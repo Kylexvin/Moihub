@@ -1,0 +1,164 @@
+.business-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content:space-around;
+}
+
+.business-card {
+  border: 2px solid green;
+  border-radius: 20px;
+  margin: 10px auto;
+  background: #008080;
+  margin: 20px 10px;
+  width: calc(30%);
+  max-width: 100%; /* Adjust max-width as needed */
+}
+
+@media (max-width: 768px) {
+  .business-card {
+      width: 100%; /* Override flex-basis */
+  }
+}
+
+  
+  .biz-title-card {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    border:2px solid green;
+    box-shadow: inset 5px 5px 8px #d3d3d3, inset -6px -6px 10px #ffffff;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .info-cards {
+    display: flex;
+    
+  }
+  
+  .location-card, .hours-card {
+    flex: 1;
+    border:2px solid green;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .location-card h3, .hours-card h3 {
+    margin: 0; /* Remove default margin */
+    font-size: 1.2em; /* Adjust font size as needed */
+    color: #333; /* Adjust text color */
+  }
+  
+  .btn-container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    margin-top: 20px; /* Adjust margin as needed */
+    margin: 10px;
+  }
+  
+  .btn-shop {
+    background-color: #4CAF50; /* Green background color */
+    border: none;
+    width: 100%;
+    margin: auto;
+    color: white; /* White text color */
+    padding: 10px 20px; /* Add padding to top/bottom and left/right */
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  .btn-shop:hover {
+    background-color: #45a049; /* Darker green on hover */
+    text-decoration: none;
+  }
+  
+  
+  .additional-info {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: inset 5px 5px 8px #d3d3d3, inset -6px -6px 10px #ffffff;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    align-items: center;
+    border:1px solid rgb(13, 0, 128);
+    text-align: center;
+  }
+  
+  .info {
+    text-align: center;
+  }
+  
+  .info p {
+    margin: 10px 0;
+  }
+  
+  .whatsapp-card {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: inset 5px 5px 8px #d3d3d3, inset -6px -6px 10px #ffffff;
+    padding: 10px;
+    margin: 10px;
+    border:1px solid green;
+    text-align: center;
+  }
+  
+  .whatsapp-card a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #25d366; /* WhatsApp green color */
+    font-weight: bold;
+   
+  }
+  
+  .whatsapp-link i {
+    margin-right: 10px;
+  }
+  
+  .shop-setup-card {
+    background-color:transparent;
+    border-radius: 8px;
+    padding: 20px;
+    width: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .shop-setup-card h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .shop-setup-card p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .shop-setup-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .shop-setup-card button:hover {
+    background-color: #0056b3;
+  }
+  

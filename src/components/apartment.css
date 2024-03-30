@@ -1,0 +1,104 @@
+.centered-div {
+    padding: 20px;
+    margin: 10px;
+    border: 2px solid green;
+    background-color: ivory;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: inset 6px 6px 12px #c1c1c1, inset -6px -6px 12px #ffffff;
+    text-align: center;
+}
+
+.apartment-name {
+    font-weight: bold;
+    margin: 20px;
+    font: 2em ;
+}
+
+.card-section {
+    display: flex;
+    justify-content:  center;
+    align-items: center;
+    margin: 10px;
+    border: 2px solid green;
+    background: #38a05b;
+    flex-wrap: wrap;
+    border-radius: 15px;
+    
+}
+
+.card-apa {
+   
+    box-shadow: inset 6px 6px 12px #c1c1c1, inset -6px -6px 12px #ffffff;
+    flex: 1;
+    width: calc(100% - 20px); /* Adjust the width as per your layout */
+    margin: 10px; /* Adjust margin as needed for spacing between cards */
+    background-color: #ffffff; /* Add background color if desired */
+    border: 1px solid #e4e4e4; /* Add border for separation */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+    padding: 10px; /* Add padding for internal spacing */
+    box-sizing: border-box; /* Include padding and border in the box size */
+    text-align: center; /* Align text in the center */
+    overflow: hidden; /* Hide content if it overflows */
+}
+
+.card-apa i {
+    font-size: 24px;
+}
+
+@media (max-width: 600px) {
+    .card-section {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.toggle-button, .button {
+    padding: 15px;
+    background-color: #066916;
+    color: #fff;
+    border: none;
+    margin: auto;
+    width:100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.toggle-icon {
+  display: inline-block;
+  vertical-align: middle; 
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid white; 
+  margin-left: 8px; 
+}
+.image-container {
+    display: flex;
+    margin-top:20px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+}
+
+.image-container img {
+    width: 100%;
+    border-radius: 5px;
+    max-width: 300px;
+    height: auto;
+    object-fit: cover;
+    border: 2px solid #1dd655;
+}
+
+@media (min-width: 768px) {
+    .image-container img {
+        width: calc(33.33% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .image-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}

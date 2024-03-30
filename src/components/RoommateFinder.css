@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+.roommate-finder {
+    text-align: center;
+  }
+  
+  .filter-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .roommate-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .roommate-card {
+    width: 300px; /* Set a fixed width for each card */
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .roommate-card h3 {
+    margin-top: 0;
+  }
+  @media (max-width: 768px) {
+    .roommate-card {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin: 20px;
+    }
+}
+  .roommate-card button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .roommate-card button:hover {
+    background-color:green;
+    box-sizing: border-box;
+  }
+  
+  .nemo{
+        box-shadow: inset 6px 6px 12px #c1c1c1, inset -6px -6px 12px #ffffff;
+        background-color: white;
+        text-decoration-color: black;
+        border: 1px solid green; /* Add border for separation */
+        border-radius: 10px; /* Add border-radius for rounded corners */
+        padding: 10px; /* Add padding for internal spacing */
+        box-sizing: border-box; /* Include padding and border in the box size */
+        text-align: center; /* Align text in the center */
+        overflow: hidden; /* Hide content if it overflows */
+    }
+    
+  

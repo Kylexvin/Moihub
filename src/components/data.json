@@ -1,0 +1,82 @@
+[
+    {
+      "id": 1,
+      "title": "Business Title 1",
+      "url": "vinny",
+      "location": "Location 1",
+      "hours": "Working Hours 1",
+      "description": "Description 1",
+      "phoneNumber": "254745276898",
+      "myShopData": {
+        "shopName": "My Shop 1",
+        "shopDescription": "Welcome to My Shop 1",
+        "products": [
+          {
+            "id": 1,
+            "name": "Product 1",
+            "price": "1000 ksh.",
+            "image": "/Cshoes/product1.jpg",
+            "info": "Product 1 Info"
+          },
+          {
+            "id": 1,
+            "name": "Product 1",
+            "price": "1000 ksh.",
+            "image": "/Cshoes/product1.jpg",
+            "info": "Product 1 Info"
+          },
+          {
+            "id": 2,
+            "name": "Product 2",
+            "price": "$20",
+            "image": "product2.jpg",
+            "info": "Product 2 Info"
+          },
+          {
+            "id": 3,
+            "name": "Product 25",
+            "price": "$20",
+            "image": "product24.jpg",
+            "info": "Product 24 Info"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Business Title 2",
+      "url": "vinny",
+      "location": "Location 2",
+      "hours": "Working Hours 2",
+      "description": "Description 2",
+      "phoneNumber": "254768970744",
+      "myShopData": {
+        "shopName": "My Shop 2",
+        "shopDescription": "Welcome to My Shop 2",
+        "products": [
+          {
+            "id": 3,
+            "name": "Product 3",
+            "price": "$30",
+            "image": "product3.jpg",
+            "info": "Product 3 Info"
+          },
+          {
+            "id": 4,
+            "name": "Product 4",
+            "price": "$40",
+            "image": "product4.jpg",
+            "info": "Product 4 Info"
+          },
+          {
+            "id": 5,
+            "name": "Product 4",
+            "price": "$40",
+            "image": "product4.jpg",
+            "info": "Product 4 Info"
+          }
+        ]
+      }
+    }
+  ]
+  

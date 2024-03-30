@@ -1,0 +1,104 @@
+/* HomePage.css */ 
+ 
+body { 
+  background: #D2F3E8; 
+} 
+ 
+.neumorphic { 
+  width: auto; 
+  height: auto; 
+  background-color: white; 
+  border: none; 
+  padding: 10px; 
+  border-radius: 15px; 
+  box-shadow: 5px 5px 15px, -5px -5px 15px #c4c4c4; 
+  transition: transform 0.3s ease-in-out; 
+} 
+ 
+.neumorphic-v2 { 
+  width: auto; 
+  height: auto; 
+  background-color: #d3dbd1; 
+  border: none; 
+  padding: 10px; 
+  border-radius: 15px; 
+  box-shadow: 5px 5px 15px #c4c4c4, -5px -5px 15px #ffffff; 
+  transition: transform 0.3s ease-in-out; 
+} 
+ 
+.body-cards { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: flex-start; 
+  
+} 
+ 
+@media (max-width: 767px) { 
+  .body-cards { 
+    flex-direction: column;  
+  } 
+   
+  .service-card { 
+    flex: 1 1 auto; 
+  } 
+} 
+ 
+.service-card { 
+  max-width: auto; 
+  text-align: center; 
+  padding: 20px; 
+  height: auto; 
+  border-radius: 25px; 
+  background: linear-gradient(to top, green, green, green); 
+  box-shadow:  
+    10px 10px 20px #ddd, 
+    -10px -10px 20px #fff; 
+  margin: 10px;   
+  flex: 1 1 300px;  
+} 
+ 
+.service-card h3 { 
+  color: #00354e; 
+  margin-bottom: 10px;  
+} 
+ 
+.service-card p { 
+  color: #0f0f0f; 
+  
+} .search-panel { 
+  width: 100%; 
+  border-radius: 5px; 
+  margin: 20px; 
+} 
+ 
+.search-input { 
+  width: 100%; 
+  padding: 10px; 
+  border: none; 
+  border-radius: 5px; 
+  border-bottom: 2px solid green; 
+  outline: none; 
+  font-size: 16px; 
+} 
+ 
+.search-icon { 
+  position: absolute; 
+  top: 50%; 
+  right: 10px; 
+  transform: translateY(-50%); 
+  cursor: pointer; 
+}
+.button-b {
+  background-color: #3498db; /* Background color for the button */
+  color: #fff; /* Text color for the button */
+  border: none;
+  font-weight: bold;
+  border-radius: 5px; /* Border radius for the button */
+  padding: 10px 15px; /* Padding for the button */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add transition for a smoother hover effect */
+}
+
+.button-b:hover {
+  background-color: #2980b9; /* Change background color on hover */
+}
