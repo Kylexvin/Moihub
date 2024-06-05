@@ -1,0 +1,19 @@
+[
+    {
+      "name": "Name Here",
+      "yearOfStudy": "Year of study",
+      "description": "Your info here.",
+      "hobbies": "⚽️💻",
+      "gender": "male",
+      "phoneNumber": "+1234567890"
+    },
+    {
+      "name": "Name Here",
+      "yearOfStudy": "Year of study",
+      "description": "Your info here.",
+      "hobbies": "⚽️💻",
+      "gender": "female",
+      "phoneNumber": "+9876543210"
+    }
+  ]
+  

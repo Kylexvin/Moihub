@@ -1,0 +1,282 @@
+.component-background {
+  background-color: #27a844; /* Replace with your desired background color */
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  
+}
+
+.card-intro {
+    border-radius:50px 50px  0px 0px;
+    width: 100%;
+    margin: 20px 0 0 0;
+    padding: 0;
+    background-color: white;
+    margin-top:20px;
+    height: auto;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+  }
+.landing {
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-start;
+margin-top: 20px;
+}
+
+.square {
+width: 100px;
+height: 100px;
+border:1px solid green;
+margin: 50px 10px 0;
+border-radius: 10px;
+box-shadow: inset 5px 5px 5px #c4c4c4,
+            inset -5px -5px 5px #ffffff;
+background-color: #ddd;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+.square h3{
+   font-size:15px;
+   
+}
+.rectangle {
+min-width: 200px;
+border:1px solid green;
+max-width: calc(100% - 20px); /* Adjusted max-width calculation to consider margin */
+flex-grow: 1; /* Added flex-grow to allow the rectangle to stretch its width */
+height: 100px;
+box-shadow: inset 5px 5px 5px #c4c4c4,
+            inset -5px -5px 5px #ffffff;
+ margin: 50px 10px 0;
+border-radius: 10px;
+background-color: #ddd;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+.cta {
+display: block;
+text-align: center;
+background-color: green;
+color: #fff;
+padding: 10px 20px;
+text-decoration: none;
+border-radius: 5px;
+text-decoration:none;
+}
+
+.cta:hover{
+  text-decoration: none;
+  cursor:copy; 
+}
+@media (min-width: 768px) {
+/* Adjust dimensions for larger screens */
+.square {
+  width: 150px;
+  height: 150px;
+}
+
+.rectangle {
+  width: 150px;
+  height: 150px;
+  min-width: 300px;
+  flex-direction: column;
+  justify-content: center;
+}
+}
+
+.shopping-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-link {
+  text-decoration: none;
+}
+
+.shopping-card {
+  background-color: blue;
+  border: 2px solid red;
+  border-radius: 20px  5px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+  padding: 10px;
+  margin: 10px;
+  color:white;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  width: 200px;
+  height: 100px; /* Adjust the height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.shopping-card:hover {
+  border-color: #27a844;
+  text-decoration: none;
+  background-color: #3498db;
+  border-radius: 20px;
+  transition: cubic-bezier(0.19, 1, 0.22, 1);
+  transform: scaleX(20px);
+  
+}
+
+.category1 { background-color: #3498db; }
+.category2 { background-color: #e74c3c; }
+.category3 { background-color: #27ae60; }
+.category4 { background-color: #f39c12; }
+.category5 { background-color: #9b59b6; }
+.category6 { background-color: #2c3e50; }
+ 
+  .ad-card {
+    width: auto;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #dadfe6;
+    border:2px solid green;
+    box-shadow: inset 5px 5px 5px #c4c4c4,
+            inset -5px -5px 5px #ffffff;
+    margin: 20px;
+  }
+
+  .ad-content {
+    padding: 20px;
+    color: #0e0d0d;
+    text-align: center;
+  }
+
+  .ad-heading {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #0c0c0c;
+  }
+
+  .ad-description {
+    margin-top: 10px;
+    color: #0f0f0f;
+  }
+
+  .cta-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: green;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.8s ease;
+  }
+
+  .cta-button:hover {
+    background-color: green;
+    text-decoration:blueviolet;
+  }
+  
+    .card-n {
+background-color: #e4e4e4;
+border-radius: 15px;
+display: flex;
+width: auto;
+flex-direction: row;
+margin: 0 20px 30px;
+justify-content: space-around;
+padding: 4px;
+}
+
+.button {
+background-color: #e4e4e4;
+border: none;
+border-radius: 10px;
+box-shadow: inset 5px 5px 5px #c4c4c4,
+            inset -5px -5px 5px #ffffff;
+color: #333;
+cursor: pointer;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-size: 13px;
+font-weight: bold;
+margin: 3px;
+padding: 10px;
+text-transform: uppercase;
+}
+
+.button:hover {
+box-shadow: none;
+}
+.svg {
+width: 20px;
+height: 20px;
+margin-right: 5px;
+}
+
+
+
+.card-n .Explore {
+color: #3035cb;
+}
+
+.card-n .Explore:hover {
+background-color: #3035cb;
+color: #e4e4e4;
+}
+
+.card-n .Explore svg {
+fill: #3035cb;
+}
+
+.card-n .Explore:hover svg {
+fill: #e4e4e4;
+}
+
+.card-n .Post {
+color: #18da32;
+}
+
+.card-n .Post:hover {
+background-color: #18da32;
+color: #e4e4e4;
+}
+
+.card .Post svg {
+fill: #18da32;
+}
+
+.card-n .Post:hover svg {
+fill: #e4e4e4;
+text-decoration: none;
+}
+
+.card-n .Chat {
+color: #b82323;
+}
+
+.card-n .Chat:hover {
+background-color: #b82323;
+color: #e4e4e4;
+}
+
+.card-n .Chat svg {
+fill: #b82323;
+}
+
+.card-n .Chat:hover svg {
+fill: #e4e4e4;
+}
+
+a {
+  text-decoration: none;
+}

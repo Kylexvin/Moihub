@@ -11,7 +11,7 @@ const ShopSkeleton = () => (
     </div>
 
     <div className="card-container">
-      {[...Array(6)].map((_, index) => (
+      {[...Array(10)].map((_, index) => (
         <div className="mini-card skeleton" key={index}>
           <div className="img-container skeleton"></div>
           <div className="item-container skeleton">

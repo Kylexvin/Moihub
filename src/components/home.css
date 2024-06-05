@@ -8,10 +8,10 @@ body {
   width: auto; 
   height: auto; 
   background-color: white; 
-  border: none; 
+  border: 2px solid #df202a; 
   padding: 10px; 
   border-radius: 15px; 
-  box-shadow: 5px 5px 15px, -5px -5px 15px #c4c4c4; 
+  box-shadow: 3px 3px 10px, -3px -3px 10px #c4c4c4; 
   transition: transform 0.3s ease-in-out; 
 } 
  
@@ -19,10 +19,10 @@ body {
   width: auto; 
   height: auto; 
   background-color: #d3dbd1; 
-  border: none; 
+  border: 2px solid green; 
   padding: 10px; 
   border-radius: 15px; 
-  box-shadow: 5px 5px 15px #c4c4c4, -5px -5px 15px #ffffff; 
+  /* box-shadow: 5px 5px 15px #c4c4c4, -5px -5px 15px #ffffff;  */
   transition: transform 0.3s ease-in-out; 
 } 
  
@@ -43,23 +43,32 @@ body {
   } 
 } 
  
-.service-card { 
-  max-width: auto; 
-  text-align: center; 
-  padding: 20px; 
-  height: auto; 
-  border-radius: 25px; 
-  background: linear-gradient(to top, green, green, green); 
-  box-shadow:  
-    10px 10px 20px #ddd, 
-    -10px -10px 20px #fff; 
-  margin: 10px;   
-  flex: 1 1 300px;  
-} 
- 
+.service-card {
+  max-width: auto;
+  text-align: center;
+  padding: 20px;
+  height: auto;
+  border-radius: 25px;
+  background: linear-gradient(to top, green, green, green);
+  box-shadow:
+    10px 10px 20px #ddd,
+    -10px -10px 20px #fff;
+  margin: 10px;
+  flex: 1 1 350px;
+  animation: bounce 0.3s ease-out;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 0.4s ease, transform 0.9s ease;
+}
+
+.service-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 .service-card h3 { 
-  color: #00354e; 
-  margin-bottom: 10px;  
+  color: blue; 
+  margin-bottom: 10px; 
+   
 } 
  
 .service-card p { 
@@ -91,9 +100,9 @@ body {
 .button-b {
   background-color: #3498db; /* Background color for the button */
   color: #fff; /* Text color for the button */
-  border: none;
+  border: 1px solid blue;
   font-weight: bold;
-  border-radius: 5px; /* Border radius for the button */
+  border-radius: 10px; /* Border radius for the button */
   padding: 10px 15px; /* Padding for the button */
   cursor: pointer;
   transition: background-color 0.3s ease; /* Add transition for a smoother hover effect */
@@ -101,4 +110,182 @@ body {
 
 .button-b:hover {
   background-color: #2980b9; /* Change background color on hover */
+}
+
+.bodyy {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: auto;
+  background: #D2F3E8;
+}
+.card-vinny {
+background: #D2F3E8;
+padding: 20px;
+width: auto;
+height: auto;
+border-radius: 20px;
+box-shadow: 
+5px 5px 10px #dcdcdc,
+-5px -5px 10px #ffffff;
+ margin:20px auto;
+
+transition: height 0.3s ease;
+}
+.container-fix{
+width: 100%;
+height: auto;
+box-shadow: 
+5px 5px 10px #dcdcdc,
+-5px -5px 10px #ffffff;
+ margin:20px auto;
+ display: flex;
+justify-content: center;
+align-items: center;
+ 
+}
+.card-profile {
+width: auto;
+height: auto;
+border-radius: 50%;
+background-color: #f0f0f0;
+box-shadow: 10px 10px 20px #cbced1, -10px -10px 20px #ffffff;
+display: flex;
+justify-content: center;
+align-items: center;
+margin:20px auto;
+}
+
+.image-container-profile {
+width: 200px;
+height: 200px;
+border-radius: 50%;
+overflow: hidden;
+display: flex;
+margin: 20px;
+justify-content: center;
+align-items: center;
+box-shadow: 5px 5px 10px #cbced1, -5px -5px 10px #ffffff;
+}
+
+.image-container-profile img {
+max-width: 100%;
+max-height: 100%;
+object-fit: cover;
+object-position: center;
+}
+
+/* styles.css */
+
+.service-details {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.service-details h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.review {
+  margin-bottom: 15px;
+}
+
+.review span {
+  display: block;
+  font-size: 16px;
+  color: #666;
+}
+
+.rating {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 18px;
+  color: #f39c12; /* Yellow color for rating */
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.emergency-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.emergency-contact {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.phone {
+  font-size: 14px;
+}
+.ministrip-card {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin:auto;
+  background-color: transparent;
+  font-size: smaller;
+
+
+}
+
+.emergency-number {
+  width: 100%;
+  margin: auto;
+  gap: auto;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: smaller;
+  box-shadow: 5px 5px 10px black, -5px -5px 10px transparent;
+}
+
+.left {
+  background-color: #ff4d4d; /* Red for ambulance */
+  text-align: left;
+  font-size: smaller;
+}
+
+.right {
+  background-color: #4db8ff; /* Blue for security */
+  text-align: right;
+  font-size: smaller;
+}
+
+.emergency-number p {
+  margin: 0;
+  color: white;
+  font-weight: bold;
+  font-size: small;
 }

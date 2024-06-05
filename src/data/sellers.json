@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "photo": "/sellers/image1.jpg",
+      "name": "Product 1",
+      "condition": "70% new",
+      "seller": "Seller A",
+      "phoneNumber": "+1234567890",
+      "isAd": false
+    },
+    {
+      "id": 2,
+      "photo": "slide2.jpg",
+      "name": "Product 2",
+      "condition": "85% new",
+      "seller": "Seller B",
+      "phoneNumber": "+9876543210",
+      "isAd": false
+    },
+    {
+      "id": 3,
+      "photo": "ad.jpg",
+      "name": "Exclusive Web Design Offer",
+      "condition": "Limited Time Deal",
+      "seller": "kylex inc.",
+      "phoneNumber": "+1122334455",
+      "isAd": true
+    }
+  ]
+  

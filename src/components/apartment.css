@@ -1,7 +1,7 @@
 .centered-div {
     padding: 20px;
     margin: 10px;
-    border: 2px solid green;
+    border: 2px solid red;
     background-color: ivory;
     width: auto;
     border-radius: 15px;
@@ -34,7 +34,7 @@
     width: calc(100% - 20px); /* Adjust the width as per your layout */
     margin: 10px; /* Adjust margin as needed for spacing between cards */
     background-color: #ffffff; /* Add background color if desired */
-    border: 1px solid #e4e4e4; /* Add border for separation */
+    border: 2px solid red; /* Add border for separation */
     border-radius: 10px; /* Add border-radius for rounded corners */
     padding: 10px; /* Add padding for internal spacing */
     box-sizing: border-box; /* Include padding and border in the box size */
@@ -44,6 +44,7 @@
 
 .card-apa i {
     font-size: 24px;
+    color: red;
 }
 
 @media (max-width: 600px) {
@@ -55,7 +56,7 @@
 
 .toggle-button, .button {
     padding: 15px;
-    background-color: #066916;
+    background-color:blue;
     color: #fff;
     border: none;
     margin: auto;

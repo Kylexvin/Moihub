@@ -1,0 +1,223 @@
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+} */
+
+.intro-card {
+    margin: 0 auto;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.intro-header {
+    background-color: #FF5722;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    
+}
+
+.intro-header h1 {
+    margin: 0;
+    color: #f8f8f8;
+    font-size: 24px;
+}
+
+.intro-header p {
+    margin-top: 10px;
+    color: #000;
+    z-index: 99999;
+    margin-bottom: 20px;
+}
+
+     
+.orange {
+    background: #FF5722;
+    margin-bottom: -1px;
+}
+
+.hero {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.slide {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    background-color: transparent;
+    transition: transform 4s, opacity 2s;
+}
+
+.slide.active {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+}
+
+img {
+    height: 150px;
+    width: auto;
+    background-color: transparent;
+}
+
+.search-panel {
+    position: relative;
+    width: auto;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    max-width:100%;
+    border-radius: 5px;
+    border-bottom: 2px solid #FF5722;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.card-provider {
+    border: 1px solid coral;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    width: 100%;
+    max-width: 350px;
+    background-color: ivory;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 2;
+    
+}
+.container-provider {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding:10px ;
+  }
+  
+.card-header {
+    background-color: #FF6347;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+.card-header h2{
+    font-size: 20px;
+}
+
+.ratings {
+    color: #FFD700;
+    font-size: 20px;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.delivery-time,
+.offer-tag {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.delivery-time i,
+.offer-tag i {
+    margin-right: 5px;
+    color: coral;
+}
+
+.card-footer {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.cta-button {
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #E64A19;
+}
+
+/* Flexbox container for the buttons */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-footer.single-button {
+    justify-content: center;
+}
+.food-types {
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid coral;
+    justify-content: space-between;
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.food-types ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.food-types li {
+    margin: 0;
+    list-style-type: none;
+    padding: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.food-types li:not(:last-child) {
+    margin-right: 10px;
+}
+
+.food-types li:after {
+    content: '💫';
+    color: #FF6347;
+    margin-right: 5px;
+}     
+    /* For PC */

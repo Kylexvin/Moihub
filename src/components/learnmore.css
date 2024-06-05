@@ -1,0 +1,31 @@
+/* Container styles */
+.learn-more-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Section styles */
+  .policy-section {
+    margin-bottom: 30px;
+  }
+  
+  .policy-section h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .policy-section p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .disclaimer {
+    background-color: #f8d7da; /* Red background color */
+    color: #721c24; /* Dark red text color */
+    padding: 10px;
+    margin-top: 20px; /* Add some space between the disclaimer and the content above */
+    border-radius: 5px; /* Rounded corners */
+  }
+    

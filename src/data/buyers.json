@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "name": "Looking for Web Design Services",
+      "condition": "Preferred Budget: $1000",
+      "seller": "Buyer: John Doe",
+      "phoneNumber": "+1234567890",
+      "isAd": false
+    },
+    {
+      "id": 2,
+      "name": "Looking for a mattress",
+      "condition": "Preferred Budget: $1000",
+      "seller": "Buyer: Jane Doe",
+      "phoneNumber": "+9876543210",
+      "isAd": false
+    },
+    {
+      "id": 3,
+      "name": "Exclusive Web Design Offer",
+      "condition": "Limited Time Deal",
+      "seller": "kylex inc.",
+      "phoneNumber": "+1122334455",
+      "isAd": true
+    }
+  ]
+  

@@ -5,8 +5,12 @@
   background: url('../assets/bg.jpg') center/cover no-repeat; /* Replace 'path/to/your/background-image.jpg' with your actual image path */
   border-radius: 20px;
   margin: 20px;
+  border: 2px solid white;
   align-items: center;
   justify-content: center;
+  box-shadow:  
+    10px 10px 20px #d84848, 
+    -10px -10px 20px #f1ebeb; 
 }
 
 .hero-overlay {

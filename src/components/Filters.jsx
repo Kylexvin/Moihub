@@ -51,7 +51,7 @@ const Filters = ({ handleFiltering }) => {
             </select>
           </div>
         </div>
-        <button onClick={handleFiltering}>Apply Filters</button>
+        <button  onClick={handleFiltering}>Apply Filters</button>
       </div>
     </div>
   );

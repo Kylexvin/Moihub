@@ -1,0 +1,284 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #BBE2EC;
+    font-family: Arial, sans-serif;
+}
+
+.footer {
+    position: fixed;
+    bottom: 20px; /* Floating the footer a bit */
+    left: 50%; /* Centering horizontally */
+    transform: translateX(-50%); /* Centering horizontally */
+    width: 100%; /* Adjust width as needed */
+    max-width: 300px; /* Limiting maximum width */
+    background-color: #27a844;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    border: 1px solid #FF4500;
+    justify-content: space-between;
+    border-radius: 20px; /* Curving the border */
+}
+.cart-counter {
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background-color: red; /* Choose your desired background color */
+  color: white;
+  border-radius: 50%;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.footer-icons {
+  display: flex;
+  justify-content: space-between; /* Spread the icons to the far right and left */
+  width: 100%; /* Ensure the container spans the full width */
+}
+
+.footer-icons a {
+  margin: 0 5px; /* Add some spacing between the icons */
+}
+
+.footer-icons i {
+    font-size: 25px;
+    color: white;
+    weight:bold;
+    flex-grow: 1; /* Spread icons evenly */    
+    text-align: center; /* Align icon horizontally */
+}
+.pharmacy-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+    gap: 10px;
+}
+
+.pharmacy-card {
+  width: 100%;
+  max-width:300px;
+  margin: 10px;
+  border: 1px solid #FF4500;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 5px 5px 15px grey, -5px -5px 10px grey;
+}
+@media (max-width: 767px) { 
+  .pharmacy-container {
+      flex-direction: column; /* Stack items vertically on smaller screens */
+      align-items: center; /* Center items horizontally on smaller screens */
+  }
+
+  .pharmacy-card {
+      width: calc(100% - 20px); /* Make cards full width with margin between them */
+      margin: 10px; /* Add margin between cards */
+  }
+}
+
+.pharmacy-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #cbced1, -5px -5px 10px #ffffff;
+}
+
+
+  .pharmacy-details {
+  margin-top: 10px;
+  background: #f0f0f0;
+  padding: 10px;
+  border:1px solid red;
+  border-radius: 10px;
+  box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.1), inset -4px -4px 6px rgba(255, 255, 255, 0.5);
+}
+.pharmacy-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0;
+  color: #333; /* Darker color for the name */
+  transition: color 0.3s ease; 
+  box-shadow: 5px 5px 10px #cbced1, -5px -5px 10px #ffffff;
+  margin-top: 20px;
+  padding:10px;
+}
+
+.pharmacy-price {
+  font-size: 1em;
+  color: #666; 
+  box-shadow: 5px 5px 10px #cbced1, -5px -5px 10px #ffffff;
+  margin-top: 20px;
+  padding:10px;
+}
+
+/* Hover effect for the name */
+.pharmacy-name:hover {
+  color: #007bff; /* Change color to blue on hover */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.pharmacy-add-to-cart,.pharmacy-order-now {
+     background-color: #FF4500;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-panel {
+  margin: 20px auto; /* Auto left and right margins to center horizontally */
+  width: auto;
+  max-width: 350px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 0.5px solid #FF4500;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+/* Style the search input */
+#search {
+  padding: 10px;
+  max-width: 200px; /* Adjust the width as needed */
+  border: none;
+  border-radius: 8px;
+  box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.1), inset -4px -4px 6px rgba(255, 255, 255, 0.5); 
+}
+
+/* Style the search button */
+#button {
+  padding: 10px 20px; /* Adjust padding for button */
+  background-color: #ff4500;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1), -4px -4px 6px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  margin-left: 10px; /* Add margin between input and button */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.prev {
+  margin-right: 10px;
+}
+
+button.next {
+  margin-left: 10px;
+}
+/* Add this to your CSS file */
+.cart-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .cart-modal.open {
+    display: block;
+  }
+  
+  .cart-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 5px;
+    position: relative;
+  }
+  
+  .cart-modal-content .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .cart-count {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 8px;
+    font-size: 12px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+/* Add this CSS to your echem.css file */
+.cart-count {
+    background-color:  #FF4500;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+  }
+   
+  @media (min-width: 768px) {
+    #unique-svg {
+      display: none;
+    }
+  }
+  
+  /* Define the keyframes for the shake animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(3px); }
+}
+
+/* Apply the animation to the button when it's clicked */
+.shake {
+  animation: shake 0.1s ease-in-out;
+}

@@ -1,0 +1,22 @@
+.customer-care {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    border-radius: 10%;
+    background-color: #25d366;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    transition: transform 0.3s ease;
+    z-index: 9999;
+}
+
+.customer-care:hover {
+    transform: scale(1.1);
+}
+
+.customer-care p {
+    margin: 0;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}

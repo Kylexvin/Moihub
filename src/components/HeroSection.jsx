@@ -6,9 +6,10 @@ const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const captions = [
-    'Luxury Apartments for Rent',
-    'Discover Your Dream Home',
+    'Best places for Rent',
+    'Discover Your Dream room',
     'Book Your Perfect Getaway',
+    'Welcome to MoiHub',
     // Add more captions as needed
   ];
 
