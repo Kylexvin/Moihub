@@ -4,7 +4,7 @@ import './HeroSection.css';
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+ 
   const captions = [
     'Best places for Rent',
     'Discover Your Dream room',

@@ -9,7 +9,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/emerald01.jpg", "../plotimgs/emerald02.jpg", "../plotimgs/emerald03.jpg","../plotimgs/emerald04.jpg"],
     "contact": "+254706048717",
-    "lastUpdated": "2024-03-31"
+    "lastUpdated": "2024-03-31",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Blueview", 
@@ -21,7 +22,8 @@
     "vacancy": "0",
     "images":  ["../plotimgs/dm201.jpg", "../plotimgs/dm202.jpg", "../plotimgs/dm203.jpg", "../plotimgs/dm204.jpg"],
     "contact": "0715426938",
-    "lastUpdated": "2024-03-30"
+    "lastUpdated": "2024-03-30",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Blue City", 
@@ -33,7 +35,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/bcity2.jpg", "../plotimgs/bcity3.jpg", "../plotimgs/bcity4.jpg"],
     "contact": "0714209737",
-    "lastUpdated": "2024-03-29"
+    "lastUpdated": "2024-03-29",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Delta Court", 
@@ -45,7 +48,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/delta1.jpg","../plotimgs/delta2.jpg", "../plotimgs/delta3.jpg", "../plotimgs/delta4.jpg"],
     "contact": "0793530280",
-    "lastUpdated": "2024-03-28"
+    "lastUpdated": "2024-03-28",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "JT Complex", 
@@ -57,7 +61,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/jt01.jpg","../plotimgs/jt02.jpg", "../plotimgs/jt03.jpg", "../plotimgs/jt04.jpg"],
     "contact": "234-567-8901",
-    "lastUpdated": "2024-03-22"
+    "lastUpdated": "2024-03-22",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Beren2", 
@@ -69,7 +74,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/Dberen02.jpg", "../plotimgs/Dberen03.jpg", "../plotimgs/Dberen04.jpg"],
     "contact": "0794049921",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Beren", 
@@ -81,7 +87,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/beren01.jpg", "../plotimgs/beren02.jpg", "../plotimgs/beren03.jpg", "../plotimgs/beren04.jpg"],
     "contact": "0794049921",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Melvit", 
@@ -93,7 +100,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/melvit01.jpg", "../plotimgs/melvit02.jpg", "../plotimgs/melvit03.jpg", "../plotimgs/melvit04.jpg"],
     "contact": "0729662332",
-    "lastUpdated": "2024-03-25"
+    "lastUpdated": "2024-03-25",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Leslos Apartments", 
@@ -105,7 +113,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/leslos01.jpg", "../plotimgs/leslos02.jpg", "../plotimgs/leslos03.jpg","../plotimgs/leslos04.jpg"],
     "contact": "0728700544",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Brooklyn Court", 
@@ -117,7 +126,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/brooklyn01.jpg", "../plotimgs/brooklyn02.jpg", "../plotimgs/brooklyn03.jpg", "../plotimgs/brooklyn04.jpg" ],
     "contact": "0784210048",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Simba Apartment", 
@@ -129,7 +139,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/simba01.jpg", "../plotimgs/simba02.jpg", "../plotimgs/simba03.jpg", "../plotimgs/simba04.jpg"],
     "contact": "0713096215",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Rebo", 
@@ -141,7 +152,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/rebo01.jpg", "../plotimgs/rebo03.jpg", "../plotimgs/rebo04.jpg"],
     "contact": "0722110609",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Ketru", 
@@ -153,7 +165,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/ketru01.jpg","../plotimgs/ketru02.jpg", "../plotimgs/ketru03.jpg", "../plotimgs/ketru04.jpg"],
     "contact": "0716033317",
-    "lastUpdated": "2024-03-27"
+    "lastUpdated": "2024-03-27",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Rivers Of Joy", 
@@ -165,9 +178,9 @@
     "vacancy": "0",
     "images": ["../plotimgs/rivers01.jpg", "../plotimgs/rivers02.jpg","../plotimgs/rivers03.jpg", "../plotimgs/rivers04.jpg"],
     "contact": "0716030753",
-    "lastUpdated": "2024-03-26"
+    "lastUpdated": "2024-03-26",
+    "coordinates": "0.290506,35.288598"
   },
-  
   { 
     "name": "ClayPool", 
     "plotType": "1 Bedroom", 
@@ -178,7 +191,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/clay01.jpg", "../plotimgs/clay02.jpg", "../plotimgs/clay03.jpg", "../plotimgs/clay04.jpg"],
     "contact": "0704768981",
-    "lastUpdated": "2024-03-24"
+    "lastUpdated": "2024-03-24",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Leon", 
@@ -190,9 +204,9 @@
     "vacancy": "0",
     "images": ["../plotimgs/leon01.jpg"],
     "contact": "0759721276",
-    "lastUpdated": "2024-03-23"
+    "lastUpdated": "2024-03-23",
+    "coordinates": "0.290506,35.288598"
   },
-  
   { 
     "name": "Diamond Court", 
     "plotType": "BedSitter", 
@@ -203,7 +217,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/dcourt01.jpg", "../plotimgs/dcourt02.jpg", "../plotimgs/dcourt03.jpg", "../plotimgs/dcourt04.jpg"],
     "contact": "0795215225",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Noble Park", 
@@ -215,7 +230,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/nbl01.jpg", "../plotimgs/nbl02.jpg", "../plotimgs/nbl03.jpg", "../plotimgs/nbl04.jpg"],
     "contact": "0715069070",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Sunset Apartments", 
@@ -227,7 +243,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/sunset01.jpg","../plotimgs/sunset02.jpg", "../plotimgs/sunset03.jpg", "../plotimgs/sunset04.jpg"],
     "contact": "072029556",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Cheros", 
@@ -239,7 +256,8 @@
     "vacancy": "3",
     "images": ["../plotimgs/cheros01.jpg", "../plotimgs/cheros02.jpg", "../plotimgs/cheros03.jpg", "../plotimgs/cheros04.jpg"],
     "contact": "0718204879",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "SilverBrook", 
@@ -251,7 +269,8 @@
     "vacancy": "0",
     "images": ["../plotimgs/silver01.jpg", "../plotimgs/silver02.jpg", "../plotimgs/silver03.jpg", "../plotimgs/silver04.jpg"],
     "contact": "0726697345",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Cr Karen", 
@@ -263,7 +282,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/bg01.jpg", "../plotimgs/bg02.jpg", "../plotimgs/bg03.jpg", "../plotimgs/bg04.jpg"],
     "contact": "0707332990",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Exodus", 
@@ -275,9 +295,9 @@
     "vacancy": "1",
     "images": ["../plotimgs/exodus01.jpg", "../plotimgs/exodus02.jpg", "../plotimgs/exodus03.jpg"],
     "contact": "0757673289",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
-  
   { 
     "name": "Achivers A", 
     "plotType": "Single", 
@@ -288,7 +308,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/achivers01.jpg"],
     "contact": "123456789",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "Mameli", 
@@ -300,7 +321,8 @@
     "vacancy": "1",
     "images": ["../plotimgs/plotx01.jpg", "../plotimgs/plotx02.jpg", "../plotimgs/plotx03.jpg","../plotimgs/plotx04.jpg"  ],
     "contact": "0713372088",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
   { 
     "name": "DM", 
@@ -312,9 +334,9 @@
     "vacancy": "1",
     "images": ["../plotimgs/dm01.jpg", "../plotimgs/dm02.jpg", "../plotimgs/dm03.jpg", "../plotimgs/dm204.jpg"],
     "contact": "0716033317",
-    "lastUpdated": "2024-03-17"
+    "lastUpdated": "2024-03-17",
+    "coordinates": "0.290506,35.288598"
   },
-
   { 
     "name": "Birlol Apartment", 
     "plotType": "Bedsitter", 
@@ -325,6 +347,7 @@
     "vacancy": "1",
     "images": ["../plotimgs/birlol1.jpg", "../plotimgs/birlol2.jpg", "../plotimgs/birlol3.jpg", "../plotimgs/birlol4.jpg"],
     "contact": "0729496883",
-    "lastUpdated": "2024-04-17"
+    "lastUpdated": "2024-04-17",
+    "coordinates": "0.290506,35.288598"
   }
 ]

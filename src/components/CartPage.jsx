@@ -13,7 +13,7 @@ function CartPage({ cartItems, handleRemoveFromCart, handleUpdateQuantity }) {
     });
     // Calculate total amount
     const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.price.replace('$', '')), 0);
-    message += `\nTotal Amount: $${totalAmount.toFixed(2)}`;
+    message += `\nTotal Amount: Ksh ${totalAmount.toFixed(2)}`;
 
     // Encode the message for URL
     const encodedMessage = encodeURIComponent(message);

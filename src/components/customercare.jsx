@@ -6,8 +6,9 @@ const CustomerCare = () => {
 
   return (
     <div className="customer-care">
-      <p>Need help?</p>
+      
       <a href={`https://wa.me/254714167758/?text=${pretypeMessage}`} target="_blank">
+        <p>Need help?</p>
         <i className="fab fa-whatsapp fa-lg" style={{ color: 'white' }}></i>
       </a>
     </div>
