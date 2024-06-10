@@ -89,8 +89,8 @@ const CategoryList = ({ categories }) => {
 
           <div className="ad-card">
             <div className="ad-content">
-              <div className="ad-heading">Special Offer!</div>
-              <div className="ad-description">Limited time discount on selected items. Don't miss out!</div>
+              <div className="ad-heading">Space for Hire!</div>
+              <div className="ad-description">Place your add here. If you can see this,so your clients. Contact us today. </div>
               {/* <button className="cta-button">
                 Shop Now
               </button> */}
