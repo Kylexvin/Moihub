@@ -33,10 +33,18 @@ const Navbar = () => {
               Services
             </a>
             <div className="dropdown-menu" aria-labelledby="servicesDropdown">
-              <a className="dropdown-item" href="/book">Booking</a>
-              <a className="dropdown-item" href="/pharmacy">E-Chem</a>
-              <a className="dropdown-item" href="/discover">Local Services</a>
-              <a className="dropdown-item" href="/food-delivery">Food Delivery</a>
+            <a className="dropdown-item" href="/book">
+        <i class="fas fa-calendar-alt icon-green"></i> Booking
+    </a>
+    <a className="dropdown-item" href="/pharmacy">
+        <i class="fas fa-pills icon-green"></i> E-Chem
+    </a>
+    <a className="dropdown-item" href="/discover">
+        <i class="fas fa-map-marker-alt icon-green"></i> Local Services
+    </a>
+    <a className="dropdown-item" href="/food-delivery">
+        <i class="fas fa-utensils icon-green"></i> Food Delivery
+    </a>
             </div>
           </li>
           <li className="nav-item dropdown">
@@ -44,11 +52,20 @@ const Navbar = () => {
               Shopping
             </a>
             <div className="dropdown-menu" aria-labelledby="shoppingDropdown">
-              <a className="dropdown-item" href="/eshop">E-Shop</a>
-              <a className="dropdown-item" href="/greenhub">Grocery</a>
-              <a className="dropdown-item" href="/pharmacy">E-Chem</a>
-              <a className="dropdown-item" href="/marketplace">Marketplace</a>
-            </div>
+    <a className="dropdown-item" href="/eshop">
+        <i class="fas fa-shopping-cart"></i> E-Shop
+    </a>
+    <a className="dropdown-item" href="/greenhub">
+        <i class="fas fa-apple-alt"></i> Grocery
+    </a>
+    <a className="dropdown-item" href="/pharmacy">
+        <i class="fas fa-pills"></i> E-Chem
+    </a>
+    <a className="dropdown-item" href="/marketplace">
+        <i class="fas fa-store"></i> Marketplace
+    </a>
+</div>
+
           </li>
           <li className="nav-item">
             <a className="nav-link" href="/ourteam" style={navLinkStyle}>

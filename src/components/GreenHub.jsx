@@ -157,7 +157,7 @@ const GreenHub = () => {
         {filteredProducts.map((product, index) => (
           <div className="product-cardg" key={index} onClick={() => orderProduct(product.name)}>
             <div className="icon-container">
-              <div className="icon"><i className="fas fa-send"></i></div>
+              <div className="icon"><i className="fas fa-shopping-cart"></i></div>
               {/* <div className="icon"><i className="fas fa-bookmark"></i></div> */}
             </div>
             <img src={product.img} alt={product.alt} />
