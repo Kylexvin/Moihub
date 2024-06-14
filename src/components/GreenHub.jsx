@@ -100,8 +100,8 @@ const GreenHub = () => {
   const [filteredProducts, setFilteredProducts] = useState(products);
 
   const orderProduct = (productName) => {
-    const phoneNumber = '1234567890'; // Replace with the actual phone number
-    const message = `Hello, I would like to order: ${productName}`;
+    const phoneNumber = '254759778478'; // Replace with the actual phone number
+    const message = `Hello GreenHub, I would like to order: ${productName}`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
