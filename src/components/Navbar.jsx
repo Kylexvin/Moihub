@@ -50,7 +50,11 @@ const Navbar = () => {
               <a className="dropdown-item" href="/marketplace">Marketplace</a>
             </div>
           </li>
-          
+          <li className="nav-item">
+            <a className="nav-link" href="/ourteam" style={navLinkStyle}>
+              0ur Team
+            </a>
+          </li>
         </ul>
       </div>
     </div>

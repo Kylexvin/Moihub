@@ -25,6 +25,7 @@ import BlogDetail from './components/BlogDetail';
 import MoiDelish from './components/MoiDelish';
 import ProviderDetails from './components/ProviderDetails';
 import GreenHub from './components/GreenHub';
+import OurTeam from './components/Team';
 
 
 
@@ -87,6 +88,7 @@ const App = () => {
           <Route path="/find-roommate" element={<RoomateFinder />} />
           <Route path='/learnmore' element={<LearnMore/>}/>
           <Route path='/greenhub' element={<GreenHub/>}/>
+          <Route path='/ourteam' element={<OurTeam/>}/>
           <Route path="/cart" element={<CartPage cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} handleUpdateQuantity={handleUpdateQuantity} />} />
           <Route path="/pharmacy" element={<Echem cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/book" element={<Booking plots={plotsData} />} />
