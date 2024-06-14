@@ -77,6 +77,15 @@ const Home = () => {
   </div>
 </div>
 
+<div className={`service-card ${cardVisibility['grocery'] ? 'show' : ''}`} data-card-id="grocery">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic">Groceries<br /> <i className="fas fa-apple-alt"></i></h3>
+    <p className="neumorphic">GreenHub grocery allows you to order groceries. The deliveries are done around Moi university. Browse for different grocery items offered by available providers.</p>
+    <div className="neumorphic"><a href='/greenhub'><button className="button-b">Order Now <i className="fas fa-shopping-cart"></i></button></a></div>
+  </div>
+</div>
+
+
 <div className={`service-card ${cardVisibility['emergency-assistance'] ? 'show' : ''}`} data-card-id="emergency-assistance">
   <div className="neumorphic-v2">
     <h3 className="neumorphic">Discover Services<br /><i className="fas fa-search"></i></h3>
