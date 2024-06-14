@@ -45,6 +45,7 @@ const Navbar = () => {
             </a>
             <div className="dropdown-menu" aria-labelledby="shoppingDropdown">
               <a className="dropdown-item" href="/eshop">E-Shop</a>
+              <a className="dropdown-item" href="/greenhub">Grocery</a>
               <a className="dropdown-item" href="/pharmacy">E-Chem</a>
               <a className="dropdown-item" href="/marketplace">Marketplace</a>
             </div>
