@@ -47,7 +47,7 @@ const teamData = [
     ]
   },
   {
-    name: "valentine",
+    name: "Valentine",
     title: "Customer Care MoiHub",
     image: "../Team/vall.jpg",
     social: [
