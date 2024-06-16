@@ -29,7 +29,7 @@ const Navbar = () => {
             </a>
           </li>
           <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a className="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={navLinkStyle}>
               Services
             </a>
             <div className="dropdown-menu" aria-labelledby="servicesDropdown">
@@ -48,7 +48,7 @@ const Navbar = () => {
             </div>
           </li>
           <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="shoppingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a className="nav-link dropdown-toggle" href="#" id="shoppingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={navLinkStyle}>
               Shopping
             </a>
             <div className="dropdown-menu" aria-labelledby="shoppingDropdown">

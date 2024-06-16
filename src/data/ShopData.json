@@ -9,6 +9,10 @@
       "name": "Shoes"
     },
     {
+      "id": "Boutique",
+      "name": "Boutique"
+    },
+    {
       "id": "books",
       "name": "Books"
     }
@@ -150,6 +154,110 @@
           "price": 11.99,
           "image": "../assets/images/pride_and_prejudice.jpg"
         }
+      ]
+    },
+    {
+      "id": "shop7",
+      "name": "Lydia Boutique",
+      "category": "Boutique",
+      "phone": "+254723032048",
+      "description" : "Lydia boutique is a leading boutique at Moi university.We have a physicall shop and we offer deliveries around Moi university. Visit us today!",
+      "location": "Stage, Behind Petrol Station",
+      "products": [
+        {
+          "id": "Regular Duvet",
+          "name": "Regular Duvet",
+          "price": 2200,
+          "image": "../Boutique/duvet01.jpg"
+        },
+
+         {
+          "id": "product13",
+          "name": "Generic Woolen Duvet",
+          "price": 2500,
+          "image":"../Boutique/duvet04.jpg"
+        },
+
+        {
+          "id": "product12",
+          "name": "Round Mosquito Net",
+          "price": 950,
+          "image":"../Boutique/roundnet.jpg",
+          "info" : "Available in all colours."
+        },
+       
+        {
+          "id": "product13",
+          "name": "4 Stand Mosquito Net",
+          "price": 1400,
+          "image": "../Boutique/4standnet.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "2 Stand Mosquito Net",
+          "price": 4500,
+          "image":"../Boutique/2standnet.jpg"
+        },
+        {
+          "id": "product13",
+          "name": "Ordinary Pillows",
+          "price": 250,
+          "image": "../Boutique/pillow01.jpg",
+          "info" : "Varieties available."
+        },
+        {
+          "id": "product13",
+          "name": "Fibre Pillows",
+          "price": 350,
+          "image": "../Boutique/pillow03.jpg",
+          "info" : "Varieties available."
+        },
+
+        {
+          "id": "product13",
+          "name": "Shoe Rack",
+          "price": 950,
+          "image": "../Boutique/shoerack01.jpg",
+          "info" : "Other colors available."
+        },
+        {
+          "id": "product13",
+          "name": "Fluffy Doormat",
+          "price": 500,
+          "image": "../Boutique/fmat01.jpg",
+          "info" : "Varieties available."
+        },
+        {
+          "id": "product13",
+          "name": "Wall Nets",
+          "price": 350,
+          "image": "../assets/images/pride_and_prejudice.jpg",
+          "info" : "Varieties available."
+        },
+        {
+          "id": "product13",
+          "name": "Curtains",
+          "price": 300,
+          "image": "../Boutique/curtain01.jpg",
+          "info" : "Varieties available."
+        },
+        {
+          "id": "product13",
+          "name": "Throw Pillows",
+          "price": 500,
+          "image": "../Boutique/throwpillow.jpg",
+          "info" : "Varieties available."
+        },
+        {
+          "id": "product13",
+          "name": "Doormat",
+          "price": 400,
+          "image": "../Boutique/mat01.jpg",
+          "info" : "Varieties available."
+        }
+
+       
       ]
     }
   ]

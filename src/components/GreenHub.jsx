@@ -100,7 +100,7 @@ const GreenHub = () => {
   const [filteredProducts, setFilteredProducts] = useState(products);
 
   const orderProduct = (productName) => {
-    const phoneNumber = '254759778478'; // Replace with the actual phone number
+    const phoneNumber = '254759778478'; 
     const message = `Hello GreenHub, I would like to order: ${productName}`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -124,13 +124,13 @@ const GreenHub = () => {
           </div>
           <div className="neumorphism-cardg">
             <div className="container-gtop">
-              <div className="carousel-control-next-icon">
+              <div className="carouse">
                 <i className="fas fa-shopping-cart"></i>
               </div>
             </div>
             <span className="deliveries">Deliveries done around Moi University.</span>
             <div className="container-gtop">
-              <div className="carousel-control-next-icon">
+              <div className="carouse">
                 <i className="fas fa-motorcycle"></i>
               </div>
             </div>

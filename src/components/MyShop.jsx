@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './ProductList.css'; // Import CSS for styling
-import ShopSkeleton from './ShopSkeleton';
+//import './ProductList.css'; // Import CSS for styling
+//import ShopSkeleton from './ShopSkeleton';
 
 const ProductList = ({ shops }) => {
   const { shopId } = useParams();
@@ -67,7 +67,7 @@ const ProductList = ({ shops }) => {
                 {shop.products.map((product) => (
                   <div className="mini-card" key={product.id}>
                     <div className="img-container" id={`product${product.id}`}>
-                      <img className="item-photo" src={product.image} alt={`Product ${product.id} Photo`} />
+                      <img className="item-photo" src={product.image}/>
                     </div>
 
                     <div className="item-container">
@@ -99,7 +99,7 @@ const ProductList = ({ shops }) => {
       </div>
       <div className="shop-setup-card">
         <p>
-          Are you interested in showcasing your products on our website? Take the first step by contacting us now!
+          Are you interested in showcasing your products on our website?? Take the first step by contacting us now!
         </p>
         <button>Call Now</button>
       </div>
