@@ -107,8 +107,16 @@
   background-color:ivory;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
 }
-.mini-card-skeleton{
+.mini-card2{
   height: 250px;
+  flex-basis: calc(30%); /* Adjust width to fit 3 cards per row */
+  margin-bottom: 20px; /* Add margin between cards */
+  margin: 20px;
+  border: 3px solid green;
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: 0.3;
+  
 }
 .img-container {
 width: 100%;
@@ -259,6 +267,7 @@ animation: waveAnimation 2s infinite;
 @media (max-width: 600px) {
   .mini-card {
       flex-basis: 100%;
+      max-height: fit-content;
       
   }
   .img-container {

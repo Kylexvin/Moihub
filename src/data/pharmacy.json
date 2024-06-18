@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Pharmacy 1",
+    "name": "Medication 1",
     "image": "../pharmacy/drug.jpg",
     "price": "150",
     "addedToCart": false
   },
   {
     "id": 2,
-    "name": "Pharmacy 2",
+    "name": "Medication 2",
     "image": "../pharmacy/drug.jpg",
     "price": "200",
     "addedToCart": false

@@ -7,9 +7,18 @@ function Echem({ cartItems, setCartItems }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [pharmacies, setPharmacies] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
+    const [showComingSoon, setShowComingSoon] = useState(false); // State for "Coming Soon" card
 
     useEffect(() => {
         setPharmacies(pharmacyData); // Set pharmacies state with data from JSON file
+
+        // Show "Coming Soon" card after 3 seconds
+        const timer = setTimeout(() => {
+            setShowComingSoon(true);
+        }, 2000);
+
+        // Clean up the timer on component unmount
+        return () => clearTimeout(timer);
     }, []);
 
     const addToCart = (pharmacy) => {
@@ -115,6 +124,17 @@ function Echem({ cartItems, setCartItems }) {
                     </a>
                 </div>
             </div>
+
+            {showComingSoon && (
+                <div className="coming-soon-overlay">
+                <div className="coming-soon-card">
+                    <img src="/drucore.png" alt="Logo" className="logo" />
+                    <h2>Coming Soon</h2>
+                    <p>We are working hard to bring you this service. Stay tuned!</p>
+                    <Link to="/" className="home-button">Go Home</Link>
+                </div>
+            </div>
+            )}
         </>
     );
 }

@@ -63,24 +63,91 @@
       ]
     },
     {
-      "id": "shop3",
+      "id": "g9shoes",
       "name": "G9",
       "category": "shoes",
-      "phone": "+254745276898",
-      "description" : "Shop Description",
+      "phone": "+254724806578",
+      "description" : "A footware store.",
       "location": "stage, opp Rockaz",
       "products": [
-        {
-          "id": "product5",
-          "name": "Running Shoes",
-          "price": 79.99,
-          "image": "../assets/images/running_shoes.jpg"
-        },
+       
         {
           "id": "product6",
-          "name": "Dress Shoes",
-          "price": 99.99,
-          "image": "../assets/images/dress_shoes.jpg"
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe6.jpg"
+        },
+        {
+          "id": "product7",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe7.jpg"
+        },
+        {
+          "id": "product8",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe8.jpg"
+        },
+        {
+          "id": "product9",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe9.jpg"
+        },
+        {
+          "id": "product10",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe10.jpg"
+        },
+        {
+          "id": "product11",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe11.jpg"
+        },
+        {
+          "id": "product12",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe12.jpg"
+        },
+        {
+          "id": "product13",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe13.jpg"
+        },
+        {
+          "id": "product14",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe14.jpg"
+        },
+        {
+          "id": "product15",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe15.jpg"
+        },
+        {
+          "id": "product16",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe16.jpg"
+        },
+        {
+          "id": "product17",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe17.jpg"
+        },
+        {
+          "id": "product18",
+          "name": "Shoe Name",
+          "price": 0,
+          "image": "../Cshoes/shoe18.jpg"
         }
       ]
     },
@@ -157,7 +224,7 @@
       ]
     },
     {
-      "id": "shop7",
+      "id": "lydiaboutique",
       "name": "Lydia Boutique",
       "category": "Boutique",
       "phone": "+254723032048",
