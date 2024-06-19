@@ -1,0 +1,21 @@
+name: Moihub
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  FTP-Deploy-Action:
+    name: FTP Deploy Action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          ftp-server: ${{ secrets.FTP_SERVER }}  # FTP server hostname or IP address
+          ftp-username: ${{ secrets.FTP_USERNAME }}  # FTP username (stored in GitHub Secrets)
+          ftp-password: ${{ secrets.FTP_PASSWORD }}  # FTP password (stored in GitHub Secrets)
