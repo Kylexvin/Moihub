@@ -9,26 +9,5 @@
         "phoneNumber": "+1234567890",
         "hasDetails": true,
         "description": "Villa Park offers a wide variety of delicious foods including Chips, Pizza, and Pasta. Enjoy our special offer and fast delivery service."
-    },
-    {
-        "id": 2,
-        "providerName": "Mexican Spice",
-        "rating": 4.5,
-        "foodTypes": ["Mexican", "Tacos", "Burritos"],
-        "deliveryTime": "25-40 mins",
-        "offer": "Free delivery on orders over $20",
-        "phoneNumber": "+1987654321",
-        "hasDetails": false
-    },
-    {
-        "id": 3,
-        "providerName": "Sizzling Chinese",
-        "rating": 4.6,
-        "foodTypes": ["Chinese", "Sushi", "Stir Fry"],
-        "deliveryTime": "35-50 mins",
-        "offer": "Happy Hour: 20% off on weekdays",
-        "phoneNumber": "+1122334455",
-        "hasDetails": true,
-        "description": "Sizzling Chinese offers a delightful selection of Chinese cuisine including Sushi and Stir Fry. Take advantage of our Happy Hour discounts on weekdays!"
     }
 ]

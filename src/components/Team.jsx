@@ -7,9 +7,8 @@ const teamData = [
     title: "CEO of MoiHub",
     image: "../Team/kylex.jpg",
     social: [
-      { platform: "Twitter", iconClass: "fab fa-twitter" },
+      { platform: "Twitter", iconClass: "fab fa-whatsapp" },
       { platform: "Instagram", iconClass: "fab fa-instagram" },
-      { platform: "Facebook", iconClass: "fab fa-facebook-f" },
       { platform: "LinkedIn", iconClass: "fab fa-linkedin-in" }
     ]
   },

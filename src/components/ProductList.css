@@ -104,7 +104,7 @@
   border: 3px solid green;
   border-radius: 8px;
   overflow: hidden;
-  background-color:ivory;
+  background-color: transparent;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
 }
 .mini-card2{
@@ -120,7 +120,8 @@
 }
 .img-container {
 width: 100%;
-height: 250px;
+height: auto;
+max-height: 500px;
 overflow: hidden;
 background-color: ivory; 
 border-radius: 0;  
@@ -129,9 +130,10 @@ position: relative;
 
 .item-photo {
   width: 100%;
-  height: auto; /* Adjust height of the photo */
-  object-fit: cover;
+  height: 300px; /* Adjust height of the photo */
+  object-fit: contain;
 border-radius: 0; /* Match border radius for consistency */
+background-color: transparent;
 
 }
 
@@ -244,15 +246,15 @@ font-size: 1.2em;
 
 @keyframes waveAnimation {
 0% {
-  opacity: 0.3;
+  opacity: 0.1;
   transform: translateY(0);
 }
 50% {
-  opacity: 0.3;
+  opacity: 0.5;
   transform: translateY(-1px);
 }
 100% {
-  opacity: 0.3;
+  opacity: 0.1;
   transform: translateY(0);
 }
 }
@@ -260,7 +262,9 @@ font-size: 1.2em;
 .mini-card.skeleton,
 .img-container.skeleton,
 .item-container.skeleton {
-animation: waveAnimation 2s infinite;
+animation: waveAnimation 0.9s infinite;
+height: 300px;
+width: auto;
 }
 
 
@@ -278,6 +282,13 @@ animation: waveAnimation 2s infinite;
     background-color: rgb(182, 222, 230); 
     border-radius: 0;  
     position: relative;
+    }
+    .item-photo {
+      width: 100%;
+      height: auto; /* Adjust height of the photo */
+      object-fit: cover;
+    border-radius: 0; /* Match border radius for consistency */
+    
     }
 }
 
