@@ -30,12 +30,12 @@
           "id": "product1",
           "name": "Product Name",
           "price": 1,
-          "image": "productimg.jpg" 
+          "image": "../sellers/productimg.jpg" 
         }
       ]
     },
     {
-      "id": "shop1",
+      "id": "shop2",
       "name": "Your Shop Name",
       "category": "electronics",
       "phone": "+1234567890",
@@ -44,14 +44,14 @@
       "products": [
         {
           "id": "product1",
-          "name": "Product Name",
+          "name":"The Product",
           "price": 1,
-          "image": "productimg.jpg" 
+         "image": "../sellers/productimg.jpg" 
         }
       ]
     },
     {
-      "id": "shop1",
+      "id": "shop3",
       "name": "Your Shop Name",
       "category": "homedecor",
       "phone": "+1234567890",
@@ -62,7 +62,7 @@
           "id": "product1",
           "name": "Product Name",
           "price": 1,
-          "image": "productimg.jpg" 
+          "image": "../sellers/productimg.jpg" 
         }
       ]
     },
