@@ -58,6 +58,14 @@ const Home = () => {
   </div>
 </div>
 
+<div className={`service-card ${cardVisibility['e-shop'] ? 'show' : ''}`} data-card-id="e-shop">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic">E-shop<br /><i className="fas fa-shopping-cart"></i></h3>
+    <p className="neumorphic">Browse a wide range of products from the comfort of your own home. Enjoy hassle-free online shopping with our collection of products.Shop now.</p>
+    <a href="/eshop"><div className="neumorphic"> <button className="button-b">Start Shopping <i className="fas fa-store"></i></button></div></a>
+  </div>
+</div>
+
 <div className={`service-card ${cardVisibility['e-chem'] ? 'show' : ''}`} data-card-id="e-chem">
   <div className="neumorphic-v2">
     <h3 className="neumorphic">E-Chem<br /><i className="fas fa-stethoscope"></i></h3>
@@ -92,13 +100,7 @@ const Home = () => {
   </div>
 </div>
 
-<div className={`service-card ${cardVisibility['e-shop'] ? 'show' : ''}`} data-card-id="e-shop">
-  <div className="neumorphic-v2">
-    <h3 className="neumorphic">E-shop<br /><i className="fas fa-shopping-cart"></i></h3>
-    <p className="neumorphic">Browse a wide range of products from the comfort of your own home. Enjoy hassle-free online shopping with our collection of products.Shop now.</p>
-    <a href="/eshop"><div className="neumorphic"> <button className="button-b">Start Shopping <i className="fas fa-store"></i></button></div></a>
-  </div>
-</div>
+
 
 <div className={`service-card ${cardVisibility['second-hand-market'] ? 'show' : ''}`} data-card-id="second-hand-market">
   <div className="neumorphic-v2">
