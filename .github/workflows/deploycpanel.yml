@@ -1,21 +1,19 @@
-name: Moihub
-
-on:
+on: 
   push:
     branches:
-      - master 
-
+      -master
+name: 🚀 Deploy website on push
 jobs:
-  FTP-Deploy-Action:
-    name: FTP Deploy Action
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
-        with:
-          ftp-server: ${{ secrets.FTP_SERVER }}  # FTP server hostname or IP address
-          ftp-username: ${{ secrets.FTP_USERNAME }}  # FTP username (stored in GitHub Secrets)
-          ftp-password: ${{ secrets.FTP_PASSWORD }}  # FTP password (stored in GitHub Secrets)
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        ftp-server: ftpmoihubv1@moihub.co.ke  # FTP server hostname or IP address
+        ftp-username: ${{ secrets.FTP_USERNAME }}  # FTP username (stored in GitHub Secrets)
+        ftp-password: ${{ secrets.FTP_PASSWORD }}  # FTP password (stored in GitHub Secrets)

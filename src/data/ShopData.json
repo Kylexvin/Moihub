@@ -13,52 +13,56 @@
       "name": "Boutique"
     },
     {
-      "id": "books",
-      "name": "Books"
+      "id": "homedecor",
+      "name": "Home Decor"
     }
   ],
   "shops": [
     {
       "id": "shop1",
-      "name": "Electronics Emporium",
+      "name": "Your Shop Name",
       "category": "electronics",
       "phone": "+1234567890",
       "description" : "Shop Description",
-      "location": "stage, opp Rockaz",
+      "location": "Location Here",
       "products": [
         {
           "id": "product1",
-          "name": "Laptop",
-          "price": 799,
-          "image": "/Eimgs/spark10.jpg" 
-        },
-        {
-          "id": "product2",
-          "name": "Smartphone",
-          "price": 499.99,
-          "image": "../assets/images/smartphone.jpg"
+          "name": "Product Name",
+          "price": 1,
+          "image": "productimg.jpg" 
         }
       ]
     },
     {
-      "id": "shop2",
-      "name": "Gadget Galaxy",
+      "id": "shop1",
+      "name": "Your Shop Name",
       "category": "electronics",
-      "phone": "+1987654321",
+      "phone": "+1234567890",
       "description" : "Shop Description",
-      "location": "stage, opp Rockaz",
+      "location": "Location Here",
       "products": [
         {
-          "id": "product3",
-          "name": "Tablet",
-          "price": 20999.99,
-          "image": "../assets/images/tablet.jpg"
-        },
+          "id": "product1",
+          "name": "Product Name",
+          "price": 1,
+          "image": "productimg.jpg" 
+        }
+      ]
+    },
+    {
+      "id": "shop1",
+      "name": "Your Shop Name",
+      "category": "homedecor",
+      "phone": "+1234567890",
+      "description" : "Shop Description",
+      "location": "Location Here",
+      "products": [
         {
-          "id": "product4",
-          "name": "Camera",
-          "price": 399.99,
-          "image": "../assets/images/camera.jpg"
+          "id": "product1",
+          "name": "Product Name",
+          "price": 1,
+          "image": "productimg.jpg" 
         }
       ]
     },
@@ -151,78 +155,7 @@
         }
       ]
     },
-    {
-      "id": "shop4",
-      "name": "Sports Footwear",
-      "category": "shoes",
-      "phone": "+9988776655",
-      "description" : "Shop Description",
-      "location": "stage, opp Rockaz",
-      "products": [
-        {
-          "id": "product7",
-          "name": "Sneakers",
-          "price": 89.99,
-          "image": "../assets/images/sneakers.jpg"
-        },
-        {
-          "id": "product8",
-          "name": "Sandals",
-          "price": 49.99,
-          "image": "../assets/images/sandals.jpg"
-        }
-      ]
-    },
-    {
-      "id": "shop5",
-      "name": "Book Emporium",
-      "category": "books",
-      "phone": "+6655443322",
-      "description" : "Shop Description",
-      "location": "stage, opp Rockaz",
-      "products": [
-        {
-          "id": "product9",
-          "name": "The Great Gatsby",
-          "price": 14.99,
-          "image": "../assets/images/great_gatsby.jpg"
-        },
-        {
-          "id": "product10",
-          "name": "To Kill a Mockingbird",
-          "price": 12.99,
-          "image": "../assets/images/mockingbird.jpg"
-        }
-      ]
-    },
-    {
-      "id": "shop6",
-      "name": "Literary Haven",
-      "category": "books",
-      "phone": "+1122334455",
-      "description" : "Shop Description",
-      "location": "stage, opp Rockaz",
-      "products": [
-        {
-          "id": "product11",
-          "name": "1984",
-          "price": 9.99,
-          "image": "../assets/images/1984.jpg"
-        },
-        {
-          "id": "product12",
-          "name": "Pride and Prejudice",
-          "price": 11.99,
-          "image": "../assets/images/pride_and_prejudice.jpg"
-        },
-        {
-          "id": "product13",
-          "name": "Kigogo",
-          "price": 11.99,
-          "image": "../assets/images/pride_and_prejudice.jpg"
-        }
-      ]
-    },
+
     {
       "id": "lydiaboutique",
       "name": "Lydia Boutique",
