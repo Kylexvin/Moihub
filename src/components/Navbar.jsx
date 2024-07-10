@@ -1,5 +1,6 @@
 // Navbar.js
 import React from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import './styles.css'; 
 
 const navLinkStyle = {
@@ -12,6 +13,7 @@ const navLinkStyle = {
 const Navbar = () => {
   return (
     <>
+     <SpeedInsights />
   <nav className="navbar navbar-expand-lg navbar-light bg-success">
     <a className="navbar-brand" href="/">
       <img src="logo2.png" width="auto" height="50" className="d-inline-block " alt="MoiHub" />

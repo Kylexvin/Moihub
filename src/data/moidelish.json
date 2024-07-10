@@ -2,7 +2,7 @@
     {
         "id": 1,
         "providerName": "Villa Park",
-        "rating": 4.8,
+        "rating": 4.9,
         "foodTypes": ["Chips", "Pizza", "Pasta"],
         "deliveryTime": "30-45 mins",
         "offer": "Special Offer: 10% off first order",
