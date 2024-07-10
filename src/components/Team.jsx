@@ -7,9 +7,9 @@ const teamData = [
     title: "CEO of MoiHub",
     image: "../Team/kylex.jpg",
     social: [
-      { platform: "WhatsApp", iconClass: "fab fa-whatsapp", link: "https://wa.me/your_whatsapp_number" },
-      { platform: "Instagram", iconClass: "fab fa-instagram", link: "https://www.instagram.com/kylex_profile" },
-      { platform: "LinkedIn", iconClass: "fab fa-linkedin-in", link: "https://www.linkedin.com/in/kylex_profile" }
+      { platform: "Github", iconClass: "fab fa-github", link: "https://github.com/Kylexvin" },
+      { platform: "Instagram", iconClass: "fab fa-instagram", link: "https://www.instagram.com/vinny_kylex?igsh=MTJwZ2tjNm95ejZuMQ==" },
+      { platform: "LinkedIn", iconClass: "fab fa-linkedin-in", link: "https://www.linkedin.com/in/vinny-kylex-?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" }
     ]
   },
   {

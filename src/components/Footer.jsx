@@ -25,14 +25,14 @@ const Footer = () => {
         <div className="footer-section"> 
           <h4>Follow Us</h4> 
           <ul className="social-icons"> 
-            <li><a href="moihub.co.ke" className="fab fa-facebook"></a></li> 
-            <li><a href="moihub.co.ke" className="fab fa-tiktok"></a></li> 
-            <li><a href="moihub.co.ke" className="fab fa-instagram"></a></li> 
+            <li><a href="https://www.facebook.com/profile.php?id=61553038797986" className="fab fa-facebook"></a></li> 
+            <li><a href="https://vm.tiktok.com/ZMrhXThUb/" className="fab fa-tiktok"></a></li> 
+            <li><a href="https://www.instagram.com/_moihub?igsh=MWMzdG1qZzZ3ZmN2" className="fab fa-instagram"></a></li> 
           </ul> 
         </div> 
       </div> 
       <div className="footer-bottom"> 
-        <p>© 2024 <br />Kylex inc | Sejjo Co. <br />All rights reserved.</p> 
+        <p>© 2024 <br />Kylex inc. | Sejjo Co. <br />All rights reserved.</p> 
       </div> 
     </footer> 
   ); 
