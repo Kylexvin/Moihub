@@ -4,7 +4,7 @@ import './team.css';
 const teamData = [
   {
     name: "Kylex",
-    title: "CEO of MoiHub",
+    title: "CEO",
     image: "../Team/kylex.jpg",
     social: [
       { platform: "Github", iconClass: "fab fa-github", link: "https://github.com/Kylexvin" },
@@ -14,7 +14,7 @@ const teamData = [
   },
   {
     name: "Sejjo",
-    title: "CTO MoiHub",
+    title: "CTO",
     image: "../Team/sejjo.jpg",
     social: [
       { platform: "Twitter", iconClass: "fab fa-twitter", link: "https://twitter.com/sejjo_profile" },
@@ -25,7 +25,7 @@ const teamData = [
   },
   {
     name: "Lannie",
-    title: "CMO MoiHub",
+    title: "CMO",
     image: "../Team/lannie.jpg",
     social: [
       { platform: "Twitter", iconClass: "fab fa-twitter", link: "https://twitter.com/lannie_profile" },
@@ -36,7 +36,7 @@ const teamData = [
   },
   {
     name: "Tekashi",
-    title: "GM MoiHub",
+    title: "GM",
     image: "../Team/tekashi.jpg",
     social: [
       { platform: "Twitter", iconClass: "fab fa-twitter", link: "https://twitter.com/tekashi_profile" },
@@ -47,7 +47,7 @@ const teamData = [
   },
   {
     name: "Valentine",
-    title: "Customer Care MoiHub",
+    title: "Customer Support",
     image: "../Team/vall.jpg",
     social: [
       { platform: "Twitter", iconClass: "fab fa-twitter", link: "https://twitter.com/valentine_profile" },
