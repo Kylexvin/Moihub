@@ -31,7 +31,7 @@ const MoiDelish = () => {
 
     const handleSearch = () => {
         const filtered = providerData.filter(provider =>
-            provider.providerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             provider.foodTypes.some(type => type.toLowerCase().includes(searchTerm.toLowerCase()))
         );
         setFilteredProviders(filtered);
@@ -83,10 +83,10 @@ const MoiDelish = () => {
             </div>
 
             <div className="container-provider">
-                {filteredProviders.map((provider, index) => (
+                {Array.isArray(filteredProviders) && filteredProviders.map((provider, index) => (
                     <div key={index} className="card-provider">
                         <div className="card-header">
-                            <h2 className="provider-name">{provider.providerName}</h2>
+                            <h2 className="provider-name">{provider.name}</h2>
                             <div className="ratings">
                                 <i className="fas fa-star"></i>{provider.rating}
                             </div>

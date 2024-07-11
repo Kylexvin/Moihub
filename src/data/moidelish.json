@@ -1,13 +1,68 @@
 [
-    {
-        "id": 1,
-        "providerName": "Villa Park",
-        "rating": 4.9,
-        "foodTypes": ["Chips", "Pizza", "Pasta"],
-        "deliveryTime": "30-45 mins",
-        "offer": "Special Offer: 10% off first order",
-        "phoneNumber": "+1234567890",
-        "hasDetails": true,
-        "description": "Villa Park offers a wide variety of delicious foods including Chips, Pizza, and Pasta. Enjoy our special offer and fast delivery service."
-    }
+  {
+      "id": "villapark",
+      "name": "Villa Park",
+      "category": "food delivery",
+      "phone": "+254724806578",
+      "description": "Villa Park offers a wide variety of delicious foods including Chips, Pizza, and Pasta. Enjoy our special offer and fast delivery service.",
+      "location": "stage",
+      "rating": 4.8,
+      "foodTypes": ["Chips", "Pizza", "Pasta"],
+      "deliveryTime": "30-45 mins",
+      "offer": "Special Offer: 10% off first order",
+      "hasDetails": true,
+      "products": [
+          {
+              "id": "steak1",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          },
+          {
+              "id": "steak2",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          },
+          {
+              "id": "steak3",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          }
+      ]
+  },
+  {
+      "id": "gourmetbites",
+      "name": "Shop Name",
+      "category": "food delivery",
+      "phone": "+254723456789",
+      "description": "Gourmet Bites offers a range of gourmet meals including Steaks, Sushi, and Desserts. Enjoy our high-quality meals delivered to your door.",
+      "location": "downtown, near Central Park",
+      "rating": 4.7,
+      "foodTypes": ["Steaks", "Sushi", "Desserts"],
+      "deliveryTime": "25-40 mins",
+      "offer": "Special Offer: 15% off orders above $50",
+      "hasDetails": true,
+      "products": [
+          {
+              "id": "steak1",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          },
+          {
+              "id": "steak2",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          },
+          {
+              "id": "steak3",
+              "name": "Food Name",
+              "price": 0.00,
+              "image": "../delish/food.jpg"
+          }
+      ]
+  }
 ]

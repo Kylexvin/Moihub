@@ -1,33 +1,45 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import providerData from '../data/moidelish.json';
-//    import './ProviderDetails.css';
+import providerData from '../data/moidelish.json'; // Assuming this is your JSON data
+import './providersdetails.css';
 
 const ProviderDetails = () => {
     const { providerId } = useParams();
-    const provider = providerData.find(p => p.id === parseInt(providerId));
+    const provider = providerData.find(p => p.id === providerId);
 
     if (!provider) {
         return <div>Provider not found</div>;
     }
 
-    return (
+    return ( 
+    <>
         <div className="provider-details">
-            <h1>{provider.providerName}</h1>
-            <div className="ratings">
-                <i className="fas fa-star"></i>{provider.rating}
+            <h1 className='provider-name'>{provider.name}</h1>
+          
+            <div className="info-row">
+            <p><i className="fas fa-map-marker-alt"></i> <br></br>{provider.location}</p>
+            <p><i className="fas fa-clock"></i> <br></br>{provider.deliveryTime}</p>
             </div>
-            <p>{provider.description}</p>
-            <h3>Food Types:</h3>
-            <ul className="food-types">
-                {provider.foodTypes.map((type, index) => (
-                    <li key={index}>{type}</li>
-                ))}
-            </ul>
-            <p className="delivery-time"><i className="far fa-clock"></i>{provider.deliveryTime}</p>
-            <p className="offer-tag"><i className="fas fa-tags"></i>{provider.offer}</p>
-            <button className="cta-button" onClick={() => window.location.href = `tel:${provider.phoneNumber}`}>Order Now <i className="fas fa-phone"></i></button>
+            
+            </div>
+            <div className="card-food">
+                <h2>Products</h2>
+                <ul>
+                    {provider.products.map(product => (
+                        <li key={product.id}>
+                            <img src={product.image} alt={product.name} />
+                            <div>
+                                <p className='product-name'>{product.name}</p>
+                                <p className='product-price'>{product.price}</p>
+                                <button className='order-now-btn'>Order Now</button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+           
         </div>
+
+       </>
     );
 };
 

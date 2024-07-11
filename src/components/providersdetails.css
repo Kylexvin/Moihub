@@ -1,0 +1,113 @@
+.provider-details {
+    background: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 10px 10px 20px #bebebe, 
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    width: auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 0.5px solid #FE5722;
+    box-shadow: 10px 10px 20px #bebebe, 
+                -10px -10px 20px #ffffff;
+}
+
+.neo {
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px #bebebe, 
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    border: 0.5px solid #FE5722;
+}
+
+.info-row p {
+    margin: 5px;  
+} 
+
+.card-food {
+    background: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 10px 10px 20px #bebebe, 
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    width: auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.card-food h1, .card h2 {
+    margin-bottom: 10px;
+}
+
+.card-food ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* spacing between items */
+}
+
+.card-food li {
+    width: calc(50% - 10px); /* 50% width minus gap */
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    border-bottom: 2px solid red;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.order-now-btn {
+    background-color: #e65c50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .card-food li {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+
+.card-food li img {
+    width: 150px;  /* Adjusted image size */
+    height: 150px; /* Adjusted image size */
+    border-radius: 10%;
+    margin-right: 10px;
+    border: 1px solid #e65c50;
+}
+
+.card-food li div {
+    text-align: left;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FE5722;
+}  
+.provider-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333; /* Change this to the desired color */
+    margin-bottom: 10px;
+    text-align: left;
+}
