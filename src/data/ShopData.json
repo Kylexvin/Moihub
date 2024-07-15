@@ -171,11 +171,39 @@
           "image": "../Boutique/duvet01.jpg"
         },
 
+        {
+          "id": "Regular Duvet",
+          "name": "Regular Duvet",
+          "price": 2200,
+          "image": "../Boutique/duvet02.jpg"
+        },
+
          {
           "id": "product13",
           "name": "Generic Woolen Duvet",
           "price": 2500,
           "image":"../Boutique/duvet04.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Shinny Duvet",
+          "price": 2500,
+          "image":"../Boutique/shinyduvet.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Shinny Duvet",
+          "price": 2500,
+          "image":"../Boutique/shinyduvets.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Velvet Duvet",
+          "price": 4500,
+          "image":"../Boutique/velvetduvet.jpg"
         },
 
         {
@@ -193,6 +221,12 @@
           "image": "../Boutique/4standnet.jpg"
         },
 
+        {
+          "id": "product14",
+          "name": "2 Stand Mosquito Net",
+          "price": 4500,
+          "image": "../Boutique/2standnet2.jpg"
+        },
         {
           "id": "product13",
           "name": "2 Stand Mosquito Net",
@@ -228,6 +262,17 @@
           "image": "../Boutique/fmat01.jpg",
           "info" : "Varieties available."
         },
+
+
+         {
+          "id": "product13",
+          "name": "Doormat",
+          "price": 400,
+          "image": "../Boutique/mat01.jpg",
+          "info" : "Varieties available."
+        },
+
+
         {
           "id": "product13",
           "name": "Wall Nets",
@@ -235,6 +280,7 @@
           "image": "../assets/images/pride_and_prejudice.jpg",
           "info" : "Varieties available."
         },
+
         {
           "id": "product13",
           "name": "Curtains",
@@ -242,6 +288,7 @@
           "image": "../Boutique/curtain01.jpg",
           "info" : "Varieties available."
         },
+
         {
           "id": "product13",
           "name": "Throw Pillows",
@@ -249,12 +296,124 @@
           "image": "../Boutique/throwpillow.jpg",
           "info" : "Varieties available."
         },
+
         {
           "id": "product13",
-          "name": "Doormat",
-          "price": 400,
-          "image": "../Boutique/mat01.jpg",
-          "info" : "Varieties available."
+          "name": "Bonnets",
+          "price": 250,
+          "image": "../Boutique/bonnets.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Corset Belts",
+          "price": 1000,
+          "image": "../Boutique/corsetbelts.jpg"
+        },
+        
+        {
+          "id": "product13",
+          "name": "Corset Belts",
+          "price": 1000,
+          "image": "../Boutique/corsetbelts2.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Corset Belt",
+          "price": 1000,
+          "image": "../Boutique/corsetbelt.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Harness Belt",
+          "price": 250,
+          "image": "../Boutique/harness belt.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Obi Belt",
+          "price": 250,
+          "image": "../Boutique/obibelts.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Fish Nets",
+          "price": 250,
+          "image": "../Boutique/fishnets.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Biker Shorts",
+          "price": 350,
+          "image": "../Boutique/bikershorts.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Quality Ladies Tights",
+          "price": 350,
+          "image": "../Boutique/ladiestight.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Sweater Skirt",
+          "price": 600,
+          "image": "../Boutique/sweaterskirts.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Official Pensil Skirt",
+          "price": 500,
+          "image": "../Boutique/officialpensil2.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Official Pensil Skirt",
+          "price": 500,
+          "image": "../Boutique/officialpensil.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Maxi Skirt",
+          "price": 750,
+          "image": "../Boutique/maxiskirt.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Maxi Skirt",
+          "price": 750,
+          "image": "../Boutique/maxiskirt1.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Maxi Skirt",
+          "price": 750,
+          "image": "../Boutique/maxiskirt2.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Silk Scarfs",
+          "price": 250,
+          "image": "../Boutique/scarfs.jpg"
+        },
+
+        {
+          "id": "product13",
+          "name": "Sling Bag",
+          "price": 250,
+          "image": "../Boutique/slingbag.jpg"
         }
 
        
