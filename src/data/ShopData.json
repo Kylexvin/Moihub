@@ -328,14 +328,14 @@
         {
           "id": "product13",
           "name": "Harness Belt",
-          "price": 250,
+          "price": 1300,
           "image": "../Boutique/harness belt.jpg"
         },
 
         {
           "id": "product13",
           "name": "Obi Belt",
-          "price": 250,
+          "price": 600,
           "image": "../Boutique/obibelts.jpg"
         },
 
@@ -412,7 +412,7 @@
         {
           "id": "product13",
           "name": "Sling Bag",
-          "price": 250,
+          "price": 500,
           "image": "../Boutique/slingbag.jpg"
         }
 
