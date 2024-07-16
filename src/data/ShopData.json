@@ -20,9 +20,9 @@
   "shops": [
     {
       "id": "shop1",
-      "name": "Your Shop Name",
+      "name": "SMART VENTURES",
       "category": "electronics",
-      "phone": "+1234567890",
+      "phone": "+254748655202",
       "description" : "Shop Description",
       "location": "Location Here",
       "products": [
