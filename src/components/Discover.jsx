@@ -23,6 +23,7 @@ const jsonData = [
     category: "Mama Fua",
     services: [
       { name: "(Rebo)", phone: "0717249441" },
+      { name: "Rodha(Mobile)", phone: "+254 741 260404"},
       { name: "(Emerald)", phone: "0748446504"},
       { name: "Mobile", phone: "0790861147"}
     ]
