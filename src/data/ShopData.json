@@ -25,14 +25,177 @@
       "phone": "+254748655202",
       "description" : "Smart Ventures offers new, second-hand, and refurbished tech at great prices. Upgrade your gadgets now!",
       "location": "Diamond House",
-      "products": [
+      "products": [ 
         {
           "id": "product1",
-          "name": "Product Name",
-          "price": 1,
-          "image": "../sellers/productimg.jpg" 
+          "name": "HP EliteBook 840 G1",
+          "price": 19500,
+          "image": "../Laptops/hp_elitebook_840_g1.jpg",
+          "info": "Intel Core i5, 8GB RAM, 500GB HDD, 14-inch screen, Backlit keyboard"
+        },
+        {
+          "id": "product2",
+          "name": "HP EliteBook 840 G2",
+          "price": 20999,
+          "image": "../Laptops/hp_elitebook_840_g2.jpg",
+          "info": "Intel Core i5, 8GB RAM, 256GB SSD, 14-inch screen, Backlit keyboard"
+        },
+        {
+          "id": "product3",
+          "name": "HP EliteBook 840 G4",
+          "price": 25999,
+          "image": "../Laptops/hp_elitebook_840_g4.jpg",
+          "info": "Intel Core i7, 8GB RAM, 256GB SSD, 12.5-inch screen, Backlit keyboard"
+        },
+        {
+          "id": "product4",
+          "name": "Dell Latitude E7240",
+          "price": 16999,
+          "image": "../Laptops/dell_latitude_e7240.jpg",
+          "info": "Intel Core i5-4300U 1.90 GHz, 8GB RAM, 128GB SSD, 12.5-inch LED Ultrabook, Windows 10 Pro"
+        },
+        {
+          "id": "product5",
+          "name": "Dell Latitude E6420",
+          "price": 15499,
+          "image": "../Laptops/dell_latitude_e6420.jpg",
+          "info": "Intel Core i5, 4GB RAM, 500GB HDD, 14-inch screen"
+        },
+        {
+          "id": "product6",
+          "name": "Lenovo ThinkPad X240",
+          "price": 17799,
+          "image": "../Laptops/lenovo_thinkpad_x240.jpg",
+          "info": "Intel Core i5-4300U, 8GB RAM, 256GB SSD, 12.5-inch screen"
+        },
+        {
+          "id": "product7",
+          "name": "Lenovo ThinkPad T460",
+          "price": 21499,
+          "image": "../Laptops/lenovo_thinkpad_t460.jpg",
+          "info": "Intel Core i5 Dual-Core, 8GB DDR3 RAM, 256GB SSD, 14-inch screen, Windows 10 Pro"
+        },
+        {
+          "id": "product8",
+          "name": "Lenovo ThinkPad T470s",
+          "price": 26000,
+          "image": "../Laptops/lenovo_thinkpad_t470s.jpg",
+          "info": "Intel Core i7 2.8 GHz 7600U, 8GB RAM, 256GB SSD, 14-inch screen, Intel HD Graphics, Windows 10 Pro"
+        },
+        {
+          "id": "product9",
+          "name": "Lenovo ThinkPad Yoga 11e x360",
+          "price": 19799,
+          "image": "../Laptops/lenovo_thinkpad_yoga_11e_x360.jpg",
+          "info": "Intel Core i5, 8GB RAM, 256GB SSD, 11.6-inch touchscreen"
+        },
+        {
+          "id": "product10",
+          "name": "HP EliteBook 8470p",
+          "price": 15000,
+          "image": "../Laptops/hp_elitebook_8470p.jpg",
+          "info": "Intel Core i5 2.6 GHz, 4GB RAM, 500GB HDD"
+        },
+        {
+          "id": "product11",
+          "name": "HP EliteBook 840 G5",
+          "price": 39999,
+          "image": "../Laptops/hp_elitebook_840_g5.jpg",
+          "info": "8th Gen Intel Quad-Core i7-8250U, 16GB RAM, 256GB SSD, 14-inch FHD display, Bluetooth, Webcam, WiFi, USB Type-C, HDMI, Intel UHD Graphics"
+        },
+        {
+          "id": "product12",
+          "name": "HP ProBook 430 G2",
+          "price": 22500,
+          "image": "../Laptops/hp_probook_430_g2.jpg",
+          "info": "5th Generation Intel Core i5, 4GB RAM, 500GB HDD or 128GB SSD, HDMI port"
+        },
+        {
+          "id": "product13",
+          "name": "HP EliteBook 830 G5",
+          "price": 31999,
+          "image": "../Laptops/hp_elitebook_830_g5.jpg",
+          "info": "Intel Core i5 8th Gen, 8GB RAM, 256GB SSD, 13.3-inch screen"
+        },
+        {
+          "id": "product14",
+          "name": "HP EliteBook 820 G3",
+          "price": 21999,
+          "image": "../Laptops/hp_elitebook_820_g3.jpg",
+          "info": "12.5-inch FHD display, Intel Core i5-6300U 2.4GHz, 8GB DDR4 RAM, 256GB SSD, Webcam, USB-C, Windows 10 Pro 64-bit"
+        },
+        {
+          "id": "product15",
+          "name": "HP EliteBook Folio 1040 G3",
+          "price": 31599,
+          "image": "../Laptops/hp_elitebook_folio_1040_g3.jpg",
+          "info": "Intel Core i5 6th Gen, 8GB RAM, 256GB SSD, 14-inch HD touchscreen display"
+        },
+        {
+          "id": "product16",
+          "name": "Lenovo ThinkPad X390",
+          "price": 37899,
+          "image": "../Laptops/lenovo_thinkpad_x390.jpg",
+          "info": "8th Gen Intel Core i7, 16GB RAM, 256GB SSD"
+        },
+        {
+          "id": "product17",
+          "name": "Dell XPS 9360",
+          "price": 39000,
+          "image": "../Laptops/dell_xps_9360.jpg",
+          "info": "Intel Core i5 7th Gen, 8GB RAM, 256GB SSD, Touchscreen, 3K display, backlit keyboard"
+        },
+        {
+          "id": "product18",
+          "name": "Lenovo V130-15IKB",
+          "price": 37000,
+          "image": "../Laptops/lenovo_v130_15ikb.jpg",
+          "info": "15.6-inch screen, Celeron 3865U, 4GB RAM, 1TB HDD, 1-year warranty"
+        },
+        {
+          "id": "product19",
+          "name": "MacBook Pro 2015 (13\")",
+          "price": 48999,
+          "image": "../Laptops/macbook_pro_2015_13.jpg",
+          "info": "Intel Core i5, 8GB RAM, 256GB SSD, Silver"
+        },
+        {
+          "id": "product20",
+          "name": "HP EliteOne 800 G2 All-in-One",
+          "price": 44999,
+          "image": "../Laptops/hp_eliteone_800_g2.jpg",
+          "info": "Intel Core i5 6th Gen, 8GB RAM, 256GB SSD"
+        },
+        {
+          "id": "product21",
+          "name": "Intel Core i5-8365U 2-in-1 Laptop",
+          "price": 48699,
+          "image": "../Laptops/intel_i5_8365u_2_in_1.jpg",
+          "info": "16GB DDR4 RAM, 256GB SSD, 14-inch FHD touchscreen, Intel UHD Graphics 620, Bang & Olufsen sound, Multi-touch, Ex-UK, 6 months warranty"
+        },
+        {
+          "id": "product22",
+          "name": "HP EliteBook Revolve 810 G3",
+          "price": 28000,
+          "image": "../Laptops/hp_elitebook_revolve_810_g3.jpg",
+          "info": "Intel Core i5 5th Gen, 8GB RAM, 256GB SSD, 12mm ultra-slim, 2.1 kg ultra-light, High performance"
+        },
+        {
+          "id": "product23",
+          "name": "MacBook Pro 2015 (13\" Retina)",
+          "price": 38999,
+          "image": "../Laptops/macbook_pro_2015_13_retina.jpg",
+          "info": "Intel Core i5, 8GB RAM, 128GB SSD, Backlit keyboard, 2.7GHz, Intel Iris Graphics"
+        },
+        {
+          "id": "product24",
+          "name": "HP EliteBook 840 G4",
+          "price": 31450,
+          "image": "../Laptops/hp_elitebook_840_g4_touchscreen.jpg",
+          "info": "Intel Core i5 7th Gen, 8GB RAM, 256GB SSD, Touchscreen"
         }
       ]
+      
     },
     {
       "id": "shop2",
