@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Filters from './Filters';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './styles.css';
 import CustomerCare from './customercare';
 
@@ -11,17 +11,15 @@ const plotsPerPage = 6; // Number of plots per page
 const Booking = ({ plots }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredPlots, setFilteredPlots] = useState(plots);
-  const [animateCards, setAnimateCards] = useState(false); // State to manage animation
+  const [animateCards, setAnimateCards] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const page = parseInt(params.get('page'));
-    if (!isNaN(page)) {
-      setCurrentPage(page);
-    }
-
-    setAnimateCards(true); // Trigger animation
+    const page = parseInt(params.get('page')) || 1;
+    setCurrentPage(page);
+    setAnimateCards(true);
 
     const notificationTimer = setTimeout(() => {
       toast("Na usisahau kuambia caretaker umetoka MoiHub!", {
@@ -85,12 +83,16 @@ const Booking = ({ plots }) => {
     });
 
     setFilteredPlots(filtered);
-    setCurrentPage(1);
+    handlePageChange(1);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    navigate(`?page=${newPage}`);
   };
 
   const indexOfLastPlot = currentPage * plotsPerPage;
   const indexOfFirstPlot = (currentPage - 1) * plotsPerPage;
-
   const currentPlots = filteredPlots.slice(indexOfFirstPlot, indexOfLastPlot);
 
   return (
@@ -104,10 +106,8 @@ const Booking = ({ plots }) => {
         <div className="apartment-container" id="apartmentContainer">
           {currentPlots.map((plot, index) => (
             <div key={index} className={`apartment-card ${animateCards ? 'animated-card show' : ''}`}>
-              
               <div className="appartment-name">{plot.name} {parseInt(plot.vacancy) >= 1 && <div className="green"></div>}
               </div>
-             
               <div className="neomorphism">
                 <div className="neomorphism" data-plottype={plot.plotType}>
                   {plot.plotType}
@@ -128,10 +128,18 @@ const Booking = ({ plots }) => {
       </div>
       <div className="filter-container">
         <div className="pagination">
-          <button onClick={() => setCurrentPage(prevPage => prevPage - 1)} disabled={currentPage === 1} aria-label="Previous">
+          <button 
+            onClick={() => handlePageChange(currentPage - 1)} 
+            disabled={currentPage === 1} 
+            aria-label="Previous"
+          >
             <i className="fas fa-arrow-left"></i> Previous
           </button>
-          <button onClick={() => setCurrentPage(prevPage => prevPage + 1)} disabled={indexOfLastPlot >= filteredPlots.length} aria-label="Next">
+          <button 
+            onClick={() => handlePageChange(currentPage + 1)} 
+            disabled={indexOfLastPlot >= filteredPlots.length} 
+            aria-label="Next"
+          >
             Next <i className="fas fa-arrow-right"></i>
           </button>
         </div>
