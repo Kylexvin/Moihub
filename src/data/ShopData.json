@@ -198,14 +198,14 @@
         "id": "product25",
         "name": "HP Elite Dragonfly",
         "price": 55000,
-        "image": "../Laptops/hp_elite_dragonfly.jpg",
+        "image": "../Laptops/hp_elitebook_dragonfly.jpg",
         "info": "Intel Core i7 8th Gen, 16GB RAM, 512GB SSD, Touchscreen, Backlit Keyboard, Windows 10 Pro, Microsoft Office, FHD Display"
     },
     {
         "id": "product26",
         "name": "HP EliteBook X360 830 G6",
         "price": 42000,
-        "image": "../Laptops/hp_elitebook_x360_830_g6.jpg",
+        "image": "../Laptops/hp_elitebook_x360_g6.jpg",
         "info": "Intel Core i7-8665U 8th Gen, 16GB RAM, 256GB SSD, Intel UHD Graphics 620, 1920 x 1080 Full HD Resolution, Facial Recognition, Fingerprint Security, X360 Convertible, Keyboard Light, 13.3” Touchscreen"
     },
     {
