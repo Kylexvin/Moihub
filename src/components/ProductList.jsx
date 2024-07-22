@@ -8,12 +8,15 @@ const ProductList = ({ shops }) => {
   const shop = shops.find((s) => s.id === shopId);
 
   // State for showing additional information
-  const [showInfo, setShowInfo] = useState(false);
+  const [showInfo, setShowInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true); // State to track loading
 
   // Function to toggle additional information
-  const toggleInfo = () => {
-    setShowInfo(!showInfo);
+  const toggleInfo = (productId) => {
+    setShowInfo((prevState) => ({
+      ...prevState,
+      [productId]: !prevState[productId],
+    }));
   };
 
   // Function to handle order
@@ -78,11 +81,11 @@ const ProductList = ({ shops }) => {
                       </div>
 
                       <div className="button-container">
-                        <button className="button-n" onClick={toggleInfo}>Info <i className="fas fa-info-circle"></i></button>
+                        <button className="button-n" onClick={() => toggleInfo(product.id)}>Info <i className="fas fa-info-circle"></i></button>
                         <button className="button-n" onClick={() => handleOrderLink(product)}>Order <i className="fab fa-whatsapp"></i></button>
                       </div>
 
-                      {showInfo && <div className="extra-info">
+                      {showInfo[product.id] && <div className="extra-info">
                         <p>{product.info}</p>
                       </div>}
                     </div>
@@ -97,7 +100,7 @@ const ProductList = ({ shops }) => {
           <p className="error-message">Shop not found.</p>
         )}
       </div>
-      
+
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
         <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
       </svg>
