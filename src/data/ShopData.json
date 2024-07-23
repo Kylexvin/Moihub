@@ -683,8 +683,8 @@
       "id": " bakery",
       "name": "Delish Cake Studio",
       "category": "bakery",
-      "phone": "+254745928593",
-      "description" : "",
+      "phone": "+254788498345",
+      "description" : "We deal with all event cakes,pizzas,pastries and all baked goods.",
       "location": "stage, Behind Reliance",
       "products": [
        
@@ -729,7 +729,7 @@
         "id": "cake8",
         "name": "Birthday Cake (White Forest)",
         "price": 3200,
-        "image": "../Bosslady/photo6.jpg",
+        "image": "../Bosslady/photo9.jpg",
         "info": "2kg, White forest"
     },
     {
