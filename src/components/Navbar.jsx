@@ -47,6 +47,9 @@ const Navbar = () => {
     <a className="dropdown-item" href="/food-delivery">
         <i class="fas fa-utensils icon-green"></i> Food Delivery
     </a>
+    <a className="dropdown-item" href="/find-roommate">
+    <i className="fas fa-user-friends icon-blue"></i> Find Roommate
+</a>
             </div>
           </li>
           <li className="nav-item dropdown">

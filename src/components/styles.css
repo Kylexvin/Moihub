@@ -174,8 +174,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 @media (min-width: 768px) {
   .apartment-card {
-      flex: 0 0 calc(33.33%); /* 33.33% minus margin */
-      max-width: calc(300px); /* 33.33% minus margin */
+    flex-basis: calc(30%);
+     
   }
 }
 

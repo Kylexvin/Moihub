@@ -44,12 +44,27 @@ const ApartmentDetails = ({ plots }) => {
   return (
     <>
       {modalVisible && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <p>Please do not send payment without proper consultation. If you have to book a room, consult the MoiHub admin first<br></br>0745276898.</p>
-            <button onClick={closeModal} className="close-modal-button">Proceed</button>
-          </div>
-        </div>
+       <div className="modal-overlay">
+       <div className="modal-content">
+         <div className="warning-icon">
+           <i className="fas fa-exclamation-triangle"></i>
+         </div>
+         <h2 className="modal-title">Important Notice</h2>
+         <p className="modal-message">
+           Please do not send payment without proper consultation.
+           <br />
+           If you need to book a room, consult the MoiHub admin first:
+           <br />
+           <a href="tel:0745276898" className="phone-number">0745276898</a>
+         </p>
+         <button onClick={closeModal} className="close-modal-btn">
+           <span>Proceed</span>
+           <i className="fas fa-arrow-right"></i>
+         </button>
+       </div>
+     </div>
+     
+     
       )}
 
       <div>

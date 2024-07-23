@@ -699,7 +699,7 @@
      {
         "id": "cake3",
         "name": "Graduation Cake",
-        "price": 2000,
+        "price": 2000, 
         "image": "../Bosslady/photo2.jpg",
         "info": "1kg, Edible prints, Flavor and decorations of your choice"
     },

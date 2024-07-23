@@ -8,21 +8,26 @@ const MoiDelish = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProviders, setFilteredProviders] = useState(providerData);
+    const [showComingSoon, setShowComingSoon] = useState(true);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            showSlide();
-        }, 2000);
-
+        let interval;
+        if (!showComingSoon) {
+            interval = setInterval(() => {
+                showSlide();
+            }, 2000);
+        }
         return () => clearInterval(interval);
-    }, [currentSlide]);
+    }, [currentSlide, showComingSoon]);
 
     const showSlide = () => {
         const slides = document.querySelectorAll('.slide');
-        slides[currentSlide].classList.remove('active');
-        const nextSlide = (currentSlide + 1) % slides.length;
-        setCurrentSlide(nextSlide);
-        slides[nextSlide].classList.add('active');
+        if (slides.length > 0) {
+            slides[currentSlide].classList.remove('active');
+            const nextSlide = (currentSlide + 1) % slides.length;
+            setCurrentSlide(nextSlide);
+            slides[nextSlide].classList.add('active');
+        }
     };
 
     const handleSearchChange = (e) => {
@@ -36,6 +41,32 @@ const MoiDelish = () => {
         );
         setFilteredProviders(filtered);
     };
+
+    const closeComingSoonModal = () => {
+        setShowComingSoon(false);
+    };
+
+    if (showComingSoon) {
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <div className="coming-soon-icon">
+                        <i className="fas fa-tools"></i>
+                    </div>
+                    <h2 className="modal-title">MoiDelish is Coming Soon!</h2>
+                    <p className="modal-message">
+                        We're working hard to bring you the best food delivery experience around Moi University.
+                        The full service will be available soon. You can proceed to view our current progress,
+                        but please note that some features may not be fully functional yet.
+                    </p>
+                    <button onClick={closeComingSoonModal} className="close-modal-button">
+                        <span>Proceed</span>
+                        <i className="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -62,26 +93,6 @@ const MoiDelish = () => {
                     </div>
                 </div>
             </section>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(180)">
-                <path fill="#FF5722" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-            </svg>
-            <div className="container-s">
-                <div className="search-panel">
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            id="search"
-                            placeholder="Search for a service..."
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                        />
-                        <button type="button" id="button" onClick={handleSearch}>
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <div className="container-provider">
                 {Array.isArray(filteredProviders) && filteredProviders.map((provider, index) => (
                     <div key={index} className="card-provider">
@@ -111,10 +122,13 @@ const MoiDelish = () => {
                     </div>
                 ))}
             </div>
+
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
                 <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
             </svg>
         </div>
+        <CustomerCare/>
+        
         <CustomerCare/>
         </>
     );

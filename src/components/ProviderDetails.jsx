@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import providerData from '../data/moidelish.json'; // Assuming this is your JSON data
 import './providersdetails.css';
@@ -6,6 +6,10 @@ import './providersdetails.css';
 const ProviderDetails = () => {
     const { providerId } = useParams();
     const provider = providerData.find(p => p.id === providerId);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     if (!provider) {
         return <div>Provider not found</div>;
@@ -21,25 +25,23 @@ const ProviderDetails = () => {
             <p><i className="fas fa-clock"></i> <br></br>{provider.deliveryTime}</p>
             </div>
             
-            </div>
-            <div className="card-food">
-                <h2>Products</h2>
-                <ul>
-                    {provider.products.map(product => (
-                        <li key={product.id}>
-                            <img src={product.image} alt={product.name} />
-                            <div>
-                                <p className='product-name'>{product.name}</p>
-                                <p className='product-price'>{product.price}</p>
-                                <button className='order-now-btn'>Order Now</button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-           
         </div>
-
-       </>
+        <div className="card-food">
+            <h2>Products</h2>
+            <ul>
+                {provider.products.map(product => (
+                    <li key={product.id}>
+                        <img src={product.image} alt={product.name} />
+                        <div>
+                            <p className='product-name'>{product.name}</p>
+                            <p className='product-price'>{product.price}</p>
+                            <button className='order-now-btn'>Order Now</button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </>
     );
 };
 
