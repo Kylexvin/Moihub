@@ -5,6 +5,10 @@
       "name": "Electronics"
     },
     {
+      "id": "bakery",
+      "name": "Bakery"
+    },
+    {
       "id": "shoes",
       "name": "Shoes"
     },
@@ -19,7 +23,7 @@
   ],
   "shops": [
     {
-      "id": "shop1",
+      "id": "smartventures",
       "name": "SMART VENTURES",
       "category": "electronics",
       "phone": "+254748655202",
@@ -219,18 +223,90 @@
       
     },
     {
-      "id": "shop2",
-      "name": "Your Shop Name",
+      "id": "Kellyelectronics",
+      "name": "KELLY ELECTRONICS",
       "category": "electronics",
-      "phone": "+1234567890",
-      "description" : "Shop Description",
-      "location": "Location Here",
+      "phone": "+254721837146",
+      "description" : "Get all phones and accessories",
+      "location": "Stage",
       "products": [
         {
           "id": "product1",
-          "name":"The Product",
-          "price": 1,
-         "image": "../sellers/productimg.jpg" 
+          "name": "Oraimo Fast Charger Cable",
+          "price": 200,
+          "image": "../kelly/product1.jpg"
+        },
+        {
+          "id": "product2",
+          "name": "Amaya Charging Cable",
+          "price": 150,
+          "image": "../kelly/product2.jpg"
+        },
+        {
+          "id": "product3",
+          "name": "3d Glass Protector",
+          "price": 100,
+          "image": "../kelly/product3.jpg"
+        },
+        {
+          "id": "product4",
+          "name": "Original Oraimo Chargers",
+          "price": 600,
+          "image": "../kelly/product4.jpg"
+        },
+        {
+          "id": "product5",
+          "name": "Vitron V646",
+          "price": 6500,
+          "image": "../kelly/product5.jpg"
+        },
+        {
+          "id": "product6",
+          "name": "Vitron V643",
+          "price": 6000,
+          "image": "../kelly/product6.jpg"
+        },
+        {
+          "id": "product7",
+          "name": "Vitron V401",
+          "price": 4100,
+          "image": "../kelly/product7.jpg"
+        },
+        {
+          "id": "product8",
+          "name": "Vitron V402",
+          "price": 4100,
+          "image": "../kelly/product8.jpg"
+        },
+        {
+          "id": "product9",
+          "name": "AM-735",
+          "price": 7600,
+          "image": "../kelly/product9.jpg"
+        },
+        {
+          "id": "product10",
+          "name": "Vitron V-527",
+          "price": 6900,
+          "image": "../kelly/product10.jpg"
+        },
+        {
+          "id": "product11",
+          "name": "Amtec 3.1",
+          "price": 5900,
+          "image": "../kelly/product11.jpg"
+        },
+        {
+          "id": "product12",
+          "name": "Vitron V5204",
+          "price": 5600,
+          "image": "../kelly/product12.jpg"
+        },
+        {
+          "id": "product13",
+          "name": "Infinix Double Ports",
+          "price": 350,
+          "image": "../kelly/product13.jpg"
         }
       ]
     },
@@ -601,6 +677,84 @@
         }
 
        
+      ]
+    },
+    {
+      "id": " bakery",
+      "name": "Delish Cake Studio",
+      "category": "bakery",
+      "phone": "+254724806578",
+      "description" : "",
+      "location": "stage, Behind Reliance",
+      "products": [
+       
+       {
+        "id": "cake1",
+        "name": "Baby Shower Cake",
+        "price": 1500,
+        "image": "../Bosslady/photo1.jpg",
+        "info": "1kg, Flavor of your choice, Custom designs"
+    },
+
+     {
+        "id": "cake3",
+        "name": "Graduation Cake",
+        "price": 2000,
+        "image": "../Bosslady/photo2.jpg",
+        "info": "1kg, Edible prints, Flavor and decorations of your choice"
+    },
+    {
+        "id": "cake2",
+        "name": "Birthday Cake",
+        "price": 1500,
+        "image": "../Bosslady/photo3.jpg",
+        "info": "1kg, Available in all flavors"
+    },
+   
+    {
+        "id": "cake4",
+        "name": "Birthday Cake (Vanilla)",
+        "price": 1500,
+        "image": "../Bosslady/photo4.jpg",
+        "info": "1kg, Vanilla flavor"
+    },
+    {
+      "id": "cake5",
+      "name": "Birthday Cake (Vanilla)",
+      "price": 1500,
+      "image": "../Bosslady/photo5.jpg",
+      "info": "1kg, Vanilla flavor"
+     },
+     {
+        "id": "cake8",
+        "name": "Birthday Cake (White Forest)",
+        "price": 3200,
+        "image": "../Bosslady/photo6.jpg",
+        "info": "2kg, White forest"
+    },
+    {
+        "id": "cake5",
+        "name": "Veges Pizza(small)",
+        "price": 650,
+        "image": "../Bosslady/photo6.jpg",
+        "info": "Medium size @1000 Large @1300"
+    }, 
+    {
+        "id": "cake9",
+        "name": "Beef/Chicken Pizza",
+        "price": 800,
+       "image": "../Bosslady/photo7.jpg",
+        "info": "Medium size @1100 Large @1500"
+    },
+   
+    {
+        "id": "cake12",
+        "name": "Cake Parfaits/Dessert Cups",
+        "price": 100,
+       "image": "../Bosslady/photo8.jpg",
+        "info": "Each cup, Different flavors available"
+    }
+    
       ]
     }
   ]

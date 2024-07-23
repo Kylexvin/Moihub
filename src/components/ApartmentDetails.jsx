@@ -8,6 +8,7 @@ const ApartmentDetails = ({ plots }) => {
   const apartmentDetails = plots[id];
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [imagesLoading, setImagesLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -36,8 +37,21 @@ const ApartmentDetails = ({ plots }) => {
     setImagesLoading(false);
   };
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <>
+      {modalVisible && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>Please do not send payment without proper consultation. If you have to book a room, consult the MoiHub admin first<br></br>0745276898.</p>
+            <button onClick={closeModal} className="close-modal-button">Proceed</button>
+          </div>
+        </div>
+      )}
+
       <div>
         <div className="centered-div">
           <p className="apartment-name">{apartmentDetails.name}</p>
