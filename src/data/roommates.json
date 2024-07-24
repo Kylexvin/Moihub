@@ -1,5 +1,13 @@
 [
     {
+      "name": "Yvonne",
+      "yearOfStudy": "3rd",
+      "description": "School of IS. Roomie boy pia ni better🤭",
+      "hobbies": "N/A",
+      "gender": "female",
+      "phoneNumber": "+254113200495"
+    },
+    {
       "name": "Isaac Nyabera",
       "yearOfStudy": "2nd",
       "description": "Nyumba ni one bedroom, rent 8k.Looking somebody we can share the rent",
@@ -7,6 +15,7 @@
       "gender": "male",
       "phoneNumber": "+254712198405"
     },
+
     {
       "name": "Kemunto",
       "yearOfStudy": "2nd",
