@@ -76,7 +76,7 @@ const CategoryList = ({ categories }) => {
         </div>
 
         <section className="card-intro">
-          <div className="landing">
+          {/* <div className="landing">
             <div className="square">
               <i className="fas fa-map-marker-alt fa-2x" style={{ color: 'green' }}></i>
               <h3>STAGE</h3>
@@ -86,7 +86,7 @@ const CategoryList = ({ categories }) => {
                 Learn More
               </a>
             </div>
-          </div>
+          </div> */}
 
           <div className="ad-card">
             <div className="ad-content">

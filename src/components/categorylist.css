@@ -93,16 +93,21 @@ text-decoration:none;
 }
 }
 
+/* categorylist.css */
+
+/* Container for shopping categories */
 .shopping-categories {
   padding: 2rem;
 }
 
+/* Grid layout for category cards */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
 }
 
+/* Style for each category card */
 .category-card {
   background-color: #ffffff;
   border-radius: 10px;
@@ -111,6 +116,29 @@ text-decoration:none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
+}
+
+/* Media queries for responsiveness */
+
+/* For screens up to 600px (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+  }
+}
+
+/* For screens larger than 600px but less than 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
+  }
+}
+
+/* For screens larger than 900px (e.g., desktops) */
+@media (min-width: 901px) {
+  .category-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust for larger screens */
+  }
 }
 
 .category-card:hover {
@@ -134,43 +162,6 @@ text-decoration:none;
   font-weight: 600;
   margin: 0;
 }
-
-/* Add some variety with different background colors */
-.category1 { background-color: #f0f7ff; }
-.category2 { background-color: #fff0f0; }
-.category3 { background-color: #f0fff0; }
-.category4 { background-color: #fff0ff; }
-/* Add more category-specific styles as needed */
-
-.shopping-card {
-  background-color: blue;
-  border: 2px solid red;
-  border-radius: 20px  5px;
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
-  padding: 10px;
-  margin: 10px;
-  color:white;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  width: 200px;
-  height: 100px; /* Adjust the height as needed */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-}
-
-.shopping-card:hover {
-  border-color: #27a844;
-  text-decoration: none;
-  background-color: #3498db;
-  border-radius: 20px;
-  transition: cubic-bezier(0.19, 1, 0.22, 1);
-  transform: scaleX(20px);
-  
-}
-
 /* categorylist.css */
 
 /* Bright and colorful category backgrounds */

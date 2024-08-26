@@ -55,7 +55,7 @@ const ApartmentDetails = ({ plots }) => {
            <br />
            If you need to book a room, consult the MoiHub admin first:
            <br />
-           <a href="tel:0745276898" className="phone-number">0745276898</a>
+           <a href="tel:0745276898" className="phone-number">0745276898<br></br>✟KYLEX✟</a>
          </p>
          <button onClick={closeModal} className="close-modal-btn">
            <span>Proceed</span>
