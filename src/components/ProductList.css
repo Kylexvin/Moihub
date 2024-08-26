@@ -84,7 +84,7 @@
 
 .location, .phone{
   font-size: 14px;
-  color: blue;
+  color: green;
 }
 .shop-info p {
   font-size: 16px;
@@ -216,8 +216,8 @@ font-size: 1.2em;
   margin-top:10px;
   text-align: center;
   margin-top: 20px;
-  background-color: #3498db;
-  color: white;
+  background-color: white;
+  color: green;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -324,16 +324,16 @@ width: auto;
 }
 
 .shop-setup-card button:hover {
-  background-color: #0056b3;
+  background-color: red;
 }
 .order-summary-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 90%;
+  left: 25%;
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid #be1b1b;
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -341,20 +341,7 @@ width: auto;
   cursor: pointer;
   z-index: 1000;
 }
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
-}
 
-.close-button:hover {
-  color: #000;
-}
 .order-icon {
   font-size: 24px;
   position: relative;
