@@ -114,8 +114,8 @@ const ProductList = ({ shops }) => {
 
                       <div className="button-container">
                         <button className="button-n" onClick={() => toggleInfo(product.id)}>Info <i className="fas fa-info-circle"></i></button>
-                        <button className="button-n" onClick={() => handleOrderLink(product)}>Order Now <i className="fab fa-whatsapp"></i></button>
-                        <button className="button-n" onClick={() => addToOrderSummary(product)}>Add to Order <i className="fas fa-plus-circle"></i></button>
+                        <button className="button-n" onClick={() => handleOrderLink(product)}>Order <i className="fab fa-whatsapp"></i></button>
+                        <button className="button-n" onClick={() => addToOrderSummary(product)}>Add <i className="fas fa-plus-circle"></i></button>
                       </div>
 
                       {showInfo[product.id] && <div className="extra-info">
@@ -163,7 +163,7 @@ const ProductList = ({ shops }) => {
               </div>
               <div className="button-container">
                 <button className="place-order-button" onClick={toggleOrderSummary}>Close</button>
-                <button className="place-order-button" onClick={handlePlaceOrder}>Place Order</button>
+                <button className="place-order-button" onClick={handlePlaceOrder}>Order</button>
               </div>
             </>
           ) : (
