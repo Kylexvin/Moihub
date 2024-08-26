@@ -1,5 +1,10 @@
 {
   "categories": [
+
+    {
+      "id": "Boutique",
+      "name": "Boutique"
+    },
     {
       "id": "electronics",
       "name": "Electronics"
@@ -13,8 +18,8 @@
       "name": "Shoes"
     },
     {
-      "id": "Boutique",
-      "name": "Boutique"
+      "id": "eservices",
+      "name": "E-Services & Cybers"
     },
     {
       "id": "homedecor",
@@ -755,6 +760,219 @@
         "info": "Each cup, Different flavors available"
     }
     
+      ]
+    },
+    {
+      "id": " eservices",
+      "name": "Donaizer Technologies",
+      "category": "eservices",
+      "phone": "+254796798452",
+      "description" : "We deal with all digital and online services.",
+      "location": "Stage",
+      "products": [
+        {
+          "id": "service01",
+          "name": "ACADEMIC WRITING",
+          "price": "Depends on type of assignment",
+          "image": "../donaizer/service01.jpg",
+          "info": "Expert answers and teaching services for students who need writing jobs done."
+        },
+        {
+          "id": "service02",
+          "name": "SERIAL KEYS",
+          "price": "200 per key",
+          "image": "../donaizer/service02.jpg",
+          "info": "Get serial keys for any software for activation."
+        },
+        {
+          "id": "service03",
+          "name": "PC GAMES",
+          "price": "500 each",
+          "image": "../donaizer/service03.jpg",
+          "info": "Top-rated games for your PC."
+        },
+        {
+          "id": "service04",
+          "name": "WINDOWS 11",
+          "price": "800",
+          "image": "../donaizer/service04.jpg",
+          "info": "Get Windows 11 for your PC, free installation, and activation."
+        },
+        {
+          "id": "service05",
+          "name": "IMEI RECOVERY SERVICE",
+          "price": "1000",
+          "image": "../donaizer/service05.jpg",
+          "info": "We fix IMEI problems affecting your phone service."
+        },
+        {
+          "id": "service06",
+          "name": "MICROSOFT TRAINING",
+          "price": "Depends on the number of packages and course levels",
+          "image": "../donaizer/service06.jpg",
+          "info": "Training on using various MS apps, physically or remotely."
+        },
+        {
+          "id": "service07",
+          "name": "SMS FROM ABROAD",
+          "price": "150",
+          "image": "../donaizer/service07.jpg",
+          "info": "Select a number from abroad, and we'll provide the SMS message sent, such as OTP codes."
+        },
+        {
+          "id": "service08",
+          "name": "BACKGROUND REMOVER",
+          "price": "50",
+          "image": "../donaizer/service08.jpg",
+          "info": "Remove backgrounds from your photos in a second."
+        },
+        {
+          "id": "service09",
+          "name": "CONVERSION TOOLS",
+          "price": "50",
+          "image": "../donaizer/service09.jpg",
+          "info": "We convert file formats between pdf, jpeg, gif, mhtml, csv, word, excel, etc."
+        },
+        {
+          "id": "service10",
+          "name": "HELB FUNDING",
+          "price": "300",
+          "image": "../donaizer/service10.jpg",
+          "info": "Apply for HELB loan and scholarship with easier processes."
+        },
+        {
+          "id": "service11",
+          "name": "GOV SERVICES",
+          "price": "N/A",
+          "image": "../donaizer/service11.jpg",
+          "info": "No need to queue; let's service you from the comfort of your home."
+        },
+        {
+          "id": "service12",
+          "name": "CV MAKERS",
+          "price": "350",
+          "image": "../donaizer/service12.jpg",
+          "info": "We create and design professional CVs, and update old CVs."
+        },
+        {
+          "id": "service13",
+          "name": "REPAIR USBs",
+          "price": "300",
+          "image": "../donaizer/service13.jpg",
+          "info": "We repair faulty flash drives to their original state."
+        },
+        {
+          "id": "service14",
+          "name": "PREMIUM APPS",
+          "price": "250",
+          "image": "../donaizer/service14.jpg",
+          "info": "Get pre-hacked apps and forget about paying for subscriptions."
+        },
+        {
+          "id": "service15",
+          "name": "WINDOW ACTIVATION",
+          "price": "100",
+          "image": "../donaizer/service15.jpg",
+          "info": "We activate your Windows within minutes."
+        },
+        {
+          "id": "service16",
+          "name": "WATERMARK REMOVER",
+          "price": "50",
+          "image": "../donaizer/service16.jpg",
+          "info": "We offer watermark removal services for photos."
+        },
+        {
+          "id": "service17",
+          "name": "VPN INTERNET SERVICES",
+          "price": "N/A",
+          "image": "../donaizer/service17.jpg",
+          "info": "Get free internet from our files for Safaricom, with fast speeds and unlimited data."
+        },
+        {
+          "id": "service18",
+          "name": "A3, A2 & A1 Printing and designs",
+          "price": "N/A",
+          "image": "../donaizer/service18.jpg",
+          "info": "We design large paper prints and offer printing services such as calendars."
+        },
+        {
+          "id": "service19",
+          "name": "BINANCE TRADING",
+          "price": "1000 full course",
+          "image": "../donaizer/service19.jpg",
+          "info": "Classes on how to convert coins and navigate Binance for trading experiences."
+        },
+        {
+          "id": "service20",
+          "name": "GET WINDOWS 10",
+          "price": "500",
+          "image": "../donaizer/service20.jpg",
+          "info": "We install Windows 10 on your computer with free activation."
+        },
+        {
+          "id": "service21",
+          "name": "DRIVERS INSTALLATION",
+          "price": "300",
+          "image": "../donaizer/service21.jpg",
+          "info": "We install all drivers for your PC, including WiFi, sound, display, with free updating services."
+        },
+        {
+          "id": "service22",
+          "name": "WINDOWS 7",
+          "price": "350",
+          "image": "../donaizer/service22.jpg",
+          "info": "We install Windows 7 and activate it for free."
+        },
+        {
+          "id": "service23",
+          "name": "PASSWORD RECOVERY",
+          "price": "500",
+          "image": "../donaizer/service23.jpg",
+          "info": "Reset your computer's forgotten password without losing files."
+        },
+        {
+          "id": "service24",
+          "name": "WINDOWS 8",
+          "price": "450",
+          "image": "../donaizer/service24.jpg",
+          "info": "Get Windows 8 with free activation services."
+        },
+        {
+          "id": "service25",
+          "name": "LINUX INSTALLATION",
+          "price": "1000",
+          "image": "../donaizer/service25.jpg",
+          "info": "We install all types of Linux OS for your PC."
+        },
+        {
+          "id": "service26",
+          "name": "WEB HOSTING",
+          "price": "300 per month or 3000 per year",
+          "image": "../donaizer/service26.jpg",
+          "info": "We provide web hosting services, with a one-month free trial."
+        },
+        {
+          "id": "service27",
+          "name": "E-BOOKS AND NOTES",
+          "price": "50",
+          "image": "../donaizer/service27.jpg",
+          "info": "Get e-books found on Amazon and notes for your courses, including high school assignments."
+        },
+        {
+          "id": "service28",
+          "name": "KRA",
+          "price": "40 for nil returns, 200 for employment returns, 100 for new KRA pins",
+          "image": "../donaizer/service28.jpg",
+          "info": "We file KRA returns and create new KRA pins."
+        },
+        {
+          "id": "service29",
+          "name": "WORLDCOIN PROCESSING",
+          "price": "300 minimum per order",
+          "image": "../donaizer/service29.jpg",
+          "info": "We convert your Worldcoins to shillings."
+        }
       ]
     }
   ]
