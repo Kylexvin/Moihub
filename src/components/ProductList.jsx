@@ -113,9 +113,9 @@ const ProductList = ({ shops }) => {
                       </div>
 
                       <div className="button-container">
-                        <button className="button-n" onClick={() => toggleInfo(product.id)}>Info <i className="fas fa-info-circle"></i></button>
-                        <button className="button-n" onClick={() => handleOrderLink(product)}>Order <i className="fab fa-whatsapp"></i></button>
-                        <button className="button-n" onClick={() => addToOrderSummary(product)}>Add <i className="fas fa-plus-circle"></i></button>
+                        <button className="button-n" onClick={() => toggleInfo(product.id)}> <i className="fas fa-info-circle"></i></button>
+                        <button className="button-n" onClick={() => handleOrderLink(product)}> <i className="fab fa-whatsapp"></i></button>
+                        <button className="button-n" onClick={() => addToOrderSummary(product)}> <i className="fas fa-shopping-cart"></i></button>
                       </div>
 
                       {showInfo[product.id] && <div className="extra-info">
