@@ -139,8 +139,41 @@ const GreenHub = () => {
 
   return ( 
     <>
-      <div className="container-gtop">
-        {/* Other components */}
+ <div className="container-gtop">
+        <div className="container-gtop">
+          <div className="neumorphism-sname">
+            <span className="shop-name">GreenHub Grocery Store</span>
+            {/* <span className="phone-number">Phone Number</span> */}
+          </div>
+          <div className="neumorphism-cardg">
+            <div className="container-gtop">
+              <div className="carouse" onClick={toggleModal}>
+                <i className="fas fa-shopping-cart"></i>
+              </div>
+            </div>
+            <span className="deliveries">Deliveries done around Moi University.</span>
+            <div className="container-gtop">
+              <div className="carouse">
+                <i className="fas fa-motorcycle"></i>
+              </div>
+            </div>
+          </div>
+
+          <div className="pannel-gtop">
+            <div className="neumorphism-search-panel">
+              <input 
+                type="text" 
+                className="search-input" 
+                placeholder="Search..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="search-buttong" onClick={handleSearch}>
+                <i className="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="container-grocery">
