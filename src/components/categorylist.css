@@ -94,14 +94,53 @@ text-decoration:none;
 }
 
 .shopping-categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  padding: 2rem;
 }
 
-.category-link {
-  text-decoration: none;
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
 }
+
+.category-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #4a90e2;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Add some variety with different background colors */
+.category1 { background-color: #f0f7ff; }
+.category2 { background-color: #fff0f0; }
+.category3 { background-color: #f0fff0; }
+.category4 { background-color: #fff0ff; }
+/* Add more category-specific styles as needed */
 
 .shopping-card {
   background-color: blue;
@@ -132,13 +171,18 @@ text-decoration:none;
   
 }
 
-.category1 { background-color: #3498db; }
-.category2 { background-color: #e74c3c; }
-.category3 { background-color: #27ae60; }
-.category4 { background-color: #f39c12; }
-.category5 { background-color: #9b59b6; }
-.category6 { background-color: #2c3e50; }
- 
+/* categorylist.css */
+
+/* Bright and colorful category backgrounds */
+.category-Boutique { background-color: #d0e8ff; } /* Bright light blue */
+.category-electronics { background-color: #ffebeb; } /* Bright light pink */
+.category-bakery { background-color: #e3ffdc; } /* Bright light green */
+.category-shoes { background-color: #fddfff; } /* Bright light purple */
+.category-eservices { background-color: #e9d9ff; } /* Bright light lavender */
+.category-homedecor { background-color: #ffffe0; } /* Bright light cream */
+
+
+
   .ad-card {
     width: auto;
     border-radius: 15px;

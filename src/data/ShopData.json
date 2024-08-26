@@ -1,29 +1,34 @@
 {
   "categories": [
-
     {
       "id": "Boutique",
-      "name": "Boutique"
+      "name": "Boutique",
+      "icon": "tshirt"
     },
     {
       "id": "electronics",
-      "name": "Electronics"
+      "name": "Electronics",
+      "icon": "laptop"
     },
     {
       "id": "bakery",
-      "name": "Bakery"
+      "name": "Bakery",
+      "icon": "bread-slice"
     },
     {
       "id": "shoes",
-      "name": "Shoes"
+      "name": "Shoes",
+      "icon": "shoe-prints"
     },
     {
       "id": "eservices",
-      "name": "E-Services & Cybers"
+      "name": "E-Services & Cybers",
+      "icon": "globe"
     },
     {
       "id": "homedecor",
-      "name": "Home Decor"
+      "name": "Home Decor",
+      "icon": "couch"
     }
   ],
   "shops": [
