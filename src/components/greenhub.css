@@ -18,6 +18,19 @@
     align-items: center;
     width: auto;
 }
+.counter {
+    background-color: #ff4d4d; /* Red background color */
+    color: white; /* White text color */
+    border-radius: 50%; /* Make the counter circular */
+    padding: 5px 10px; /* Add some padding for size */
+    font-size: 14px; /* Font size for the number */
+    font-weight: bold; /* Make the number bold */
+    position: absolute; /* Position it relatively to the parent element */
+    top: -10px; /* Adjust top position */
+    right: -10px; /* Adjust right position */
+    transform: translate(50%, -50%); /* Center it over the icon */
+    z-index: 10; /* Ensure it’s on top */
+  }
 .container-gtop {
     background-color: #e0e5ec;
     border-radius: 10px;
@@ -115,7 +128,7 @@
     z-index: 10;
 }
 .icon-container .icon {
-    background:#eaf1ea6b;
+    background:#e3e9e3;
     border-radius: 50%;
     padding: 10px;
     box-shadow: 2px 2px 5px #bebebe, -2px -2px 5px #ffffff;
@@ -182,3 +195,149 @@
 /* .fa-shopping-cart, .fa-motorcycle {
     color: #45a049;
 } */
+/* Basket Modal Container */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+  /* Modal Content */
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+  
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+  /* Basket Counter */
+
+  
+  /* Basket Items List */
+  .basket-items-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  /* Basket Item */
+  .basket-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* Basket Item Image */
+  .basket-item-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  /* Basket Item Details */
+  .basket-item-details {
+    flex-grow: 1;
+  }
+  
+  /* Delete Button */
+  .delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .delete-btn:hover {
+    background-color: #ff1a1a;
+  }
+  
+  /* Close Modal Button */
+  .close-modal-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .close-modal-btn:hover {
+    background-color: #0056b3;
+  }
+  /* Order Now Button */
+.order-now-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  .order-now-btn:hover {
+    background-color: #218838;
+  }
+  
+/* Basket Card at the Middle Bottom */
+.basket-card {
+    position: fixed; /* Fixed position to stick it on the screen */
+    bottom: 20px; /* Position from the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #4CAF50; /* Green background for visibility */
+    color: white; /* White icon and text color */
+    padding: 10px 20px; /* Padding for better size */
+    border-radius: 50px; /* Rounded corners */
+    display: flex; /* Flexbox for icon and counter alignment */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
+    cursor: pointer; /* Pointer cursor on hover */
+    z-index: 1000; /* Ensure it's on top */
+  }
+  
+  /* Counter Styling */
+  .counter {
+    background-color: #ff4d4d; /* Red background color */
+    color: white; /* White text color */
+    border-radius: 50%; /* Make the counter circular */
+    padding: 5px 10px; /* Padding for size */
+    font-size: 14px; /* Font size for the number */
+    font-weight: bold; /* Bold text */
+    margin-left: 8px; /* Space between icon and counter */
+  }
+  

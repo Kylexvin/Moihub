@@ -32,7 +32,7 @@ const Footer = () => {
         </div> 
       </div> 
       <div className="footer-bottom"> 
-        <p>© 2024 <br />Kylex inc. | Sejjo Co. <br />All rights reserved.</p> 
+        <p>© 2024 <br />✟KYLEX✟  m | Sejjo Co. <br />All rights reserved.</p> 
       </div> 
     </footer> 
   ); 
