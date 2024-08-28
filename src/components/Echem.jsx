@@ -79,8 +79,8 @@ function Echem({ cartItems, setCartItems }) {
             </div>
             
             {loading ? (
-                <div className="loading-container">
-                    <div className="loader"></div>
+                <div className="loading-containerr">
+                    <div className="loaderr"></div>
                 </div>
             ) : (
                 <div className="pharmacy-container">
@@ -121,7 +121,7 @@ function Echem({ cartItems, setCartItems }) {
          Feel free to reach out with any private inquiries.
     </p>
     <button className="confidential-button" onClick={handleConfidentialInquiry}>
-        <i className="fas fa-envelope"></i> Inquire Confidentially
+        <i className="fas fa-whatsapp"></i> Inquire Confidentially
     </button>
 </div>
 

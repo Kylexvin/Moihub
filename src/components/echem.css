@@ -331,26 +331,42 @@ button.next {
   background-color: #218838;
 }
 
-.loading-container {
+.loading-containerr {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 200px;
 }
 
-.loader {
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #27a844;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+.loaderr {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .loaderr:after{
+    content: '';
+    position: absolute;
+    inset: 8px;
+    margin: auto;
+    background: #222b32;
+     border-radius: 50%;
+  }
+  .loaderr:before{
+    content: '';
+    position: absolute;
+    inset: 0px;
+    margin: auto;
+    background: #de3500;
+    animation: crlMugLoader 2s linear infinite alternate;
+  }
+  @keyframes crlMugLoader {
+    0%  ,10% { transform: translateY(64px) }
+    90% , 100% { transform: translateY(0px) }
+  }
+      
 .stock-badge {
   display: inline-block;
   padding: 5px 10px;
