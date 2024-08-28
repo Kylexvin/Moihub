@@ -351,7 +351,7 @@ button.next {
     position: absolute;
     inset: 8px;
     margin: auto;
-    background: #222b32;
+    background: green;
      border-radius: 50%;
   }
   .loaderr:before{
