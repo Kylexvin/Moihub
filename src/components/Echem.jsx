@@ -143,7 +143,7 @@ function Echem({ cartItems, setCartItems }) {
 
 <div className="map-container">
     <iframe
-        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.275859674947!2d35.291438!3d0.290336!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1781044a7a000001%3A0x616eaaf1951fd6f0!2sMoi%20University%20Main%20Campus!5e0!3m2!1sen!2ske!4v1693212345678!5m2!1sen!2ske&marker=color:red%7Clabel:S%7C0.290336,35.291438"
+        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.275859674947!2d35.291438!3d0.290336!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x178106fffc37c663%3A0x487e36c633f5b313!2sMoi%20University%20Main%20Campus!5e0!3m2!1sen!2ske!4v1693212345678!5m2!1sen!2ske&marker=color:red%7Clabel:M%7C0.290336,35.291438"
         width="100%"
         height="300"
         style={{ border: "none" }}
