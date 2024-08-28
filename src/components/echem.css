@@ -561,3 +561,35 @@ button.next {
       color: #0056b3;
   }
 }
+
+.service-card-containerr {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+}
+
+.service-cardd {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 15px;
+  padding: 20px;
+  margin: auto;
+  text-align: center;
+  box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.service-cardd i {
+  font-size: 40px;
+  color: #27a844; /* Adjust color as needed */
+  margin-bottom: 10px;
+}
+
+.service-cardd h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.service-cardd p {
+  color: #666;
+}

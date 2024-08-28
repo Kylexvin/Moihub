@@ -66,9 +66,15 @@ function Echem({ cartItems, setCartItems }) {
     <div className="pharmacy-info">
         <h2>Goodlife Pharmacy</h2>
         <p>Stage, opposite Homes, past Megabytes</p>
-        <p>Open 24/7</p>
+        {/* <p>Open 24/7</p> */}
     </div>
 </div>
+
+
+
+
+
+
             <div className="container-s">
                 <div className="search-panel card">
                     <div className="search-container">
