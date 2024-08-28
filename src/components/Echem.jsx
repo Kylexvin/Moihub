@@ -121,7 +121,7 @@ function Echem({ cartItems, setCartItems }) {
          Feel free to reach out with any private inquiries.
     </p>
     <button className="confidential-button" onClick={handleConfidentialInquiry}>
-        <i className="fas fa-whatsapp"></i> Inquire Confidentially
+        <i className="fab fa-whatsapp"></i> Inquire Confidentially
     </button>
 </div>
 
