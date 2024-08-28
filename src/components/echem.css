@@ -327,3 +327,153 @@ button.next {
 .home-button:hover {
   background-color: #1e8435;
 }
+.search-button:hover {
+  background-color: #218838;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #27a844;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.stock-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+.in-stock {
+  background-color: #e6f4ea;
+  color: #27a844;
+}
+
+.out-of-stock {
+  background-color: #fbe9e7;
+  color: #d32f2f;
+}
+
+.pharmacy-add-to-cart:disabled, .pharmacy-order-now:disabled {
+  background-color: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+}
+/* Confidential Inquiry Card - Complex Design with Icons */
+.confidential-card {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 30px 0;
+  text-align: center;
+  box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.confidential-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 12px 12px 24px #c1c1c1, -12px -12px 24px #ffffff;
+}
+
+.confidential-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, rgba(39, 168, 68, 0.15), rgba(39, 168, 68, 0));
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+.confidential-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 15px;
+  background: linear-gradient(45deg, #27a844, #a4e88e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.confidential-title i {
+  margin-right: 10px;
+  color: #27a844;
+}
+
+.confidential-text {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 25px;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.confidential-text i {
+  margin-right: 8px;
+  color: #27a844;
+}
+
+.confidential-button {
+  background-color: #27a844;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.confidential-button i {
+  margin-right: 10px;
+  color: #ffffff;
+}
+
+.confidential-button::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(145deg, #a4e88e, #27a844);
+  z-index: -1;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.confidential-button:hover {
+  background-color: #219239;
+  transform: translateY(-2px);
+}
+
+.confidential-button:hover::before {
+  opacity: 1;
+}

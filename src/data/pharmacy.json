@@ -4,13 +4,15 @@
     "name": "Medication 1",
     "image": "../pharmacy/drug.jpg",
     "price": "150",
-    "addedToCart": false
+    "addedToCart": false,
+    "inStock": true
   },
   {
     "id": 2,
     "name": "Medication 2",
     "image": "../pharmacy/drug.jpg",
     "price": "200",
-    "addedToCart": false
+    "addedToCart": false,
+    "inStock": false
   }
 ]

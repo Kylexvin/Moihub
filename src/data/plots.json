@@ -6,7 +6,7 @@
     "price": 6000, 
     "location": "Stage", 
     "pd": "Near Rebo",
-    "vacancy": "10",
+    "vacancy": "0",
     "images": ["../plotimgs/emerald01.jpg", "../plotimgs/emerald02.jpg", "../plotimgs/emerald03.jpg","../plotimgs/emerald04.jpg"],
     "contact": "+254706048717",
     "lastUpdated": "2024-03-31",
