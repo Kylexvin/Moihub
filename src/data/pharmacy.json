@@ -1,18 +1,162 @@
 [
   {
     "id": 1,
-    "name": "Medication 1",
-    "image": "../pharmacy/drug.jpg",
-    "price": "150",
+    "name": "Paracetamol 500mg",
+    "image": "../pharmacy/paracetamol.jpg",
+    "price": "100",
     "addedToCart": false,
     "inStock": true
   },
   {
     "id": 2,
-    "name": "Medication 2",
-    "image": "../pharmacy/drug.jpg",
+    "name": "Ibuprofen 400mg",
+    "image": "../pharmacy/ibuprofen.jpg",
+    "price": "150",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 3,
+    "name": "Amoxicillin 250mg",
+    "image": "../pharmacy/amoxicillin.jpg",
+    "price": "200",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 4,
+    "name": "Ciprofloxacin 500mg",
+    "image": "../pharmacy/ciprofloxacin.jpg",
+    "price": "250",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 5,
+    "name": "Aspirin 100mg",
+    "image": "../pharmacy/aspirin.jpg",
+    "price": "120",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 6,
+    "name": "Metformin 500mg",
+    "image": "../pharmacy/metformin.jpg",
+    "price": "180",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 7,
+    "name": "Atorvastatin 10mg",
+    "image": "../pharmacy/atorvastatin.jpg",
+    "price": "300",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 8,
+    "name": "Omeprazole 20mg",
+    "image": "../pharmacy/omeprazole.jpg",
+    "price": "140",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 9,
+    "name": "Amlodipine 5mg",
+    "image": "../pharmacy/amlodipine.jpg",
+    "price": "160",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 10,
+    "name": "Simvastatin 20mg",
+    "image": "../pharmacy/simvastatin.jpg",
+    "price": "190",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 11,
+    "name": "Losartan 50mg",
+    "image": "../pharmacy/losartan.jpg",
+    "price": "220",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 12,
+    "name": "Lisinopril 10mg",
+    "image": "../pharmacy/lisinopril.jpg",
+    "price": "230",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 13,
+    "name": "Levothyroxine 50mcg",
+    "image": "../pharmacy/levothyroxine.jpg",
+    "price": "170",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 14,
+    "name": "Hydrochlorothiazide 25mg",
+    "image": "../pharmacy/hydrochlorothiazide.jpg",
+    "price": "150",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 15,
+    "name": "Metoprolol 50mg",
+    "image": "../pharmacy/metoprolol.jpg",
+    "price": "210",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 16,
+    "name": "Furosemide 40mg",
+    "image": "../pharmacy/furosemide.jpg",
+    "price": "130",
+    "addedToCart": false,
+    "inStock": false
+  },
+  {
+    "id": 17,
+    "name": "Alprazolam 0.5mg",
+    "image": "../pharmacy/alprazolam.jpg",
+    "price": "250",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 18,
+    "name": "Gabapentin 300mg",
+    "image": "../pharmacy/gabapentin.jpg",
+    "price": "240",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 19,
+    "name": "Zolpidem 10mg",
+    "image": "../pharmacy/zolpidem.jpg",
     "price": "200",
     "addedToCart": false,
     "inStock": false
+  },
+  {
+    "id": 20,
+    "name": "Clonazepam 1mg",
+    "image": "../pharmacy/clonazepam.jpg",
+    "price": "260",
+    "addedToCart": false,
+    "inStock": true
   }
 ]
