@@ -19,7 +19,7 @@ function CartPage({ cartItems, handleRemoveFromCart, handleUpdateQuantity }) {
     const encodedMessage = encodeURIComponent(message);
 
     // Specify the phone number (replace XXXXXXXXXXX with the desired phone number)
-    const phoneNumber = '254745276898';
+    const phoneNumber = '254718055023';
 
     // Generate the WhatsApp URL with the phone number and pre-filled message
     const whatsappURL = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
