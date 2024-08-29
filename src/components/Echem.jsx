@@ -46,13 +46,13 @@ function Echem({ cartItems, setCartItems }) {
 
     const handleOrderNow = (pharmacy) => {
         const message = `Hello, I would like to order ${pharmacy.name}.`;
-        const whatsappLink = `https://wa.me/254768610613?text=${encodeURIComponent(message)}`;
+        const whatsappLink = `https://wa.me/254718055023?text=${encodeURIComponent(message)}`;
         window.open(whatsappLink);
     };
 
     const handleConfidentialInquiry = () => {
         const message = "Hello, I have a confidential inquiry.";
-        const whatsappLink = `https://wa.me/254768610613?text=${encodeURIComponent(message)}`;
+        const whatsappLink = `https://wa.me/254718055023?text=${encodeURIComponent(message)}`;
         window.open(whatsappLink);
     };
 
