@@ -74,7 +74,7 @@
   {
     "id": 8,
     "name": "Amoxillin 500mg",
-    "image": "../pharmacy/amoxillin.jpg",
+    "image": "../pharmacy/amoxicillin.jpg",
     "price": "150",
     "addedToCart": false,
     "inStock": true
@@ -138,7 +138,7 @@
   {
     "id": 16,
     "name": "Cetrizine",
-    "image": "../pharmacy/catrizine.jpg",
+    "image": "../pharmacy/cetrizine.jpg",
     "price": "5",
     "addedToCart": false,
     "inStock": true
@@ -155,7 +155,7 @@
     "id": 18,
     "name": "Probeta-N",
     "image": "../pharmacy/probeta.jpg",
-    "price": "240",
+    "price": "15",
     "addedToCart": false,
     "inStock": true
   },
@@ -163,15 +163,23 @@
     "id": 19,
     "name": "Diclofenac 100mg",
     "image": "../pharmacy/declofenac.jpg",
-    "price": "200",
+    "price": "10",
     "addedToCart": false,
-    "inStock": false
+    "inStock": true
   },
   {
     "id": 20,
     "name": "Doxycline 100Mg",
     "image": "../pharmacy/doxycline.jpg",
-    "price": "1000",
+    "price": "100",
+    "addedToCart": false,
+    "inStock": true
+  },
+  {
+    "id": 20,
+    "name": "Any other Medications Available",
+    "image": "../pharmacy/drug.jpg",
+    "price": "-",
     "addedToCart": false,
     "inStock": true
   }
