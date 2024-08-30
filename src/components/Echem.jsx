@@ -180,7 +180,7 @@ function Echem({ cartItems, setCartItems }) {
                     <a href="/">
                         <i className="fas fa-home"></i>
                     </a>
-                    <a href="https://wa.me/254768610613">
+                    <a href="https://wa.me/254718055023">
                         <i className="fab fa-whatsapp"></i>
                     </a>
                 </div>
