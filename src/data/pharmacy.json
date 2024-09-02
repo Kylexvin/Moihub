@@ -155,7 +155,7 @@
     "id": 18,
     "name": "Probeta-N",
     "image": "../pharmacy/probeta.jpg",
-    "price": "15",
+    "price": "150",
     "addedToCart": false,
     "inStock": true
   },
