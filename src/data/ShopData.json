@@ -1,6 +1,11 @@
 {
   "categories": [
     {
+      "id": "generalshop",
+      "name": "General Shop",
+      "icon": "shopping-basket"
+    },
+    {
       "id": "Boutique",
       "name": "Boutique",
       "icon": "tshirt"
@@ -979,6 +984,312 @@
           "info": "We convert your Worldcoins to shillings."
         }
       ]
+    },
+    {
+      "id": "generalshop",
+      "name": "Jayden Online Shop",
+      "category": "generalshop",
+      "phone": "+254725027357",
+      "description": "Jayden Online Shop is your go-to destination for essential daily products. We offer a wide range of high-quality items including groceries, cooking essentials, and more, all conveniently available at competitive prices.",
+      "location": "Stage, Opp View",
+      "products":[
+        {
+          "id": "product1",
+          "name": "Jogoo Maize 1KG",
+          "price": "70",
+          "image": "../jayden/jogoo.jpg",
+          "info": ""
+        },
+        {
+          "id": "product2",
+          "name": "Jogoo Maize 2KG",
+          "price": "135",
+          "image": "../jayden/jogoo.jpg",
+          "info": "" 
+        },
+        {
+          "id": "product3",
+          "name": "Ajab Maize 2KG",
+          "price": "140",
+          "image": "../jayden/ajabmaize.jpg",
+          "info": ""
+        },
+        {
+          "id": "product4",
+          "name": "Dola Maize 2KG",
+          "price": "135",
+          "image": "../jayden/dola.jpg",
+          "info": ""
+        },
+        {
+          "id": "product5",
+          "name": "Kabras Sugar 1KG",
+          "price": "140",
+          "image": "../jayden/kabras.jpg",
+          "info": ""
+        },
+        {
+          "id": "product6",
+          "name": "Mumias Sugar 2KG",
+          "price": "150",
+          "image": "../jayden/mumias.jpg",
+          "info": ""
+        },
+        {
+          "id": "product7",
+          "name": "Kabras Sugar 2KG",
+          "price": "280",
+          "image": "../jayden/kabras.jpg",
+          "info": ""
+        },
+        {
+          "id": "product8",
+          "name": "Sugar",
+          "price": "120",
+          "image": "../jayden/pack.jpg",
+          "info": ""
+        },
+        {
+          "id": "product9",
+          "name": "Ajab Wheat Flour 1KG",
+          "price": "90",
+          "image": "../jayden/ajab.jpg",
+          "info": ""
+        },
+        {
+          "id": "product10",
+          "name": "Ajab Wheat Flour 2KG",
+          "price": "90",
+          "image": "../jayden/ajab.jpg",
+          "info": ""
+        },
+        {
+          "id": "product11",
+          "name": "Baking Powder",
+          "price": "35",
+          "image": "../jayden/bakingpowder.jpg",
+          "info": "Chapa Mandashi"
+        },
+        {
+          "id": "product12",
+          "name": "Rice (Falcon) 1Kg",
+          "price": "130",
+          "image": "../jayden/pack.jpg",
+          "info": "Haishikani ukipika"
+        },
+        {
+          "id": "product13",
+          "name": "Dawaat Long Grain 1Kg",
+          "price": "180",
+          "image": "../jayden/dawaat1.jpg",
+          "info": ""
+        },
+        {
+          "id": "product14",
+          "name": "Dawaat Long Grain 5Kg",
+          "price": "800",
+          "image": "../jayden/dawaat1.jpg",
+          "info": ""
+        },
+        {
+          "id": "product15",
+          "name": "Cooking Oil/litre",
+          "price": "235",
+          "image": "../jayden/cookingoil.jpg",
+          "info": "Kipimo Kamili"
+        },
+        {
+          "id": "product16",
+          "name": "Fresh Fri Cooking Oil 2l",
+          "price": "540",
+          "image": "../jayden/freshfri.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product17",
+          "name": "Fresh Fri Cooking Oil 3l",
+          "price": "820",
+          "image": "../jayden/freshfri.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product18",
+          "name": "Fresh Fri Cooking Oil 10l",
+          "price": "2300",
+          "image": "../jayden/freshfri.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product19",
+          "name": "Salit Cooking Oil 10l",
+          "price": "540",
+          "image": "../jayden/salit.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product20",
+          "name": "Fresh Fri Cooking Oil 1l",
+          "price": "280",
+          "image": "../jayden/freshfri.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product21",
+          "name": "Royco Cubes (Chicken)",
+          "price": "130",
+          "image": "../jayden/roycocubechicken.jpg",
+          "info": "Small cube, big taste"
+        },
+        {
+          "id": "product22",
+          "name": "Royco Cubes",
+          "price": "130",
+          "image": "../jayden/roycocubebeef.jpg",
+          "info": "Small cube, big taste"
+        },
+        {
+          "id": "product23",
+          "name": "Knor beef Cubes ",
+          "price": "130",
+          "image": "../jayden/knorr.jpg",
+          "info": "Small cube, big taste"
+        },
+        {
+          "id": "product24",
+          "name": "Kensalt 200g ",
+          "price": "10",
+          "image": "../jayden/kensalt.jpg",
+          "info": ""
+        },
+        {
+          "id": "product25",
+          "name": "Kensalt 500g",
+          "price": "25",
+          "image": "../jayden/kensalt.jpg",
+          "info": ""
+        },
+        {
+          "id": "product26",
+          "name": "Kensalt 1Kg",
+          "price": "50",
+          "image": "../jayden/kensalt.jpg",
+          "info": ""
+        },
+        {
+          "id": "product27",
+          "name": "Famila Pure Wimbi 1KG",
+          "price": "170",
+          "image": "../jayden/purewimbi2.jpg",
+          "info": "Nature's Food"
+        },
+        {
+          "id": "product28",
+          "name": "Famila Pure Wimbi 500g",
+          "price": "85",
+          "image": "../jayden/purewimbi.jpg",
+          "info": "Nature's Food"
+        },
+        {
+          "id": "product29",
+          "name": "Famila Baby Weaning",
+          "price": "100",
+          "image": "../jayden/babyweaning.jpg",
+          "info": "Rich in minerals and vitamins"
+        },
+        {
+          "id": "product30",
+          "name": "Famila Fermented Flour 500g",
+          "price": "80",
+          "image": "../jayden/fermented.jpg",
+          "info": "Sour porridge mix"
+        },
+        {
+          "id": "product31",
+          "name": "Dawaat Traditional Basmati",
+          "price": "360",
+          "image": "../jayden/traditionalbasmati.jpg",
+          "info": "Tasty"
+        },
+        {
+          "id": "product32",
+          "name": "Dawaat Spaghetti 400g",
+          "price": "85",
+          "image": "../jayden/greenlable.jpg",
+          "info": "Green label"
+        },
+        {
+          "id": "product33",
+          "name": "Dawaat Spaghetti",
+          "price": "170",
+          "image": "../jayden/bluelable.jpg",
+          "info": "Blue label"
+        },
+        {
+          "id": "product34",
+          "name": "Pika Cooking Oil 1L",
+          "price": "290",
+          "image": "../jayden/pikaoil.jpg",
+          "info": "Premium Fortified Vegetable Cooking Oil"
+        },
+        {
+          "id": "product35",
+          "name": "Royco Beef 500g",
+          "price": "200",
+          "image": "../jayden/royco.jpg",
+          "info": "Spicy Beef Flavour"
+        },
+        {
+          "id": "product36",
+          "name": "Chipsy Pure Yellow 500g",
+          "price": "160",
+          "image": "../jayden/chipsy.jpg",
+          "info": "Mafuta Halisi ya Kupikia"
+        },
+        {
+          "id": "product37",
+          "name": "Tomato Paste",
+          "price": "25",
+          "image": "../jayden/tomatopaste.jpg",
+          "info": "Tam Tam"
+        },
+        {
+          "id": "product38",
+          "name": "Food Colour",
+          "price": "30",
+          "image": "../jayden/foodcolor.jpg",
+          "info": "All Colours Available"
+        },
+        {
+          "id": "product39",
+          "name": "Indomie Chicken 120g",
+          "price": "45",
+          "image": "../jayden/indomiec.jpg",
+          "info": "Chicken Flavour"
+        },
+        {
+          "id": "product42",
+          "name": "Indomie Chicken 5 Packs",
+          "price": "130",
+          "image": "../jayden/indomie5.jpg",
+          "info": "Chicken Flavour"
+        },
+        {
+          "id": "product40",
+          "name": "Sossi Classic 75g",
+          "price": "35",
+          "image": "../jayden/sossiclassic.jpg",
+          "info": ""
+        },
+        {
+          "id": "product41",
+          "name": "Sossi Beef 75g",
+          "price": "35",
+          "image": "../jayden/sossibeef.jpg",
+          "info": ""
+        }
+      ]
+      
     }
+     
   ]
 }
