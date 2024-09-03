@@ -98,14 +98,14 @@ const CategoryList = ({ categories }) => {
             </div>
           </div>
 
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
   <path
     fill="#27a844"
     fillOpacity="1"
     d="M0,224L48,197.3C96,171,192,117,288,106.7C384,96,480,128,576,149.3C672,171,768,181,864,170.7C960,160,1056,128,1152,138.7C1248,149,1344,203,1392,229.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
     transform="scale(1, -1) translate(0, -320)"
   ></path>
-</svg>
+</svg> */}
           <section className="shopping-categories">
             <div className="category-grid">
               {categories.map((category) => (
