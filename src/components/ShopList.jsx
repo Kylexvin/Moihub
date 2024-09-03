@@ -38,7 +38,7 @@ const ShopList = ({ shops }) => {
             padding: 10px;
             width: 80%;
             max-width: 500px;
-            border: 2px solid #ccc;
+            border: 2px solid green;
             border-radius: 5px;
             font-size: 16px;
           }

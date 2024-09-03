@@ -117,19 +117,23 @@ const ProductList = ({ shops }) => {
 
             {subcategories.length > 0 && (
               <div className="subcategory-filter">
-                <label htmlFor="subcategory-select">Filter by subcategory:</label>
-                <select 
-                  id="subcategory-select" 
-                  value={selectedSubcategory} 
-                  onChange={(e) => setSelectedSubcategory(e.target.value)}
-                >
-                  <option value="">All</option>
-                  {subcategories.map((subcategory) => (
-                    <option key={subcategory} value={subcategory}>
-                      {subcategory}
-                    </option>
-                  ))}
-                </select>
+                <label htmlFor="subcategory-select" className="filter-label">Filter by Subcategory</label>
+                <div className="select-wrapper">
+                  <select 
+                    id="subcategory-select" 
+                    value={selectedSubcategory} 
+                    onChange={(e) => setSelectedSubcategory(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">All</option>
+                    {subcategories.map((subcategory) => (
+                      <option key={subcategory} value={subcategory}>
+                        {subcategory}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="select-icon"></span>
+                </div>
               </div>
             )}
 

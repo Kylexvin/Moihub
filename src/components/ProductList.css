@@ -434,19 +434,40 @@ width: auto;
   background-color: #45a049;
 }
 
-/* Existing styles */
-
+/* Subcategory Filter */
 .subcategory-filter {
   margin: 20px 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.subcategory-filter label {
+.filter-label {
+  font-size: 18px;
+  margin-bottom: 8px;
   font-weight: bold;
-  margin-right: 10px;
 }
 
-.subcategory-filter select {
-  padding: 5px;
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
-/* Other existing styles */
+.filter-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.select-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
+}
