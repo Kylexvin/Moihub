@@ -773,6 +773,157 @@
       ]
     },
     {
+      "id": "Cakistbakery",
+      "name": "Cakist",
+      "category": "bakery",
+      "phone": "+254704866857",
+      "description":"Cakist offers a delightful selection of cakes, cookies, and beverages, perfect for any occasion. We make every celebration sweeter.",
+      "location": "stage, Next to Megabytes",
+      "products": [
+          {
+              "id": "cake1",
+              "name": "Birthday Cake",
+              "price": 700,
+              "image": "../cakist/birthdaycake.jpg",
+              "info": "Custom birthday cakes for any occasion."
+          },
+          {
+              "id": "cake2",
+              "name": "Children's Cake",
+              "price": 2000,
+              "image": "../cakist/chindrenscake.jpg",
+              "info": "Colorful cakes for children's parties. Starting from 2k."
+          },
+          {
+              "id": "cake3",
+              "name": "Custom Cake",
+              "price": 2500,
+              "image": "../cakist/customcake1.jpg",
+              "info": "Personalized cakes for special events."
+          },
+          {
+              "id": "cake4",
+              "name": "Custom Cake 2.5Kg",
+              "price": 3000,
+              "image": "../cakist/customcake2.jpg",
+              "info": "Large custom cakes for grand occasions."
+          },
+          {
+              "id": "cake5",
+              "name": "Custom Cake (Alternative Design)",
+              "price": 2500,
+              "image": "../cakist/customcake3.jpg",
+              "info": "Another variation of custom cakes."
+          },
+          {
+              "id": "cake6",
+              "name": "Graduation Cake",
+              "price": 1500,
+              "image": "../cakist/graduationcake.jpg",
+              "info": "Celebrate graduation with a specially designed cake."
+          },
+          {
+              "id": "cake7",
+              "name": "Baby Shower Cake",
+              "price": 3000,
+              "image": "../cakist/babyshower.jpg",
+              "info": "Delightful cakes for baby showers."
+          },
+          {
+              "id": "cake8",
+              "name": "Pre-Wedding Cakes",
+              "price": 10000,
+              "image": "../cakist/prewedding.jpg",
+              "info": "Elegant cakes for pre-wedding celebrations. Starting from 10k."
+          },
+          {
+              "id": "cake9",
+              "name": "Traditional Cakes",
+              "price": 10000,
+              "image": "../cakist/traditional.jpg",
+              "info": "Classic cakes with traditional flavors."
+          },
+          {
+              "id": "cake10",
+              "name": "Cookies",
+              "price": 30,
+              "image": "../cakist/cookies.jpg",
+              "info": "Freshly baked cookies available in various flavors."
+          },
+          {
+              "id": "cake11",
+              "name": "Spring Rolls",
+              "price": 50,
+              "image": "../cakist/springrols.jpg",
+              "info": "Crispy and delicious spring rolls."
+          },
+          {
+              "id": "cake12",
+              "name": "Cup Cakes",
+              "price": 1000,
+              "image": "../cakist/cupcakes.jpg",
+              "info": "Assorted cupcakes in different flavors."
+          },
+          {
+              "id": "cake13",
+              "name": "Chocolate Ice Cream",
+              "price": 70,
+              "image": "../cakist/chocolateice.jpg",
+              "info": "Rich and creamy chocolate ice cream."
+          },
+          {
+              "id": "cake14",
+              "name": "Black Forest 1kg",
+              "price": 1800,
+              "image": "../cakist/blackforest.jpg",
+              "info": "Classic Black Forest cake, perfect for dessert."
+          },
+          {
+              "id": "cake15",
+              "name": "Chocolate Cake",
+              "price": 2000,
+              "image": "../cakist/chocolatecake.jpg",
+              "info": "Decadent chocolate cake for chocolate lovers."
+          },
+          {
+              "id": "cake16",
+              "name": "Donuts",
+              "price": 50,
+              "image": "../cakist/donuts.jpg",
+              "info": "Sweet and fluffy donuts, available in various toppings."
+          },
+          {
+              "id": "cake17",
+              "name": "Iced Coffee",
+              "price": 70,
+              "image": "../cakist/icedcoffee.jpg",
+              "info": "Refreshing iced coffee. Starting from 70."
+          },
+          {
+              "id": "cake18",
+              "name": "Milkshake",
+              "price": 110,
+              "image": "../cakist/milkshake.jpg",
+              "info": "Creamy milkshakes in various flavors."
+          },
+          {
+              "id": "cake19",
+              "name": "Coffee",
+              "price": 80,
+              "image": "../cakist/coffee.jpg",
+              "info": "Freshly brewed coffee. Starting from 80."
+          },
+          {
+              "id": "cake20",
+              "name": "Birthday Packages",
+              "price": 5000,
+              "image": "../cakist/bpackages.jpg",
+              "info": "Complete birthday packages with cakes and decorations."
+          }
+      ]
+  },
+  
+    {
       "id": " eservices",
       "name": "Donaizer Technologies",
       "category": "eservices",
