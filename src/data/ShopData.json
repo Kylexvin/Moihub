@@ -50,7 +50,8 @@
           "name": "HP EliteBook 840 G1",
           "price": 19500,
           "image": "../Laptops/hp_elitebook_840_g1.jpg",
-          "info": "Intel Core i5, 8GB RAM, 500GB HDD, 14-inch screen, Backlit keyboard"
+          "info": "Intel Core i5, 8GB RAM, 500GB HDD, 14-inch screen, Backlit keyboard",
+          "subcategory": "Laptops"
         },
         {
           "id": "product2",
@@ -1149,294 +1150,344 @@
           "name": "Jogoo Maize 1KG",
           "price": "70",
           "image": "../jayden/jogoo.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product2",
           "name": "Jogoo Maize 2KG",
           "price": "135",
           "image": "../jayden/jogoo.jpg",
-          "info": "" 
+          "info": "" ,
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product3",
           "name": "Ajab Maize 2KG",
           "price": "140",
           "image": "../jayden/ajabmaize.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product4",
           "name": "Dola Maize 2KG",
           "price": "135",
           "image": "../jayden/dola.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product5",
           "name": "Kabras Sugar 1KG",
           "price": "140",
           "image": "../jayden/kabras.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product6",
           "name": "Mumias Sugar 2KG",
           "price": "150",
           "image": "../jayden/mumias.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product7",
           "name": "Kabras Sugar 2KG",
           "price": "280",
           "image": "../jayden/kabras.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product8",
           "name": "Sugar",
           "price": "120",
           "image": "../jayden/pack.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product9",
           "name": "Ajab Wheat Flour 1KG",
           "price": "90",
           "image": "../jayden/ajab.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product10",
           "name": "Ajab Wheat Flour 2KG",
           "price": "180",
           "image": "../jayden/ajab.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product11",
           "name": "Baking Powder",
           "price": "35",
           "image": "../jayden/bakingpowder.jpg",
-          "info": "Chapa Mandashi"
+          "info": "Chapa Mandashi",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product12",
           "name": "Rice (Falcon) 1Kg",
           "price": "130",
           "image": "../jayden/pack.jpg",
-          "info": "Haishikani ukipika"
+          "info": "Haishikani ukipika",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product13",
           "name": "Dawaat Long Grain 1Kg",
           "price": "180",
           "image": "../jayden/dawaat1.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product14",
           "name": "Dawaat Long Grain 5Kg",
           "price": "800",
           "image": "../jayden/dawaat1.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product15",
           "name": "Cooking Oil/litre",
           "price": "235",
           "image": "../jayden/cookingoil.jpg",
-          "info": "Kipimo Kamili"
+          "info": "Kipimo Kamili",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product16",
           "name": "Fresh Fri Cooking Oil 2l",
           "price": "540",
           "image": "../jayden/freshfri.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product17",
           "name": "Fresh Fri Cooking Oil 3l",
           "price": "820",
           "image": "../jayden/freshfri.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product18",
           "name": "Fresh Fri Cooking Oil 10l",
           "price": "2300",
           "image": "../jayden/freshfri.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product19",
           "name": "Salit Cooking Oil 10l",
           "price": "540",
           "image": "../jayden/salit.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product20",
           "name": "Fresh Fri Cooking Oil 1l",
           "price": "280",
           "image": "../jayden/freshfri.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product21",
           "name": "Royco Cubes (Chicken)",
           "price": "130",
           "image": "../jayden/roycocubechicken.jpg",
-          "info": "Small cube, big taste"
+          "info": "Small cube, big taste",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product22",
           "name": "Royco Cubes",
           "price": "130",
           "image": "../jayden/roycocubebeef.jpg",
-          "info": "Small cube, big taste"
+          "info": "Small cube, big taste",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product23",
           "name": "Knor beef Cubes ",
           "price": "130",
           "image": "../jayden/knorr.jpg",
-          "info": "Small cube, big taste"
+          "info": "Small cube, big taste",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product24",
           "name": "Kensalt 200g ",
           "price": "10",
           "image": "../jayden/kensalt.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product25",
           "name": "Kensalt 500g",
           "price": "25",
           "image": "../jayden/kensalt.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product26",
           "name": "Kensalt 1Kg",
           "price": "50",
           "image": "../jayden/kensalt.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product27",
           "name": "Famila Pure Wimbi 1KG",
           "price": "170",
           "image": "../jayden/purewimbi2.jpg",
-          "info": "Nature's Food"
+          "info": "Nature's Food",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product28",
           "name": "Famila Pure Wimbi 500g",
           "price": "85",
           "image": "../jayden/purewimbi.jpg",
-          "info": "Nature's Food"
+          "info": "Nature's Food",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product29",
           "name": "Famila Baby Weaning",
           "price": "100",
           "image": "../jayden/babyweaning.jpg",
-          "info": "Rich in minerals and vitamins"
+          "info": "Rich in minerals and vitamins",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product30",
           "name": "Famila Fermented Flour 500g",
           "price": "80",
           "image": "../jayden/fermented.jpg",
-          "info": "Sour porridge mix"
+          "info": "Sour porridge mix",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product31",
           "name": "Dawaat Traditional Basmati",
           "price": "360",
           "image": "../jayden/traditionalbasmati.jpg",
-          "info": "Tasty"
+          "info": "Tasty",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product32",
           "name": "Dawaat Spaghetti 400g",
           "price": "85",
           "image": "../jayden/greenlable.jpg",
-          "info": "Green label"
+          "info": "Green label",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product33",
           "name": "Dawaat Spaghetti",
           "price": "170",
           "image": "../jayden/bluelable.jpg",
-          "info": "Blue label"
+          "info": "Blue label",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product34",
           "name": "Pika Cooking Oil 1L",
           "price": "290",
           "image": "../jayden/pikaoil.jpg",
-          "info": "Premium Fortified Vegetable Cooking Oil"
+          "info": "Premium Fortified Vegetable Cooking Oil",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product35",
           "name": "Royco Beef 500g",
           "price": "200",
           "image": "../jayden/royco.jpg",
-          "info": "Spicy Beef Flavour"
+          "info": "Spicy Beef Flavour",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product36",
           "name": "Chipsy Pure Yellow 500g",
           "price": "160",
           "image": "../jayden/chipsy.jpg",
-          "info": "Mafuta Halisi ya Kupikia"
+          "info": "Mafuta Halisi ya Kupikia",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product37",
           "name": "Tomato Paste",
           "price": "25",
           "image": "../jayden/tomatopaste.jpg",
-          "info": "Tam Tam"
+          "info": "Tam Tam",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product38",
           "name": "Food Colour",
           "price": "30",
           "image": "../jayden/foodcolor.jpg",
-          "info": "All Colours Available"
+          "info": "All Colours Available",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product39",
           "name": "Indomie Chicken 120g",
           "price": "45",
           "image": "../jayden/indomiec.jpg",
-          "info": "Chicken Flavour"
+          "info": "Chicken Flavour",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product42",
           "name": "Indomie Chicken 5 Packs",
           "price": "130",
           "image": "../jayden/indomie5.jpg",
-          "info": "Chicken Flavour"
+          "info": "Chicken Flavour",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product40",
           "name": "Sossi Classic 75g",
           "price": "35",
           "image": "../jayden/sossiclassic.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
         },
         {
           "id": "product41",
           "name": "Sossi Beef 75g",
           "price": "35",
           "image": "../jayden/sossibeef.jpg",
-          "info": ""
+          "info": "",
+          "subcategory": "Food and Oils"
+        },
+        {
+          "id": "product42",
+          "name": "Raha Chocolate 100g",
+          "price": "100",
+          "image": "../jayden/raha.jpg",
+          "info": "",
+          "subcategory": "Beavarages"
         }
       ]
       

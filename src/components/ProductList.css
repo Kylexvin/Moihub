@@ -434,3 +434,19 @@ width: auto;
   background-color: #45a049;
 }
 
+/* Existing styles */
+
+.subcategory-filter {
+  margin: 20px 0;
+}
+
+.subcategory-filter label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.subcategory-filter select {
+  padding: 5px;
+}
+
+/* Other existing styles */

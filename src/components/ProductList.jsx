@@ -10,6 +10,17 @@ const ProductList = ({ shops }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [orderItems, setOrderItems] = useState([]);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [subcategories, setSubcategories] = useState([]);
+
+  useEffect(() => {
+    if (shop) {
+      const uniqueSubcategories = [
+        ...new Set(shop.products.map((product) => product.subcategory))
+      ].filter(Boolean);
+      setSubcategories(uniqueSubcategories);
+    }
+  }, [shop]);
 
   const toggleInfo = (productId) => {
     setShowInfo((prevState) => ({
@@ -79,6 +90,10 @@ const ProductList = ({ shops }) => {
     return <ShopSkeleton />;
   }
 
+  const filteredProducts = shop.products.filter(product => 
+    !selectedSubcategory || product.subcategory === selectedSubcategory
+  );
+
   return (
     <>
       <div className="product-list-container">
@@ -97,9 +112,29 @@ const ProductList = ({ shops }) => {
                 </div>
               </div>
             </div>
-            {shop.products.length > 0 ? (
+
+            {/* Subcategory Filter Panel */}
+            {subcategories.length > 0 && (
+              <div className="subcategory-filter">
+                <label htmlFor="subcategory-select">Filter by subcategory:</label>
+                <select 
+                  id="subcategory-select" 
+                  value={selectedSubcategory} 
+                  onChange={(e) => setSelectedSubcategory(e.target.value)}
+                >
+                  <option value="">All</option>
+                  {subcategories.map((subcategory) => (
+                    <option key={subcategory} value={subcategory}>
+                      {subcategory}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {filteredProducts.length > 0 ? (
               <div className="card-container">
-                {shop.products.map((product) => (
+                {filteredProducts.map((product) => (
                   <div className="mini-card" key={product.id}>
                     <div className="img-container" id={`product${product.id}`}>
                       <img className="item-photo" src={product.image} alt={`Product ${product.id}`}/>
@@ -172,8 +207,8 @@ const ProductList = ({ shops }) => {
         </div>
       )}
 
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
-        <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="background-svg">
+        <path fill="#f5f5f5" d="M0,256L30,266.7C60,277,120,299,180,293.3C240,288,300,256,360,245.3C420,235,480,245,540,245.3C600,245,660,235,720,229.3C780,224,840,220,900,245.3C960,270,1020,320,1080,309.3C1140,299,1200,221,1260,186.7C1320,155,1380,149,1410,146.7L1440,144L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
       </svg>
     </>
   );
