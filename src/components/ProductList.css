@@ -371,11 +371,33 @@ width: auto;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  max-width: 80%;
-  width: 400px;
+  width: 100%;
+  max-width: 500px; /* Optional: to limit the width on larger screens */
+  max-height: 80vh; /* Ensures modal doesn't take up too much of the screen height */
+  overflow-y: auto; /* Enables vertical scrollbar when content overflows */
 }
+
+/* Optional: Customize scrollbar appearance (for webkit browsers like Chrome, Safari) */
+.order-summary-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.order-summary-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.order-summary-modal::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.order-summary-modal::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 
 .order-item {
   display: flex;
@@ -434,40 +456,61 @@ width: auto;
   background-color: #45a049;
 }
 
+/* General Input Panel Styles */
+.input-panel {
+  padding: 20px;
+    border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
 /* Subcategory Filter */
 .subcategory-filter {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .filter-label {
   font-size: 18px;
-  margin-bottom: 8px;
+  margin: 10px;
   font-weight: bold;
+  color: #333;
 }
 
 .select-wrapper {
   position: relative;
-  display: inline-block;
-  width: 100%;
 }
 
 .filter-select {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
-  background: #fff;
-  cursor: pointer;
+  background-color: #fff;
+  color: #333;
 }
 
-.select-icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #999;
+
+.order-summary-button:hover {
+  background: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .input-panel {
+    padding: 15px;
+  }
+
+  .filter-label {
+    font-size: 16px;
+  }
+
+  .filter-select {
+    font-size: 14px;
+  }
+
+  .order-summary-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
 }
