@@ -12,15 +12,28 @@ const ProductList = ({ shops }) => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (shop) {
-      const uniqueSubcategories = [
-        ...new Set(shop.products.map((product) => product.subcategory))
-      ].filter(Boolean);
+      const validProducts = shop.products.filter(product => product.subcategory);
+      setProducts(validProducts);
+
+      const uniqueSubcategories = [...new Set(validProducts.map(product => product.subcategory))];
       setSubcategories(uniqueSubcategories);
     }
   }, [shop]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(delay);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const toggleInfo = (productId) => {
     setShowInfo((prevState) => ({
@@ -75,24 +88,13 @@ const ProductList = ({ shops }) => {
     window.open(url, '_blank');
   };
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    return () => clearTimeout(delay);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   if (isLoading) {
     return <ShopSkeleton />;
   }
 
-  const filteredProducts = shop.products.filter(product => 
-    !selectedSubcategory || product.subcategory === selectedSubcategory
-  );
+  const filteredProducts = selectedSubcategory
+    ? products.filter(product => product.subcategory === selectedSubcategory)
+    : products;
 
   return (
     <>
@@ -113,7 +115,6 @@ const ProductList = ({ shops }) => {
               </div>
             </div>
 
-            {/* Subcategory Filter Panel */}
             {subcategories.length > 0 && (
               <div className="subcategory-filter">
                 <label htmlFor="subcategory-select">Filter by subcategory:</label>
@@ -161,7 +162,7 @@ const ProductList = ({ shops }) => {
                 ))}
               </div>
             ) : (
-              <p>No products available in this shop.</p>
+              <p>No products available in this subcategory.</p>
             )}
           </div>
         ) : (
