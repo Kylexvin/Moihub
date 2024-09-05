@@ -114,7 +114,7 @@ const CategoryList = ({ categories }) => {
                   href={`/shops/${category.id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleCategoryClick(category.id);
+                    handleCategoryClick(category.id); 
                   }}
                   className={`category-card category-${category.id}`}
                 >

@@ -270,27 +270,96 @@ width: auto;
 
 
 @media (max-width: 600px) {
-  .mini-card {
-      flex-basis: 100%;
-      max-height: fit-content;
-      
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
+
+  .mini-card {
+    flex-basis: calc(48%); /* Two cards per row */
+    margin-bottom: 10px;
+    margin: 1%;
+    padding: 5px;
+    border-radius: 6px;
+    height: auto; /* Allow cards to be flexible */
+  }
+
   .img-container {
     width: 100%;
-    height: auto;
+    height: 150px; /* Set a fixed height to control image size */
     overflow: hidden;
     background-color: rgb(182, 222, 230); 
-    border-radius: 0;  
+    border-radius: 6px;
     position: relative;
-    }
-    .item-photo {
-      width: 100%;
-      height: auto; /* Adjust height of the photo */
-      object-fit: cover;
-    border-radius: 0; /* Match border radius for consistency */
-    
-    }
+  }
+
+  .item-photo {
+    width: 100%;
+    height: 100%; /* Force image to fill the container height */
+    object-fit: cover; /* Ensure images keep their aspect ratio and fill the container */
+    border-radius: 6px;
+  }
+
+  .item-container {
+    border: 1px solid green;
+    padding: 8px;
+    background: green;
+    text-align: center;
+  }
+
+  .item-name {
+    font-size: 1em;
+    margin-bottom: 5px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
+  }
+
+  .price-container {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 4px 8px;
+    text-align: center;
+    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
+    margin: 5px auto;
+  }
+
+  .item-price {
+    font-size: 0.9em;
+    color: #ff5733;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .button-n {
+    padding: 8px;
+    width: 100%;
+    font-size: 0.9em;
+    background-color: white;
+    color: green;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .extra-info {
+    font-size: 0.9em;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 }
+
+
 
 .shop-setup-card {
   background-color:transparent;
