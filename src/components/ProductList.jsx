@@ -12,13 +12,17 @@ const ProductList = ({ shops }) => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
+  const [showStickyFilter, setShowStickyFilter] = useState(false);
 
+  // Effect to handle subcategories logic
   useEffect(() => {
-    if (shop) {
+    if (shop && shop.products) {
       const uniqueSubcategories = [
-        ...new Set(shop.products.map((product) => product.subcategory))
+        ...new Set(shop.products.map((product) => product.subcategory)),
       ].filter(Boolean);
       setSubcategories(uniqueSubcategories);
+    } else {
+      setSubcategories([]);
     }
   }, [shop]);
 
@@ -38,9 +42,9 @@ const ProductList = ({ shops }) => {
 
   const addToOrderSummary = (product) => {
     setOrderItems((prevItems) => {
-      const existingProduct = prevItems.find(item => item.id === product.id);
+      const existingProduct = prevItems.find((item) => item.id === product.id);
       if (existingProduct) {
-        return prevItems.map(item =>
+        return prevItems.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
@@ -49,11 +53,11 @@ const ProductList = ({ shops }) => {
   };
 
   const removeFromOrderSummary = (productId) => {
-    setOrderItems(prevItems => prevItems.filter(item => item.id !== productId));
+    setOrderItems((prevItems) => prevItems.filter((item) => item.id !== productId));
   };
 
   const toggleOrderSummary = () => {
-    setShowOrderSummary(prevState => !prevState);
+    setShowOrderSummary((prevState) => !prevState);
   };
 
   const getTotalPrice = () => {
@@ -65,9 +69,11 @@ const ProductList = ({ shops }) => {
   };
 
   const handlePlaceOrder = () => {
-    const cartItems = orderItems.map(item => 
-      `${item.name} x${item.quantity} - Ksh ${item.price * item.quantity}`
-    ).join('\n');
+    const cartItems = orderItems
+      .map(
+        (item) => `${item.name} x${item.quantity} - Ksh ${item.price * item.quantity}`
+      )
+      .join('\n');
     const totalPrice = getTotalPrice();
     const message = `Hello, I would like to order the following items:\n\n${cartItems}\n\nTotal: Ksh ${totalPrice}\n\nThank you!`;
     const phoneNumber = shop.phone;
@@ -86,13 +92,27 @@ const ProductList = ({ shops }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  const filteredProducts = shop ? shop.products.filter(
+    (product) => !selectedSubcategory || product.subcategory === selectedSubcategory
+  ) : [];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const headerHeight = 100; // Adjust based on your header height
+      setShowStickyFilter(scrollPosition > headerHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   if (isLoading) {
     return <ShopSkeleton />;
   }
-
-  const filteredProducts = shop.products.filter(product => 
-    !selectedSubcategory || product.subcategory === selectedSubcategory
-  );
 
   return (
     <>
@@ -115,12 +135,16 @@ const ProductList = ({ shops }) => {
 
             {/* Subcategory Filter Panel */}
             {subcategories.length > 0 && (
-              <div className="subcategory-filter">
-                <label htmlFor="subcategory-select" className="filter-label">Filter by Subcategory</label>
+              <div className={`subcategory-filter ${showStickyFilter ? 'sticky' : ''}`}>
+                <div className="filter-header">
+                  <label htmlFor="subcategory-select" className="filter-label">
+                    <i className="fas fa-filter"></i> Filter by Subcategory
+                  </label>
+                </div>
                 <div className="select-wrapper">
-                  <select 
-                    id="subcategory-select" 
-                    value={selectedSubcategory} 
+                  <select
+                    id="subcategory-select"
+                    value={selectedSubcategory}
                     onChange={(e) => setSelectedSubcategory(e.target.value)}
                     className="filter-select"
                   >
@@ -131,11 +155,10 @@ const ProductList = ({ shops }) => {
                       </option>
                     ))}
                   </select>
-                  <span className="select-icon"></span>
+                 
                 </div>
               </div>
             )}
-
             {filteredProducts.length > 0 ? (
               <div className="card-container">
                 {filteredProducts.map((product) => (

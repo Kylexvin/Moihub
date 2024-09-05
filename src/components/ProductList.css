@@ -533,16 +533,46 @@ width: auto;
   margin: 20px 0;
 }
 
-/* Subcategory Filter */
-.subcategory-filter {
-  margin-bottom: 20px;
+/.subcategory-filter {
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  margin: 20px auto;
+  max-width: 600px;
+  border: 1px solid #ddd;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #45a049;  
+  width: 100%;
+  z-index: 1000;
+  animation: slideDown 0.3s ease-in-out;
+  border-bottom: 1px solid #ddd;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .filter-label {
-  font-size: 18px;
-  margin: 10px;
-  font-weight: bold;
+  font-size: 20px;
   color: #333;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .select-wrapper {
@@ -551,12 +581,34 @@ width: auto;
 
 .filter-select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  background-color: #fff;
-  color: #333;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 18px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.filter-select:focus {
+  border-color: #ff0055;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #d11515;
+}
+
+.sticky .select-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #45a049;
+  padding: 0 15px;
 }
 
 
