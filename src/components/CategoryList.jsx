@@ -91,7 +91,7 @@ const CategoryList = ({ categories }) => {
           <div className="ad-card">
             <div className="ad-content">
               <div className="ad-heading">Space for Hire!</div>
-              <div className="ad-description">Place your ad here. If you can see this, so can your clients. Contact us today.</div>
+              <div className="ad-description">Place your ad here. If you can see this, so your clients. Contact us today.</div>
               {/* <button className="cta-button">
                 Shop Now
               </button> */}
