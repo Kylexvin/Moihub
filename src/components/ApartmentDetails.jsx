@@ -79,7 +79,7 @@ const ApartmentDetails = ({ plots }) => {
           </div>
           <div className="card-apa">
             <i className="fas fa-dollar-sign"></i>
-            <p>Price: {apartmentDetails.price}/{apartmentDetails.per}</p>
+            <p>Price: {apartmentDetails.price} {apartmentDetails.price1} {apartmentDetails.price2}/{apartmentDetails.per}</p>
           </div>
           <div className="card-apa">
             <i className="fas fa-map-marker-alt"></i>
