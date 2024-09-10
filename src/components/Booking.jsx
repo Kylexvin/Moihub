@@ -74,17 +74,18 @@ const Booking = ({ plots }) => {
       const plotName = plot.name.toLowerCase();
       const plotPrice = parseInt(plot.price);
       const plotLocation = plot.location.toLowerCase();
-      const plotVacancy = plot.vacancy.toLowerCase();
+      const plotVacancy = parseInt(plot.vacancy);
 
       return plotName.includes(searchInput) &&
         (priceRange === 0 || plotPrice <= priceRange) &&
         (locationFilterValue === 'all' || plotLocation.includes(locationFilterValue)) &&
-        (vacancyFilterValue === 'all' || (vacancyFilterValue === 'vacant' && plotVacancy === '1'));
+        (vacancyFilterValue === 'all' || (vacancyFilterValue === 'vacant' && plotVacancy >= 1));
     });
 
     setFilteredPlots(filtered);
     handlePageChange(1);
   };
+
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);

@@ -13,7 +13,7 @@
     "coordinates": "0.290506,35.288598"
   },
   { 
-    "name": "Gemstone Apartments", 
+    "name": "Gemstones Apartments", 
     "plotType": "Bedsitters", 
     "per": "Month",
     "price": "6500,",
@@ -21,7 +21,7 @@
     "price2": "8000", 
     "location": "Stage", 
     "pd": "Before Silverbrook.",
-    "vacancy": "0",
+    "vacancy": "18",
     "images":  ["../plotimgs/gem01.jpg", "../plotimgs/gem02.jpg", "../plotimgs/gem03.jpg","../plotimgs/gem04.jpg","../plotimgs/gem05.jpg","../plotimgs/gem06.jpg","../plotimgs/gem07.jpg"],
     "contact": "0113517568",
     "lastUpdated": "2024-03-30",

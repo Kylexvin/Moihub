@@ -83,7 +83,7 @@ const ApartmentDetails = ({ plots }) => {
           </div>
           <div className="card-apa">
             <i className="fas fa-map-marker-alt"></i>
-            <p>Location: {apartmentDetails.location}</p>
+            <p>Location: {apartmentDetails.location} {apartmentDetails.pd}</p>
           </div>
         </div>
 
