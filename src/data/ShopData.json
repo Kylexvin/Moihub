@@ -1589,7 +1589,7 @@
           "id": "product56 ",
           "name": "Eggs Pieces",
           "price": "17",
-          "image": "../jayden/eggspieces.jpg",
+          "image": "../jayden/eggs.jpg",
           "info": "",
           "subcategory": "Dairy & Eggs"
         },
@@ -1613,7 +1613,7 @@
           "id": "product59 ",
           "name": "KCC Milk 200ml ",
           "price": "35",
-          "image": "../jayden/kcc2.jpg",
+          "image": "../jayden/kcc.jpg",
           "info": "",
           "subcategory": "Dairy & Eggs"
         },
@@ -1629,7 +1629,7 @@
           "id": "product61 ",
           "name": "Fesha Milk 200ml Long Life",
           "price": "30",
-          "image": "../jayden/freshamilk.jpg",
+          "image": "../jayden/freshamilk2.jpg",
           "info": "",
           "subcategory": "Dairy & Eggs"
         },
@@ -2165,7 +2165,7 @@
         "subcategory": "Health & Oral Care"
       },
       {
-        "id": "product127 ",
+        "id": "product126 ",
         "name": "Pepsodent Toothpaste 65g",
         "price": "90",
         "image": "../jayden/colgateherbal.jpg",
