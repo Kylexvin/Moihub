@@ -12,7 +12,6 @@ const ProductList = ({ shops }) => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
-  const [showStickyFilter, setShowStickyFilter] = useState(false);
 
   // Effect to handle subcategories logic
   useEffect(() => {
@@ -96,20 +95,6 @@ const ProductList = ({ shops }) => {
     (product) => !selectedSubcategory || product.subcategory === selectedSubcategory
   ) : [];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const headerHeight = 100; // Adjust based on your header height
-      setShowStickyFilter(scrollPosition > headerHeight);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   if (isLoading) {
     return <ShopSkeleton />;
   }
@@ -135,7 +120,7 @@ const ProductList = ({ shops }) => {
 
             {/* Subcategory Filter Panel */}
             {subcategories.length > 0 && (
-              <div className={`subcategory-filter ${showStickyFilter ? 'sticky' : ''}`}>
+              <div className="subcategory-filter">
                 <div className="filter-header">
                   <label htmlFor="subcategory-select" className="filter-label">
                     <i className="fas fa-filter"></i> Filter by Subcategory
@@ -233,10 +218,6 @@ const ProductList = ({ shops }) => {
           )}
         </div>
       )}
-
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="background-svg">
-        <path fill="#f5f5f5" d="M0,256L30,266.7C60,277,120,299,180,293.3C240,288,300,256,360,245.3C420,235,480,245,540,245.3C600,245,660,235,720,229.3C780,224,840,220,900,245.3C960,270,1020,320,1080,309.3C1140,299,1200,221,1260,186.7C1320,155,1380,149,1410,146.7L1440,144L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
-      </svg>
     </>
   );
 };
