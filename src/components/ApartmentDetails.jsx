@@ -119,7 +119,7 @@ const ApartmentDetails = ({ plots }) => {
 
         <div className="centered-div">
           <a href={`geo:${apartmentDetails.coordinates}?q=${apartmentDetails.coordinates}`}>
-          <button className="toggle-button">View Maps <i className="fas fa-map-marker-alt"></i></button>
+          <button className="toggle-button"> <i className="fas fa-map-marker-alt"></i> View Maps </button>
           </a>
         </div>
       </div>

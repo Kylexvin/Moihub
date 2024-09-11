@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './home.css';
 import HeroSection from './HeroSection';
+import DownloadApp from './DownloadApp';
 
 const Home = () => {
   const [cardVisibility, setCardVisibility] = useState({});
@@ -131,6 +132,7 @@ const Home = () => {
 
         {/* Other cards go here */}
       </section>
+      <DownloadApp/>
       <section className="bodyy">
   <div className="container-fix">
     <div className="card-vinny">
