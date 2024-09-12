@@ -1653,7 +1653,7 @@
           "id": "product64 ",
           "name": "Geisha 90g",
           "price": "50",
-          "image": "../jayden/gisha.jpg",
+          "image": "../jayden/geisha.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1662,7 +1662,7 @@
           "name": "Geisha Soap 200g",
           "price": "100",
           "image": "../jayden/geishasoap.jpg",
-          "info": "",
+          "info": "Refreshing lemon and Honey, and Caring coconut & Honey soap available too.",
           "subcategory": "Laundry & Bathing Soap"
         },
         {
@@ -1670,7 +1670,7 @@
           "name": "Sunlight Tablets 50g",
           "price": "25",
           "image": "../jayden/sunlighttablets.jpg",
-          "info": "",
+          "info": " ",
           "subcategory": "Laundry & Bathing Soap"
         },
         {
@@ -1693,7 +1693,7 @@
           "id": "product69 ",
           "name": "Msafi Soap 1kg",
           "price": "160",
-          "image": "../jayden/msafosoap.jpg",
+          "image": "../jayden/msafi.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1701,7 +1701,7 @@
           "id": "product70 ",
           "name": "Downy 375ml",
           "price": "350",
-          "image": "../jayden/downy.jpg",
+          "image": "../jayden/downy2.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1709,7 +1709,7 @@
           "id": "product71 ",
           "name": "Downy 20ml",
           "price": "20",
-          "image": "../jayden/downy1.jpg",
+          "image": "../jayden/downy.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1717,7 +1717,7 @@
           "id": "product72 ",
           "name": "Toss Lavendar 500g",
           "price": "220",
-          "image": "../jayden/tosslavendar.jpg",
+          "image": "../jayden/tosslavender.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1733,7 +1733,7 @@
           "id": "product74 ",
           "name": "Omo 500g",
           "price": "210",
-          "image": "../jayden/omo2.jpg",
+          "image": "../jayden/omo.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1741,7 +1741,7 @@
           "id": "product75 ",
           "name": "Sunlight Tablets 175g",
           "price": "70",
-          "image": "../jayden/sunlighttablets1.jpg",
+          "image": "../jayden/sunlighttablets.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1749,7 +1749,7 @@
           "id": "product76 ",
           "name": "Sunlight Tablets 80g",
           "price": "35",
-          "image": "../jayden/sunlight2.jpg",
+          "image": "../jayden/sunlighttablets.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1805,7 +1805,7 @@
           "id": "product83 ",
           "name": "Sawa Soap 100g",
           "price": "50",
-          "image": "../jayden/sawa2.jpg",
+          "image": "../jayden/sawa.jpg",
           "info": "",
           "subcategory": "Laundry & Bathing Soap"
         },
@@ -1819,9 +1819,9 @@
         },
         {
           "id": "product85 ",
-          "name": "Herpic",
+          "name": "Harpic",
           "price": "530",
-          "image": "../jayden/herpic.jpg",
+          "image": "../jayden/Toiletries/harpic.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1829,7 +1829,7 @@
           "id": "product86 ",
           "name": "Rossy",
           "price": "35",
-          "image": "../jayden/rossy.jpg",
+          "image": "../jayden/Toiletries/rossy.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1837,15 +1837,15 @@
           "id": "product87 ",
           "name": "Flora Toilet Paper 2Rolls",
           "price": "70",
-          "image": "../jayden/flora.jpg",
+          "image": "../jayden/Toiletries/flora2.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
         {
           "id": "product88 ",
-          "name": "Fora toilet paper",
+          "name": "Flora toilet paper",
           "price": "35",
-          "image": "../jayden/flora1.jpg",
+          "image": "../jayden/Toiletries/flora.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1853,7 +1853,7 @@
           "id": "product89 ",
           "name": "Flora Jumbo Park",
           "price": "140",
-          "image": "../jayden/flora2.jpg",
+          "image": "../jayden/Toiletries/florajumbo.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1861,23 +1861,23 @@
           "id": "product90 ",
           "name": "Rossy Jumbo ",
           "price": "140",
-          "image": "../jayden/rossyjumbo.jpg",
+          "image": "../jayden/Toiletries/rossyjumbo.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
         {
           "id": "product91 ",
-          "name": "Rosy ",
+          "name": "Rosy 10 Rolls ",
           "price": "350",
-          "image": "../jayden/rossy2.jpg",
+          "image": "../jayden/Toiletries/rossy10.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
         {
           "id": "product92 ",
-          "name": "Rosy 4Rolls ",
+          "name": "Rosy 4 Rolls ",
           "price": "140",
-          "image": "../jayden/rossy3.jpg",
+          "image": "../jayden/Toiletries/rossy4.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1885,15 +1885,15 @@
           "id": "product93 ",
           "name": "Sifa 2Rolls ",
           "price": "75",
-          "image": "../jayden/sifa.jpg",
+          "image": "../jayden/Toiletries/sifa2.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
         {
           "id": "product94 ",
-          "name": "Sifa Toilet Paper 1Roll ",
+          "name": "Sifa  ",
           "price": "40",
-          "image": "../jayden/sifa1.jpg",
+          "image": "../jayden/Toiletries/sifa.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1901,15 +1901,15 @@
           "id": "product95 ",
           "name": "Bela 10 Rolls ",
           "price": "370",
-          "image": "../jayden/bella.jpg",
+          "image": "../jayden/Toiletries/bella10.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
         {
           "id": "product96 ",
-          "name": "Sifa 10Rolls ",
+          "name": "Sifa 10 Rolls ",
           "price": "370",
-          "image": "../jayden/sifa2.jpg",
+          "image": "../jayden/Toiletries/sifa10.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1917,7 +1917,7 @@
           "id": "product97 ",
           "name": "Bella Jumbo Pack (white) ",
           "price": "150",
-          "image": "../jayden/bellajumbo.jpg",
+          "image": "../jayden/Toiletries/bella.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1925,7 +1925,7 @@
           "id": "product98 ",
           "name": "Flora Tissue 10Rolls ",
           "price": "350",
-          "image": "../jayden/flora1.jpg",
+          "image": "../jayden/Toiletries/flora10.jpg",
           "info": "",
           "subcategory": "Toiletries"
         },
@@ -1933,7 +1933,7 @@
           "id": "product99 ",
           "name": "Kitchen Cleaner (1pack) ",
           "price": "30",
-          "image": "../jayden/kitchencleaner.jpg",
+          "image": "../jayden/Kitchen/kitchencleaner.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
@@ -1941,15 +1941,15 @@
           "id": "product100 ",
           "name": "Kiwi Shoe Polish ",
           "price": "85",
-          "image": "../jayden/kiwi.jpg",
+          "image": "../jayden/Kitchen/kiwi.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
         {
           "id": "product101 ",
-          "name": "Pot Scrubber with Sponge (6pack)",
+          "name": "Pot Scrubber(6pack)",
           "price": "150",
-          "image": "../jayden/scrubber.jpg",
+          "image": "../jayden/Kitchen/scrubber.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
@@ -1957,7 +1957,7 @@
           "id": "product102 ",
           "name": "Scouring Pad Supa Brite ",
           "price": "10",
-          "image": "../jayden/kitchencleaner.jpg",
+          "image": "../jayden/Kitchen/superbrite.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
@@ -1965,7 +1965,7 @@
           "id": "product103 ",
           "name": "Kitchen Cleaner (4pack) ",
           "price": "100",
-          "image": "../jayden/kitchencleaner2.jpg",
+          "image": "../jayden/Kitchen/safisha.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
@@ -1973,7 +1973,7 @@
           "id": "product104 ",
           "name": "Super Shine (1piece) ",
           "price": "20",
-          "image": "../jayden/supershine.jpg",
+          "image": "../jayden/Kitchen/supershine.jpg",
           "info": "",
           "subcategory": "Kitchen Essentials & Others"
         },
@@ -1982,7 +1982,7 @@
         "id": "product105 ",
         "name": "Pot Scrubber with Sponge",
         "price": "30",
-        "image": "../jayden/potscrubber1.jpg",
+        "image": "../jayden/Kitchen/potscrubber1.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -1990,7 +1990,7 @@
         "id": "product106 ",
         "name": "Sokoni Steel Wool Small ",
         "price": "10",
-        "image": "../jayden/sokonisteelwool.jpg",
+        "image": "../jayden/Kitchen/sokoni.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -1998,7 +1998,7 @@
         "id": "product107 ",
         "name": "Scouring Pad (12pack)",
         "price": "100",
-        "image": "../jayden/scouringpad1.jpg",
+        "image": "../jayden/Kitchen/superbrite.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -2006,7 +2006,7 @@
         "id": "product108 ",
         "name": "Mosquitpo Repellant Sticks ",
         "price": "120",
-        "image": "../jayden/mosquitostick.jpg",
+        "image": "../jayden/Kitchen/mosquitosticks.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -2014,7 +2014,7 @@
         "id": "product109 ",
         "name": "Sokoni Steel Wool Big ",
         "price": "30",
-        "image": "../jayden/sokonisteelwool2.jpg",
+        "image": "../jayden/Kitchen/sokoni.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -2022,7 +2022,7 @@
         "id": "product110 ",
         "name": "Mosquito Coils ",
         "price": "80",
-        "image": "../jayden/Mosquitocoils.jpg",
+        "image": "../jayden/Kitchen/Mosquito.jpg",
         "info": "",
         "subcategory": "Kitchen Essentials & Others"
       },
@@ -2030,7 +2030,7 @@
         "id": "product111 ",
         "name": "Amara Cocoa Butter 200ml",
         "price": "150",
-        "image": "../jayden/amara.jpg",
+        "image": "../jayden/Hair/amarabutter.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2038,7 +2038,7 @@
         "id": "product112 ",
         "name": "Vaseline for Men 45ml",
         "price": "85",
-        "image": "../jayden/vaseline.jpg",
+        "image": "../jayden/Hair/vaselinemen.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2046,7 +2046,7 @@
         "id": "product113 ",
         "name": "Arimis 50g",
         "price": "35",
-        "image": "../jayden/arimis.jpg",
+        "image": "../jayden/Hair/arimis.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2054,7 +2054,7 @@
         "id": "product114 ",
         "name": "Amara for Men 200ml",
         "price": "140",
-        "image": "../jayden/amara.jpg",
+        "image": "../jayden/Hair/amaramen.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2062,7 +2062,7 @@
         "id": "product115 ",
         "name": "Amara Raw Shea",
         "price": "140",
-        "image": "../jayden/amara2.jpg",
+        "image": "../jayden/Hair//amara.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2070,7 +2070,7 @@
         "id": "product116 ",
         "name": "Nice & Lovely Cocoa Butter 200ml",
         "price": "180",
-        "image": "../jayden/amara.jpg",
+        "image": "../jayden/Hair/niceandlovely.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2078,7 +2078,7 @@
         "id": "product117 ",
         "name": "Arimis 200g",
         "price": "180",
-        "image": "../jayden/arimis2.jpg",
+        "image": "../jayden/Hair/arimis2.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2086,7 +2086,7 @@
         "id": "product118 ",
         "name": "Vaseline Blueseal 45ml",
         "price": "70",
-        "image": "../jayden/amara.jpg",
+        "image": "../jayden/Hair/vaseline.jpg",
         "info": "",
         "subcategory": "Hair & Body Care"
       },
@@ -2094,7 +2094,7 @@
         "id": "product119 ",
         "name": "Softcare Pads 10pcs",
         "price": "75",
-        "image": "../jayden/softcare.jpg",
+        "image": "../jayden/baby/softcare.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
@@ -2102,7 +2102,7 @@
         "id": "product120 ",
         "name": "Softcare Diapers Medium",
         "price": "680",
-        "image": "../jayden/diaper1.jpg",
+        "image": "../jayden/baby/diapermedium.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
@@ -2111,24 +2111,24 @@
         "id": "product121 ",
         "name": "Always Utra Thin",
         "price": "130",
-        "image": "../jayden/always.jpg",
+        "image": "../jayden/baby/always.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
       {
         "id": "product122 ",
-        "name": "Famella Sanitary Pads 8pcs",
+        "name": "Famella 8pcs(Regular)",
         "price": "50",
-        "image": "../jayden/sanitarypads.jpg",
+        "image": "../jayden/baby/sanitarypads.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
       
       {
         "id": "product123 ",
-        "name": "Famella Sanitary Pads 8pcs",
+        "name": "Famella 8pcs(Maxi Thick)",
         "price": "60",
-        "image": "../jayden/diaper2.jpg",
+        "image": "../jayden/baby/femela.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
@@ -2136,7 +2136,7 @@
         "id": "product124 ",
         "name": "Softcare Diapers HC",
         "price": "680",
-        "image": "../jayden/diaperhc.jpg",
+        "image": "../jayden/baby/diaperhc.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
@@ -2144,7 +2144,7 @@
         "id": "product125 ",
         "name": "Softcare Diapers Large",
         "price": "700",
-        "image": "../jayden/diaperlarge.jpg",
+        "image": "../jayden/baby/diaperlarge.jpg",
         "info": "",
         "subcategory": "Baby Care & Feminine Hygiene"
       },
@@ -2152,31 +2152,17 @@
         "id": "product126 ",
         "name": "Colgate Herbal Toothpaste 140g",
         "price": "150",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/colgateherbal.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
-      {
-        "id": "product127 ",
-        "name": "Kiss Classic",
-        "price": "60",
-        "image": "../jayden/kiss.jpg",
-        "info": "",
-        "subcategory": "Health & Oral Care"
-      },
-      {
-        "id": "product126 ",
-        "name": "Pepsodent Toothpaste 65g",
-        "price": "90",
-        "image": "../jayden/colgateherbal.jpg",
-        "info": "",
-        "subcategory": "Health & Oral Care"
-      },
+     
+      
       {
         "id": "product128 ",
         "name": "Colgate Toothbrush Double Action",
         "price": "70",
-        "image": "../jayden/brush.jpg",
+        "image": "../jayden/Health/colgatet.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2184,7 +2170,7 @@
         "id": "product129 ",
         "name": "Colgate Toothbrush Anticavity",
         "price": "40",
-        "image": "../jayden/colgatebrush.jpg",
+        "image": "../jayden/Health/colgatebrush.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2192,23 +2178,23 @@
         "id": "product130 ",
         "name": "Colgate Charcoal",
         "price": "250",
-        "image": "../jayden/colgatecharcoal.jpg",
+        "image": "../jayden/Health/colgatecharcoal.jpg",
+        "info": "",
+        "subcategory": "Health & Oral Care"
+      },
+      {
+        "id": "product 126 ",
+        "name": "Pepsodent Toothpaste 65g",
+        "price": "90",
+        "image": "../jayden/Health/pepsodent.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
       {
         "id": "product131 ",
-        "name": "Pepsodent 150g",
+        "name": "Pepsodent Herbal 150g",
         "price": "140",
-        "image": "../jayden/pepesodent.jpg",
-        "info": "",
-        "subcategory": "Health & Oral Care"
-      },
-      {
-        "id": "product132 ",
-        "name": "Close Up Red Hot 60g",
-        "price": "100",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/pepsodentherbal.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2216,15 +2202,24 @@
         "id": "product133 ",
         "name": "Pepsodent Toothpaste 150g",
         "price": "120",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/pepsodent2.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
       {
+        "id": "product132 ",
+        "name": "Close Up Red Hot 60g",
+        "price": "100",
+        "image": "../jayden/Health/closeup.jpg",
+        "info": "",
+        "subcategory": "Health & Oral Care"
+      },
+      
+      {
         "id": "product134 ",
         "name": "Colgate Toothpaste 120g",
         "price": "150",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/colgateherbal.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2232,15 +2227,15 @@
         "id": "product135 ",
         "name": "Pepsodent Toothbrush",
         "price": "50",
-        "image": "../jayden/.jpg",
+        "image": "../jayden/Health/pepsodentbrush.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
       {
-        "id": "product136 ",
-        "name": "Kiss Studded",
+        "id": "product127 ",
+        "name": "Kiss Classic",
         "price": "60",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/kiss.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2248,15 +2243,15 @@
         "id": "product137 ",
         "name": "Trust Studded",
         "price": "60",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/trust.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
       {
         "id": "product138 ",
-        "name": "Trust Strawberry",
+        "name": "Kiss Strawberry",
         "price": "60",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/kiss3.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2264,7 +2259,15 @@
         "id": "product139 ",
         "name": "Kiss Chocolate",
         "price": "60",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/kiss.jpg",
+        "info": "",
+        "subcategory": "Health & Oral Care"
+      },
+       {
+        "id": "product136 ",
+        "name": "Kiss Studded",
+        "price": "60",
+        "image": "../jayden/Health/kiss2.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       },
@@ -2272,7 +2275,7 @@
         "id": "product140 ",
         "name": "Trust Classic",
         "price": "6 0",
-        "image": "../jayden/colgateherbal.jpg",
+        "image": "../jayden/Health/trustclassic.jpg",
         "info": "",
         "subcategory": "Health & Oral Care"
       }

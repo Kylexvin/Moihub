@@ -13,9 +13,9 @@ const ProductList = ({ shops }) => {
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
 
-  // Effect to handle subcategories logic
   useEffect(() => {
     if (shop && shop.products) {
+      // Get unique subcategories from products and filter out null/undefined
       const uniqueSubcategories = [
         ...new Set(shop.products.map((product) => product.subcategory)),
       ].filter(Boolean);
@@ -91,9 +91,20 @@ const ProductList = ({ shops }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredProducts = shop ? shop.products.filter(
-    (product) => !selectedSubcategory || product.subcategory === selectedSubcategory
-  ) : [];
+  // Filter products based on the selected subcategory
+  const filteredProducts = shop
+    ? shop.products.filter(
+        (product) =>
+          (!selectedSubcategory || product.subcategory === selectedSubcategory) &&
+          product.subcategory !== undefined &&
+          product.subcategory !== null
+      )
+    : [];
+
+  // Reset product info display when subcategory changes
+  useEffect(() => {
+    setShowInfo({});
+  }, [selectedSubcategory]);
 
   if (isLoading) {
     return <ShopSkeleton />;
@@ -105,14 +116,12 @@ const ProductList = ({ shops }) => {
         {shop ? (
           <div className="product-list">
             <div className="shop-info">
-              <div className="shop-name">
-                {shop.name}
-              </div>
-              <div className='shop-location'>
-                <div className='location'>
+              <div className="shop-name">{shop.name}</div>
+              <div className="shop-location">
+                <div className="location">
                   {shop.location} <i className="fas fa-map-marker-alt"></i>
                 </div>
-                <div className='phone'>
+                <div className="phone">
                   {shop.phone} <i className="fas fa-phone"></i>
                 </div>
               </div>
@@ -140,34 +149,57 @@ const ProductList = ({ shops }) => {
                       </option>
                     ))}
                   </select>
-                  
                 </div>
               </div>
             )}
+
             {filteredProducts.length > 0 ? (
               <div className="card-container">
                 {filteredProducts.map((product) => (
                   <div className="mini-card" key={product.id}>
                     <div className="img-container" id={`product${product.id}`}>
-                      <img className="item-photo" src={product.image} alt={`Product ${product.id}`}/>
+                      <img
+                        className="item-photo"
+                        src={product?.image}
+                        alt={`Product ${product?.id}`}
+                      />
                     </div>
 
                     <div className="item-container">
-                      <h2 className="item-name">{product.name}</h2>
+                      <h2 className="item-name">{product?.name}</h2>
 
                       <div className="price-container">
-                        <p className="item-price"><i className="fas fa-tag"></i> Ksh {product.price}</p>
+                        <p className="item-price">
+                          <i className="fas fa-tag"></i> Ksh {product?.price}
+                        </p>
                       </div>
 
                       <div className="button-container">
-                        <button className="button-n" onClick={() => toggleInfo(product.id)}> <i className="fas fa-info-circle"></i></button>
-                        <button className="button-n" onClick={() => handleOrderLink(product)}> <i className="fab fa-whatsapp"></i></button>
-                        <button className="button-n" onClick={() => addToOrderSummary(product)}> <i className="fas fa-shopping-cart"></i></button>
+                        <button
+                          className="button-n"
+                          onClick={() => toggleInfo(product.id)}
+                        >
+                          <i className="fas fa-info-circle"></i>
+                        </button>
+                        <button
+                          className="button-n"
+                          onClick={() => handleOrderLink(product)}
+                        >
+                          <i className="fab fa-whatsapp"></i>
+                        </button>
+                        <button
+                          className="button-n"
+                          onClick={() => addToOrderSummary(product)}
+                        >
+                          <i className="fas fa-shopping-cart"></i>
+                        </button>
                       </div>
 
-                      {showInfo[product.id] && <div className="extra-info">
-                        <p>{product.info}</p>
-                      </div>}
+                      {showInfo[product.id] && (
+                        <div className="extra-info">
+                          <p>{product?.info}</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -181,10 +213,13 @@ const ProductList = ({ shops }) => {
         )}
       </div>
 
-      <div className="order-summary-container" onClick={(e) => {
-        e.stopPropagation();
-        toggleOrderSummary();
-      }}>
+      <div
+        className="order-summary-container"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleOrderSummary();
+        }}
+      >
         <div className="order-icon">
           <i className="fas fa-clipboard-list"></i>
           <span className="order-count">{getTotalQuantity()}</span>
@@ -202,19 +237,28 @@ const ProductList = ({ shops }) => {
                   <span>{item.name}</span>
                   <span>Ksh {item.price}</span>
                   <span>Quantity: {item.quantity}</span>
-                  <button className="remove-item" onClick={() => removeFromOrderSummary(item.id)}>×</button>
+                  <button
+                    className="remove-item"
+                    onClick={() => removeFromOrderSummary(item.id)}
+                  >
+                    ×
+                  </button>
                 </div>
               ))}
               <div className="order-total">
                 <strong>Total: Ksh {getTotalPrice()}</strong>
               </div>
               <div className="button-container">
-                <button className="place-order-button" onClick={toggleOrderSummary}>Close</button>
-                <button className="place-order-button" onClick={handlePlaceOrder}>Order</button>
+                <button className="place-order-button" onClick={toggleOrderSummary}>
+                  Close
+                </button>
+                <button className="place-order-button" onClick={handlePlaceOrder}>
+                  Order
+                </button>
               </div>
             </>
           ) : (
-            <p>Your order summary is empty</p>
+            <p>Your cart is empty.</p>
           )}
         </div>
       )}

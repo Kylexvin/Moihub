@@ -95,55 +95,41 @@
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
+
 .mini-card {
-  flex-basis: calc(30%); /* Adjust width to fit 3 cards per row */
-  margin-bottom: 20px; /* Add margin between cards */
-  margin: 20px;
+  flex-basis: calc(23%); /* Adjust width to fit 4 cards per row */
+  margin-bottom: 20px;
+  margin: 1%;
   border: 3px solid green;
   border-radius: 8px;
   overflow: hidden;
   background-color: transparent;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
 }
-.mini-card2{
-  height: 250px;
-  flex-basis: calc(30%); /* Adjust width to fit 3 cards per row */
-  margin-bottom: 20px; /* Add margin between cards */
-  margin: 20px;
-  border: 3px solid green;
-  border-radius: 8px;
-  overflow: hidden;
-  opacity: 0.3;
-  
-}
+
 .img-container {
-width: 100%;
-height: auto;
-max-height: 500px;
-overflow: hidden;
-background-color: ivory; 
-border-radius: 0;  
-position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  overflow: hidden;
+  background-color: ivory;
+  border-radius: 0;
+  position: relative;
 }
 
 .item-photo {
   width: 100%;
-  height: 300px; /* Adjust height of the photo */
+  height: 300px;
   object-fit: contain;
-border-radius: 0; /* Match border radius for consistency */
-background-color: transparent;
-
+  border-radius: 0;
+  background-color: transparent;
 }
-
 
 .img-container:hover {
-transform: scale(1);
-transition: transform 0.3s ease-in-out; 
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
 }
-
-
 
 .item-container {
   border: 1px solid green;
@@ -159,68 +145,110 @@ transition: transform 0.3s ease-in-out;
   position: relative;
 }
 
-
 .item-name {
   font-size: 1.2em;
   margin-bottom: 5px;
-  background-color: #f0f0f0; 
-  border-radius: 5px; 
+  background-color: #f0f0f0;
+  border-radius: 5px;
   padding: 20px;
-  box-shadow: inset 8px 8px 16px #c0c0c0, inset -8px -8px 16px #ffffff; 
+  box-shadow: inset 8px 8px 16px #c0c0c0, inset -8px -8px 16px #ffffff;
 }
 
-
 .price-container {
-background-color: #f0f0f0; 
-border-radius: 5px;
-padding: 8px 16px;
-text-align: center;
-cursor: pointer; 
-box-shadow: inset 8px 8px 16px #c0c0c0, inset -8px -8px 16px #ffffff;
-margin: auto;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 8px 16px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: inset 8px 8px 16px #c0c0c0, inset -8px -8px 16px #ffffff;
+  margin: auto;
 }
 
 .item-price {
-margin: auto;
-font-size: 1.2em; 
+  margin: auto;
+  font-size: 1.2em;
+  color: #ff5733;
 }
 
-
-
-
-
-/* Add these styles to your CSS */
-.extra-info {
-  display: block;
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  animation: shake 0.5s ease-in-out;
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  .mini-card {
+    flex-basis: calc(30%); /* 3 cards per row on medium screens */
+  }
 }
 
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 10px;
-  gap: 20px;
+@media (max-width: 768px) {
+  .mini-card {
+    flex-basis: calc(48%); /* 2 cards per row on tablets */
+  }
 }
 
-.button-n {
-  padding: 10px;
-  width: 100%;
-  height: auto;
-  margin-top:10px;
-  text-align: center;
-  margin-top: 20px;
-  background-color: white;
-  color: green;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+@media (max-width: 600px) {
+  .mini-card {
+    flex-basis: calc(48%); /* Two cards per row on mobile */
+    margin-bottom: 10px;
+    margin: 1%;
+    padding: 5px;
+    border-radius: 6px;
+    height: auto;
+  }
+
+  .img-container {
+    width: 100%;
+    height: 150px;
+    background-color: rgb(182, 222, 230);
+    border-radius: 6px;
+    position: relative;
+  }
+
+  .item-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .item-name {
+    font-size: 1em;
+    margin-bottom: 5px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
+  }
+
+  .price-container {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 4px 8px;
+    text-align: center;
+    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
+    margin: 5px auto;
+  }
+
+  .item-price {
+    font-size: 0.9em;
+    color: #ff5733;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .button-n {
+    padding: 8px;
+    width: 100%;
+    font-size: 0.9em;
+    background-color: white;
+    color: green;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 }
 
 @keyframes shake {
@@ -269,95 +297,6 @@ width: auto;
 
 
 
-@media (max-width: 600px) {
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .mini-card {
-    flex-basis: calc(48%); /* Two cards per row */
-    margin-bottom: 10px;
-    margin: 1%;
-    padding: 5px;
-    border-radius: 6px;
-    height: auto; /* Allow cards to be flexible */
-  }
-
-  .img-container {
-    width: 100%;
-    height: 150px; /* Set a fixed height to control image size */
-    overflow: hidden;
-    background-color: rgb(182, 222, 230); 
-    border-radius: 6px;
-    position: relative;
-  }
-
-  .item-photo {
-    width: 100%;
-    height: 100%; /* Force image to fill the container height */
-    object-fit: cover; /* Ensure images keep their aspect ratio and fill the container */
-    border-radius: 6px;
-  }
-
-  .item-container {
-    border: 1px solid green;
-    padding: 8px;
-    background: green;
-    text-align: center;
-  }
-
-  .item-name {
-    font-size: 1em;
-    margin-bottom: 5px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    padding: 10px;
-    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
-  }
-
-  .price-container {
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    padding: 4px 8px;
-    text-align: center;
-    box-shadow: inset 4px 4px 8px #c0c0c0, inset -4px -4px 8px #ffffff;
-    margin: 5px auto;
-  }
-
-  .item-price {
-    font-size: 0.9em;
-    color: #ff5733;
-  }
-
-  .button-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 10px;
-    gap: 10px;
-  }
-
-  .button-n {
-    padding: 8px;
-    width: 100%;
-    font-size: 0.9em;
-    background-color: white;
-    color: green;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .extra-info {
-    font-size: 0.9em;
-    padding: 8px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-}
 
 
 
@@ -534,6 +473,7 @@ width: auto;
 }
 
 .subcategory-filter {
+  position: sticky;
   background-color: #fff;
   padding: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -545,25 +485,7 @@ width: auto;
   border: 1px solid #ddd;
 }
 
-.sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #45a049;  
-  width: 100%;
-  z-index: 1000;
-  animation: slideDown 0.3s ease-in-out;
-  border-bottom: 1px solid #ddd;
-}
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
 
 .filter-label {
   font-size: 20px;
