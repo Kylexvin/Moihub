@@ -111,6 +111,18 @@ const Home = () => {
   </div>
 </div>
 
+<div className={`service-card ${cardVisibility['match-maker'] ? 'show' : ''}`} data-card-id="match-maker">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic">MatchMaker<br /><i className="fas fa-heart"></i></h3>
+    <p className="neumorphic">
+      Connect with singles near you and discover meaningful relationships. Join our platform today and start your journey to finding love.
+    </p>
+    <div className="neumorphic">
+      <a href='/dating'><button className="button-b">Find Your Match <i className="fas fa-heartbeat"></i></button></a>
+    </div>
+  </div>
+</div>
+
 <div className={`service-card ${cardVisibility['find-roommate'] ? 'show' : ''}`} data-card-id="find-roommate">
   <div className="neumorphic-v2">
     <h3 className="neumorphic">Roommate Finder<br /><i className="fas fa-users"></i></h3>

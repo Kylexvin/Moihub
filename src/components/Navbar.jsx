@@ -36,7 +36,7 @@ const Navbar = () => {
                 </a>
                 <div className="dropdown-menu" aria-labelledby="servicesDropdown">
                   <a className="dropdown-item" href="/book">
-                    <i className="fas fa-calendar-alt icon-green"></i> Rent/Book
+                    <i className="fas fa-calendar-alt icon-green"></i> Rental Booking
                   </a>
                   <a className="dropdown-item" href="/pharmacy">
                     <i className="fas fa-pills icon-green"></i> E-Chem
