@@ -4,18 +4,20 @@
       "name": "Villa Park",
       "category": "food delivery",
       "phone": "+254724806578",
-      "description": "Villa Park offers a wide variety of delicious foods including Chips, Pizza, and Pasta. Enjoy our special offer and fast delivery service.",
+      "description": "Villa Park offers a wide variety of delicious foods including Chips, Bhajia, and more. Enjoy our special offer and fast delivery service.",
       "location": "stage",
       "rating": 4.8,
-      "foodTypes": ["Chips", "Pizza", "Pasta"],
-      "deliveryTime": "30-45 mins",
-      "offer": "Special Offer: 10% off first order",
+      "foodTypes": ["Chips", "Bhajia", "Mahamri"],
+      "deliveryTime": "10-20 mins",
+      "offer": "Special Offer",
       "hasDetails": true,
       "products": [
           {
               "id": "steak1",
-              "name": "Food Name",
-              "price": 0.00,
+              "name": "Chips",
+              "price":" 1/4 @ 100",
+              "price2":" 1/2 @ 140",
+              "price3":" Full @ 200",
               "image": "../delish/food.jpg"
           },
           {

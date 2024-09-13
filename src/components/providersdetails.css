@@ -58,14 +58,17 @@
 }
 
 .card-food li {
-    width: calc(50% - 10px); /* 50% width minus gap */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between;
+    width: calc(50% - 10px); /* Ensure width for the items */
     background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
     border-bottom: 2px solid red;
     box-sizing: border-box;
-    display: flex;
 }
+
 
 .order-now-btn {
     background-color: #e65c50;
@@ -79,7 +82,10 @@
     font-size: 16px;
     margin-top: 10px;
     cursor: pointer;
+    width: 100%; /* Ensure full width button */
 }
+
+
 
 @media (max-width: 768px) {
     .card-food li {
