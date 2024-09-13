@@ -17,7 +17,7 @@ const ProviderDetails = () => {
     }
 
     const handleCall = () => {
-        window.location.href = `tel:${provider.contact}`;
+        window.location.href = `tel:${provider.Phone}`;
     };
 
     return (

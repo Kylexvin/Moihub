@@ -92,7 +92,7 @@ const MoiDelish = () => {
                             {provider.hasDetails && (
                                 <Link to={`/provider/${provider.id}`} className="cta-button">More Details</Link>
                             )}
-                            <button className="cta-button" onClick={() => window.location.href = `tel:${provider.phoneNumber}`}>Order Now <i className="fas fa-phone"></i></button>
+                            <button className="cta-button" onClick={() => window.location.href = `tel:${provider.phone}`}>Order Now <i className="fas fa-phone"></i></button>
                         </div>
                     </div>
                 ))}
