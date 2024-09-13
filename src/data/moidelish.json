@@ -3,7 +3,7 @@
       "id": "villapark",
       "name": "Villa Park",
       "category": "food delivery",
-      "phone": "+254724806578",
+      "phone": "+254719564518",
       "description": "Villa Park offers a wide variety of delicious foods including Chips, Bhajia, and more. Enjoy our special offer and fast delivery service.",
       "location": "stage",
       "rating": 4.8,
@@ -18,53 +18,79 @@
               "price":" 1/4 @ 100",
               "price2":" 1/2 @ 140",
               "price3":" Full @ 200",
-              "image": "../delish/food.jpg"
+              "image": "../delish/image1.png"
           },
           {
-              "id": "steak2",
-              "name": "Food Name",
-              "price": 0.00,
-              "image": "../delish/food.jpg"
-          },
+            "id": "steak2",
+            "name": "Bhajia",
+            "price":"Varies", 
+            "image": "../delish/bhajia.jpg"
+        },
+        {
+            "id": "steak5",
+            "name": "Mahamri",
+            "price":"5/-", 
+            "image": "../delish/andazi.jpg"
+        },
           {
               "id": "steak3",
-              "name": "Food Name",
-              "price": 0.00,
-              "image": "../delish/food.jpg"
+              "name": "Soda",
+              "price":" 300ml @ 40",
+              "price2":" 500ml @ 60",    
+              "image": "../delish/image3.png"
+          },
+          {
+              "id": "steak4",
+              "name": "Fries + Smokie",
+              "price": 70,
+              "image": "../delish/friesspecial.jpg"
           }
       ]
   },
   {
-      "id": "gourmetbites",
-      "name": "Shop Name",
+      "id": "bipolarcafe",
+      "name": "Bipolar Cafe",
       "category": "food delivery",
-      "phone": "+254723456789",
-      "description": "Gourmet Bites offers a range of gourmet meals including Steaks, Sushi, and Desserts. Enjoy our high-quality meals delivered to your door.",
-      "location": "downtown, near Central Park",
-      "rating": 4.7,
-      "foodTypes": ["Steaks", "Sushi", "Desserts"],
-      "deliveryTime": "25-40 mins",
-      "offer": "Special Offer: 15% off orders above $50",
+      "phone": "0701943718",
+      "description": "They are located just around school of engineering-Ngeria.",
+      "location": "Ngeria",
+      "rating": 4.8,
+      "foodTypes": ["Milk", "Viazi", "Beans & Chapo"],
+      "deliveryTime": "20-25 mins",
+      "offer": "",
       "hasDetails": true,
       "products": [
-          {
-              "id": "steak1",
-              "name": "Food Name",
-              "price": 0.00,
-              "image": "../delish/food.jpg"
-          },
+        {
+            "id": "steak1",
+            "name": "Andazi",
+            "price":"5/-", 
+            "image": "../delish/andazi.jpg"
+        },
           {
               "id": "steak2",
-              "name": "Food Name",
-              "price": 0.00,
-              "image": "../delish/food.jpg"
+              "name": "Chapati",
+              "price": 15,
+              "image": "../delish/chapo.jpg"
           },
           {
               "id": "steak3",
-              "name": "Food Name",
-              "price": 0.00,
-              "image": "../delish/food.jpg"
-          }
+              "name": "Beans",
+              "price": 40,
+              "image": "../delish/beans.jpg"
+          },
+
+          {
+            "id": "steak5",
+            "name": "Ndengu",
+            "price": 30,
+            "image": "../delish/ndengu.jpg"
+        },
+          {
+            "id": "steak4",
+            "name": "Viazi",
+            "price": "Varies",
+            "image": "../delish/viazi.jpg"
+        }
       ]
   }
 ]

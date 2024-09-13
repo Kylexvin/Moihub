@@ -1,11 +1,12 @@
+/* General styles */
 .provider-details {
     background: #e0e0e0;
     border-radius: 12px;
     box-shadow: 10px 10px 20px #bebebe, 
                 -10px -10px 20px #ffffff;
     padding: 20px;
-    width: auto;
     margin-bottom: 20px;
+    border: #FF5722;
     text-align: center;
 }
 
@@ -21,25 +22,12 @@
                 -10px -10px 20px #ffffff;
 }
 
-.neo {
-    border-radius: 10px;
-    box-shadow: 10px 10px 20px #bebebe, 
-                -10px -10px 20px #ffffff;
-    padding: 20px;
-    border: 0.5px solid #FE5722;
-}
-
-.info-row p {
-    margin: 5px;  
-} 
-
 .card-food {
-    background: #e0e0e0;
+    background: #FF5722;
     border-radius: 12px;
     box-shadow: 10px 10px 20px #bebebe, 
                 -10px -10px 20px #ffffff;
     padding: 20px;
-    width: auto;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -48,28 +36,48 @@
     margin-bottom: 10px;
 }
 
+/* Use grid layout for card-food items */
 .card-food ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* spacing between items */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Cards per row */
+    gap: 20px; /* Spacing between cards */
 }
 
 .card-food li {
     display: flex;
-    flex-direction: column; /* Stack content vertically */
+    flex-direction: column;
     justify-content: space-between;
-    width: calc(50% - 10px); /* Ensure width for the items */
     background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
-    border-bottom: 2px solid red;
+    border-bottom: 5px solid red;
     box-sizing: border-box;
 }
 
-
+/* Image inside card */
+.card-food li img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e65c50;
+}
+ .product-name {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    }
+    .product-price {
+        border-top: 3px solid red;
+        border-bottom: 3px solid red;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 10px;
+        }
 .order-now-btn {
     background-color: #e65c50;
     color: white;
@@ -85,35 +93,41 @@
     width: 100%; /* Ensure full width button */
 }
 
-
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
+    .card-food ul {
+        grid-template-columns: 1fr; /* One column on small screens */
+    }
+
     .card-food li {
         width: 100%; /* Full width on smaller screens */
     }
 }
 
-.card-food li img {
-    width: 150px;  /* Adjusted image size */
-    height: 150px; /* Adjusted image size */
-    border-radius: 10%;
-    margin-right: 10px;
-    border: 1px solid #e65c50;
+/* Larger screens for more cards per row */
+@media (min-width: 1024px) {
+    .card-food ul {
+        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+    }
 }
 
-.card-food li div {
-    text-align: left;
+@media (min-width: 1440px) {
+    .card-food ul {
+        grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+    }
 }
 
+/* Product and provider name styling */
 .product-name {
     font-size: 16px;
     font-weight: bold;
     color: #FE5722;
-}  
+}
+
 .provider-name {
     font-size: 24px;
     font-weight: bold;
-    color: #333; /* Change this to the desired color */
+    color: #333;
     margin-bottom: 10px;
     text-align: left;
 }
