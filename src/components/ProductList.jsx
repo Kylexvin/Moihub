@@ -13,9 +13,9 @@ const ProductList = ({ shops }) => {
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
 
+  // Effect to handle subcategories logic
   useEffect(() => {
     if (shop && shop.products) {
-      // Get unique subcategories from products and filter out null/undefined
       const uniqueSubcategories = [
         ...new Set(shop.products.map((product) => product.subcategory)),
       ].filter(Boolean);
@@ -91,20 +91,15 @@ const ProductList = ({ shops }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Filter products based on the selected subcategory
-  const filteredProducts = shop
-    ? shop.products.filter(
-        (product) =>
-          (!selectedSubcategory || product.subcategory === selectedSubcategory) &&
-          product.subcategory !== undefined &&
-          product.subcategory !== null
-      )
-    : [];
+ // Filtered products logic with additional checks for subcategory
+const filteredProducts = shop
+? shop.products.filter((product) =>
+    selectedSubcategory
+      ? product.subcategory === selectedSubcategory
+      : true // Display all products if no subcategory is selected
+  )
+: [];
 
-  // Reset product info display when subcategory changes
-  useEffect(() => {
-    setShowInfo({});
-  }, [selectedSubcategory]);
 
   if (isLoading) {
     return <ShopSkeleton />;
@@ -258,7 +253,7 @@ const ProductList = ({ shops }) => {
               </div>
             </>
           ) : (
-            <p>Your cart is empty.</p>
+            <p>Your order summary is empty</p>
           )}
         </div>
       )}
