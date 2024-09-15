@@ -16,8 +16,10 @@ const ProviderDetails = () => {
         return <div>Provider not found</div>;
     }
 
+    // Function to handle phone call
     const handleCall = () => {
-        window.location.href = `tel:${provider.Phone}`;
+        // This will open the phone's dialer with the provider's phone number
+        window.location.href = `tel:${provider.phone}`;
     };
 
     return (
@@ -25,8 +27,8 @@ const ProviderDetails = () => {
             <div className="provider-details bg-white shadow-md rounded-lg p-6 mb-8">
                 <h1 className='provider-name text-3xl font-bold mb-4'>{provider.name}</h1>
                 <div className="info-row flex justify-between">
-                    <p className="flex items-center"><MapPin className="mr-2" /><br></br> {provider.location}</p>
-                    <p className="flex items-center"><Clock className="mr-2" /><br></br> {provider.deliveryTime}</p>
+                    <p className="flex items-center"><MapPin className="mr-2" /><br /> {provider.location}</p>
+                    <p className="flex items-center"><Clock className="mr-2" /><br /> {provider.deliveryTime}</p>
                 </div>
             </div>
 
@@ -38,23 +40,20 @@ const ProviderDetails = () => {
                             <img src={product.image} alt={product.name} className="w-full h-48 object-contain" />
                             <div className="p-4 flex-grow">
                                 <p className='product-name'>{product.name}</p>
-                                <p className='product-price'>{product.price}
-                                        
-                                             <br></br>
-                                         {product.price2}
-                                            <br></br>
-                                         {product.price3}
-
+                                <p className='product-price'>
+                                    {product.price}
+                                    <br />
+                                    {product.price2}
+                                    <br />
+                                    {product.price3}
                                 </p>
-                                
-                               
                             </div>
                             <button  
                                 className='order-now-btn w-full bg-blue-500 text-white py-2 px-4 flex items-center justify-center hover:bg-blue-600 transition-colors'
-                                onClick={handleCall}
+                                onClick={handleCall} // Call function when button is clicked
                             >
                                 <Phone className="mr-2" size={18} />
-                                 Order Now
+                                Order Now
                             </button>
                         </li>
                     ))}

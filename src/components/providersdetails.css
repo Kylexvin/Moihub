@@ -50,11 +50,46 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 10px;
-    border-bottom: 5px solid red;
+    background-color: #f0f0f3; /* Light gray background to simulate neumorphism */
+    padding: 20px;
+    border-radius: 20px;
     box-sizing: border-box;
+    border: none; /* Remove any border */
+    
+    /* Neumorphism shadow effect */
+    box-shadow: 8px 8px 16px #d1d1d9, /* Dark shadow */
+                -8px -8px 16px #ffffff; /* Light shadow */
+    
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect to enhance floating look */
+.card-food li:hover {
+    transform: translateY(-10px); /* Lifts the card up slightly */
+    box-shadow: 10px 10px 20px #c2c2cb, 
+                -10px -10px 20px #ffffff; /* More pronounced shadow on hover */
+}
+
+/* Image in card */
+.card-food img {
+    border-radius: 15px;
+}
+
+/* Order now button neumorphism */
+.order-now-btn {
+    background-color: #f0f0f3;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 15px;
+    box-shadow: 4px 4px 8px #d1d1d9, 
+                -4px -4px 8px #ffffff;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Hover effect for button */
+.order-now-btn:hover {
+    box-shadow: 6px 6px 12px #c2c2cb, 
+                -6px -6px 12px #ffffff;
 }
 
 /* Image inside card */
