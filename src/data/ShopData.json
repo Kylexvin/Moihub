@@ -327,18 +327,60 @@
       ]
     },
     {
-      "id": "shop3",
-      "name": "Your Shop Name",
+      "id": "ndutacollections",
+      "name": "Nduta's Collections",
       "category": "homedecor",
-      "phone": "+1234567890",
-      "description" : "Shop Description",
-      "location": "Location Here",
+      "phone": "+254768207128",
+      "description" : "For fancy items for both genders-online!",
+      "location": "Stage,Circuit Court",
       "products": [
         {
           "id": "product1",
-          "name": "Product Name",
-          "price": 1,
-          "image": "../sellers/productimg.jpg" 
+          "name": "Headbands",
+          "price": 250,
+          "image": "../sellers/nduta/headbands.jpg" 
+        },
+        {
+          "id": "product2",
+          "name": "Beaded Bracelets(Emojis)",
+          "price": 50,
+          "image": "../sellers/nduta/bracelets.jpg" 
+        },
+        {
+          "id": "product3",
+          "name": "Bathing Gloves",
+          "price":100,
+          "image": "../sellers/nduta/bathinggloves.jpg" 
+        },
+        {
+          "id": "product4",
+          "name": "Hairbands(Packet)",
+          "price":50,
+          "image": "../sellers/nduta/hairbands.jpg" 
+        },
+        {
+          "id": "product5",
+          "name": "Hair Clips",
+          "price":50,
+          "image": "../sellers/nduta/hairclips.jpg" 
+        },
+        {
+          "id": "product6",
+          "name": "Keyholders",
+          "price":300,
+          "image": "../sellers/nduta/keyholderss.jpg" 
+        },
+        {
+          "id": "product7",
+          "name": "Beaded Bracelets(Charms)",
+          "price":100,
+          "image": "../sellers/nduta/bracelets2.jpg" 
+        },
+        {
+          "id": "product8",
+          "name": "Earings ",
+          "price":100,
+          "image": "../sellers/nduta/bracelets2.jpg" 
         }
       ]
     },
