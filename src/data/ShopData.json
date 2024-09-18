@@ -326,64 +326,7 @@
         }
       ]
     },
-    {
-      "id": "ndutacollections",
-      "name": "Nduta's Collections",
-      "category": "homedecor",
-      "phone": "+254768207128",
-      "description" : "For fancy items for both genders-online!",
-      "location": "Stage,Circuit Court",
-      "products": [
-        {
-          "id": "product1",
-          "name": "Headbands",
-          "price": 250,
-          "image": "../sellers/nduta/headbands.jpg" 
-        },
-        {
-          "id": "product2",
-          "name": "Beaded Bracelets(Emojis)",
-          "price": 50,
-          "image": "../sellers/nduta/bracelets.jpg" 
-        },
-        {
-          "id": "product3",
-          "name": "Bathing Gloves",
-          "price":100,
-          "image": "../sellers/nduta/bathinggloves.jpg" 
-        },
-        {
-          "id": "product4",
-          "name": "Hairbands(Packet)",
-          "price":50,
-          "image": "../sellers/nduta/hairbands.jpg" 
-        },
-        {
-          "id": "product5",
-          "name": "Hair Clips",
-          "price":50,
-          "image": "../sellers/nduta/hairclips.jpg" 
-        },
-        {
-          "id": "product6",
-          "name": "Keyholders",
-          "price":300,
-          "image": "../sellers/nduta/keyholderss.jpg" 
-        },
-        {
-          "id": "product7",
-          "name": "Beaded Bracelets(Charms)",
-          "price":100,
-          "image": "../sellers/nduta/bracelets2.jpg" 
-        },
-        {
-          "id": "product8",
-          "name": "Earings ",
-          "price":100,
-          "image": "../sellers/nduta/bracelets2.jpg" 
-        }
-      ]
-    },
+   
     {
       "id": "g9shoes",
       "name": "G9",
@@ -735,6 +678,300 @@
         }
 
        
+      ]
+    },
+    {
+      "id": "ndutacollections",
+      "name": "Nduta's Collections",
+      "category": "Boutique",
+      "phone": "+254768207128",
+      "description" : "For fancy items for both genders-online!",
+      "location": "Stage,Circuit Court",
+      "products": [
+        {
+          "id": "product1",
+          "name": "Headbands",
+          "price": 250,
+          "subcategory": "Headbands ",
+          "image": "../nduta/headbands.jpg" 
+        },
+        {
+          "id": "product18",
+          "name": "Headbands",
+          "price": 250,
+          "subcategory": "Headbands ",
+          "image": "../nduta/headbands2.jpg" 
+        },
+        {
+          "id": "product2",
+          "name": "Bracelets(Emojis)",
+          "price": 50,
+          "subcategory": "Bracelets",
+          "image": "../nduta/bracelets.jpg" 
+        },
+        
+        {
+          "id": "product3",
+          "name": "Bathing Gloves",
+          "price":100,
+          "subcategory": "Laundry & Bathing",
+          "image": "../nduta/bathinggloves.jpg" 
+        },
+        {
+          "id": "product4",
+          "name": "Hairbands(Packet)",
+          "price":50,
+          "subcategory": "Hairbands ",
+          "image": "../nduta/hairbands.jpg" 
+        },
+       
+        {
+          "id": "product5",
+          "name": "Hair Clips",
+          "price":50,
+          "subcategory": "Hairclips ",
+          "image": "../nduta/hairclips.jpg" 
+        },
+        {
+          "id": "product16",
+          "name": "Hair Clips",
+          "price":50,
+          "subcategory": "Hairclips ",
+          "image": "../nduta/hairclips2.jpg" 
+        },
+        {
+          "id": "product17",
+          "name": "Hair Clips",
+          "price":50,
+          "subcategory": "Hairclips ",
+          "image": "../nduta/hairclips3.jpg" 
+        },
+        {
+          "id": "product18",
+          "name": "Hair Clips",
+          "price":50,
+          "subcategory": "Hairclips ",
+          "image": "../nduta/hairclips4.jpg" 
+        },
+        {
+          "id": "product12",
+          "name": "Keyholders",
+          "price":300,
+          "subcategory": "Keyholders",
+          "image": "../nduta/keyholder1.jpg" 
+        },
+        {
+          "id": "product13",
+          "name": "Keyholders",
+          "price":300,
+          "subcategory": "Keyholders",
+          "image": "../nduta/keyholder2.jpg" 
+        },
+        {
+          "id": "product14",
+          "name": "Keyholders",
+          "price":300,
+          "subcategory": "Keyholders",
+          "image": "../nduta/keyholder3.jpg" 
+        },
+        {
+          "id": "product15",
+          "name": "Keyholders",
+          "price":300,
+          "subcategory": "Keyholders",
+          "image": "../nduta/keyholder4.jpg" 
+        },
+        {
+          "id": "product6",
+          "name": "Keyholders",
+          "price":300,
+          "subcategory": "Keyholders",
+          "image": "../nduta/keyholders.jpg" 
+        },
+        {
+          "id": "product7",
+          "name": "Beaded Bracelets(Charms)",
+          "price":100,
+          "subcategory": "Bracelets",
+          "image": "../nduta/bracelets2.jpg" 
+        },
+        {
+          "id": "product9",
+          "name": "Beaded Bracelets(Charms)",
+          "price":100,
+          "subcategory": "Bracelets",
+          "image": "../nduta/bracelets3.jpg" 
+        },
+        {
+          "id": "product10",
+          "name": "Beaded Bracelets(Charms)",
+          "price":100,
+          "subcategory": "Bracelets",
+          "image": "../nduta/bracelets4.jpg" 
+        },
+        {
+          "id": "product11",
+          "name": "Beaded Bracelets(Charms)",
+          "price":100,
+          "subcategory": "Bracelets",
+          "image": "../nduta/bracelets5.jpg" 
+        },
+        {
+          "id": "product8",
+          "name": "Earings ",
+          "price":100,
+          "subcategory": "Earings",
+          "image": "../nduta/earings.jpg" 
+        },
+        {
+          "id": "product20",
+          "name": "Dress ",
+          "price":450,
+          "subcategory": "Dresses",
+          "image": "../nduta/dress.jpg" 
+        },
+        {
+          "id": "product27",
+          "name": "Sweater Dress ",
+          "price":450,
+          "subcategory": "Dresses",
+          "image": "../nduta/sweaterdress.jpg" 
+        },
+        {
+          "id": "product21",
+          "name": "Long Denim ",
+          "price":500,
+          "subcategory": "Denim",
+          "image": "../nduta/longdenim.jpg" 
+        },
+        {
+          "id": "product22",
+          "name": "Kimono",
+          "price":500,
+          "subcategory": "Kimono",
+          "image": "../nduta/kimono1.jpg" 
+        },
+        {
+          "id": "product23",
+          "name": "Kimono",
+          "price":500,
+          "subcategory": "Kimono",
+          "image": "../nduta/kimono3.jpg" 
+        },
+        {
+          "id": "product24",
+          "name": "Kimono",
+          "price":500,
+          "subcategory": "Kimono",
+          "image": "../nduta/kimono2.jpg" 
+        },
+        {
+          "id": "product25",
+          "name": "Long Sweater",
+          "price":500,
+          "subcategory": "Sweaters",
+          "image": "../nduta/longsweater1.jpg" 
+        },
+        {
+          "id": "product26",
+          "name": "Long Sweater",
+          "price":500,
+          "subcategory": "Sweaters",
+          "image": "../nduta/longsweater2.jpg" 
+        },
+
+        {
+          "id": "product28", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim1.jpg"  
+        },
+        {
+          "id": "product29", 
+          "name": "Denim Shirt", 
+          "price": 500, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim2.jpg"  
+        },
+        {
+          "id": "product30", 
+          "name": "Denim Shirt", 
+          "price": 450,
+          "subcategory": "Demins", 
+          "image": "../nduta/denim3.jpg"  
+        },
+        {
+          "id": "product31", 
+          "name": "Denim Shirt", 
+          "price": 450,
+          "subcategory": "Demins", 
+          "image": "../nduta/denim4.jpg"  
+        },
+        {
+          "id": "product32", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim5.jpg"  
+        },
+        {
+          "id": "product33", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim6.jpg"  
+        },
+        {
+          "id": "product34", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim7.jpg"  
+        },
+        {
+          "id": "product35", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim8.jpg"  
+        },
+        {
+          "id": "product36", 
+          "name": "Denim Shirt", 
+          "price": 500,
+          "subcategory": "Demins", 
+          "image": "../nduta/denim9.jpg"  
+        },
+        {
+          "id": "product37", 
+          "name": "Denim Shirt", 
+          "price": 500, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim10.jpg"  
+        },
+        {
+          "id": "product38", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim11.jpg"  
+        },
+        {
+          "id": "product39", 
+          "name": "Denim Shirt", 
+          "price": 400,
+          "subcategory": "Demins",
+          "image": "../nduta/denim12.jpg"  
+        },
+        {
+          "id": "product40", 
+          "name": "Denim Shirt", 
+          "price": 400, 
+          "subcategory": "Demins",
+          "image": "../nduta/denim13.jpg"  
+        }
+
       ]
     },
     {
