@@ -326,7 +326,6 @@
         }
       ]
     },
-   
     {
       "id": "g9shoes",
       "name": "G9",
@@ -416,7 +415,6 @@
         }
       ]
     },
-
     {
       "id": "lydiaboutique",
       "name": "Lydia Boutique",
@@ -1201,8 +1199,7 @@
               "info": "Complete birthday packages with cakes and decorations."
           }
       ]
-  },
-  
+    },
     {
       "id": " eservices",
       "name": "Donaizer Technologies",
@@ -2563,7 +2560,286 @@
       
     ] 
       
+    },
+    {
+      "id": "kylexdecors",
+      "name": "Kylex Decors",
+      "category": "homedecor",
+      "phone": "+254768610613",
+      "description" : "Transform your space with stunning wall art and unique home décor pieces. Kylex Decors – where style meets creativity!",
+      "location": "Stage",
+      "products": [
+        {
+          "id": "product1",
+          "name": "Wall Art 1",
+          "price": 400,
+          "image": "../homedecor/art01.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product2",
+          "name": "Wall Art 2",
+          "price": 400,
+          "image": "../homedecor/art02.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product3",
+          "name": "Wall Art 3",
+          "price": 400,
+          "image": "../homedecor/art03.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product4",
+          "name": "Wall Art 4",
+          "price": 400,
+          "image": "../homedecor/art04.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product5",
+          "name": "Wall Art 5",
+          "price": 400,
+          "image": "../homedecor/art05.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product6",
+          "name": "Wall Art 6",
+          "price": 400,
+          "image": "../homedecor/art06.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product7",
+          "name": "Wall Art 7",
+          "price": 400,
+          "image": "../homedecor/art07.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product8",
+          "name": "Wall Art 8",
+          "price": 400,
+          "image": "../homedecor/art08.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product9",
+          "name": "Wall Art 9",
+          "price": 400,
+          "image": "../homedecor/art09.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product10",
+          "name": "Wall Art 10",
+          "price": 400,
+          "image": "../homedecor/art10.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product11",
+          "name": "Wall Art 11",
+          "price": 400,
+          "image": "../homedecor/art11.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product12",
+          "name": "Wall Art 12",
+          "price": 400,
+          "image": "../homedecor/art12.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product13",
+          "name": "Wall Art 13",
+          "price": 400,
+          "image": "../homedecor/art13.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product14",
+          "name": "Wall Art 14",
+          "price": 400,
+          "image": "../homedecor/art14.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product15",
+          "name": "Wall Art 15",
+          "price": 400,
+          "image": "../homedecor/art15.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product16",
+          "name": "Wall Art 16",
+          "price": 400,
+          "image": "../homedecor/art16.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product17",
+          "name": "Wall Art 17",
+          "price": 400,
+          "image": "../homedecor/art17.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product18",
+          "name": "Wall Art 18",
+          "price": 400,
+          "image": "../homedecor/art18.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product19",
+          "name": "Wall Art 19",
+          "price": 400,
+          "image": "../homedecor/art19.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product20",
+          "name": "Wall Art 20",
+          "price": 400,
+          "image": "../homedecor/art20.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product21",
+          "name": "Wall Art 21",
+          "price": 400,
+          "image": "../homedecor/art21.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product22",
+          "name": "Wall Art 22",
+          "price": 400,
+          "image": "../homedecor/art22.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product23",
+          "name": "Wall Art 23",
+          "price": 400,
+          "image": "../homedecor/art23.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product24",
+          "name": "Wall Art 24",
+          "price": 400,
+          "image": "../homedecor/art24.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product25",
+          "name": "Wall Art 25",
+          "price": 400,
+          "image": "../homedecor/art25.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product26",
+          "name": "Wall Art 26",
+          "price": 400,
+          "image": "../homedecor/art26.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product27",
+          "name": "Wall Art 27",
+          "price": 400,
+          "image": "../homedecor/art27.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product28",
+          "name": "Wall Art 28",
+          "price": 400,
+          "image": "../homedecor/art28.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product29",
+          "name": "Wall Art 29",
+          "price": 400,
+          "image": "../homedecor/art29.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product30",
+          "name": "Wall Art 30",
+          "price": 400,
+          "image": "../homedecor/art30.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      
+      {
+          "id": "product32",
+          "name": "Wall Art 32",
+          "price": 400,
+          "image": "../homedecor/art32.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product33",
+          "name": "Wall Art 33",
+          "price": 400,
+          "image": "../homedecor/art33.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      },
+      {
+          "id": "product34",
+          "name": "Wall Art 34",
+          "price": 400,
+          "image": "../homedecor/art34.jpg",
+          "info": "",
+          "subcategory": "Wall Arts"
+      }
+    ]
+       
+      
+      
     }
+    
  
      
   ]
