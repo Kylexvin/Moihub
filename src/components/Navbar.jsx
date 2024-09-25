@@ -50,6 +50,9 @@ const Navbar = () => {
                   <a className="dropdown-item" href="/find-roommate">
                     <i className="fas fa-user-friends icon-blue"></i> Find Roommate
                   </a>
+                  <a className="dropdown-item" href="https://mvobingwa.godaddysites.com">
+                    <i className="fas fa-sim-card icon-blue"></i> Data Bundles
+                  </a>
                 </div>
               </li>
               <li className="nav-item dropdown">

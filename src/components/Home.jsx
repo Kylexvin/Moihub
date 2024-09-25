@@ -111,17 +111,18 @@ const Home = () => {
   </div>
 </div>
 
-<div className={`service-card ${cardVisibility['match-maker'] ? 'show' : ''}`} data-card-id="match-maker">
+<div className={`service-card ${cardVisibility['buy-bundles'] ? 'show' : ''}`} data-card-id="buy-bundles">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">MatchMaker<br /><i className="fas fa-heart"></i></h3>
+    <h3 className="neumorphic">Buy Bundles<br /><i className="fas fa-sim-card"></i></h3>
     <p className="neumorphic">
-      Connect with singles near you and discover meaningful relationships. Join our platform today and start your journey to finding love.
+      Easily purchase Safaricom data bundles even with an <b>OKOA JAHAZI</b>. Stay connected without interruption. 
     </p>
     <div className="neumorphic">
-      <a href='/dating'><button className="button-b">Find Your Match <i className="fas fa-heartbeat"></i></button></a>
+      <a href='https://mvobingwa.godaddysites.com'><button className="button-b">Buy Data Now <i className="fas fa-sim-card"></i></button></a>
     </div>
   </div>
 </div>
+
 
 <div className={`service-card ${cardVisibility['find-roommate'] ? 'show' : ''}`} data-card-id="find-roommate">
   <div className="neumorphic-v2">
