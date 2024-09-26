@@ -22,78 +22,49 @@
                 -10px -10px 20px #ffffff;
 }
 
-.card-food {
+.food-cards {
     background: #FF5722;
     border-radius: 12px;
-    box-shadow: 10px 10px 20px #bebebe, 
-                -10px -10px 20px #ffffff;
+    /* box-shadow: 10px 10px 20px #bebebe, 
+                -10px -10px 20px #ffffff; */
     padding: 20px;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.card-food h1, .card h2 {
+.food-cards h2 {
     margin-bottom: 10px;
 }
 
-/* Use grid layout for card-food items */
-.card-food ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+/* Use grid layout for food cards */
+.food-cards .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Cards per row */
-    gap: 20px; /* Spacing between cards */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
-.card-food li {
+.food-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #f0f0f3; /* Light gray background to simulate neumorphism */
+    background-color: #f0f0f3;
     padding: 20px;
     border-radius: 20px;
     box-sizing: border-box;
-    border: none; /* Remove any border */
-    
-    /* Neumorphism shadow effect */
-    box-shadow: 8px 8px 16px #d1d1d9, /* Dark shadow */
-                -8px -8px 16px #ffffff; /* Light shadow */
-    
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
-}
-
-/* Hover effect to enhance floating look */
-.card-food li:hover {
-    transform: translateY(-10px); /* Lifts the card up slightly */
-    box-shadow: 10px 10px 20px #c2c2cb, 
-                -10px -10px 20px #ffffff; /* More pronounced shadow on hover */
-}
-
-/* Image in card */
-.card-food img {
-    border-radius: 15px;
-}
-
-/* Order now button neumorphism */
-.order-now-btn {
-    background-color: #f0f0f3;
     border: none;
-    border-radius: 12px;
-    padding: 10px 15px;
-    box-shadow: 4px 4px 8px #d1d1d9, 
-                -4px -4px 8px #ffffff;
-    transition: box-shadow 0.3s ease;
+    
+    /* box-shadow: 8px 8px 16px #d1d1d9,
+                -8px -8px 16px #ffffff; */
+    
+    transition: transform 0.3s ease;
 }
 
-/* Hover effect for button */
-.order-now-btn:hover {
-    box-shadow: 6px 6px 12px #c2c2cb, 
-                -6px -6px 12px #ffffff;
+.food-card:hover {
+    transform: translateY(-10px);
+   border:1px solid #FE5722;
 }
 
-/* Image inside card */
-.card-food li img {
+.food-card img {
     width: 100%;
     height: 150px;
     object-fit: cover;
@@ -101,18 +72,24 @@
     margin-bottom: 10px;
     border: 1px solid #e65c50;
 }
- .product-name {
+
+.food-card h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FE5722;
     padding: 10px;
     margin: 5px;
     border-radius: 10px;
-    }
-    .product-price {
-        border-top: 3px solid red;
-        border-bottom: 3px solid red;
-        margin: 5px;
-        padding: 10px;
-        border-radius: 10px;
-        }
+}
+
+.food-card .mb-4 {
+    border-top: 3px solid red;
+    border-bottom: 3px solid red;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .order-now-btn {
     background-color: #e65c50;
     color: white;
@@ -125,38 +102,26 @@
     font-size: 16px;
     margin-top: 10px;
     cursor: pointer;
-    width: 100%; /* Ensure full width button */
+    width: 100%;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .card-food ul {
-        grid-template-columns: 1fr; /* One column on small screens */
-    }
-
-    .card-food li {
-        width: 100%; /* Full width on smaller screens */
+    .food-cards .grid {
+        grid-template-columns: 1fr;
     }
 }
 
-/* Larger screens for more cards per row */
 @media (min-width: 1024px) {
-    .card-food ul {
-        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+    .food-cards .grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (min-width: 1440px) {
-    .card-food ul {
-        grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+    .food-cards .grid {
+        grid-template-columns: repeat(4, 1fr);
     }
-}
-
-/* Product and provider name styling */
-.product-name {
-    font-size: 16px;
-    font-weight: bold;
-    color: #FE5722;
 }
 
 .provider-name {

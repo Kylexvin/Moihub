@@ -16,51 +16,48 @@ const ProviderDetails = () => {
         return <div>Provider not found</div>;
     }
 
-    // Function to handle phone call
     const handleCall = () => {
-        // This will open the phone's dialer with the provider's phone number
         window.location.href = `tel:${provider.phone}`;
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8">
-            <div className="provider-details bg-white shadow-md rounded-lg p-6 mb-8">
+        <div className="max-w-6xl mx-0 px-4 py-8">
+            <div className="provider-details bg-white shadow-md rounded-lg p-6 ">
                 <h1 className='provider-name text-3xl font-bold mb-4'>{provider.name}</h1>
                 <div className="info-row flex justify-between">
-                    <p className="flex items-center"><MapPin className="mr-2" /><br /> {provider.location}</p>
-                    <p className="flex items-center"><Clock className="mr-2" /><br /> {provider.deliveryTime}</p>
+                    <p className="flex items-center"><MapPin className="mr-2" /><br />{provider.location}</p>
+                    <p className="flex items-center"><Clock className="mr-2" /><br />{provider.deliveryTime}</p>
                 </div>
             </div>
-
-            <div className="card-food bg-white shadow-md rounded-lg p-6">
+    
+            <div className="food-cards">
                 <h2 className="text-2xl font-semibold mb-4">Foods Available</h2>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {provider.products.map(product => (
-                        <li key={product.id} className="flex flex-col bg-gray-50 rounded-lg overflow-hidden">
-                            <img src={product.image} alt={product.name} className="w-full h-48 object-contain" />
-                            <div className="p-4 flex-grow">
-                                <p className='product-name'>{product.name}</p>
-                                <p className='product-price'>
-                                    {product.price}
-                                    <br />
-                                    {product.price2}
-                                    <br />
-                                    {product.price3}
-                                </p>
+                        <div key={product.id} className="food-card bg-white shadow-md rounded-lg overflow-hidden">
+                            <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                            <div className="p-4">
+                                <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
+                                <div className="mb-4">
+                                    {product.price && <p className="text-gray-700">{product.price}</p>}
+                                    {product.price2 && <p className="text-gray-700">{product.price2}</p>}
+                                    {product.price3 && <p className="text-gray-700">{product.price3}</p>}
+                                </div>
+                                <button
+                                    className="order-now-btn w-full bg-blue-500 text-white py-2 px-4 rounded flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                    onClick={handleCall}
+                                >
+                                    <Phone className="mr-2" size={18} />
+                                    Order Now
+                                </button>
                             </div>
-                            <button  
-                                className='order-now-btn w-full bg-blue-500 text-white py-2 px-4 flex items-center justify-center hover:bg-blue-600 transition-colors'
-                                onClick={handleCall} // Call function when button is clicked
-                            >
-                                <Phone className="mr-2" size={18} />
-                                Order Now
-                            </button>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
         </div>
     );
+    
 };
 
 export default ProviderDetails;
