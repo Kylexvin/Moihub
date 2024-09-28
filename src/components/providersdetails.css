@@ -1,133 +1,298 @@
-/* General styles */
-.provider-details {
-    background: #e0e0e0;
-    border-radius: 12px;
-    box-shadow: 10px 10px 20px #bebebe, 
-                -10px -10px 20px #ffffff;
+/* Global styles and variables */
+:root {
+    --primary-color: #2ecc71;
+    --secondary-color: #e74c3c;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --card-background: #ffffff;
+    --header-background: rgba(255, 255, 255, 0.9);
+    --button-hover: #2980b9;
+    --transition-speed: 0.3s;
+  }
+  
+  
+  /* Dark mode styles */
+  body.dark-mode {
+    --background-color: #121212;
+    --text-color: #f5f5f5;
+    --card-background: #1e1e1e;
+    --header-background: rgba(30, 30, 30, 0.9);
+  }
+  
+  /* Custom cursor styles */
+  /* .custom-cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease-out, background-color 0.3s ease;
+  } */
+  
+  /* Container styles */
+  .provider-details-container {
+    max-width: auto;
+    margin: 0 auto;
     padding: 20px;
-    margin-bottom: 20px;
-    border: #FF5722;
-    text-align: center;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
+  }
+  
+  /* Header styles */
+  .provider-header {
+    background-color: var(--header-background);
     padding: 20px;
+    border:1px solid  #e74c3c;
     border-radius: 10px;
-    border: 0.5px solid #FE5722;
-    box-shadow: 10px 10px 20px #bebebe, 
-                -10px -10px 20px #ffffff;
-}
-
-.food-cards {
-    background: #FF5722;
-    border-radius: 12px;
-    /* box-shadow: 10px 10px 20px #bebebe, 
-                -10px -10px 20px #ffffff; */
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.food-cards h2 {
-    margin-bottom: 10px;
-}
-
-/* Use grid layout for food cards */
-.food-cards .grid {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    top: 0;
+    z-index: 100;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .provider-header-top {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;
+  }
+  
+  .provider-name {
+    font-size: 2rem;
+    margin: 0;
+    color: #2ecc71;
+  }
+  
+  .call-button, .order-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .call-button:hover, .order-button:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .provider-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .toggle-info {
+    background: var(--primary-color);
+    border: none;
+    color: var(--card-background);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  /* Category list styles */
+  .category-list {
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  
+  .category-items {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .category-button {
+    background-color: var(--card-background);
+    border: 1px solid var(--primary-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    border:1px solid  #e74c3c;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
+  
+  .category-button.active-category {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Product grid styles */
+  .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-}
-
-.food-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #f0f0f3;
-    padding: 20px;
-    border-radius: 20px;
-    box-sizing: border-box;
-    border: none;
-    
-    /* box-shadow: 8px 8px 16px #d1d1d9,
-                -8px -8px 16px #ffffff; */
-    
-    transition: transform 0.3s ease;
-}
-
-.food-card:hover {
-    transform: translateY(-10px);
-   border:1px solid #FE5722;
-}
-
-.food-card img {
+  }
+  
+  .product-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    overflow: hidden;
+    border:1px solid  #e74c3c;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  }
+  
+  .product-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .product-image {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
+    transition: transform var(--transition-speed);
+  }
+  
+  .image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    transition: transform var(--transition-speed);
+  }
+  
+  /* Mobile styles: Always show food name */
+  @media (max-width: 768px) {
+    .image-overlay {
+      transform: translateY(0);
+    }
+    
+    .product-card:hover .product-image {
+      transform: none;
+    }
+  }
+  
+  /* Desktop styles: Reveal food name on hover */
+  @media (min-width: 769px) {
+    .image-overlay {
+      transform: translateY(100%);
+    }
+  
+    .product-card:hover .image-overlay {
+      transform: translateY(0);
+    }
+  
+    .product-card:hover .product-image {
+      transform: scale(1.1);
+    }
+  }
+  
+  .product-details {
+    padding: 15px;
+  }
+  
+  .product-name {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .product-price-container {
+    display: flex;
+    padding: 10px;
     border-radius: 10px;
+    background-color: antiquewhite;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
-    border: 1px solid #e65c50;
-}
-
-.food-card h3 {
-    font-size: 16px;
+  }
+  
+  .product-price, .product-price-alt {
     font-weight: bold;
-    color: #FE5722;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;
-}
-
-.food-card .mb-4 {
-    border-top: 3px solid red;
-    border-bottom: 3px solid red;
-    margin: 5px;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.order-now-btn {
-    background-color: #e65c50;
+  }
+  
+  .product-price-secondary {
+    display: block;
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  
+  /* Theme toggle button */
+  .theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-top: 10px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    width: 100%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .food-cards .grid {
-        grid-template-columns: 1fr;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color var(--transition-speed);
+  }
+  
+  .theme-toggle:hover {
+    background-color: var(--button-hover);
+  }
+  
+  /* Toast styles */
+  .Toastify__toast {
+    border-radius: 10px;
+  }
+  
+  .toast-success {
+    background-color: #2ecc71;
+  }
+  
+  .toast-error {
+    background-color: #e74c3c;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .provider-header-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
-}
-
-@media (min-width: 1024px) {
-    .food-cards .grid {
-        grid-template-columns: repeat(3, 1fr);
+  
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
-}
-
-@media (min-width: 1440px) {
-    .food-cards .grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.provider-name {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-    text-align: left;
-}
+  }
+  
+  /* Loading styles */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+  }
+  
+  /* Provider not found styles */
+  .provider-not-found {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.5rem;
+  }

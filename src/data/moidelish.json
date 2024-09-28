@@ -20,6 +20,13 @@
               "price3":" Full @ 200",
               "image": "../delish/image1.png"
           },
+        {
+            "id": "pilau1",
+            "name": "Pilau",
+            "price":"Beef,Plain,Special, Beef Fry, Vegetable Pilau,Pilau Peas ",
+            "image": "../delish/pilau.jpg"
+        },
+
           {
             "id": "steak2",
             "name": "Bhajia",
