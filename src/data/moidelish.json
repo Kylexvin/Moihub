@@ -17,7 +17,7 @@
               "name": "Chips",
               "price":" 1/4 @ 100",
               "price2":" 1/2 @ 140",
-              "price3":" Full @ 200",
+              "price3":" Full @ 280",
               "image": "../delish/image1.png"
           },
         {
@@ -99,5 +99,67 @@
             "image": "../delish/viazi.jpg"
         }
       ]
-  }
+  },
+  {
+    "id": "summerplace",
+    "name": "Summer Palace",
+    "category": "food delivery",
+    "phone": "0112380295",
+    "description": "Next to Wembley Cyber, Opposite Goodlife Chemist.",
+    "location": "Stage",
+    "rating": 4.8,
+    "foodTypes": ["Chips", "Kuku", "Kebabs"],
+    "deliveryTime": "20-25 mins",
+    "offer": "Stage, Hostels, Mabs Chebarus & Kesses ",
+    "hasDetails": true,
+    "products": [
+        {
+            "id": "steak1",
+            "name": "Chips",
+            "price":" 1/4 @ 100",
+            "price2":" 1/2 @ 140",
+            "price3":" Full @ 280",
+            "image": "../delish/image1.png"
+        },
+        {
+            "id": "steak2",
+            "name": "Bhajia",
+            "price":" 1/4 @ 100",
+            "price2":" 1/2 @ 150",
+            "price3":" Full @ 280",
+            "image": "../delish/bhajia.jpg"
+        },
+        {
+            "id": "steak3",
+            "name": "Kuku",
+            "price": "Varies",
+            "image": "../delish/kuku.jpg"
+        },
+
+        {
+          "id": "steak5",
+          "name": "Smokies",
+          "price": 35,
+          "image": "../delish/smokie.jpg"
+      },
+        {
+          "id": "steak4",
+          "name": "Kebab",
+          "price": "30",
+          "image": "../delish/kebab.jpg"
+      },
+      {
+        "id": "steak6",
+        "name": "Kebab/Smokie Special ",
+        "price": "80",
+        "image": "../delish/kebab.jpg"
+    },
+      {
+        "id": "steak5",
+        "name": "Eggs",
+        "price": "30",
+        "image": "../jayden/eggs.jpg"
+    }
+    ]
+}
 ]
