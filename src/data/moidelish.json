@@ -3,13 +3,13 @@
       "id": "villapark",
       "name": "Villa Park",
       "category": "food delivery",
-      "phone": "+254719564518",
+      "phone": "0747564517",
       "description": "Villa Park offers a wide variety of delicious foods including Chips, Bhajia, and more. Enjoy our special offer and fast delivery service.",
       "location": "stage",
       "rating": 4.8,
       "foodTypes": ["Chips", "Bhajia", "Mahamri"],
       "deliveryTime": "10-20 mins",
-      "offer": "Special Offer",
+      "offer": "Stage, Hostels, Mabs Chebarus & Kesses ",
       "hasDetails": true,
       "products": [
           {
@@ -62,9 +62,9 @@
       "description": "They are located just around school of engineering-Ngeria.",
       "location": "Ngeria",
       "rating": 4.8,
-      "foodTypes": ["Milk", "Viazi", "Beans & Chapo"],
+      "foodTypes": ["Milk", "Viazi", "Chapo"],
       "deliveryTime": "20-25 mins",
-      "offer": "",
+      "offer": "Stage and School",
       "hasDetails": true,
       "products": [
         {

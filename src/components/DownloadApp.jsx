@@ -10,7 +10,7 @@ function DownloadApp() {
       </p>
       <a href="/moihub.apk" download className="download-link">
         <button className="download-button">
-          <span className="download-text">Download APK</span>
+          <span className="download-text">Download APK <i className="fas fa-arrow-down"></i></span>
         </button>
       </a>
     </div>

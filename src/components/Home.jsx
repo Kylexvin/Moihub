@@ -53,7 +53,7 @@ const Home = () => {
       <section className="body-cards">
         <div className={`service-card ${cardVisibility['rent-space'] ? 'show' : ''}`} data-card-id="rent-space">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Rent Your Space<br /><i className="fas fa-home"></i></h3>
+    <h3 className="neumorphic"><h3>Rent Your Space<br /><i className="fas fa-home"></i></h3></h3>
     <p className="neumorphic">Discover the perfect space for your stay. Browse through a variety of rental houses, check prices, locations, and other details—all from the comfort of your device.</p>
     <a href="/book"><div className="neumorphic"> <button className="button-b">Explore Rentals <i className="fas fa-key"></i></button></div></a>
   </div>
@@ -61,7 +61,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['e-shop'] ? 'show' : ''}`} data-card-id="e-shop">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">E-shop<br /><i className="fas fa-shopping-cart"></i></h3>
+    <h3 className="neumorphic"><h3>E-shop<br /><i className="fas fa-shopping-cart"></i></h3></h3>
     <p className="neumorphic">Browse a wide range of products from the comfort of your own home. Enjoy hassle-free online shopping with our collection of products.Shop now.</p>
     <a href="/eshop"><div className="neumorphic"> <button className="button-b">Start Shopping <i className="fas fa-store"></i></button></div></a>
   </div>
@@ -69,7 +69,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['e-chem'] ? 'show' : ''}`} data-card-id="e-chem">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">E-Chem<br /><i className="fas fa-stethoscope"></i></h3>
+    <h3 className="neumorphic"><h3>E-Chem<br /><i className="fas fa-stethoscope"></i></h3></h3>
     <p className="neumorphic">Discover our diverse selection of pharmaceutical items and easily buy them through our user-friendly online platform, simplifying your shopping experience.
 </p>
     <div className="neumorphic"><a href='/pharmacy'><button className="button-b">Shop Now <i className="fas fa-medkit"></i></button></a></div>
@@ -78,7 +78,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['food'] ? 'show' : ''}`} data-card-id="food">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">MoiDelish<br /> <i className="fas fa-utensils"></i></h3>
+    <h3 className="neumorphic"><h3>MoiDelish<br /> <i className="fas fa-utensils"></i></h3></h3>
     <p className="neumorphic">MoiDelish allows you to order food. The deliveries are done around Moi university. Browse for different foods offered by available providers. We are assuring you a best service.</p>
     <div className="neumorphic"><a href='/food-delivery'><button className="button-b">Order Now <i className="fas fa-motorcycle"></i></button></a></div>
   </div>
@@ -86,7 +86,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['grocery'] ? 'show' : ''}`} data-card-id="grocery">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Groceries<br /> <i className="fas fa-apple-alt"></i></h3>
+    <h3 className="neumorphic"><h3>Groceries<br /> <i className="fas fa-apple-alt"></i></h3></h3>
     <p className="neumorphic">GreenHub grocery allows you to order groceries. The deliveries are done around Moi university. Browse for different grocery items offered by available providers.</p>
     <div className="neumorphic"><a href='/greenhub'><button className="button-b">Order Now <i className="fas fa-shopping-cart"></i></button></a></div>
   </div>
@@ -95,7 +95,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['emergency-assistance'] ? 'show' : ''}`} data-card-id="emergency-assistance">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Discover Services<br /><i className="fas fa-search"></i></h3>
+    <h3 className="neumorphic"><h3>Discover Services<br /><i className="fas fa-search"></i></h3></h3>
     <p className="neumorphic">Discover outstanding local services near Moi University with our guide. Support these businesses to foster community growth and prosperity.</p>
     <a href="/discover"><div className="neumorphic"> <button className="button-b">Explore Now <i className="fas fa-arrow-right"></i></button></div></a>
   </div>
@@ -105,7 +105,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['second-hand-market'] ? 'show' : ''}`} data-card-id="second-hand-market">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Second-hand Market<br /><i className="fas fa-shopping-bag"></i></h3>
+    <h3 className="neumorphic"><h3>Second-hand Market<br /><i className="fas fa-shopping-bag"></i></h3></h3>
     <p className="neumorphic">Explore a variety of gently used items. From home items to beddings, find great deals on second-hand products right from your screen.</p>
     <a href="/marketplace"><div className="neumorphic"> <button className="button-b">Explore Now <i className="fas fa-tags"></i></button></div></a>
   </div>
@@ -113,7 +113,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['buy-bundles'] ? 'show' : ''}`} data-card-id="buy-bundles">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Buy Bundles<br /><i className="fas fa-sim-card"></i></h3>
+    <h3 className="neumorphic"><h3>Buy Bundles<br /><i className="fas fa-sim-card"></i></h3></h3>
     <p className="neumorphic">
       Easily purchase Safaricom data bundles even with an <b>OKOA JAHAZI</b>. Stay connected without interruption. 
     </p>
@@ -126,7 +126,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['find-roommate'] ? 'show' : ''}`} data-card-id="find-roommate">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Roommate Finder<br /><i className="fas fa-users"></i></h3>
+    <h3 className="neumorphic"><h3>Roommate Finder<br /><i className="fas fa-users"></i></h3></h3>
     <p className="neumorphic">Discover compatible roommates for your living space. Browse through profiles, preferences, and connect with potential roommates hassle-free.</p>
     <a href="/find-roommate"><div className="neumorphic"> <button className="button-b">Explore Roommates <i className="fas fa-search"></i></button></div></a>
   </div>
@@ -134,7 +134,7 @@ const Home = () => {
 
 <div className={`service-card ${cardVisibility['blog-news'] ? 'show' : ''}`} data-card-id="blog-news">
   <div className="neumorphic-v2">
-    <h3 className="neumorphic">Blog Post and News<br /><i className="fas fa-newspaper"></i></h3>
+    <h3 className="neumorphic"><h3>Blog Post and News<br /><i className="fas fa-newspaper"></i></h3></h3>
     <p className="neumorphic">Stay informed and entertained! Read our latest blog posts and news articles covering a wide range of topics.Business ideas included.</p>
     <div className="neumorphic"><a href='/blog'><button className="button-b">Read Now <i className="fas fa-book-open"></i></button></a></div>
   </div>

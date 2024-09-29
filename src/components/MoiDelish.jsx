@@ -86,7 +86,7 @@ const MoiDelish = () => {
                                 </ul>
                             </div>
                             <p className="delivery-time"><i className="far fa-clock"></i>{provider.deliveryTime}</p>
-                            <p className="offer-tag"><i className="fas fa-tags"></i>{provider.offer}</p>
+                            <p className="offer-tag"><i className="fas fa-motorcycle"></i>{provider.offer}</p>
                         </div>
                         <div className={`card-footer ${provider.hasDetails ? '' : 'single-button'}`}>
                             {provider.hasDetails && (
