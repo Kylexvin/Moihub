@@ -132,8 +132,14 @@
         {
             "id": "steak3",
             "name": "Kuku",
-            "price": "Varies",
+            "price": "Starts From 50 Bob",
             "image": "../delish/kuku.jpg"
+        },
+        {
+            "id": "steak3",
+            "name": "Chips Kuku",
+            "price": "Starts From 50 Bob",
+            "image": "../delish/chipskuku.jfif "
         },
 
         {

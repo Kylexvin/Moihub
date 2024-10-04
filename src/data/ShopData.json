@@ -424,258 +424,302 @@
       "location": "Stage, Behind Petrol Station",
       "products": [
         {
-          "id": "Regular Duvet",
+          "id": "duvet-001",
           "name": "Regular Duvet",
           "price": 2200,
           "image": "../Boutique/duvet01.jpg"
         },
-
         {
-          "id": "Regular Duvet",
+          "id": "duvet-002",
           "name": "Regular Duvet",
           "price": 2200,
           "image": "../Boutique/duvet02.jpg"
         },
-
-         {
-          "id": "product13",
+        {
+          "id": "duvet-003",
           "name": "Generic Woolen Duvet",
           "price": 2500,
-          "image":"../Boutique/duvet04.jpg"
+          "image": "../Boutique/duvet04.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "duvet-004",
           "name": "Shinny Duvet",
           "price": 2500,
-          "image":"../Boutique/shinyduvet.jpg"
+          "image": "../Boutique/shinyduvet.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "duvet-005",
           "name": "Shinny Duvet",
           "price": 2500,
-          "image":"../Boutique/shinyduvets.jpg"
+          "image": "../Boutique/shinyduvets.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "duvet-006",
           "name": "Velvet Duvet",
           "price": 4500,
-          "image":"../Boutique/velvetduvet.jpg"
+          "image": "../Boutique/velvetduvet.jpg"
         },
-
         {
-          "id": "product12",
+          "id": "duvet-007",
+          "name": "4in1 Duvets",
+          "price": 1600,
+          "image": "../Boutique/4in1duvets1600.jpg"
+        },
+        {
+          "id": "mosquito-net-001",
           "name": "Round Mosquito Net",
           "price": 950,
-          "image":"../Boutique/roundnet.jpg",
-          "info" : "Available in all colours."
+          "image": "../Boutique/roundnet.jpg",
+          "info": "Available in all colours."
         },
-       
         {
-          "id": "product13",
+          "id": "mosquito-net-002",
           "name": "4 Stand Mosquito Net",
           "price": 1400,
           "image": "../Boutique/4standnet.jpg"
         },
-
         {
-          "id": "product14",
+          "id": "mosquito-net-003",
           "name": "2 Stand Mosquito Net",
           "price": 4500,
           "image": "../Boutique/2standnet2.jpg"
         },
         {
-          "id": "product13",
+          "id": "mosquito-net-004",
           "name": "2 Stand Mosquito Net",
           "price": 4500,
-          "image":"../Boutique/2standnet.jpg"
+          "image": "../Boutique/2standnet.jpg"
         },
         {
-          "id": "product13",
+          "id": "pillow-001",
           "name": "Ordinary Pillows",
           "price": 250,
           "image": "../Boutique/pillow01.jpg",
-          "info" : "Varieties available."
+          "info": "Varieties available."
         },
         {
-          "id": "product13",
+          "id": "pillow-002",
           "name": "Fibre Pillows",
           "price": 350,
           "image": "../Boutique/pillow03.jpg",
-          "info" : "Varieties available."
-        },
-
-        {
-          "id": "product13",
-          "name": "Shoe Rack",
-          "price": 950,
-          "image": "../Boutique/shoerack01.jpg",
-          "info" : "Other colors available."
+          "info": "Varieties available."
         },
         {
-          "id": "product13",
-          "name": "Fluffy Doormat",
-          "price": 500,
-          "image": "../Boutique/fmat01.jpg",
-          "info" : "Varieties available."
-        },
-
-
-         {
-          "id": "product13",
-          "name": "Doormat",
-          "price": 400,
-          "image": "../Boutique/mat01.jpg",
-          "info" : "Varieties available."
-        },
-
-
-        {
-          "id": "product13",
-          "name": "Wall Nets",
-          "price": 350,
-          "image": "../assets/images/pride_and_prejudice.jpg",
-          "info" : "Varieties available."
-        },
-
-        {
-          "id": "product13",
-          "name": "Curtains",
-          "price": 300,
-          "image": "../Boutique/curtain01.jpg",
-          "info" : "Varieties available."
-        },
-
-        {
-          "id": "product13",
+          "id": "pillow-003",
           "name": "Throw Pillows",
           "price": 500,
           "image": "../Boutique/throwpillow.jpg",
-          "info" : "Varieties available."
+          "info": "Varieties available."
         },
-
         {
-          "id": "product13",
+          "id": "storage-001",
+          "name": "Shoe Rack",
+          "price": 950,
+          "image": "../Boutique/shoerack01.jpg",
+          "info": "Other colors available."
+        },
+        {
+          "id": "storage-002",
+          "name": "Metallic Wardrobe",
+          "price": 2600,
+          "image": "../Boutique/metallic wardrobe2600.jpg"
+        },
+        {
+          "id": "mat-001",
+          "name": "Fluffy Doormat",
+          "price": 500,
+          "image": "../Boutique/fmat01.jpg",
+          "info": "Varieties available."
+        },
+        {
+          "id": "mat-002",
+          "name": "Doormat",
+          "price": 400,
+          "image": "../Boutique/mat01.jpg",
+          "info": "Varieties available."
+        },
+        {
+          "id": "mat-003",
+          "name": "Door Mat",
+          "price": 350,
+          "image": "../Boutique/doormat1350.jpg"
+        },
+        {
+          "id": "carpet-001",
+          "name": "Fluffy Carpet",
+          "price": 2300,
+          "image": "../Boutique/fluffycarpet2300.jpg"
+        },
+        {
+          "id": "carpet-002",
+          "name": "Plastic Carpets",
+          "price": 170,
+          "image": "../Boutique/plasticcarpets170.jpg"
+        },
+        {
+          "id": "decor-001",
+          "name": "Wall Nets",
+          "price": 350,
+          "image": "../Boutique/wallnets.jpg",
+          "info": "Varieties available."
+        },
+        {
+          "id": "decor-002",
+          "name": "Curtains",
+          "price": 300,
+          "image": "../Boutique/curtain01.jpg",
+          "info": "Varieties available."
+        },
+        {
+          "id": "accessory-001",
           "name": "Bonnets",
           "price": 250,
           "image": "../Boutique/bonnets.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "belt-001",
           "name": "Corset Belts",
           "price": 1000,
           "image": "../Boutique/corsetbelts.jpg"
         },
-        
         {
-          "id": "product13",
+          "id": "belt-002",
           "name": "Corset Belts",
           "price": 1000,
           "image": "../Boutique/corsetbelts2.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "belt-003",
           "name": "Corset Belt",
           "price": 1000,
           "image": "../Boutique/corsetbelt.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "belt-004",
           "name": "Harness Belt",
           "price": 1300,
           "image": "../Boutique/harness belt.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "belt-005",
           "name": "Obi Belt",
           "price": 600,
           "image": "../Boutique/obibelts.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "clothing-001",
           "name": "Fish Nets",
           "price": 250,
           "image": "../Boutique/fishnets.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "clothing-002",
           "name": "Biker Shorts",
           "price": 350,
           "image": "../Boutique/bikershorts.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "clothing-003",
           "name": "Quality Ladies Tights",
           "price": 350,
           "image": "../Boutique/ladiestight.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-001",
           "name": "Sweater Skirt",
           "price": 600,
           "image": "../Boutique/sweaterskirts.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-002",
           "name": "Official Pensil Skirt",
           "price": 500,
           "image": "../Boutique/officialpensil2.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-003",
           "name": "Official Pensil Skirt",
           "price": 500,
           "image": "../Boutique/officialpensil.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-004",
           "name": "Maxi Skirt",
           "price": 750,
           "image": "../Boutique/maxiskirt.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-005",
           "name": "Maxi Skirt",
           "price": 750,
           "image": "../Boutique/maxiskirt1.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "skirt-006",
           "name": "Maxi Skirt",
           "price": 750,
           "image": "../Boutique/maxiskirt2.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "accessory-002",
           "name": "Silk Scarfs",
           "price": 250,
           "image": "../Boutique/scarfs.jpg"
         },
-
         {
-          "id": "product13",
+          "id": "bag-001",
           "name": "Sling Bag",
           "price": 500,
           "image": "../Boutique/slingbag.jpg"
+        },
+        {
+          "id": "bag-002",
+          "name": "Chain Sling Bag",
+          "price": 700,
+          "image": "../Boutique/chainslingbag700.jpg"
+        },
+        {
+          "id": "bag-003",
+          "name": "Foldable Kitenge Shopping Bag",
+          "price": 200,
+          "image": "../Boutique/foldablekitengeshoppingbag200.jpg"
+        },
+        {
+          "id": "bag-004",
+          "name": "Phone Sling Bag",
+          "price": 500,
+          "image": "../Boutique/phoneslingbag1500.jpg"
+        },
+        {
+          "id": "bag-005",
+          "name": "Pollo Bag",
+          "price": 500,
+          "image": "../Boutique/pollobag500.jpg"
+        },
+        {
+          "id": "bag-006",
+          "name": "Pouch",
+          "price": 100,
+          "image": "../Boutique/pouch100.jpg"
+        },
+        {
+          "id": "bag-007",
+          "name": "Sling Bag",
+          "price": 750,
+          "image": "../Boutique/slingbag750.jpg"
+        },
+        {
+          "id": "bag-008",
+          "name": "Travel Bag",
+          "price": 1200,
+          "image": "../Boutique/travelbag1200.jpg"
+        },
+        {
+          "id": "bag-009",
+          "name": "Water Proof Cartoon Bag",
+          "price": 400,
+          "image": "../Boutique/bb.jpg"
         }
-
-       
       ]
     },
     {
