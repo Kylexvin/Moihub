@@ -9,9 +9,10 @@ const jsonData = [
   {
     category: "Motorbike Services",
     services: [
-      { name: "Bernard", phone: "0729451143", hasPage: false },
+      { name: "Eduu", phone: "0725118223", hasPage: false },
       { name: "Feloo", phone: "0717022787", hasPage: false },
       { name: "Biwott", phone: "0748667191", hasPage: false }
+      
     ]
   },
   {
@@ -23,16 +24,18 @@ const jsonData = [
   {
     category: "Mama Fua",
     services: [
-      { name: "(Rebo)", phone: "0717249441", hasPage: true, route: "rebo" },
-      { name: "Rodha(Mobile)", phone: "+254 741 260404", hasPage: true, route: "rodha-mobile" },
-      { name: "(Emerald)", phone: "0748446504", hasPage: true, route: "emerald" },
-      { name: "Mobile", phone: "0790861147", hasPage: false }
+      { name: "(Rebo)", phone: "0717249441", hasPage: false },      
+      { name: "(Emerald)", phone: "0748446504", hasPage: false },
+      { name: "(Mobile)", phone: "0790861147", hasPage: false },
+      { name: "Mercy(Stage)", phone: "0745042970", hasPage: false },
+      { name: "Diana(Stage)", phone: "0790907727", hasPage: false }
     ]
   },
   {
     category: "Tuktuk Services",
     services: [
-      { name: "Arap Koech", phone: "0714695664", hasPage: false }
+      { name: "Tuktuk 1", phone: "0796208766", hasPage: false },
+      { name: "Tuktuk 2", phone: "0714695664", hasPage: false }
     ]
   },
   {
@@ -51,8 +54,9 @@ const jsonData = [
   {
     category: "Laundry Services",
     services: [
-      { name: "Talanta", phone: "0799066882", hasPage: false },
-      { name: "Nyunja Solutions", phone: "0114678616", hasPage: false }
+      { name: "Campus Laundry", phone: "0700318400", hasPage: false },
+      { name: "Talanta", phone: "0799066882", hasPage: false }
+
     ]
   },
   {
