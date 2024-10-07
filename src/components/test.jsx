@@ -1,36 +1,171 @@
-<div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="p-6">
-                    <h2 className="text-3xl font-bold mb-6 text-gray-800">Featured Menu</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {provider.products.map(product => (
-                            <div key={product.id} className="group">
-                                <div className="relative overflow-hidden rounded-lg">
-                                    <img 
-                                        src={product.image} 
-                                        alt={product.name} 
-                                        className="w-full h-48 object-cover transition duration-300 ease-in-out group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <button 
-                                            onClick={() => handlePhoneCall(provider.phoneNumber)}
-                                            className="bg-white text-gray-800 px-4 py-2 rounded-full font-semibold flex items-center space-x-2 hover:bg-gray-100 transition duration-300"
-                                        >
-                                            <Phone className="w-5 h-5" />
-                                            <span>Call to Order</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="mt-4">
-                                    <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
-                                    <div className="mt-2 space-y-1">
-                                        <p className="text-green-600 font-medium">{product.price}</p>
-                                        {product.price2 && <p className="text-gray-500 text-sm">{product.price2}</p>}
-                                        {product.price3 && <p className="text-gray-500 text-sm">{product.price3}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-       
+import React, { useState, useEffect } from 'react';
+import './home.css';
+import HeroSection from './HeroSection';
+import AdContainer from './AdContainer'
+
+
+const Home = () => {
+  const [cardVisibility, setCardVisibility] = useState({});
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const cards = document.querySelectorAll('.service-card');
+
+      cards.forEach(card => {
+        const cardId = card.getAttribute('data-card-id');
+        const cardTop = card.getBoundingClientRect().top;
+        const cardBottom = card.getBoundingClientRect().bottom;
+
+        if (cardTop < windowHeight && cardBottom >= 0) {
+          setCardVisibility(prevState => ({ ...prevState, [cardId]: true }));
+        } else {
+          setCardVisibility(prevState => ({ ...prevState, [cardId]: false }));
+        }
+      });
+    };
+
+    // Trigger handleScroll once initially
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  return (
+    <>
+
+
+    {/*   */}
+      {/* <HeroSection /> */}
+      <AdContainer/>
+      <div className="ministrip-card">
+      <div className="emergency-number left">
+        <p> <i className="fas fa-ambulance"></i> Medical:0710761679</p>
+      </div>
+      <div className="emergency-number right">
+        <p><i className="fas fa-shield-alt"></i>
+        Security:0720253976</p>
+      </div>
+    </div>
+
+      <section className="body-cards">
+        <div className={`service-card ${cardVisibility['rent-space'] ? 'show' : ''}`} data-card-id="rent-space">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Rent Your Space<br /><i className="fas fa-home"></i></h3></h3>
+    <p className="neumorphic">Discover the perfect space for your stay. Browse through a variety of rental houses, check prices, locations, and other details—all from the comfort of your device.</p>
+    <a href="/book"><div className="neumorphic"> <button className="button-b">Explore Rentals <i className="fas fa-key"></i></button></div></a>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['e-shop'] ? 'show' : ''}`} data-card-id="e-shop">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>E-shop<br /><i className="fas fa-shopping-cart"></i></h3></h3>
+    <p className="neumorphic">Browse a wide range of products from the comfort of your own home. Enjoy hassle-free online shopping with our collection of products.Shop now.</p>
+    <a href="/eshop"><div className="neumorphic"> <button className="button-b">Start Shopping <i className="fas fa-store"></i></button></div></a>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['e-chem'] ? 'show' : ''}`} data-card-id="e-chem">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>E-Chem<br /><i className="fas fa-stethoscope"></i></h3></h3>
+    <p className="neumorphic">Discover our diverse selection of pharmaceutical items and easily buy them through our user-friendly online platform, simplifying your shopping experience.
+</p>
+    <div className="neumorphic"><a href='/pharmacy'><button className="button-b">Shop Now <i className="fas fa-medkit"></i></button></a></div>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['food'] ? 'show' : ''}`} data-card-id="food">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>MoiDelish<br /> <i className="fas fa-utensils"></i></h3></h3>
+    <p className="neumorphic">MoiDelish allows you to order food. The deliveries are done around Moi university. Browse for different foods offered by available providers. We are assuring you a best service.</p>
+    <div className="neumorphic"><a href='/food-delivery'><button className="button-b">Order Now <i className="fas fa-motorcycle"></i></button></a></div>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['grocery'] ? 'show' : ''}`} data-card-id="grocery">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Groceries<br /> <i className="fas fa-apple-alt"></i></h3></h3>
+    <p className="neumorphic">GreenHub grocery allows you to order groceries. The deliveries are done around Moi university. Browse for different grocery items offered by available providers.</p>
+    <div className="neumorphic"><a href='/greenhub'><button className="button-b">Order Now <i className="fas fa-shopping-cart"></i></button></a></div>
+  </div>
+</div>
+
+
+<div className={`service-card ${cardVisibility['emergency-assistance'] ? 'show' : ''}`} data-card-id="emergency-assistance">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Discover Services<br /><i className="fas fa-search"></i></h3></h3>
+    <p className="neumorphic">Discover outstanding local services near Moi University with our guide. Support these businesses to foster community growth and prosperity.</p>
+    <a href="/discover"><div className="neumorphic"> <button className="button-b">Explore Now <i className="fas fa-arrow-right"></i></button></div></a>
+  </div>
+</div>
+
+
+
+<div className={`service-card ${cardVisibility['second-hand-market'] ? 'show' : ''}`} data-card-id="second-hand-market">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Second-hand Market<br /><i className="fas fa-shopping-bag"></i></h3></h3>
+    <p className="neumorphic">Explore a variety of gently used items. From home items to beddings, find great deals on second-hand products right from your screen.</p>
+    <a href="/marketplace"><div className="neumorphic"> <button className="button-b">Explore Now <i className="fas fa-tags"></i></button></div></a>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['buy-bundles'] ? 'show' : ''}`} data-card-id="buy-bundles">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Buy Bundles<br /><i className="fas fa-sim-card"></i></h3></h3>
+    <p className="neumorphic">
+      Easily purchase Safaricom data bundles even with an <b>OKOA JAHAZI</b>. Stay connected without interruption. 
+    </p>
+    <div className="neumorphic">
+      <a href='https://mvobingwa.godaddysites.com'><button className="button-b">Buy Data Now <i className="fas fa-sim-card"></i></button></a>
+    </div>
+  </div>
+</div>
+
+
+<div className={`service-card ${cardVisibility['find-roommate'] ? 'show' : ''}`} data-card-id="find-roommate">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Roommate Finder<br /><i className="fas fa-users"></i></h3></h3>
+    <p className="neumorphic">Discover compatible roommates for your living space. Browse through profiles, preferences, and connect with potential roommates hassle-free.</p>
+    <a href="/find-roommate"><div className="neumorphic"> <button className="button-b">Explore Roommates <i className="fas fa-search"></i></button></div></a>
+  </div>
+</div>
+
+<div className={`service-card ${cardVisibility['blog-news'] ? 'show' : ''}`} data-card-id="blog-news">
+  <div className="neumorphic-v2">
+    <h3 className="neumorphic"><h3>Blog Post and News<br /><i className="fas fa-newspaper"></i></h3></h3>
+    <p className="neumorphic">Stay informed and entertained! Read our latest blog posts and news articles covering a wide range of topics.Business ideas included.</p>
+    <div className="neumorphic"><a href='/blog'><button className="button-b">Read Now <i className="fas fa-book-open"></i></button></a></div>
+  </div>
+</div>
+
+
+
+
+        {/* Other cards go here */}
+      </section>
+     
+      {/* <section className="bodyy">
+  <div className="container-fix">
+    <div className="card-vinny">
+      <div className="card-profile">
+        <div className="image-container-profile">
+          <img src="MoiHub.png" alt="Booking an Apartment at MoiHub" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section> */}
+{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
+     <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+   </svg> */}
+
+
+    </>
+  );
+};
+
+export default HomeE;

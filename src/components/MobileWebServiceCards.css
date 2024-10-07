@@ -1,0 +1,146 @@
+/* Neomorphic Effect */
+.service-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: transparent; /* Light background for the neomorphic effect */
+}
+
+.service-card {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    justify-items: center;
+    align-items: center;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1), 
+                -10px -10px 15px rgba(255, 255, 255, 0.7); /* Neomorphic shadows */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 200px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px); /* Initially translate down */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    animation: bounceInLeft 1s;
+}
+.service-card.in-view {
+    opacity: 1;
+    transform: translateY(0); /* Slide into view */
+  }
+  
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.15), 
+                -15px -15px 20px rgba(255, 255, 255, 0.8); /* Enhanced shadow on hover */
+}
+
+/* Service Card Content */
+.service-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.service-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.service-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.service-description {
+    flex-grow: 1;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.service-action {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2), -5px -5px 8px rgba(255, 255, 255, 0.5);
+}
+
+.service-action:hover {
+    background-color: #0056b3;
+}
+
+/* Category-specific styles */
+.service-card.living { background-color: #e8f5e9; }
+.service-card.shopping { background-color: #e8eaf6; }
+.service-card.health { background-color: #ffebee; }
+.service-card.food { background-color: #fff3e0; }
+.service-card.services { background-color: #e3f2fd; }
+.service-card.information { background-color: #f3e5f5; }
+
+/* Scroll Animations (Using Animate.css for bounceInLeft effect) */
+@keyframes bounceInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .service-cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+  .ministrip-card {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin:auto;
+  background-color: transparent;
+  font-size: smaller;
+
+
+}
+
+.emergency-number {
+  width: 100%;
+  margin: auto;
+  gap: auto;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: smaller;
+  box-shadow: 5px 5px 10px black, -5px -5px 10px transparent;
+}
+
+.left {
+  background-color: #ff4d4d; /* Red for ambulance */
+  text-align: left;
+  font-size: smaller;
+}
+
+.right {
+  background-color: #4db8ff; /* Blue for security */
+  text-align: right;
+  font-size: smaller;
+}
+
+.emergency-number p {
+  margin: 0;
+  color: white;
+  font-weight: bold;
+  font-size: small;
+}
