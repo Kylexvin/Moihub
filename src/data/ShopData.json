@@ -50,8 +50,8 @@
           "name": "HP EliteBook 840 G1",
           "price": 19500,
           "image": "../Laptops/hp_elitebook_840_g1.jpg",
-          "info": "Intel Core i5, 8GB RAM, 500GB HDD, 14-inch screen, Backlit keyboard",
-          "subcategory": "Laptops"
+          "info": "Intel Core i5, 8GB RAM, 500GB HDD, 14-inch screen, Backlit keyboard"
+          
         },
         {
           "id": "product2",
@@ -427,48 +427,56 @@
           "id": "duvet-001",
           "name": "Regular Duvet",
           "price": 2200,
+          "subcategory": "Beddings",
           "image": "../Boutique/duvet01.jpg"
         },
         {
           "id": "duvet-002",
           "name": "Regular Duvet",
           "price": 2200,
+          "subcategory": "Beddings",
           "image": "../Boutique/duvet02.jpg"
         },
         {
           "id": "duvet-003",
           "name": "Generic Woolen Duvet",
           "price": 2500,
+          "subcategory": "Beddings",
           "image": "../Boutique/duvet04.jpg"
         },
         {
           "id": "duvet-004",
           "name": "Shinny Duvet",
           "price": 2500,
+          "subcategory": "Beddings",
           "image": "../Boutique/shinyduvet.jpg"
         },
         {
           "id": "duvet-005",
           "name": "Shinny Duvet",
           "price": 2500,
+          "subcategory": "Beddings",
           "image": "../Boutique/shinyduvets.jpg"
         },
         {
           "id": "duvet-006",
           "name": "Velvet Duvet",
           "price": 4500,
+          "subcategory": "Beddings",
           "image": "../Boutique/velvetduvet.jpg"
         },
         {
           "id": "duvet-007",
           "name": "4in1 Duvets",
           "price": 1600,
+          "subcategory": "Beddings",
           "image": "../Boutique/4in1duvets1600.jpg"
         },
         {
           "id": "mosquito-net-001",
           "name": "Round Mosquito Net",
           "price": 950,
+          "subcategory": "Beddings",
           "image": "../Boutique/roundnet.jpg",
           "info": "Available in all colours."
         },
@@ -476,24 +484,28 @@
           "id": "mosquito-net-002",
           "name": "4 Stand Mosquito Net",
           "price": 1400,
+          "subcategory": "Beddings",
           "image": "../Boutique/4standnet.jpg"
         },
         {
           "id": "mosquito-net-003",
           "name": "2 Stand Mosquito Net",
           "price": 4500,
+          "subcategory": "Beddings",
           "image": "../Boutique/2standnet2.jpg"
         },
         {
           "id": "mosquito-net-004",
           "name": "2 Stand Mosquito Net",
           "price": 4500,
+          "subcategory": "Beddings",
           "image": "../Boutique/2standnet.jpg"
         },
         {
           "id": "pillow-001",
           "name": "Ordinary Pillows",
           "price": 250,
+          "subcategory": "Beddings",
           "image": "../Boutique/pillow01.jpg",
           "info": "Varieties available."
         },
@@ -501,6 +513,7 @@
           "id": "pillow-002",
           "name": "Fibre Pillows",
           "price": 350,
+          "subcategory": "Beddings",
           "image": "../Boutique/pillow03.jpg",
           "info": "Varieties available."
         },
@@ -508,6 +521,7 @@
           "id": "pillow-003",
           "name": "Throw Pillows",
           "price": 500,
+          "subcategory": "Beddings",
           "image": "../Boutique/throwpillow.jpg",
           "info": "Varieties available."
         },
@@ -515,6 +529,7 @@
           "id": "storage-001",
           "name": "Shoe Rack",
           "price": 950,
+          "subcategory": "Racks",
           "image": "../Boutique/shoerack01.jpg",
           "info": "Other colors available."
         },
@@ -522,12 +537,14 @@
           "id": "storage-002",
           "name": "Metallic Wardrobe",
           "price": 2600,
+          "subcategory": "Racks",
           "image": "../Boutique/metallic wardrobe2600.jpg"
         },
         {
           "id": "mat-001",
           "name": "Fluffy Doormat",
           "price": 500,
+          "subcategory": "Mat/Carpets",
           "image": "../Boutique/fmat01.jpg",
           "info": "Varieties available."
         },
@@ -535,6 +552,7 @@
           "id": "mat-002",
           "name": "Doormat",
           "price": 400,
+          "subcategory": "Mat/Carpets",
           "image": "../Boutique/mat01.jpg",
           "info": "Varieties available."
         },
@@ -542,24 +560,28 @@
           "id": "mat-003",
           "name": "Door Mat",
           "price": 350,
+          "subcategory": "Mat/Carpets",
           "image": "../Boutique/doormat1350.jpg"
         },
         {
           "id": "carpet-001",
           "name": "Fluffy Carpet",
           "price": 2300,
+          "subcategory": "Mat/Carpets",
           "image": "../Boutique/fluffycarpet2300.jpg"
         },
         {
           "id": "carpet-002",
           "name": "Plastic Carpets",
           "price": 170,
+          "subcategory": "Mat/Carpets",
           "image": "../Boutique/plasticcarpets170.jpg"
         },
         {
           "id": "decor-001",
           "name": "Wall Nets",
           "price": 350,
+          "subcategory": "Home Decors",
           "image": "../Boutique/wallnets.jpg",
           "info": "Varieties available."
         },
@@ -567,6 +589,7 @@
           "id": "decor-002",
           "name": "Curtains",
           "price": 300,
+          "subcategory": "Home Decors",
           "image": "../Boutique/curtain01.jpg",
           "info": "Varieties available."
         },
@@ -574,102 +597,119 @@
           "id": "accessory-001",
           "name": "Bonnets",
           "price": 250,
+          "subcategory": "Ladies",
           "image": "../Boutique/bonnets.jpg"
         },
         {
           "id": "belt-001",
           "name": "Corset Belts",
           "price": 1000,
+          "subcategory": "Ladies",
           "image": "../Boutique/corsetbelts.jpg"
         },
         {
           "id": "belt-002",
           "name": "Corset Belts",
           "price": 1000,
+          "subcategory": "Ladies",
           "image": "../Boutique/corsetbelts2.jpg"
         },
         {
           "id": "belt-003",
           "name": "Corset Belt",
           "price": 1000,
+          "subcategory": "Ladies",
           "image": "../Boutique/corsetbelt.jpg"
         },
         {
           "id": "belt-004",
           "name": "Harness Belt",
           "price": 1300,
+          "subcategory": "Ladies",
           "image": "../Boutique/harness belt.jpg"
         },
         {
           "id": "belt-005",
           "name": "Obi Belt",
           "price": 600,
+          "subcategory": "Ladies",
           "image": "../Boutique/obibelts.jpg"
         },
         {
           "id": "clothing-001",
           "name": "Fish Nets",
           "price": 250,
+          "subcategory": "Ladies",
           "image": "../Boutique/fishnets.jpg"
         },
         {
           "id": "clothing-002",
           "name": "Biker Shorts",
           "price": 350,
+          "subcategory": "Ladies",
           "image": "../Boutique/bikershorts.jpg"
         },
         {
           "id": "clothing-003",
           "name": "Quality Ladies Tights",
           "price": 350,
+          "subcategory": "Ladies",
           "image": "../Boutique/ladiestight.jpg"
         },
         {
           "id": "skirt-001",
           "name": "Sweater Skirt",
           "price": 600,
+          "subcategory": "Ladies",
           "image": "../Boutique/sweaterskirts.jpg"
         },
         {
           "id": "skirt-002",
           "name": "Official Pensil Skirt",
           "price": 500,
+          "subcategory": "Ladies",
           "image": "../Boutique/officialpensil2.jpg"
         },
         {
           "id": "skirt-003",
           "name": "Official Pensil Skirt",
           "price": 500,
+          "subcategory": "Ladies",
           "image": "../Boutique/officialpensil.jpg"
         },
         {
           "id": "skirt-004",
           "name": "Maxi Skirt",
           "price": 750,
+          "subcategory": "Ladies",
           "image": "../Boutique/maxiskirt.jpg"
         },
         {
           "id": "skirt-005",
           "name": "Maxi Skirt",
           "price": 750,
+          "subcategory": "Ladies",
           "image": "../Boutique/maxiskirt1.jpg"
         },
         {
           "id": "skirt-006",
           "name": "Maxi Skirt",
           "price": 750,
+          "subcategory": "Ladies",
           "image": "../Boutique/maxiskirt2.jpg"
         },
         {
           "id": "accessory-002",
           "name": "Silk Scarfs",
           "price": 250,
+          "subcategory": "Ladies",
           "image": "../Boutique/scarfs.jpg"
         },
         {
           "id": "bag-001",
           "name": "Sling Bag",
           "price": 500,
+          "subcategory": "Ladies",
           "image": "../Boutique/slingbag.jpg"
         },
         {

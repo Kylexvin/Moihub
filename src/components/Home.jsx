@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './home.css';
 import HeroSection from './HeroSection';
+import AdContainer from './AdContainer'
 
 
 const Home = () => {
@@ -39,7 +40,8 @@ const Home = () => {
 
 
     {/*   */}
-      <HeroSection />
+      {/* <HeroSection /> */}
+      <AdContainer/>
       <div className="ministrip-card">
       <div className="emergency-number left">
         <p> <i className="fas fa-ambulance"></i> Medical:0710761679</p>

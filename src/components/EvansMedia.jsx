@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Camera, Calendar, Users, User, Mail, Phone, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Camera, Calendar, Users, User, Mail, Phone } from 'lucide-react';
 import "./evansmedia.css";
 
 const services = [
