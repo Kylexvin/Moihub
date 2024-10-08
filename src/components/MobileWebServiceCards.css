@@ -18,14 +18,37 @@
     align-items: center;
     box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1), 
                 -10px -10px 15px rgba(255, 255, 255, 0.7); /* Neomorphic shadows */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     min-height: 200px;
     position: relative;
     opacity: 0;
     transform: translateY(30px); /* Initially translate down */
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
     animation: bounceInLeft 1s;
+    overflow: hidden; /* Ensure border animation doesn't overflow */
+    border: 2px solid transparent; /* No border initially */
 }
+
+/* Adding border enclosing animation */
+.service-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px; /* Match the card's border radius */
+    border: 2px solid rgba(0, 123, 255, 0.6); /* Transparent border initially */
+    box-sizing: border-box;
+    transform: scale(0); /* Start at zero scale */
+    transition: transform 0.5s ease-in-out; /* Smooth transition for the scale */
+    pointer-events: none; /* Ensure it doesn't affect interaction */
+}
+
+/* Hover effect to animate border enclosing */
+.service-card:hover::before {
+    transform: scale(1); /* Scale to full size on hover */
+}
+
 .service-card.in-view {
     opacity: 1;
     transform: translateY(0); /* Slide into view */
@@ -33,8 +56,8 @@
   
 .service-card:hover {
     transform: translateY(-10px);
-    box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.15), 
-                -15px -15px 20px rgba(255, 255, 255, 0.8); /* Enhanced shadow on hover */
+    /* box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.15), 
+                -15px -15px 20px rgba(255, 255, 255, 0.8);  */
 }
 
 /* Service Card Content */
@@ -59,13 +82,13 @@
 
 .service-description {
     flex-grow: 1;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     color: #666;
 }
 
 .service-action {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 10px;
     background-color: #007bff;
     color: white;
     text-decoration: none;

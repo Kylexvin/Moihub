@@ -66,7 +66,7 @@ const serviceData = [
     category: 'living'
   },
   {
-    title: 'Blog Post and News',
+    title: 'Blog Post',
     icon: '📰',
     description: '',
     link: '/blog',
