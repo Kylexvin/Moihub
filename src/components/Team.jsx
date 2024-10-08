@@ -9,7 +9,12 @@ const teamData = [
     social: [
       { platform: "Github", iconClass: "fab fa-github", link: "https://github.com/Kylexvin" },
       { platform: "Instagram", iconClass: "fab fa-instagram", link: "https://www.instagram.com/vinny_kylex?igsh=MTJwZ2tjNm95ejZuMQ==" },
-      { platform: "LinkedIn", iconClass: "fab fa-linkedin-in", link: "https://www.linkedin.com/in/vinny-kylex-?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" }
+      { platform: "LinkedIn", iconClass: "fab fa-linkedin-in", link: "https://www.linkedin.com/in/vinny-kylex-?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+      { 
+        platform: "Website", 
+        iconClass: "fas fa-globe", 
+        link: "https://kylexvin.vercel.app"  
+      }
     ]
   },
   {
