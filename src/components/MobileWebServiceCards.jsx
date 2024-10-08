@@ -5,7 +5,7 @@ const serviceData = [
   {
     title: 'Rental Booking',
     icon: '🏠',
-    description: 'Find the perfect space for your stay.',
+    description: '',
     action: 'Explore Rentals',
     link: '/book',
     category: 'living'
@@ -13,7 +13,7 @@ const serviceData = [
   {
     title: 'E-shop',
     icon: '🛒',
-    description: 'Browse and shop online with ease.',
+    description: '',
     action: 'Start Shopping',
     link: '/eshop',
     category: 'shopping'
@@ -21,15 +21,15 @@ const serviceData = [
   {
     title: 'E-Chem',
     icon: '💊',
-    description: 'Order pharmaceutical items.',
+    description: '',
     action: 'Shop Now',
     link: '/pharmacy',
     category: 'health'
   },
   {
-    title: 'MoiDelish',
+    title: 'Food Delivery',
     icon: '🍽️',
-    description: 'Order food for delivery.',
+    description: '',
     action: 'Order Now',
     link: '/food-delivery',
     category: 'food'
@@ -37,7 +37,7 @@ const serviceData = [
   {
     title: 'Groceries',
     icon: '🥕',
-    description: 'Order groceries around Moi University.',
+    description: '',
     action: 'Order Now',
     link: '/greenhub',
     category: 'shopping'
@@ -45,7 +45,7 @@ const serviceData = [
   {
     title: 'Local Services',
     icon: '🔍',
-    description: 'Find local services near Moi University.',
+    description: '',
     action: 'Explore Now',
     link: '/discover',
     category: 'services'
@@ -53,15 +53,15 @@ const serviceData = [
   {
     title: 'Second-hand Market',
     icon: '🏷️',
-    description: 'Find great deals on gently used items.',
+    description: '',
     action: 'Explore Now',
     link: '/marketplace',
     category: 'shopping'
   },
   {
-    title: 'Buy Bundles',
+    title: 'Bingwa Sokoni',
     icon: '📱',
-    description: 'Purchase Safaricom even with an okoa.',
+    description: '',
     action: 'Buy Data Now',
     link: 'https://mvobingwa.godaddysites.com',
     category: 'services'
@@ -69,7 +69,7 @@ const serviceData = [
   {
     title: 'Roommate Finder',
     icon: '👥',
-    description: 'Discover compatible roommates for you.',
+    description: '',
     action: 'Explore Roommates',
     link: '/find-roommate',
     category: 'living'
@@ -77,7 +77,7 @@ const serviceData = [
   {
     title: 'Blog Post and News',
     icon: '📰',
-    description: 'Our latest blog posts and news articles.',
+    description: '',
     action: 'Read Now',
     link: '/blog',
     category: 'information'

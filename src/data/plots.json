@@ -16,8 +16,8 @@
     "name": "Gemstones Apartments", 
     "plotType": "Bedsitters", 
     "per": "Month",
-    "price": "6500,",
-    "price1": "7000 and",
+    "price": "6500",
+    "price1": ",7000 and",
     "price2": "8000", 
     "location": "Stage", 
     "pd": "Before Silverbrook.",
@@ -364,5 +364,56 @@
     "contact": "0729496883",
     "lastUpdated": "2024-04-17",
     "coordinates": "0.290506,35.288598"
+  },
+  { 
+    "name": "Professional's Court", 
+    "plotType": "Bedsitter", 
+    "per": "Month",
+    "price": 6000, 
+    "location": "Stage", 
+    "pd": "Around Bahamas",
+    "vacancy": "0",
+    "images": ["../plotimgs/professional.jpg", "../plotimgs/professional01.jpg", "../plotimgs/professional02.jpg","../plotimgs/professional04.jpg"],
+    "contact": "0748504983",   
+    "coordinates": "0.293045,35.293105"
+  },
+  { 
+    "name": "Greenland", 
+    "plotType": "Bedsitter", 
+    "per": "Month",
+    "price": 6000, 
+    "location": "Stage", 
+    "pd": "Around Bahamas",
+    "vacancy": "0",
+    "images": ["../plotimgs/greenland.jpg", "../plotimgs/greenland01.jpg", "../plotimgs/greenland02.jpg","../plotimgs/greenland04.jpg"],
+    "contact": "0115058010",   
+    "coordinates": "0.293123,35.293312"
+  },
+  { 
+    "name": "Bahamas", 
+    "plotType": "Bedsitter", 
+    "per": "Month",
+    "price": "6500",
+    "price1": "and 8500 ",     
+    "location": "Stage", 
+    "pd": "-",
+    "vacancy": "0",
+    "images": ["../plotimgs/bahamas.jpg","../plotimgs/bahamas001.jpg", "../plotimgs/bahamas01.jpg", "../plotimgs/bahamas07.jpg", "../plotimgs/bahamas03.jpg","../plotimgs/bahamas04.jpg","../plotimgs/bahamas05.jpg"],
+    "contact": "0714948475 ",   
+    "coordinates": "0.293045,35.293105"
+  },
+
+  { 
+    "name": "Sunrise Apartments", 
+    "plotType": "Bedsitter", 
+    "per": "Month",
+    "price": "6000",
+    "price1": "and 6500",
+    "location": "Stage", 
+    "pd": "Next to Bahamas",
+    "vacancy": "0",
+    "images": ["../plotimgs/sunrise.jpg", "../plotimgs/sunrise01.jpg", "../plotimgs/sunrise02.jpg", "../plotimgs/sunrise04.jpg"],
+    "contact": "0748504983",   
+    "coordinates": "0.293045,35.293105"
   }
 ]

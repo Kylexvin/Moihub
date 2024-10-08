@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './apartment.css';
 
 const ApartmentDetails = ({ plots }) => {
@@ -8,20 +10,28 @@ const ApartmentDetails = ({ plots }) => {
   const apartmentDetails = plots[id];
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [imagesLoading, setImagesLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setImagesLoading(false);
-    }, 2000); // Setting a timeout of 2 seconds
+    }, 2000);
 
-    // Cleanup function to clear the timeout if component unmounts
     return () => clearTimeout(timeoutId);
-  }, []); // Empty dependency array ensures useEffect only runs once
+  }, []);
 
-  // Scroll to the top of the page when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Show a brief toast notification when the component mounts
+    toast.warning("Please do not send payment without proper consultation.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+    });
   }, []);
 
   const toggleImageModal = () => {
@@ -33,39 +43,12 @@ const ApartmentDetails = ({ plots }) => {
   };
 
   const handleImageLoad = () => {
-    // This function will be called when all images are loaded
     setImagesLoading(false);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
   };
 
   return (
     <>
-      {modalVisible && (
-       <div className="modal-overlay">
-       <div className="modal-content">
-         <div className="warning-icon">
-           <i className="fas fa-exclamation-triangle"></i>
-         </div>
-         <h2 className="modal-title">Important Notice</h2>
-         <p className="modal-message">
-           Please do not send payment without proper consultation.
-           <br />
-           If you need to book a room, consult the MoiHub admin first:
-           <br />
-           <a href="tel:0745276898" className="phone-number">0745276898<br></br>✟KYLEX✟</a>
-         </p>
-         <button onClick={closeModal} className="close-modal-btn">
-           <span>Proceed</span>
-           <i className="fas fa-arrow-right"></i>
-         </button>
-       </div>
-     </div>
-     
-     
-      )}
+      <ToastContainer />
 
       <div>
         <div className="centered-div">
@@ -119,14 +102,10 @@ const ApartmentDetails = ({ plots }) => {
 
         <div className="centered-div">
           <a href={`geo:${apartmentDetails.coordinates}?q=${apartmentDetails.coordinates}`}>
-          <button className="toggle-button"> <i className="fas fa-map-marker-alt"></i> View Maps </button>
+            <button className="toggle-button"> <i className="fas fa-map-marker-alt"></i> View Maps </button>
           </a>
         </div>
       </div>
-
-      {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
-        <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-      </svg> */}
     </>
   );
 };
