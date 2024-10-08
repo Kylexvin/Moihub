@@ -6,7 +6,6 @@ const serviceData = [
     title: 'Rental Booking',
     icon: '🏠',
     description: '',
-    action: 'Explore Rentals',
     link: '/book',
     category: 'living'
   },
@@ -14,7 +13,6 @@ const serviceData = [
     title: 'E-shop',
     icon: '🛒',
     description: '',
-    action: 'Start Shopping',
     link: '/eshop',
     category: 'shopping'
   },
@@ -22,7 +20,6 @@ const serviceData = [
     title: 'E-Chem',
     icon: '💊',
     description: '',
-    action: 'Shop Now',
     link: '/pharmacy',
     category: 'health'
   },
@@ -30,7 +27,6 @@ const serviceData = [
     title: 'Food Delivery',
     icon: '🍽️',
     description: '',
-    action: 'Order Now',
     link: '/food-delivery',
     category: 'food'
   },
@@ -38,7 +34,6 @@ const serviceData = [
     title: 'Groceries',
     icon: '🥕',
     description: '',
-    action: 'Order Now',
     link: '/greenhub',
     category: 'shopping'
   },
@@ -46,7 +41,6 @@ const serviceData = [
     title: 'Local Services',
     icon: '🔍',
     description: '',
-    action: 'Explore Now',
     link: '/discover',
     category: 'services'
   },
@@ -54,7 +48,6 @@ const serviceData = [
     title: 'Second-hand Market',
     icon: '🏷️',
     description: '',
-    action: 'Explore Now',
     link: '/marketplace',
     category: 'shopping'
   },
@@ -62,7 +55,6 @@ const serviceData = [
     title: 'Bingwa Sokoni',
     icon: '📱',
     description: '',
-    action: 'Buy Data Now',
     link: 'https://mvobingwa.godaddysites.com',
     category: 'services'
   },
@@ -70,7 +62,6 @@ const serviceData = [
     title: 'Roommate Finder',
     icon: '👥',
     description: '',
-    action: 'Explore Roommates',
     link: '/find-roommate',
     category: 'living'
   },
@@ -78,13 +69,12 @@ const serviceData = [
     title: 'Blog Post and News',
     icon: '📰',
     description: '',
-    action: 'Read Now',
     link: '/blog',
     category: 'information'
   }
 ];
 
-const ServiceCard = ({ title, icon, description, action, link, category, index }) => {
+const ServiceCard = ({ title, icon, description, link, category, index }) => {
   const cardRef = useRef(null); // Reference to each card
 
   useEffect(() => {
@@ -111,8 +101,9 @@ const ServiceCard = ({ title, icon, description, action, link, category, index }
   }, []);
 
   return (
-    <div 
+    <a 
       ref={cardRef} 
+      href={link}
       className={`service-card ${category}`}
       style={{ transitionDelay: `${index * 100}ms` }} // Add a slight delay for staggered effects
     >
@@ -120,9 +111,8 @@ const ServiceCard = ({ title, icon, description, action, link, category, index }
         <div className="service-icon">{icon}</div>
         <h3 className="service-title">{title}</h3>
         <p className="service-description">{description}</p>
-        <a href={link} className="service-action">{action}</a>
       </div>
-    </div>
+    </a>
   );
 };
 
