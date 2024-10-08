@@ -45,7 +45,7 @@ const serviceData = [
     category: 'services'
   },
   {
-    title: 'Second-hand Market',
+    title: 'Second-hand ',
     icon: '🏷️',
     description: '',
     link: '/marketplace',
