@@ -5,6 +5,7 @@ const serviceData = [
   {
     title: 'Rental Booking',
     icon: '🏠',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/book',
     category: 'living'
@@ -12,6 +13,7 @@ const serviceData = [
   {
     title: 'E-shop',
     icon: '🛒',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/eshop',
     category: 'shopping'
@@ -19,6 +21,7 @@ const serviceData = [
   {
     title: 'E-Chem',
     icon: '💊',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/pharmacy',
     category: 'health'
@@ -26,6 +29,7 @@ const serviceData = [
   {
     title: 'Food Delivery',
     icon: '🍽️',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/food-delivery',
     category: 'food'
@@ -33,6 +37,7 @@ const serviceData = [
   {
     title: 'Groceries',
     icon: '🥕',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/greenhub',
     category: 'shopping'
@@ -40,20 +45,23 @@ const serviceData = [
   {
     title: 'Local Services',
     icon: '🔍',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/discover',
     category: 'services'
   },
   {
-    title: 'Second-hand ',
+    title: 'Second-hand',
     icon: '🏷️',
+    logo: '', // Add logo URL here if available
     description: '',
-    link: '/marketplace',
+    link: 'https://markethub-mocha.vercel.app/',
     category: 'shopping'
   },
   {
-    title: 'Bingwa Sokoni',
+    title: 'Bingwa Sokoni Bundles',
     icon: '📱',
+    logo: '', // Add logo URL here if available
     description: '',
     link: 'https://mvobingwa.godaddysites.com',
     category: 'services'
@@ -61,20 +69,30 @@ const serviceData = [
   {
     title: 'Roommate Finder',
     icon: '👥',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/find-roommate',
     category: 'living'
   },
   {
+    title: 'Moi Gossip',
+    icon: '💋',
+    logo: '', // Add logo URL here if available
+    description: '',
+    link: 'https://whatsapp.com/channel/0029VaaSTiF8PgsQn25sXK1I',
+    category: 'health'
+  },
+  {
     title: 'Blog Post',
     icon: '📰',
+    logo: '', // Add logo URL here if available
     description: '',
     link: '/blog',
     category: 'information'
   }
 ];
 
-const ServiceCard = ({ title, icon, description, link, category, index }) => {
+const ServiceCard = ({ title, icon, logo, description, link, category, index }) => {
   const cardRef = useRef(null); // Reference to each card
 
   useEffect(() => {
@@ -90,7 +108,7 @@ const ServiceCard = ({ title, icon, description, link, category, index }) => {
       },
       { threshold: 0.1 } // Trigger when 10% of the card is visible
     );
-    
+
     if (cardRef.current) {
       observer.observe(cardRef.current);
     }
@@ -108,7 +126,9 @@ const ServiceCard = ({ title, icon, description, link, category, index }) => {
       style={{ transitionDelay: `${index * 100}ms` }} // Add a slight delay for staggered effects
     >
       <div className="service-card-content">
-        <div className="service-icon">{icon}</div>
+        <div className="service-icon">
+          {logo ? <img src={logo} alt={`${title} logo`} className="service-logo" /> : icon}
+        </div>
         <h3 className="service-title">{title}</h3>
         <p className="service-description">{description}</p>
       </div>

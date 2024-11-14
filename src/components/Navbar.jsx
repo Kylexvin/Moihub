@@ -69,7 +69,7 @@ const Navbar = () => {
                   <a className="dropdown-item" href="/pharmacy">
                     <i className="fas fa-pills"></i> E-Chem
                   </a>
-                  <a className="dropdown-item" href="/marketplace">
+                  <a className="dropdown-item" href="https://markethub-mocha.vercel.app/">
                     <i className="fas fa-store"></i> Marketplace
                   </a>
                 </div>
