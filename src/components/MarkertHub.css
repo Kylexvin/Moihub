@@ -1,0 +1,327 @@
+
+  /* Navigation */
+  .navv {
+    background: white;
+    padding: 16px 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .nav-contentt {
+    display: flex;
+    justify-content: space-between; /* Pushes items to the far ends */
+    align-items: center;
+  }
+  
+  .logoo {
+    font-size: 24px;
+    font-weight: 700;
+    color: green;
+  }
+  
+  .nav-buttonss {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .nav-btnn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .login-btnn {
+    background: none;
+    border: none;
+    color: #71bf76;
+  }
+  
+  .login-btnn:hover {
+    background: #f0f7ff;
+  }
+  
+  .register-btnn {
+    background: green;
+    border: none;
+    color: white;
+  }
+  
+  .register-btnn:hover {
+    background: #00a76f;
+  }
+  
+  /* Hero Section */
+  .heroo {
+    background: linear-gradient(135deg, green 0%, #1b4e4e 100%);
+    padding: 120px 24px 80px;
+    text-align: center;
+    color: white;
+  }
+  
+  .hero-contentt {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .heroo h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .heroo p {
+    font-size: 18px;
+    opacity: 0.9;
+    color: white;
+    margin-bottom: 40px;
+  }
+  
+  /* Seller Card */
+  .seller-cardd {
+    max-width: 1200px;
+    margin: -40px auto 40px;
+    padding: 0 24px;
+  }
+  
+  .seller-card-contentt {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .seller-cardd h2 {
+    color: #212b36;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .seller-cardd p {
+    color: #637381;
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+  
+  /* Products Grid */
+  .containerr {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+  }
+  
+  .section-titlee {
+    font-size: 24px;
+    color: green;
+    margin-bottom: 24px;
+  }
+  
+  .products-gridd {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  
+  .product-cardd {
+    background: white;
+    border-radius: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    transition: transform 0.2s ease;
+    border: 1px solid #e5e7eb;
+    
+  }
+  
+  .product-cardd:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-imagee {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* 4:3 Aspect Ratio */
+    background: #f3f4f6;
+    overflow: hidden;
+  }
+  
+  .product-imagee img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .image-placeholderr {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #09e4ad;
+  }
+  
+  .loading-spinner {
+    border: 4px solid #e5e7eb;
+    border-top: 4px solid #10b981; /* Green color */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  .image-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+  
+  .product-infoo {
+    padding: 1.5rem;
+  }
+  
+  .price-roww {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .product-pricee {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #059669; /* Green color */
+  }
+  
+  .timestamp {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .product-descriptionn {
+    margin: 1rem 0;
+    color: #374151;
+    line-height: 1.5;
+  }
+  
+  .seller-infoo {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    background: #f0fdf4; /* Light green background */
+    border-radius: 8px;
+  }
+  
+  .seller-namee {
+    color: #374151;
+    font-size: 0.875rem;
+  }
+  
+  .contact-btnn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #10b981; /* Green color */
+    color: white;
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .contact-btnn:hover {
+    background: #059669;
+  }
+  
+  .contact-btnn:active {
+    transform: scale(0.98);
+  }
+  
+  /* Icons styling */
+  .fas, .fab {
+    margin-right: 0.5rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .product-cardd {
+      margin: 0.5rem;
+    }
+  
+    .product-infoo {
+      padding: 1rem;
+    }
+  
+    .price-roww {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .image-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7efef;
+    color: #666;
+  }
+  .image-error p{
+    color: #00a76f;
+  }
+  .image-error i {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

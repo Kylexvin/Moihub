@@ -55,7 +55,7 @@ const serviceData = [
     icon: '🏷️',
     logo: '', // Add logo URL here if available
     description: '',
-    link: 'https://markethub-mocha.vercel.app/',
+    link: '/markethub',
     category: 'shopping'
   },
   {

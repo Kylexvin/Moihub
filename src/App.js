@@ -26,6 +26,7 @@ import ProviderDetails from './components/ProviderDetails';
 import GreenHub from './components/GreenHub';
 import OurTeam from './components/Team';
 import DownloadApp from './components/DownloadApp';
+import MarketHub from './components/MarkertHub';
 //import EvansMedia from './components/EvansMedia'; // Adjust the path as necessary
 
 
@@ -97,6 +98,7 @@ const App = () => {
           <Route path="/eshop" element={<CategoryList categories={ShopData.categories} />} />
           <Route path="/shops/:categoryId" element={<ShopList shops={ShopData.shops} />} />
           <Route path="/products/:shopId" element={<ProductList shops={ShopData.shops} />} />
+          <Route path='/markethub' element ={<MarketHub/> }/>
           {/* <Route path="/evans-media" element={<EvansMedia />} /> */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
