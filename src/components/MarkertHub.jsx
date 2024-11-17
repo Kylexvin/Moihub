@@ -115,8 +115,8 @@ const ProductCard = ({ product, contactSeller }) => {
             <div className="loading-spinner"></div>
           </div>
         )}
-        <img
-          src={imageUrl}
+         <img
+          src={product.image} // Direct use of the image URL
           alt={product.name}
           onLoad={handleImageLoad}
           onError={handleImageError}
@@ -124,6 +124,7 @@ const ProductCard = ({ product, contactSeller }) => {
             opacity: imageStatus === 'loaded' ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',
           }}
+         
         />
         {imageStatus === 'error' && (
           <div className="image-error">
