@@ -255,7 +255,7 @@
     "price": 6500, 
     "location": "Stage", 
     "pd": "Opposite Cheros",
-    "vacancy": "0",
+    "vacancy": "4",
     "images": ["../plotimgs/sunset01.jpg","../plotimgs/sunset02.jpg", "../plotimgs/sunset03.jpg", "../plotimgs/sunset04.jpg"],
     "contact": "0720295556",
     "lastUpdated": "2024-03-17",
@@ -414,6 +414,18 @@
     "vacancy": "0",
     "images": ["../plotimgs/sunrise.jpg", "../plotimgs/sunrise01.jpg", "../plotimgs/sunrise02.jpg", "../plotimgs/sunrise04.jpg"],
     "contact": "0748504983",   
+    "coordinates": "0.293045,35.293105"
+  },
+  { 
+    "name": "Agnes Tirop B", 
+    "plotType": "Bedsitter", 
+    "per": "Month",
+    "price": "N/A",   
+    "location": "Chebarus", 
+    "pd": "Dip",
+    "vacancy": "0",
+    "images": [],
+    "contact": "0707689885",   
     "coordinates": "0.293045,35.293105"
   }
 ]
