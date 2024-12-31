@@ -10,6 +10,7 @@
     "@vercel/speed-insights": "^1.0.12",
     "aos": "^2.3.4",
     "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.8.0",
     "lucide-react": "^0.436.0",
     "nth-check": "^2.0.1",
