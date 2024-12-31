@@ -1,0 +1,446 @@
+:root {
+  --green-900: #064e3b;
+  --green-600: #059669;
+  --green-100: #d1fae5;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --gray-50: #f9fafb;
+  --gray-200: #e5e7eb;
+  --gray-600: #4b5563;
+  --gray-900: #111827;
+  --white: #ffffff;
+}
+.blog-headerr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #dc2626;
+}
+
+.login-link, 
+.register-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #dc2626;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.login-link:hover, 
+.register-link:hover {
+  color: #0056b3;
+}
+
+.login-link svg, 
+.register-link svg {
+  stroke: currentColor;
+}
+
+.login-link span, 
+.register-link span {
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  
+
+  .auth-links {
+    justify-content: center;
+    width: 100%;
+  }
+}
+.blog-homepage {
+  min-height: 100vh;  
+  
+  font-family: 'Inter', sans-serif;
+}
+
+/* Featured Post Styles */
+.featured-post {
+  position: relative;
+  height: 400px; /* Set a default height, adjust as necessary */
+  min-height: 200px; /* Ensures the height doesn't shrink too much */
+  background-size: cover; /* Ensures the image fully covers the background area */
+  background-position: center center; /* Centers the background image */
+  background-repeat: no-repeat; /* Prevents image repetition */
+}
+
+/* Responsive design for different screen sizes */
+@media (max-width: 768px) {
+  .featured-post {
+    height: 300px; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-post {
+    height: 250px; /* Adjust height for very small screens */
+  }
+}
+
+/* Semi-transparent overlay to improve readability */
+.featured-post-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
+  z-index: 1; /* Ensure overlay is behind the content */
+}
+
+/* Content styling on top of the background */
+.featured-post-content {
+  position: relative;
+  z-index: 10;
+  color: #fff; /* White text for visibility */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
+}
+
+/* Tag styling */
+.featured-tag {
+  background-color: #ff4f58; /* Adjust to a solid red color */
+  color: #fff; /* White text on the tag */
+  padding: 4px 12px;
+  border-radius: 9999px;
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+
+/* Title styling */
+.featured-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add a text shadow for better readability */
+}
+
+/* Excerpt styling */
+.featured-excerpt {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+  max-width: 600px;
+  color: #f9fbfd;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
+  
+}
+
+/* Meta information styling */
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-size: 0.875rem;
+  color: #ddd; /* Light grey color for meta info */
+}
+
+/* Hover effect for "Read More" link */
+.blog-card-read-more {
+  color: #fff; /* White color */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.blog-card-read-more:hover {
+  color: #ff4f58; /* Red hover color */
+  transform: translateX(5px); /* Slight movement on hover */
+}
+
+.read-more-icon {
+  transition: transform 0.3s ease;
+}
+
+.blog-card-read-more:hover .read-more-icon {
+  transform: translateX(3px); /* Icon movement */
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.featured-read-btn {
+  display: flex;
+  align-items: center;
+  background-color: var(--red-600);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.featured-read-btn:hover {
+  background-color: var(--red-700);
+}
+
+.btn-icon {
+  margin-left: 8px;
+}
+
+/* Category Filter Styles */
+.category-filter {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  padding: 10px 15px;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #03b41b #f0f0f0; /* Scrollbar track and thumb colors */
+  white-space: nowrap; /* Prevent wrapping of buttons */
+}
+.category-btn.active {
+  background-color: #007bff; /* Active button color */
+  color: white;
+}
+
+.category-filter::-webkit-scrollbar {
+  width:auto;
+  height: 50px;
+}
+
+.category-filter::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.category-filter::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+.category-btn {
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  border-radius: 20px; /* Rounded corners */
+  background-color: #e8f5e9; /* Light green background */
+  color: #03b41b; /* Green text */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* Prevent text from breaking into multiple lines */
+}
+
+/* Category Button Hover Effect */
+.category-btn:hover {
+  background-color: #d4edda; /* Slightly darker green on hover */
+  border-color: #03b41b; /* Green border on hover */
+}
+
+/* Active Category Button */
+.category-btn.active {
+  background-color: #03b41b;
+  color: #fff; /* White text for active button */
+  border-color: #03b41b;
+  font-weight: 600;
+}
+
+/* Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+  .category-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+/* Blog Grid Styles */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.blog-card {
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.blog-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+.blog-card-image {
+  width: 100%;
+  height: 192px;
+  object-fit: cover;
+}
+
+.blog-card-content {
+  padding: 24px;
+}
+
+.blog-card-category {
+  color: var(--red-600);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+/* Add to your existing CSS */
+.blog-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 32px 24px;
+}
+
+.sort-filter {
+  display: flex;
+  gap: 16px;
+}
+
+.sort-btn {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--gray-200);
+  color: var(--gray-900);
+}
+
+.sort-btn.active {
+  background-color: var(--green-600);
+  color: var(--white);
+}
+
+.sort-btn:hover:not(.active) {
+  background-color: var(--green-100);
+}
+.blog-card-title {
+  color: var(--green-900);
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.blog-card-excerpt {
+  color: var(--gray-600);
+  margin-bottom: 16px;
+}
+
+.blog-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.blog-card-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-600);
+  font-size: 0.875rem;
+}
+
+.blog-card-read-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px solid red; 
+  background-color: #faf6f5;
+  color: #ee0e0e;
+  text-decoration: none; 
+  font-weight: bold;
+  text-decoration: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.blog-card-read-more:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.read-more-icon {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.blog-card-read-more:hover .read-more-icon {
+  transform: translateX(5px);
+}
+
+
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.load-more-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.load-more-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.no-more-posts {
+  text-align: center;
+  color: #666;
+  margin-top: 20px;
+}
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-post {
+    height: 500px;
+  }
+
+  .featured-title {
+    font-size: 2.5rem;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}
