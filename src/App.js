@@ -44,7 +44,7 @@ import ShopData from './data/ShopData.json';
 
 // Authentication Service
 import { authService } from './services/authService';
-import SpectacularFireworks from './components/SpectacularFireworks';
+
 
 
 
@@ -102,7 +102,7 @@ const App = () => {
   return (
     <>
 
-    <SpectacularFireworks/>
+  
       <div>
         <Navbar />
       </div>

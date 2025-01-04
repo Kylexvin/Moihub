@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft , Loader2, MessageCircle, Trash2 ,Edit } from 'lucide-react';
-import { Toaster, toast} from 'react-hot-toast';
+import { ArrowLeft, Loader2, MessageCircle, Trash2, Edit } from 'lucide-react';
+import { Toaster, toast } from 'react-hot-toast';
 import './WritersPage.css';
 
 const WritersPage = () => {
@@ -16,7 +16,43 @@ const WritersPage = () => {
   const [comments, setComments] = useState({});
   const [showComments, setShowComments] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({
+    posts: null,
+    submission: null
+  });
+  const [progress, setProgress] = useState(0);
 
+  const navigate = useNavigate();
+
+  // Auto-save functionality
+  useEffect(() => {
+    const saveInterval = setInterval(() => {
+      if (title || contentBlocks.length > 0) {
+        localStorage.setItem('draftPost', JSON.stringify({
+          title,
+          category,
+          contentBlocks,
+          lastSaved: new Date().toISOString()
+        }));
+        toast.success('Draft saved', { duration: 2000 });
+      }
+    }, 60000); // Save every minute
+
+    return () => clearInterval(saveInterval);
+  }, [title, category, contentBlocks]);
+
+  // Load saved draft on initial load
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('draftPost');
+    if (savedDraft) {
+      const draft = JSON.parse(savedDraft);
+      setTitle(draft.title || '');
+      setCategory(draft.category || '');
+      setContentBlocks(draft.contentBlocks || []);
+    }
+  }, []);
+
+  // Fetch all posts
   useEffect(() => {
     const fetchAllPosts = async () => {
       const token = localStorage.getItem('authToken');
@@ -24,7 +60,7 @@ const WritersPage = () => {
         toast.error('No token found! Please log in again.');
         return;
       }
-  
+
       try {
         const response = await fetch('http://localhost:5000/api/posts/all', {
           headers: {
@@ -32,7 +68,6 @@ const WritersPage = () => {
           },
         });
         const data = await response.json();
-        // Add a check to ensure data.posts exists and is an array
         if (Array.isArray(data?.posts)) {
           setPosts(data.posts);
         } else {
@@ -44,15 +79,78 @@ const WritersPage = () => {
         console.error('Error fetching all posts:', error);
       }
     };
-  
+
     fetchAllPosts();
   }, []);
 
-  const navigate = useNavigate();
+  // Progress calculation
+  useEffect(() => {
+    let points = 0;
+    if (title) points += 20;
+    if (category) points += 20;
+    if (image) points += 20;
+    points += Math.min(40, contentBlocks.length * 10);
+    setProgress(points);
+  }, [title, category, image, contentBlocks]);
+
+  // Image optimization utility
+  const optimizeImage = async (file, options = {}) => {
+    const {
+      maxWidth = 1200,
+      maxHeight = 800,
+      quality = 0.8,
+      maxSizeInMB = 5
+    } = options;
+
+    return new Promise((resolve, reject) => {
+      if (file.size <= maxSizeInMB * 1024 * 1024) {
+        resolve(file);
+        return;
+      }
+
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              resolve(new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              }));
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
   const renderPostContent = (content) => {
     try {
-      // Check if content is a string (old format) or parsed JSON (new format)
       const parsedContent = typeof content === 'string' 
         ? JSON.parse(content) 
         : content;
@@ -82,6 +180,7 @@ const WritersPage = () => {
                   src={block.src} 
                   alt={block.caption || 'Block image'} 
                   className="block-preview-image"
+                  loading="lazy"
                 />
                 {block.caption && <p className="block-preview-image-caption">{block.caption}</p>}
               </div>
@@ -97,120 +196,155 @@ const WritersPage = () => {
   };
 
   const toggleComments = async (postId) => {
-  if (showComments[postId]) {
-    setShowComments({ ...showComments, [postId]: false });
-    return;
-  }
-  try {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      toast.error('No token found! Please log in again.');
+    if (showComments[postId]) {
+      setShowComments({ ...showComments, [postId]: false });
       return;
     }
-
-    const response = await axios.get(`http://localhost:5000/api/posts/${postId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    
-    if (response.data.post.comments) {
-      setComments({ ...comments, [postId]: response.data.post.comments });
-      setShowComments({ ...showComments, [postId]: true });
-    } else {
-      toast.error('No comments found');
-    }
-  } catch (error) {
-    console.error('Error fetching comments:', error.response ? error.response.data : error.message);
-    toast.error('Failed to fetch comments');
-  }
-};
-
-const deleteComment = async (postId, commentId) => {
-  try {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      toast.error('No token found! Please log in again.');
-      return;
-    }
-
-    await axios.delete(`http://localhost:5000/api/posts/${postId}/comment/${commentId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    setComments({
-      ...comments,
-      [postId]: comments[postId].filter((comment) => comment._id !== commentId),
-    });
-    toast.success('Comment deleted successfully');
-  } catch (error) {
-    console.error('Error deleting comment:', error.response ? error.response.data : error.message);
-    toast.error('Failed to delete comment');
-  }
-};
-  
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast.error('Image size should be less than 5MB');
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast.error('No token found! Please log in again.');
         return;
       }
-      setImage(file);
-      const reader = new FileReader();
-      reader.onload = () => setPreviewImage(reader.result);
-      reader.readAsDataURL(file);
-      toast.success('Image uploaded successfully');
+
+      const response = await axios.get(`http://localhost:5000/api/posts/${postId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.post.comments) {
+        setComments({ ...comments, [postId]: response.data.post.comments });
+        setShowComments({ ...showComments, [postId]: true });
+      } else {
+        toast.error('No comments found');
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error.response ? error.response.data : error.message);
+      toast.error('Failed to fetch comments');
     }
   };
 
-  const handleContentBlockImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast.error('Image size should be less than 5MB');
+  const deleteComment = async (postId, commentId) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast.error('No token found! Please log in again.');
         return;
       }
-      const reader = new FileReader();
-      reader.onload = () => {
-        setNewBlock(prev => ({ 
-          ...prev, 
-          src: reader.result,
-          caption: prev.caption || '' 
-        }));
-        toast.success('Block image uploaded successfully');
-      };
-      reader.readAsDataURL(file);
+
+      await axios.delete(`http://localhost:5000/api/posts/${postId}/comment/${commentId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      setComments({
+        ...comments,
+        [postId]: comments[postId].filter((comment) => comment._id !== commentId),
+      });
+      toast.success('Comment deleted successfully');
+    } catch (error) {
+      console.error('Error deleting comment:', error.response ? error.response.data : error.message);
+      toast.error('Failed to delete comment');
     }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const optimizedFile = await optimizeImage(file);
+        setImage(optimizedFile);
+        const reader = new FileReader();
+        reader.onload = () => setPreviewImage(reader.result);
+        reader.readAsDataURL(optimizedFile);
+        toast.success('Image uploaded and optimized successfully');
+      } catch (error) {
+        toast.error('Error processing image');
+        console.error('Image optimization error:', error);
+      }
+    }
+  };
+
+  const handleContentBlockImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const optimizedFile = await optimizeImage(file);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setNewBlock(prev => ({
+            ...prev,
+            src: reader.result,
+            caption: prev.caption || ''
+          }));
+          toast.success('Block image uploaded and optimized successfully');
+        };
+        reader.readAsDataURL(optimizedFile);
+      } catch (error) {
+        toast.error('Error processing block image');
+        console.error('Block image optimization error:', error);
+      }
+    }
+  };
+
+  const validateBlock = (block) => {
+    const errors = [];
+    
+    switch(block.type) {
+      case 'header':
+        if (!block.text.trim()) errors.push('Header text is required');
+        if (block.text.length > 100) errors.push('Header text too long');
+        break;
+      case 'paragraph':
+        if (!block.text.trim()) errors.push('Paragraph text is required');
+        break;
+      case 'list':
+        if (!block.items.length) errors.push('List must have at least one item');
+        break;
+      case 'image':
+        if (!block.src) errors.push('Image is required');
+        if (block.caption?.length > 200) errors.push('Caption too long');
+        break;
+    }
+    
+    return errors;
   };
 
   const addBlock = () => {
-    if (newBlock.type === 'list' && newBlock.items.length === 0) {
-      toast.error('Please add at least one item to the list');
+    const blockErrors = validateBlock(newBlock);
+    
+    if (blockErrors.length > 0) {
+      blockErrors.forEach(error => toast.error(error));
       return;
     }
 
-    const isValidBlock = 
-      (newBlock.type === 'paragraph' && newBlock.text.trim()) ||
-      (newBlock.type === 'header' && newBlock.text.trim()) ||
-      (newBlock.type === 'list' && newBlock.items.length > 0) ||
-      (newBlock.type === 'image' && newBlock.src);
+    setContentBlocks([...contentBlocks, newBlock]);
+    setNewBlock({
+      type: 'paragraph',
+      text: '',
+      items: [],
+      src: '',
+      caption: ''
+    });
+    toast.success('Content block added');
+  };
 
-    if (isValidBlock) {
-      setContentBlocks([...contentBlocks, newBlock]);
-      setNewBlock({ 
-        type: 'paragraph', 
-        text: '', 
-        items: [],
-        src: '',
-        caption: ''
-      });
-      toast.success('Content block added');
-    } else {
-      toast.error(`Please provide content for ${newBlock.type} block`);
+  const handleKeyPress = (e, blockIndex) => {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'ArrowUp' && blockIndex > 0) {
+        const newBlocks = [...contentBlocks];
+        [newBlocks[blockIndex], newBlocks[blockIndex - 1]] = 
+        [newBlocks[blockIndex - 1], newBlocks[blockIndex]];
+        setContentBlocks(newBlocks);
+      }
+      if (e.key === 'ArrowDown' && blockIndex < contentBlocks.length - 1) {
+        const newBlocks = [...contentBlocks];
+        [newBlocks[blockIndex], newBlocks[blockIndex + 1]] = 
+        [newBlocks[blockIndex + 1], newBlocks[blockIndex]];
+        setContentBlocks(newBlocks);
+      }
     }
   };
 
@@ -261,7 +395,6 @@ const deleteComment = async (postId, commentId) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Robust check for posts array
         if (Array.isArray(data?.posts)) {
           setPosts(data.posts);
           toast.success('Blog post successfully created!');
@@ -272,13 +405,13 @@ const deleteComment = async (postId, commentId) => {
           setContentBlocks([]);
           setImage(null);
           setPreviewImage(null);
+          // Clear draft from localStorage
+          localStorage.removeItem('draftPost');
         } else {
-          // Fallback if posts array is not in the expected format
           toast.success('Blog post created, but unable to update post list');
           console.warn('Unexpected response format:', data);
         }
       } else {
-        // Handle error responses
         toast.error(`Error: ${data.message || 'Error creating blog post'}`);
       }
     } catch (error) {
@@ -318,8 +451,8 @@ const deleteComment = async (postId, commentId) => {
 
   return (
     <div className='writer-page'>
-      <Toaster 
-        position="top-right" 
+      <Toaster
+        position="top-right"
         toastOptions={{
           success: {
             style: {
@@ -333,133 +466,287 @@ const deleteComment = async (postId, commentId) => {
               color: 'white',
             },
           },
-        }} 
+        }}
       />
+
     
-      <header className='writer-page-header'>
-      <Link to="/blog" className="back-to-blog">
+        <header className='writer-page-header'>
+        <Link to="/blog" className="back-to-blog">
           <ArrowLeft size={24} className="back-icon" />
           Back to Blog
         </Link>
       </header>
 
       <h1 className='writer-page-header'>Create Blog Post</h1>
+ {/* Progress indicator */}
+ <div className="progress-bar-container">
+        <div 
+          className="progress-bar" 
+          style={{ width: `${progress}%` }}
+          role="progressbar"
+          aria-valuenow={progress}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          {progress}%
+        </div>
+      </div>
 
-      <input
-  type="text"
-  placeholder="Enter blog title"
-  value={title}
-  onChange={(e) => setTitle(e.target.value)}
-  className="blog-title-input"
-/>
-
-
-<input
-  type="text"
-  placeholder="Enter blog category"
-  value={category}
-  onChange={(e) => setCategory(e.target.value)}
-  className="input-field"
-/>
-
-<div className="file-upload">
-  <input type="file" onChange={handleImageUpload} className="file-input" />
-  {previewImage && (
-    <div className="preview-container">
-      <p>Preview:</p>
-      <img src={previewImage} alt="Uploaded Preview" className="preview-image" />
-    </div>
-  )}
-</div>
-
-<div className="select-container">
-  <select
-    value={newBlock.type}
-    onChange={(e) => setNewBlock({ 
-      type: e.target.value, 
-      text: '', 
-      items: [], 
-      src: '', 
-      caption: '' 
-    })}
-    className="select-input"
-  >
-    <option value="paragraph">Paragraph</option>
-    <option value="header">Header</option>
-    <option value="list">List</option>
-    <option value="image">Image Block</option>
-  </select>
-
-  {newBlock.type === 'list' ? (
-    <input
-      type="text"
-      placeholder="Enter list items, separated by commas"
-      value={newBlock.items.join(', ')}
-      onChange={(e) => setNewBlock({ 
-        ...newBlock, 
-        items: e.target.value.split(',').map(item => item.trim()) 
-      })}
-      className="input-field list-input"
-    />
-  ) : newBlock.type === 'image' ? (
-    <div className="image-block">
-      <input 
-        type="file" 
-        accept="image/*"
-        onChange={handleContentBlockImageUpload}
-        className="file-input"
-      />
-      {newBlock.src && (
-        <img 
-          src={newBlock.src} 
-          alt="Block Preview" 
-          className="block-preview-image" 
-        />
-      )}
       <input
         type="text"
-        placeholder="Add image caption (optional)"
-        value={newBlock.caption || ''}
-        onChange={(e) => setNewBlock({ ...newBlock, caption: e.target.value })}
-        className="input-field"
+        placeholder="Enter blog title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="blog-title-input"
+        aria-label="Blog title"
       />
-    </div>
-  ) : (
-    <textarea
-      placeholder={`Enter your ${newBlock.type} content`}
-      value={newBlock.text}
-      onChange={(e) => setNewBlock({ ...newBlock, text: e.target.value })}
-      className="textarea-field"
-    />
-  )}
 
-<button onClick={addBlock} style={{ marginBottom: '20px' }}>
+      <input
+        type="text"
+        placeholder="Enter blog category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="input-field"
+        aria-label="Blog category"
+      />
+
+      <div className="file-upload">
+        <input 
+          type="file" 
+          onChange={handleImageUpload} 
+          className="file-input"
+          accept="image/*"
+          aria-label="Upload main image"
+        />
+        {previewImage && (
+          <div className="preview-container">
+            <p>Preview:</p>
+            <img 
+              src={previewImage} 
+              alt="Uploaded Preview" 
+              className="preview-image"
+              loading="lazy"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="select-container">
+        <select
+          value={newBlock.type}
+          onChange={(e) => setNewBlock({
+            type: e.target.value,
+            text: '',
+            items: [],
+            src: '',
+            caption: ''
+          })}
+          className="select-input"
+          aria-label="Content block type"
+        >
+          <option value="paragraph">Paragraph</option>
+          <option value="header">Header</option>
+          <option value="list">List</option>
+          <option value="image">Image Block</option>
+        </select>
+
+        {newBlock.type === 'list' ? (
+          <input
+            type="text"
+            placeholder="Enter list items, separated by commas"
+            value={newBlock.items.join(', ')}
+            onChange={(e) => setNewBlock({
+              ...newBlock,
+              items: e.target.value.split(',').map(item => item.trim())
+            })}
+            className="input-field list-input"
+            aria-label="List items"
+          />
+        ) : newBlock.type === 'image' ? (
+          <div className="image-block">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleContentBlockImageUpload}
+              className="file-input"
+              aria-label="Upload block image"
+            />
+            {newBlock.src && (
+              <img
+                src={newBlock.src}
+                alt="Block Preview"
+                className="block-preview-image"
+                loading="lazy"
+              />
+            )}
+            <input
+              type="text"
+              placeholder="Add image caption (optional)"
+              value={newBlock.caption || ''}
+              onChange={(e) => setNewBlock({ ...newBlock, caption: e.target.value })}
+              className="input-field"
+              aria-label="Image caption"
+            />
+          </div>
+        ) : (
+          <textarea
+            placeholder={`Enter your ${newBlock.type} content`}
+            value={newBlock.text}
+            onChange={(e) => setNewBlock({ ...newBlock, text: e.target.value })}
+            className="textarea-field"
+            aria-label={`${newBlock.type} content`}
+          />
+        )}
+
+        <button 
+          onClick={addBlock} 
+          style={{ marginBottom: '20px' }}
+          aria-label="Add content block"
+        >
           Add Content Block
         </button>
-</div>
+      </div>
       
 
-<div className="content-preview-container">
+      <div className="content-preview-container">
   {contentBlocks.length > 0 && (
     <div>
       <h2 className="content-preview-title">Content Preview:</h2>
       {contentBlocks.map((block, index) => (
-        <div key={index} className="content-block">
-          {block.type === 'header' && <h3 className="block-header">{block.text}</h3>}
-          {block.type === 'paragraph' && <p className="block-paragraph">{block.text}</p>}
-          {block.type === 'list' && (
-            <ul className="block-list">
-              {block.items.map((item, i) => (
-                <li key={i} className="list-item">{item}</li>
-              ))}
-            </ul>
-          )}
-          {block.type === 'image' && (
-            <div className="block-image-container">
-              <img src={block.src} alt="Uploaded block" className="block-image" />
-              {block.caption && <p className="image-caption">{block.caption}</p>}
+        <div 
+          key={index} 
+          className="content-block"
+          onKeyDown={(e) => handleKeyPress(e, index)}
+          tabIndex="0"
+          role="article"
+          aria-label={`Content block ${index + 1} of ${contentBlocks.length}`}
+        >
+          {block.type === 'header' && (
+            <div className="block-header-container">
+              <h3 className="block-header">{block.text}</h3>
+              <div className="block-controls">
+                <button 
+                  onClick={() => {
+                    const newBlocks = [...contentBlocks];
+                    newBlocks.splice(index, 1);
+                    setContentBlocks(newBlocks);
+                    toast.success('Block removed');
+                  }}
+                  className="block-delete-btn"
+                  aria-label="Delete block"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
           )}
+          
+          {block.type === 'paragraph' && (
+            <div className="block-paragraph-container">
+              <p className="block-paragraph">{block.text}</p>
+              <div className="block-controls">
+                <button 
+                  onClick={() => {
+                    const newBlocks = [...contentBlocks];
+                    newBlocks.splice(index, 1);
+                    setContentBlocks(newBlocks);
+                    toast.success('Block removed');
+                  }}
+                  className="block-delete-btn"
+                  aria-label="Delete block"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {block.type === 'list' && (
+            <div className="block-list-container">
+              <ul className="block-list">
+                {block.items.map((item, i) => (
+                  <li key={i} className="list-item">{item}</li>
+                ))}
+              </ul>
+              <div className="block-controls">
+                <button 
+                  onClick={() => {
+                    const newBlocks = [...contentBlocks];
+                    newBlocks.splice(index, 1);
+                    setContentBlocks(newBlocks);
+                    toast.success('Block removed');
+                  }}
+                  className="block-delete-btn"
+                  aria-label="Delete block"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {block.type === 'image' && (
+            <div className="block-image-container">
+              <div className="image-wrapper">
+                <img 
+                  src={block.src} 
+                  alt={block.caption || "Uploaded block"} 
+                  className="block-image"
+                  loading="lazy"
+                />
+                {block.caption && (
+                  <p className="image-caption">{block.caption}</p>
+                )}
+              </div>
+              <div className="block-controls">
+                <button 
+                  onClick={() => {
+                    const newBlocks = [...contentBlocks];
+                    newBlocks.splice(index, 1);
+                    setContentBlocks(newBlocks);
+                    toast.success('Block removed');
+                  }}
+                  className="block-delete-btn"
+                  aria-label="Delete block"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+          
+          <div className="block-move-controls">
+            {index > 0 && (
+              <button
+                onClick={() => {
+                  const newBlocks = [...contentBlocks];
+                  [newBlocks[index], newBlocks[index - 1]] = 
+                  [newBlocks[index - 1], newBlocks[index]];
+                  setContentBlocks(newBlocks);
+                  toast.success('Block moved up');
+                }}
+                className="block-move-btn"
+                aria-label="Move block up"
+              >
+                ↑
+              </button>
+            )}
+            {index < contentBlocks.length - 1 && (
+              <button
+                onClick={() => {
+                  const newBlocks = [...contentBlocks];
+                  [newBlocks[index], newBlocks[index + 1]] = 
+                  [newBlocks[index + 1], newBlocks[index]];
+                  setContentBlocks(newBlocks);
+                  toast.success('Block moved down');
+                }}
+                className="block-move-btn"
+                aria-label="Move block down"
+              >
+                ↓
+              </button>
+            )}
+          </div>
         </div>
       ))}
     </div>
