@@ -25,7 +25,7 @@ const EditPostPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+        const response = await fetch(`https://moigosip.onrender.com/api/posts/${id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
@@ -78,7 +78,7 @@ const EditPostPage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const response = await fetch(`https://moigosip.onrender.com/api/posts/${id}`, {
         method: 'PATCH',
         body: formData,
         headers: { 'Authorization': `Bearer ${token}` },

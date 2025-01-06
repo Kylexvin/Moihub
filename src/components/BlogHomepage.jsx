@@ -18,7 +18,7 @@ const BlogHomepage = () => {
 
     try {
       setLoading(true);
-      const postsResponse = await axios.get('http://localhost:5000/api/posts', {
+      const postsResponse = await axios.get('https://moigosip.onrender.com/api/posts', {
         params: {
           page,
           limit: postsPerPage,

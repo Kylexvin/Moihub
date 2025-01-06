@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <>
-  //<SpectacularFireworks/>
+  {/* <SpectacularFireworks/> */}
       <AdContainer/>
       <div className="ministrip-card">
         <div className="emergency-number left">

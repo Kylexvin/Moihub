@@ -62,7 +62,7 @@ const WritersPage = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/posts/all', {
+        const response = await fetch('https://moigosip.onrender.com/api/posts/all', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -207,7 +207,7 @@ const WritersPage = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:5000/api/posts/${postId}`, {
+      const response = await axios.get(`https://moigosip.onrender.com/api/posts/${postId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -233,7 +233,7 @@ const WritersPage = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:5000/api/posts/${postId}/comment/${commentId}`, {
+      await axios.delete(`https://moigosip.onrender.com/api/posts/${postId}/comment/${commentId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -384,7 +384,7 @@ const WritersPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/posts', {
+      const response = await fetch('https://moigosip.onrender.com/api/posts', {
         method: 'POST',
         body: formData,
         headers: {
@@ -430,7 +430,7 @@ const WritersPage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+      const response = await fetch(`https://moigosip.onrender.com/api/posts/${postId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

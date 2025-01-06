@@ -77,7 +77,7 @@ const BlogPost = () => {
         const token = localStorage.getItem('authToken');
         const currentUserId = localStorage.getItem('userId');
 
-        const response = await axios.get(`http://localhost:5000/api/posts/${id}`, {
+        const response = await axios.get(`https://moigosip.onrender.com/api/posts/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -159,7 +159,7 @@ const handleLike = async () => {
 
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/posts/${id}/like`, 
+      `https://moigosip.onrender.com/api/posts/${id}/like`, 
       { liked: !liked },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -190,7 +190,7 @@ const handleAddComment = async (e) => {
 
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/posts/${id}/comment`,
+      `https://moigosip.onrender.com/api/posts/${id}/comment`,
       { text: newComment },
       { headers: { Authorization: `Bearer ${token}` } }
     );
