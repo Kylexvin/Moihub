@@ -2,13 +2,13 @@ import React  from 'react';
 //import './home.css';
 import AdContainer from './AdContainer';
 import MobileWebServiceCards from './MobileWebServiceCards';
-import SpectacularFireworks from './SpectacularFireworks';
+//import SpectacularFireworks from './SpectacularFireworks';
 
 const Home = () => {
 
   return (
     <>
-  <SpectacularFireworks/>
+  //<SpectacularFireworks/>
       <AdContainer/>
       <div className="ministrip-card">
         <div className="emergency-number left">
