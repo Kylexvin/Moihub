@@ -62,7 +62,7 @@ function Register({ setIsAuthenticated }) {
         if (role === 'writer') {
           navigate('/post-list'); // Redirect to the writer's dashboard
         } else {
-          navigate('/'); // Redirect to homepage for normal users
+          navigate('/blog'); // Redirect to homepage for normal users
         }
       }, 2000);
     } catch (err) {

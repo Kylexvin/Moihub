@@ -60,6 +60,10 @@ const BlogHomepage = () => {
     fetchPosts();
   }, [currentCategory, fetchPosts]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
+  
   const loadMorePosts = () => {
     if (hasMore && !loading) {
       setPage((prevPage) => prevPage + 1);

@@ -47,14 +47,9 @@ const BlogPost = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Scroll to top on component mount or when postId changes
-    if (location.state?.fromRelatedPost) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-  }, [postId, location]);
+    window.scrollTo(0, 0); 
+  }, []);
+  
   // Reading Progress Tracker
   useEffect(() => {
     const calculateReadingProgress = () => {
