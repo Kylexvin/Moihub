@@ -113,7 +113,7 @@
   margin: 0 auto;
   padding: 0 24px;
   padding: 10px 10px;
-  border-radius: 10px;
+  border-radius: 0;
   background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
 }
 
