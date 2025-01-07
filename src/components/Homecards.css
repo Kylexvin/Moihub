@@ -1,0 +1,130 @@
+      .discover-banner {
+        width: auto; 
+        margin-right:10px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+        background: linear-gradient(145deg, #10B981, #059669); 
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1),
+                    0 0 15px rgba(16, 185, 129, 0.2); 
+        transition: all 0.4s ease;
+        cursor: pointer;
+        overflow: hidden;
+      }
+  
+      .discover-banner:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15),
+                    0 0 20px rgba(16, 185, 129, 0.3);
+      }
+  
+      .discover-content {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+  
+      .discover-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+  
+      .discover-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+  
+      .discover-icon img {
+        width: 40px;
+        height: 40px;
+        
+      }
+  
+      .discover-text {
+        color: white;
+      }
+  
+      .discover-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+        margin-bottom: 4px;
+      }
+  
+      .discover-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin: 0;
+      }
+  
+      .chevron-right {
+        width: 40px;
+        height: 40px;     
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+      }
+  
+      .discover-banner:hover .chevron-right {
+        transform: translateX(4px);
+      }
+  
+      
+      .chevron-right svg {
+        width: 40px;
+        height: 40px;
+        fill: none;
+        stroke: white;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      
+  
+  .service-grid {
+    background-color: transparent;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .service-itemm {
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-right:10px;
+    margin-left: 10px;
+    min-height: 130px;
+    cursor: pointer;
+    overflow: hidden;
+    background: linear-gradient(145deg, #faf8f6, #faf8f6); 
+    box-shadow: 5px 5px 10px #d1d5db, 
+                -1px -1px 10px #ffffff; 
+    transition: all 0.4s ease;
+  }
+  
+  .service-item:hover {
+    transform: scale(0.9);
+  }
+  
+  .service-icon img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px rgba(209, 213, 219, 0.8)); 
+  }
+  
+  .service-namee {
+    font-size: 16px;
+    font-weight: 600;
+    color: black; 
+  }

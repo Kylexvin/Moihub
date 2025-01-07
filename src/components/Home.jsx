@@ -1,9 +1,9 @@
 import React  from 'react';
 //import './home.css';
 import AdContainer from './AdContainer';
-import MobileWebServiceCards from './MobileWebServiceCards';
+//import MobileWebServiceCards from './MobileWebServiceCards';
 //import SpectacularFireworks from './SpectacularFireworks';
-
+import HomeCards from './HomeCards';
 const Home = () => {
 
   return (
@@ -18,8 +18,8 @@ const Home = () => {
           <p><i className="fas fa-shield-alt"></i> Security:0720253976</p>
                  </div>
       </div>
-      <MobileWebServiceCards/>
-      
+      {/* <MobileWebServiceCards/> */}
+      <HomeCards/>
     </>
   );
 };

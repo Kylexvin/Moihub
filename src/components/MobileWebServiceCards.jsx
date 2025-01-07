@@ -3,6 +3,14 @@ import './MobileWebServiceCards.css'; // Custom styles
 
 const serviceData = [
   {
+    title: 'My school',
+    icon: '🏠',
+    logo: '', // Add logo URL here if available
+    description: '',
+    link: '/myschool',
+    category: 'living'
+  },
+  {
     title: 'Rental Booking',
     icon: '🏠',
     logo: '', // Add logo URL here if available

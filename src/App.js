@@ -28,13 +28,13 @@ import MarketHub from './components/MarkertHub';
 
 // Blog-related Components
 //import BlogHome from './components/BlogHome';
-import BlogDetail from './components/BlogDetail';
+//import BlogDetail from './components/BlogDetail';
 import Login from './components/Login';
 import Register from './components/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import WritersPage from './components/WritersPage';
 import EditPostPage from './components/EditPostPage';
-//import BlogPost from './components/BlogPost';
+import MySchool from './components/MySchool';
 import BlogHomepage from './components/BlogHomepage';
 import BlogPost from './components/BlogPost';
 
@@ -115,6 +115,7 @@ const App = () => {
           <Route path="/provider/:providerId" element={<ProviderDetails />} />
           <Route path='/discover' element={<Discover/>}  />
           <Route path="/sellers" element={<SellersPage />} />
+          <Route path="/myschool" element={<MySchool />} />
           <Route path="/find-roommate" element={<RoomateFinder />} />
           <Route path='/learnmore' element={<LearnMore/>}/>
           <Route path='/greenhub' element={<GreenHub/>}/>

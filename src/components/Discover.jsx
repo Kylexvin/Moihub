@@ -1,180 +1,423 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import { Search, Phone, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Import Link for routing
-import "./discover.css";
-import CustomerCare from './customercare';
+import React, { useState } from 'react';
+import { Search, Phone, MapPin, ExternalLink, MessageSquare, Share2 } from 'lucide-react';
 
-const jsonData = [
-  {
-    category: "Motorbike Services",
-    services: [
-      { name: "Eduu", phone: "0725118223", hasPage: false },
-      { name: "Feloo", phone: "0717022787", hasPage: false },
-      { name: "Biwott", phone: "0748667191", hasPage: false }
-      
-    ]
-  },
-  {
-    category: "Gas Deliveries Services",
-    services: [
-      { name: "Africana", phone: "0715100949", hasPage: false }
-    ]
-  },
-  {
-    category: "Mama Fua",
-    services: [
-      { name: "(Rebo)", phone: "0717249441", hasPage: false },      
-      { name: "(Emerald)", phone: "0748446504", hasPage: false },
-      { name: "(Mobile)", phone: "0790861147", hasPage: false },
-      { name: "Mercy(Stage)", phone: "0745042970", hasPage: false },
-      { name: "Diana(Stage)", phone: "0790907727", hasPage: false }
-    ]
-  },
-  {
-    category: "Tuktuk Services",
-    services: [
-      { name: "Tuktuk 1", phone: "0796208766", hasPage: false },
-      { name: "Tuktuk 2", phone: "0714695664", hasPage: false }
-    ]
-  },
-  {
-    category: "Best Kinyozi",
-    services: [
-      { name: "Maeneo Cutz", phone: "0717241607", hasPage: false }
-    ]
-  },
-  {
-    category: "Cake",
-    services: [
-      { name: "Cakist", phone: "+254704866857", hasPage: true, route: "cakist" },
-      { name: "Boss Lady", phone: "+254745928593", hasPage: true, route: "boss-lady" }
-    ]
-  },
-  {
-    category: "Laundry Services",
-    services: [
-      { name: "Campus Laundry", phone: "0700318400", hasPage: false },
-      { name: "Talanta", phone: "0799066882", hasPage: false }
+const ServiceMarketplace = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
 
-    ]
-  },
-  {
-    category: "Capentry Services",
-    services: [
-      { name: "Rosewood", phone: "0791446535", hasPage: false }
-    ]
-  },
-  {
-    category: "Photoshoot Services",
-    services: [
-      { name: "Evans Media", phone: "0741845272", hasPage: true, route: "evans-media" }
-    ]
-  },
-  {
-    category: "Electronic Repairs",
-    services: [
-      { name: "Box Office", phone: "0799560552", hasPage: false }
-    ]
-  },
-  {
-    category: "Add your service here.",
-    services: [
-      { name: "Contact us", phone: "0768610613", hasPage: false }
-    ]
-  }
-];
+  const services = [
+    {
+      category: "Motorbike Services",
+      providers: [
+        {
+          id: "eduu",
+          name: "Eduu",
+          phone: "0725118223",
+          hasPage: false,
+          rating: 4.5,
+          reviews: 45,
+          location: "Main Gate Area",
+          tags: ["Bodaboda", "Transport", "24/7"],
+          availability: "Available Now"
+        },
+        {
+          id: "feloo",
+          name: "Feloo",
+          phone: "0717022787",
+          hasPage: false,
+          rating: 4.6,
+          reviews: 38,
+          location: "Student Center",
+          tags: ["Bodaboda", "Transport"],
+          availability: "Available Now"
+        },
+        {
+          id: "biwott",
+          name: "Biwott",
+          phone: "0748667191",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Transport"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Gas Deliveries Services",
+      providers: [
+        {
+          id: "africana",
+          name: "Africana",
+          phone: "0715100949",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 89,
+          location: "Campus Wide Delivery",
+          tags: ["Gas Refill", "Delivery"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Mama Fua",
+      providers: [
+        {
+          id: "rebo",
+          name: "Rebo",
+          phone: "0717249441",
+          hasPage: false,
+          rating: 4.8,
+          reviews: 156,
+          location: "Rebo Area",
+          tags: ["Laundry", "Cleaning"],
+          availability: "Available Now"
+        },
+        {
+          id: "emerald",
+          name: "Emerald",
+          phone: "0748446504",
+          hasPage: false,
+          rating: 4.6,
+          reviews: 92,
+          location: "Emerald Area",
+          tags: ["Laundry", "Cleaning"],
+          availability: "Available Now"
+        },
+        {
+          id: "mobile",
+          name: "Mobile",
+          phone: "0790861147",
+          hasPage: false,
+          rating: 4.5,
+          reviews: 78,
+          location: "Mobile Service",
+          tags: ["Laundry", "Pickup", "Delivery"],
+          availability: "Available Now"
+        },
+        {
+          id: "mercy",
+          name: "Mercy (Stage)",
+          phone: "0745042970",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 112,
+          location: "Stage Area",
+          tags: ["Laundry", "Cleaning"],
+          availability: "Available Now"
+        },
+        {
+          id: "diana",
+          name: "Diana (Stage)",
+          phone: "0790907727",
+          hasPage: false,
+          rating: 4.6,
+          reviews: 94,
+          location: "Stage Area",
+          tags: ["Laundry", "Cleaning"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Cake",
+      providers: [
+        {
+          id: "cakist",
+          name: "Cakist",
+          phone: "+254704866857",
+          hasPage: true,
+          route: "cakist",
+          rating: 4.9,
+          reviews: 234,
+          location: "Campus Area",
+          tags: ["Cakes", "Pastries", "Custom Orders"],
+          availability: "Available Now",
+          website: "/products/Cakistbakery"
+        },
+        {
+          id: "boss-lady",
+          name: "Boss Lady",
+          phone: "+254745928593",
+          hasPage: true,
+          route: "boss-lady",
+          rating: 4.8,
+          reviews: 189,
+          location: "Campus Area",
+          tags: ["Cakes", "Pastries", "Events"],
+          availability: "Available Now",
+          website: "/products/%20bakery"
+        }
+      ]
+    },
+    {
+      category: "Photoshoot Services",
+      providers: [
+        {
+          id: "evans-media",
+          name: "Evans Media",
+          phone: "0741845272",
+          hasPage: true,
+          route: "evans-media",
+          rating: 4.8,
+          reviews: 167,
+          location: "Campus Wide",
+          tags: ["Photography", "Events", "Portraits"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    // Newly Added Categories and Services:
+    {
+      category: "Tuktuk Services",
+      providers: [
+        {
+          id: "tuktuk1",
+          name: "Tuktuk 1",
+          phone: "0796208766",
+          hasPage: false,
+          rating: 4.2,
+          reviews: 32,
+          location: "Campus Entrance",
+          tags: ["Transport", "Tuktuk"],
+          availability: "Available Now"
+        },
+        {
+          id: "tuktuk2",
+          name: "Tuktuk 2",
+          phone: "0714695664",
+          hasPage: false,
+          rating: 4.3,
+          reviews: 28,
+          location: "Main Gate",
+          tags: ["Transport", "Tuktuk"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Best Kinyozi",
+      providers: [
+        {
+          id: "maeneo-cutz",
+          name: "Maeneo Cutz",
+          phone: "0717241607",
+          hasPage: false,
+          rating: 4.6,
+          reviews: 58,
+          location: "Kinyozi Area",
+          tags: ["Haircut", "Grooming"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Laundry Services",
+      providers: [
+        {
+          id: "campus-laundry",
+          name: "Campus Laundry",
+          phone: "0700318400",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 65,
+          location: "Campus Laundry Area",
+          tags: ["Laundry", "Washing"],
+          availability: "Available Now"
+        },
+        {
+          id: "talanta",
+          name: "Talanta",
+          phone: "0799066882",
+          hasPage: false,
+          rating: 4.5,
+          reviews: 47,
+          location: "Talanta Area",
+          tags: ["Laundry", "Cleaning"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Capentry Services",
+      providers: [
+        {
+          id: "rosewood",
+          name: "Rosewood",
+          phone: "0791446535",
+          hasPage: false,
+          rating: 4.8,
+          reviews: 52,
+          location: "Woodworking Shop",
+          tags: ["Carpentry", "Woodwork"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
+      category: "Electronic Repairs",
+      providers: [
+        {
+          id: "box-office",
+          name: "Box Office",
+          phone: "0799560552",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 34,
+          location: "Tech Area",
+          tags: ["Repairs", "Electronics"],
+          availability: "Available Now"
+        }
+      ]
+    }
+  ];
+  
 
-const Card = ({ category, services, isOpen, toggleCard }) => (
-  <div className={`category-card-discover ${isOpen ? 'open' : ''}`}>
-    <div className="service-card-title-discover" onClick={toggleCard}>
-      <div className="service-name-discover">{category}</div>
-      <ChevronDown className={`chevron ${isOpen ? 'rotate' : ''}`} />
-    </div>
-    {isOpen && (
-      <div className="service-card-discover">
-        {services && services.map((service, index) => (
-          <div key={index} className="service-card-info-discover">
-            <div className="service-name-discover">
-              {service.hasPage ? (
-                <Link to={`/${service.route}`} className="service-link">{service.name}</Link>
-              ) : (
-                service.name
-              )}
-            </div>
-            <div className="phone-number">
-              <Phone size={16} />
-              <a href={`tel:${service.phone}`}>{service.phone}</a>
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-);
-
-const Discover = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState(jsonData);
-  const [openCards, setOpenCards] = useState({});
-
-  useEffect(() => {
-    const filtered = jsonData.filter(data => {
-      const categoryMatch = data.category.toLowerCase().includes(searchTerm.toLowerCase());
-      const serviceMatch = data.services.some(service => 
-        service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.phone.includes(searchTerm)
-      );
-      return categoryMatch || serviceMatch;
-    });
-    setFilteredData(filtered);
-  }, [searchTerm]);
-
-  const toggleCard = (index) => {
-    setOpenCards(prev => ({ ...prev, [index]: !prev[index] }));
-  };
+  const filteredServices = services.filter(category => 
+    category.category !== "Add your service here." &&
+    (searchQuery === '' || 
+      category.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.providers.some(provider => 
+        provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        provider.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    )
+  );
 
   return (
-    <div className="discover-page">
-      <Helmet>
-        <title>Discover Services</title>
-        <meta name="description" content="Discover various services including motorbike, gas deliveries, laundry, and more." />
-      </Helmet>
-
-      <svg id="unique-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(180)">
-        <path fill="#27a844" fillOpacity="1" d="M0,0L24,32C48,64,96,128,144,149.3C192,171,240,149,288,138.7C336,128,384,128,432,144C480,160,528,192,576,213.3C624,235,672,245,720,229.3C768,213,816,171,864,144C912,117,960,107,1008,112C1056,117,1104,139,1152,144C1200,149,1248,139,1296,112C1344,85,1392,43,1416,21.3L1440,0L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z" />
-      </svg>
-
-      <div className="container-s">
-        <div className="search-panel">
-          <div className="search-container">
-            <Search className="search-icon" />
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="bg-gradient-to-r from-green-800 to-green-600 rounded-lg p-8 mb-8 text-white">          
+          <div className="relative rounded-lg">
             <input
               type="text"
-              id="search"
-              placeholder="Search for a service..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search for services..."
+              className="w-full pl-4 pr-4 py-2 rounded-lg text-gray-900"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
-        </div>
+          </div>       
       </div>
 
-      <div className="container-discover">
-        {filteredData.map((data, index) => (
-          <Card 
-            key={index} 
-            category={data.category} 
-            services={data.services}
-            isOpen={openCards[index]}
-            toggleCard={() => toggleCard(index)}
-          />
+
+      <div className="mb-6 overflow-x-auto">
+  <div className="flex gap-2 pb-2">
+    <button
+      onClick={() => setActiveCategory('all')}
+      className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200 ${
+        activeCategory === 'all' 
+          ? 'bg-green-700 text-white' // Active button
+          : 'bg-gray-200 text-gray-800 hover:bg-green-500 hover:text-white' // Non-active button
+      }`}
+    >
+      All Services
+    </button>
+    {filteredServices.map(category => (
+      <button
+        key={category.category}
+        onClick={() => setActiveCategory(category.category)}
+        className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200 ${
+          activeCategory === category.category 
+            ? 'bg-green-700 text-white' // Active category
+            : 'bg-gray-200 text-gray-800 hover:bg-green-500 hover:text-white' // Non-active category
+        }`}
+      >
+        {category.category}
+      </button>
+    ))}
+  </div>
+</div>
+
+
+      <div className="space-y-8">
+        {filteredServices
+          .filter(cat => activeCategory === 'all' || cat.category === activeCategory)
+          .map((serviceCategory) => (
+          <div key={serviceCategory.category}>
+            <h2 className="text-2xl font-semibold mb-4 text-green-700">{serviceCategory.category}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {serviceCategory.providers.map((provider) => (
+                <div key={provider.id} className="bg-[#e8f6e9] rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+                <div className="m-3 p-2 border-b border-gray-200">
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-start gap-2">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        {provider.name}
+                        {provider.hasPage && (
+                          <a 
+                            href={provider.website}
+                            className="text-green-600 hover:text-green-700"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                          )}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <MapPin className="h-4 w-4" />
+                      {provider.location}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {provider.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full">
+                        {provider.availability}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 border-t border-gray-200 flex gap-2">
+                    <a 
+                      href={`tel:${provider.phone}`}
+                      className="flex-1 bg-green-700 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-800"
+                    >
+                      <Phone className="h-4 w-4" />
+                      Call
+                    </a>
+                    <a 
+                      href={`https://wa.me/${provider.phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-green-700 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 "
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      WhatsApp
+                    </a>
+                    <button 
+                      onClick={() => {
+                        navigator.share({
+                          title: provider.name,
+                          text: `Check out ${provider.name}`,
+                          url: window.location.href
+                        }).catch(console.error)
+                      }}
+                      className="p-2 bg-green-900 rounded-lg "
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
-
-      <CustomerCare />
     </div>
   );
 };
 
-export default Discover;
+export default ServiceMarketplace;
