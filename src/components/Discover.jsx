@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Search, Phone, MapPin, ExternalLink, MessageSquare, Share2 } from 'lucide-react';
 
 const ServiceMarketplace = () => {
@@ -273,6 +273,9 @@ const ServiceMarketplace = () => {
     }
   ];
   
+  useEffect(() => {
+      window.scrollTo(0, 0); 
+    }, []);
 
   const filteredServices = services.filter(category => 
     category.category !== "Add your service here." &&

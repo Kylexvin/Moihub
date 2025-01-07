@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect} from 'react'; 
 
 const MySchool = () => {
   const quickLinks = [
@@ -44,6 +44,10 @@ const MySchool = () => {
   ];
 
   const categories = ['All Posts', 'Academic Guide', 'Resources', 'Student Life', 'Study Tips'];
+
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
