@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserPlus, Mail, Lock  } from 'lucide-react';
+import { UserPlus, Mail, Lock } from 'lucide-react';
 import { authService } from '../services/authService';
 import './Register.css';
-
 
 function Register({ setIsAuthenticated }) {
   const [formData, setFormData] = useState({
@@ -16,6 +15,8 @@ function Register({ setIsAuthenticated }) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || null;
 
   const handleChange = (e) => {
     setFormData({
@@ -49,20 +50,23 @@ function Register({ setIsAuthenticated }) {
     }
 
     try {
-      const { confirmPassword, ...registrationData } = formData; // Exclude confirmPassword
-      const response = await authService.register(registrationData); // Register the user
+      const { confirmPassword, ...registrationData } = formData;
+      const response = await authService.register(registrationData);
 
-      // Assume the response contains the user's role
-      const role = response?.role; // Get the user's role from the response
-      setIsAuthenticated(true); // Set authentication state
+      const role = response?.role;
+      setIsAuthenticated(true);
 
       toast.success('Registration successful! Redirecting...');
       setTimeout(() => {
-        // Redirect based on role
-        if (role === 'writer') {
-          navigate('/post-list'); // Redirect to the writer's dashboard
+        // Redirect based on state.from or role
+        if (from) {
+          navigate(from);
+        } else if (role === 'writer') {
+          navigate('/post-list');
+        } else if (role === 'admin') {
+          navigate('/admin-dashboard');
         } else {
-          navigate('/blog'); // Redirect to homepage for normal users
+          navigate('/');
         }
       }, 2000);
     } catch (err) {
@@ -87,7 +91,6 @@ function Register({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <div className="input-wrapper">
-             
               <input
                 type="text"
                 id="username"

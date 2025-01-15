@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { LogIn,  Lock } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { LogIn, Lock } from 'lucide-react';
 import { authService } from '../services/authService';
 import './Register.css';
 
 function Login({ setIsAuthenticated }) {
   const [credentials, setCredentials] = useState({
-    emailOrUsername: '', // Changed from email to emailOrUsername
+    emailOrUsername: '',
     password: '',
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Access the `state.from` value
 
   const handleChange = (e) => {
     setCredentials({
@@ -24,20 +25,35 @@ function Login({ setIsAuthenticated }) {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
-
+    
     try {
       const response = await authService.login(credentials);
-      const token = response.token; // Assuming response contains the token
-      const role = response.role; // Capture the role from the response
-      localStorage.setItem('authToken', token); // Save token to localStorage
-      localStorage.setItem('userRole', role); // Save role to localStorage
-      setIsAuthenticated(true); // Update authentication state
+      const token = response.token;
+      const role = response.role;
 
-      // Redirect based on user role
-      if (role === 'writer') {
-        navigate('/post-list'); // Redirect to the writer's dashboard
+      // Save token and role to localStorage
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userRole', role);
+      setIsAuthenticated(true);
+
+      // Retrieve the `from` path if it exists
+      const redirectUrl = location.state?.from;
+
+      if (redirectUrl) {
+        // If there's a `from` path, redirect back to it
+        navigate(redirectUrl, { replace: true });
       } else {
-        navigate('/blog'); // Redirect to the homepage for normal users
+        // Otherwise, navigate based on the role
+        switch (role) {
+          case 'admin':
+            navigate('/admin-dashboard'); // Redirect to admin dashboard
+            break;
+          case 'writer':
+            navigate('/post-list'); // Redirect writers to their dashboard
+            break;
+          default:
+            navigate('/'); // Default redirect for regular users
+        }
       }
     } catch (err) {
       setError(err.message || 'Login failed');
@@ -55,20 +71,17 @@ function Login({ setIsAuthenticated }) {
           <h2>Welcome Back</h2>
           <p>Login to continue to your account</p>
         </div>
-
         {error && (
           <div className="error-message">
             <p>{error}</p>
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="emailOrUsername">Email or Username</label>
             <div className="input-wrapper">
-             
               <input
-                type="text" // Changed type from email to text
+                type="text"
                 id="emailOrUsername"
                 name="emailOrUsername"
                 placeholder="Enter your email or username"
@@ -79,7 +92,6 @@ function Login({ setIsAuthenticated }) {
               />
             </div>
           </div>
-
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="input-wrapper">
@@ -96,7 +108,6 @@ function Login({ setIsAuthenticated }) {
               />
             </div>
           </div>
-
           <button
             type="submit"
             className="auth-submit-btn"
@@ -105,7 +116,6 @@ function Login({ setIsAuthenticated }) {
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
         <div className="auth-footer">
           <p>
             Don't have an account?{' '}

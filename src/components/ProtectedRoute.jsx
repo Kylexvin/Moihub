@@ -1,15 +1,24 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { authService } from '../services/authService';
 
-function ProtectedRoute({ children }) {
-  // Check if the user is authenticated using the authService
+function ProtectedRoute({ children, allowedRoles }) {
+  const location = useLocation();
+
+  // Check if user is authenticated
   if (!authService.isAuthenticated()) {
-    // If not authenticated, redirect to login page
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
-  // If authenticated, render the protected content
+  // Check role authorization if roles are specified
+  if (allowedRoles) {
+    const userRole = localStorage.getItem('userRole'); // Match the key used in your Login component
+
+    if (!allowedRoles.includes(userRole)) {
+      return <Navigate to="/" replace />;
+    }
+  }
+
   return children;
 }
 

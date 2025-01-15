@@ -1,7 +1,6 @@
-// Navbar.js
 import React from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import './styles.css'; 
+import './styles.css';
 
 const navLinkStyle = {
   color: '#fff', // Text color
@@ -80,6 +79,12 @@ const Navbar = () => {
                 </a>
               </li>
             </ul>
+          </div>
+          {/* Login button at the bottom */}
+          <div className="navbar-footer">
+            <a href="/login" className="btn btn-outline-light" style={{ marginTop: '10px', fontSize: '16px' }}>
+              Login
+            </a>
           </div>
         </div>
       </nav>
