@@ -29,7 +29,7 @@ const RouteSelectionPage = () => {
     const fetchRoutes = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/routes');
+        const response = await fetch('https://moigosip.onrender.com/api/routes');
         if (!response.ok) {
           throw new Error('Failed to fetch routes');
         }
