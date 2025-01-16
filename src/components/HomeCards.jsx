@@ -10,7 +10,7 @@ const HomeCards = () => {
   <div className="discover-content">
     <div className="discover-info">
       <div className="discover-icon">
-        <img src="images/eshop.jpg" alt="Discover Icon" />
+        <img src="images/discover.png" alt="Discover Icon" />
       </div>
       <div className="discover-text">
         <h3 className="discover-title">Discover Services</h3>

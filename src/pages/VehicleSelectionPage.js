@@ -10,7 +10,7 @@ const VehicleSelectionPage = () => {
 
   const fetchMatatusForRoute = async (routeId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/matatus/routes/${routeId}`);
+      const response = await fetch(`https://moigosip.onrender.com/api/matatus/routes/${routeId}`);
       const data = await response.json();
 
       if (!data || !Array.isArray(data.matatus)) throw new Error('Invalid matatus data');
