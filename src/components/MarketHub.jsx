@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MarkertHub.css';
@@ -23,67 +23,35 @@ const getRelativeTime = (date) => {
   return 'just now';
 };
 
-// Function to cache image as base64 using Axios
-const cacheImage = async (url) => {
-  try {
-    const cachedImage = localStorage.getItem(url);
-    if (cachedImage) {
-      return cachedImage;
-    }
+const SearchPanel = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch(value);
+  };
 
-    const response = await axios.get(url, { responseType: 'blob' });
-    const blob = response.data;
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        try {
-          localStorage.setItem(url, base64data);
-          resolve(base64data);
-        } catch (e) {
-          if (e.name === 'QuotaExceededError') {
-            const keys = Object.keys(localStorage);
-            keys.forEach((key) => {
-              if (key.includes('markethubbackend.onrender.com')) {
-                localStorage.removeItem(key);
-              }
-            });
-            localStorage.setItem(url, base64data);
-            resolve(base64data);
-          } else {
-            reject(e);
-          }
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  } catch (error) {
-    console.error('Error caching image:', error);
-    return url; // Fallback to original URL
-  }
+  return (
+    <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-lg font-semibold">Search Products</h3>
+        <input
+          type="text"
+          placeholder="Search by product name or description..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+    </div>
+  );
 };
 
 const ProductCard = ({ product, contactSeller }) => {
   const [imageStatus, setImageStatus] = useState('loading');
-  const [imageUrl, setImageUrl] = useState('');
   const [retryCount, setRetryCount] = useState(0);
   const [relativeTime, setRelativeTime] = useState(getRelativeTime(product.createdAt));
-
-  useEffect(() => {
-    const loadImage = async () => {
-      const formattedUrl = `https://markethubbackend.onrender.com/${product.image.replace(/\\/g, '/')}`;
-      try {
-        const cachedImageUrl = await cacheImage(formattedUrl);
-        setImageUrl(cachedImageUrl);
-      } catch (error) {
-        console.error('Error loading image:', error);
-        setImageUrl(formattedUrl); // Fallback to original URL
-      }
-    };
-
-    loadImage();
-  }, [product.image]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -100,8 +68,7 @@ const ProductCard = ({ product, contactSeller }) => {
   const handleImageError = () => {
     if (retryCount < 3) {
       setRetryCount((prev) => prev + 1);
-      const timestamp = new Date().getTime();
-      setImageUrl(`${imageUrl}?retry=${timestamp}`);
+      setImageStatus('error');
     } else {
       setImageStatus('error');
     }
@@ -115,8 +82,8 @@ const ProductCard = ({ product, contactSeller }) => {
             <div className="loading-spinner"></div>
           </div>
         )}
-         <img
-          src={product.image} // Direct use of the image URL
+        <img
+          src={product.image}
           alt={product.name}
           onLoad={handleImageLoad}
           onError={handleImageError}
@@ -124,26 +91,19 @@ const ProductCard = ({ product, contactSeller }) => {
             opacity: imageStatus === 'loaded' ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',
           }}
-         
         />
         {imageStatus === 'error' && (
           <div className="image-error">
             <i className="fas fa-image"></i>
-            <p style={{
-  color: 'red',
-  fontSize: '14px',
-  textAlign: 'center',
-  fontStyle: 'italic',
-  margin: '10px 0'
-}}>
-  Image unavailable, inquire from the seller
-</p>
-
+            <p className="text-red-500 text-sm text-center italic mt-2 mb-2">
+              Image unavailable, inquire from the seller
+            </p>
           </div>
         )}
       </div>
 
       <div className="product-infoo">
+        <h3 className="product-namee">{product.name}</h3>
         <div className="price-roww">
           <div className="product-pricee">
             <i className="fas fa-tag"></i> Price Ksh {product.price.toLocaleString()}
@@ -177,45 +137,61 @@ const MarketHub = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
+  const observer = useRef();
+  const ITEMS_PER_PAGE = 10;
+
+  const lastProductElementRef = useCallback(node => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+  const fetchProducts = async (pageNum) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://markethubbackend.onrender.com/api/products/approved?page=${pageNum}&limit=${ITEMS_PER_PAGE}`);
+      
+      setProducts(prev => {
+        const newProducts = pageNum === 1 ? response.data : [...prev, ...response.data];
+        setHasMore(response.data.length === ITEMS_PER_PAGE);
+        return newProducts;
+      });
+      
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load products. Please try again later.');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const cachedProducts = localStorage.getItem('marketHubProducts');
-        const cachedTimestamp = localStorage.getItem('marketHubProductsTimestamp');
+    fetchProducts(page);
+  }, [page]);
 
-        if (cachedProducts && cachedTimestamp) {
-          const isExpired = Date.now() - parseInt(cachedTimestamp) > 5 * 60 * 1000;
-          if (!isExpired) {
-            setProducts(JSON.parse(cachedProducts));
-            setLoading(false);
-            fetchFreshData();
-            return;
-          }
-        }
+  useEffect(() => {
+    const filtered = products.filter(product => 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchQuery, products]);
 
-        await fetchFreshData();
-      } catch (err) {
-        setError('Failed to load products. Server yetu ni chinkuu kidogo. Please try again later.');
-        setLoading(false);
-      }
-    };
-
-    const fetchFreshData = async () => {
-      try {
-        const response = await axios.get('https://markethubbackend.onrender.com/api/products/approved');
-        setProducts(response.data);
-        localStorage.setItem('marketHubProducts', JSON.stringify(response.data));
-        localStorage.setItem('marketHubProductsTimestamp', Date.now().toString());
-        setLoading(false);
-      } catch (err) {
-        throw err;
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const handleSearch = (searchTerm) => {
+    setSearchQuery(searchTerm);
+    setPage(1);
+  };
 
   const contactSeller = (sellerWhatsApp) => {
     const whatsappLink = `https://wa.me/${sellerWhatsApp}`;
@@ -229,20 +205,19 @@ const MarketHub = () => {
           <div className="nav-contentt">
             <div className="logoo">MarketHub</div>
             <div className="nav-buttonss">
-  <button
-    className="nav-btn login-btnn"
-    onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/login'}
-  >
-    <i className="fas fa-sign-in-alt"></i> Login
-  </button>
-  <button
-    className="nav-btn register-btnn"
-    onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
-  >
-    Register
-  </button>
-</div>
-
+              <button
+                className="nav-btn login-btnn"
+                onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/login'}
+              >
+                <i className="fas fa-sign-in-alt"></i> Login
+              </button>
+              <button
+                className="nav-btn register-btnn"
+                onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
+              >
+                Register
+              </button>
+            </div>
           </div>
         </nav>
 
@@ -257,27 +232,59 @@ const MarketHub = () => {
           <div className="seller-card-contentt">
             <h2>Want to Sell Your Items?</h2>
             <p>Create a free account and start selling to potential buyers in Moi University.</p>
-            <button className="nav-btn register-btnn" onClick={() => window.location.href = ('https://markethub-mocha.vercel.app/register')}>
+            <button 
+              className="nav-btn register-btnn" 
+              onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
+            >
               <i className="fas fa-plus-circle"></i> Start Selling Today
             </button>
           </div>
         </div>
-
+      
         <div className="containerr">
-          <h2 className="section-titlee">Product for you</h2>
+          <SearchPanel onSearch={handleSearch} />
+          
+          <h2 className="section-titlee">Products for you</h2>
           <div className="products-gridd">
-            {loading ? (
-              <p>
-                <i className="fas fa-spinner fa-spin"></i> Loading products...
+            {filteredProducts.map((product, index) => {
+              if (filteredProducts.length === index + 1) {
+                return (
+                  <div ref={lastProductElementRef} key={product._id}>
+                    <ProductCard 
+                      product={product} 
+                      contactSeller={contactSeller} 
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <ProductCard 
+                    key={product._id} 
+                    product={product} 
+                    contactSeller={contactSeller} 
+                  />
+                );
+              }
+            })}
+            
+            {loading && (
+              <div className="w-full text-center p-4">
+                <p><i className="fas fa-spinner fa-spin"></i> Loading more products...</p>
+              </div>
+            )}
+            
+            {error && <p className="text-red-500 text-center p-4">{error}</p>}
+            
+            {!loading && !hasMore && filteredProducts.length > 0 && (
+              <p className="w-full text-center p-4 text-gray-500">
+                No more products to load
               </p>
-            ) : error ? (
-              <p>{error}</p>
-            ) : products.length > 0 ? (
-              products.map((product) => (
-                <ProductCard key={product._id} product={product} contactSeller={contactSeller} />
-              ))
-            ) : (
-              <p>No products available.</p>
+            )}
+            
+            {!loading && filteredProducts.length === 0 && (
+              <p className="w-full text-center p-4 text-gray-500">
+                No products found matching your search
+              </p>
             )}
           </div>
         </div>
