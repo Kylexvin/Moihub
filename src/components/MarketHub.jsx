@@ -33,7 +33,7 @@ const SearchPanel = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-green-500 to-green-900 rounded-lg shadow-lg p-4 mb-6"> <div className="flex flex-col gap-4"> <h3 className="text-white text-lg font-semibold">Search Products</h3> <input type="text" placeholder="Search by pname or description..." value={searchTerm} onChange={handleSearch} className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" /> </div> </div>
+    <div className="bg-gradient-to-r from-green-500 to-green-900 rounded-lg shadow-lg p-4 mb-3"> <div className="flex flex-col gap-4"><input type="text" placeholder="Search by name or description..." value={searchTerm} onChange={handleSearch} className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" /> </div> </div>
   );
 };
 
