@@ -9,37 +9,104 @@ const ServiceMarketplace = () => {
     {
       category: "Motorbike Services",
       providers: [
-        {
-          id: "eduu",
-          name: "Eduu",
-          phone: "0725118223",
-          hasPage: false,
-          rating: 4.5,
-          reviews: 45,
-          location: "Main Gate Area",
-          tags: ["Bodaboda", "Transport", "24/7"],
-          availability: "Available Now"
-        },
-        {
-          id: "feloo",
-          name: "Feloo",
-          phone: "0717022787",
-          hasPage: false,
-          rating: 4.6,
-          reviews: 38,
-          location: "Student Center",
-          tags: ["Bodaboda", "Transport"],
-          availability: "Available Now"
-        },
+       
         {
           id: "biwott",
           name: "Biwott",
-          phone: "0748667191",
+          phone: "0727042553",
           hasPage: false,
           rating: 4.4,
           reviews: 42,
           location: "Main Gate",
           tags: ["Bodaboda", "Transport"],
+          availability: "Available Now"
+        },
+        {
+          id: "danson",
+          name: "Danson",
+          phone: "0703272479",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "dennis",
+          name: "Denis",
+          phone: "0742601072",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "ammoh",
+          name: "Amos",
+          phone: "0720455609",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "Rutto",
+          name: "Rutto",
+          phone: "0708239057",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "ian",
+          name: "Ian",
+          phone: "0795740774",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "elias",
+          name: "Elias",
+          phone: "0769410533",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "mosee",
+          name: "Mosses",
+          phone: "0719549191",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
+          availability: "Available Now"
+        },
+        {
+          id: "Msanii",
+          name: "Msanii",
+          phone: "0727708397",
+          hasPage: false,
+          rating: 4.4,
+          reviews: 42,
+          location: "Main Gate",
+          tags: ["Bodaboda", "Night"],
           availability: "Available Now"
         }
       ]
