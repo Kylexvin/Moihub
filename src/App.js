@@ -35,13 +35,14 @@ import EditPostPage from './components/EditPostPage';
 import MySchool from './components/MySchool';
 import BlogHomepage from './components/BlogHomepage';
 import BlogPost from './components/BlogPost';
-import MoiLink from './components/MoiLink';
+//import MoiLink from './components/MoiLink';
 
 // New Pages for MoiLink
 import RouteSelectionPage from './pages/RouteSelectionPage';
 import VehicleSelectionPage from './pages/VehicleSelectionPage';
 import SeatSelectionPage from './pages/SeatSelectionPage';
-import PaymentPage from './pages/PaymentPage';
+import BookingConfirmationPage from './pages/BookingConfirmationPage';
+import PaymentInitiationPage from './pages/PaymentInitiationPage';
 import TicketPage from './pages/TicketPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 
@@ -182,14 +183,16 @@ const App = () => {
               </ProtectedRoute>
             )}
           />
-          <Route
+           <Route path="/booking-confirmation/:matatuId/:seatId" element={<BookingConfirmationPage />} />
+           <Route path="/payment/initiate" element={<PaymentInitiationPage />} />
+          {/* <Route
             path="/payment/:seatId"
             element={(
               <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
                 <PaymentPage />
               </ProtectedRoute>
             )}
-          />
+          /> */}
           <Route
             path="/ticket/:paymentId"
             element={(
