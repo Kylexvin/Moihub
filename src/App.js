@@ -176,31 +176,32 @@ const App = () => {
             )}
           />
           <Route
-            path="/seat-selection/:matatuId"
+  path="/seat-selection/:matatuId"
+  element={(
+    <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+      <SeatSelectionPage />
+    </ProtectedRoute>
+  )}
+/>
+
+<Route
+            path="/booking-confirmation/:matatuId/:seatId"
             element={(
               <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
-                <SeatSelectionPage />
+                <BookingConfirmationPage />
               </ProtectedRoute>
             )}
           />
-           <Route path="/booking-confirmation/:matatuId/:seatId" element={<BookingConfirmationPage />} />
-           <Route path="/payment/initiate" element={<PaymentInitiationPage />} />
-          {/* <Route
-            path="/payment/:seatId"
+
+<Route
+            path="/payment/initiate"
             element={(
               <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
-                <PaymentPage />
-              </ProtectedRoute>
-            )}
-          /> */}
-          <Route
-            path="/ticket/:paymentId"
-            element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
-                <TicketPage />
+                <PaymentInitiationPage />
               </ProtectedRoute>
             )}
           />
+
           <Route
             path="/my-bookings"
             element={(
