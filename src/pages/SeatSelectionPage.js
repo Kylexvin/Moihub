@@ -225,12 +225,13 @@ const SeatSelectionPage = () => {
             Lock expires in: {Math.floor(lockTimer / 60)}:{(lockTimer % 60).toString().padStart(2, '0')}
           </div>
           <button className="book-button" onClick={() => {
-            if (window.confirm('Proceed with booking?')) {
-              navigate(`/booking-confirmation/${matatuId}/${selectedSeat._id}`);
-            }
-          }}>
-            <CheckCircle size={16} /> Book Seat {selectedSeat.seatNumber}
-          </button>
+  if (window.confirm('Proceed with booking?')) {
+    navigate(`/booking-confirmation/${matatuId}/${selectedSeat._id}`);
+  }
+}}>
+  <CheckCircle size={16} /> Book Seat {selectedSeat.seatNumber}
+</button>
+
         </div>
       )}
     </div>
