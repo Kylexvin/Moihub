@@ -168,7 +168,7 @@ const App = () => {
             )}
           />
           <Route
-            path="/vehicle-selection/:routeId"
+            path="/VehicleSelectionPage/:routeId"
             element={(
               <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
                 <VehicleSelectionPage />
