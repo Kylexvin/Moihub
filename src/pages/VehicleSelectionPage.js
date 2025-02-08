@@ -5,27 +5,29 @@ import { CheckCircle, Clock, Route } from "lucide-react"; // Use Lucide icons
 const VehicleSelectionPage = () => {
   const [matatus, setMatatus] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const { routeId } = useParams(); // Get routeId from URL params
   const navigate = useNavigate(); // React Router navigation
 
   useEffect(() => {
-    const fetchMatatus = async () => {
-      try {
-        const response = await fetch(`https://moihub.onrender.com/api/routes/matatu/${routeId}`);
-        if (!response.ok) throw new Error("Failed to fetch data.");
-        const data = await response.json();
-        setMatatus(data.matatus || []);
-      } catch (error) {
-        setError("Error fetching matatus. Please try again later.");
-      }
-    };
-
-    if (routeId) {
-      fetchMatatus();
-    } else {
-      setError("No route selected.");
-    }
+    fetchMatatus();
   }, [routeId]);
+
+  const fetchMatatus = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://moihub.onrender.com/api/routes/matatu/${routeId}`);
+      if (!response.ok) throw new Error("Failed to fetch data.");
+      const data = await response.json();
+      setMatatus(data.matatus || []);
+      setLastUpdated(new Date());
+    } catch (error) {
+      setError("Error fetching matatus. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="vehicle-selection-page">
@@ -35,7 +37,11 @@ const VehicleSelectionPage = () => {
       </div>
 
       <div className="destination-panel">
-        {error ? (
+        {isLoading ? (
+           <div className='load-c'>
+           <span className="loader"></span>
+         </div>
+        ) : error ? (
           <p className="error-message">{error}</p>
         ) : matatus.length === 0 ? (
           <p>No matatus available for this route.</p>
@@ -71,6 +77,10 @@ const VehicleSelectionPage = () => {
             </div>
           ))
         )}
+      </div>
+
+      <div className="refresh-container">        
+        {lastUpdated && <p className="updated-time">Updated {new Date(lastUpdated).toLocaleTimeString()}</p>}
       </div>
 
       <nav className="bottom-nav">
