@@ -142,47 +142,25 @@ const ServiceMarketplace = () => {
           availability: "Available Now"
         },
         {
-          id: "emerald",
-          name: "Emerald",
-          phone: "0748446504",
+          id: "dota",
+          name: "Dota",
+          phone: "0713460365",
           hasPage: false,
           rating: 4.6,
           reviews: 92,
-          location: "Emerald Area",
+          location: "mobile",
           tags: ["Laundry", "Cleaning"],
           availability: "Available Now"
         },
         {
           id: "mobile",
-          name: "Mobile",
-          phone: "0790861147",
+          name: "Rhoda",
+          phone: "0741260404",
           hasPage: false,
           rating: 4.5,
           reviews: 78,
           location: "Mobile Service",
-          tags: ["Laundry", "Pickup", "Delivery"],
-          availability: "Available Now"
-        },
-        {
-          id: "mercy",
-          name: "Mercy (Stage)",
-          phone: "0745042970",
-          hasPage: false,
-          rating: 4.7,
-          reviews: 112,
-          location: "Stage Area",
-          tags: ["Laundry", "Cleaning"],
-          availability: "Available Now"
-        },
-        {
-          id: "diana",
-          name: "Diana (Stage)",
-          phone: "0790907727",
-          hasPage: false,
-          rating: 4.6,
-          reviews: 94,
-          location: "Stage Area",
-          tags: ["Laundry", "Cleaning"],
+          tags: ["Laundry"],
           availability: "Available Now"
         }
       ]
@@ -235,7 +213,7 @@ const ServiceMarketplace = () => {
         }
       ]
     },
-    // Newly Added Categories and Services:
+
     {
       category: "Tuktuk Services",
       providers: [
@@ -337,6 +315,22 @@ const ServiceMarketplace = () => {
           availability: "Available Now"
         }
       ]
+    },
+    {
+      category: "Saloonist",
+      providers: [
+        {
+          id: "mercy",
+          name: "Mercy",
+          phone: "0728018670",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 34,
+          location: "Mobile",
+          tags: ["Saloon", "Hairdressing"],
+          availability: "Available "
+        }
+      ]
     }
   ];
   
@@ -399,93 +393,95 @@ const ServiceMarketplace = () => {
 </div>
 
 
-      <div className="space-y-8">
-        {filteredServices
-          .filter(cat => activeCategory === 'all' || cat.category === activeCategory)
-          .map((serviceCategory) => (
-          <div key={serviceCategory.category}>
-            <h2 className="text-2xl font-semibold mb-4 text-green-700">{serviceCategory.category}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {serviceCategory.providers.map((provider) => (
-                <div key={provider.id} className="bg-[#e8f6e9] rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-                <div className="m-3 p-2 border-b border-gray-200">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-2">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        {provider.name}
-                        {provider.hasPage && (
-                          <a 
-                            href={provider.website}
-                            className="text-green-600 hover:text-green-700"
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                          )}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 text-gray-600 mb-2">
-                      <MapPin className="h-4 w-4" />
-                      {provider.location}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {provider.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full">
-                        {provider.availability}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 border-t border-gray-200 flex gap-2">
-                    <a 
-                      href={`tel:${provider.phone}`}
-                      className="flex-1 bg-green-700 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-800"
-                    >
-                      <Phone className="h-4 w-4" />
-                      Call
-                    </a>
-                    <a 
-                      href={`https://wa.me/${provider.phone}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-green-700 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 "
-                    >
-                      <MessageSquare className="h-4 w-4" />
-                      WhatsApp
-                    </a>
-                    <button 
-                      onClick={() => {
-                        navigator.share({
-                          title: provider.name,
-                          text: `Check out ${provider.name}`,
-                          url: window.location.href
-                        }).catch(console.error)
-                      }}
-                      className="p-2 bg-green-900 rounded-lg "
-                    >
-                      <Share2 className="h-4 w-4" />
-                    </button>
-                  </div>
+<div className="space-y-8">
+  {filteredServices
+    .filter(cat => activeCategory === 'all' || cat.category === activeCategory)
+    .map((serviceCategory) => (
+      <div key={serviceCategory.category}>
+        <h2 className="text-2xl font-semibold mb-6 text-green-700">{serviceCategory.category}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {serviceCategory.providers.map((provider) => (
+            <div
+              key={provider.id}
+              className="bg-[#f0f9f1] rounded-lg border border-gray-200 hover:shadow-xl transition-all duration-300"
+            >
+              {/* Card Header */}
+              <div className="px-4 py-3 border-b border-gray-200">
+                <div className="flex justify-between items-start">
+                  <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800">
+                    {provider.name}
+                    {provider.hasPage && (
+                      <a href={provider.website} className="text-green-600 hover:text-green-800">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                  </h3>
                 </div>
-              ))}
+              </div>
+
+              {/* Card Body */}
+              <div className="px-4 py-3">
+                <div className="flex items-center gap-2 text-gray-600 text-sm mb-3">
+                  <MapPin className="h-4 w-4 text-green-700" />
+                  {provider.location}
+                </div>
+
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {provider.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-green-200 text-green-800 text-xs font-medium px-2 py-1 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <span className="bg-green-200 text-green-800 text-xs font-medium px-3 py-1 rounded-full">
+                  {provider.availability}
+                </span>
+              </div>
+
+              {/* Card Footer */}
+              <div className="px-4 py-3 border-t border-gray-200 flex gap-2">
+                <a
+                  href={`tel:${provider.phone}`}
+                  className="flex-1 bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-800 transition-all"
+                >
+                  <Phone className="h-4 w-4" />
+                  Call
+                </a>
+                <a
+                  href={`https://wa.me/${provider.phone}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-800 transition-all"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  WhatsApp
+                </a>
+                <button
+                  onClick={() => {
+                    navigator
+                      .share({
+                        title: provider.name,
+                        text: `Check out ${provider.name}`,
+                        url: window.location.href,
+                      })
+                      .catch(console.error);
+                  }}
+                  className="p-2 bg-green-900 rounded-lg hover:bg-green-800 transition-all"
+                >
+                  <Share2 className="h-4 w-4 text-white" />
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+    ))}
+</div>
+
     </div>
   );
 };
