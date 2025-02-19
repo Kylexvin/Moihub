@@ -12,6 +12,7 @@ const BookingConfirmationPage = () => {
   const [error, setError] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
+  const [statusMessage, setStatusMessage] = useState('');
   
   const pollIntervalRef = useRef(null);
 
@@ -42,6 +43,7 @@ const BookingConfirmationPage = () => {
     try {
       setLoading(true);
       setError(null);
+      setStatusMessage('Initiating payment...');
       
       const formattedPhone = phoneNumber.startsWith('254') ? phoneNumber : `254${phoneNumber.slice(1)}`;
       const token = localStorage.getItem('token');
@@ -57,11 +59,13 @@ const BookingConfirmationPage = () => {
 
       setPaymentResponse(response.data);
       setPaymentStatus('initiated');
+      setStatusMessage('Payment initiated. Please check your phone for M-PESA prompt.');
       startPaymentStatusCheck(response.data.payment_id);
       
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
       setPaymentStatus(null);
+      setStatusMessage('');
     } finally {
       setLoading(false);
     }
@@ -69,6 +73,7 @@ const BookingConfirmationPage = () => {
 
   const startPaymentStatusCheck = (paymentId) => {
     const token = localStorage.getItem('token');
+    setStatusMessage('Waiting for payment confirmation...');
 
     pollIntervalRef.current = setInterval(async () => {
       try {
@@ -82,13 +87,41 @@ const BookingConfirmationPage = () => {
 
         if (status === 'completed') {
           clearInterval(pollIntervalRef.current);
-          sessionStorage.removeItem('selectedSeats');
-          navigate('/mybookings', { state: { bookingDetails: response.data } });
+          setStatusMessage('Payment received! Processing your booking...');
+          
+          // Complete the booking after payment is confirmed
+          try {
+            const bookingResponse = await axios.post(
+              `${API_BASE_URL}/bookings/${bookingDetails.matatu_id}/book`,
+              {
+                seat_number: bookingDetails.seats[0], // Assuming single seat booking
+                payment_id: paymentId
+              },
+              { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            
+            setStatusMessage('Booking confirmed! Redirecting to your bookings...');
+            
+            // Short delay before redirect to show success message
+            setTimeout(() => {
+              sessionStorage.removeItem('selectedSeats');
+              navigate('/my-bookings', { state: { bookingDetails: bookingResponse.data.booking } });
+            }, 2000);
+            
+          } catch (bookErr) {
+            setError(`Payment successful but booking failed: ${bookErr.response?.data?.message || bookErr.message}`);
+            setPaymentStatus('booking_failed');
+            setStatusMessage('');
+          }
+          
         } else if (['failed', 'expired', 'cancelled'].includes(status)) {
           clearInterval(pollIntervalRef.current);
           setError(`Payment ${status}. Please try again.`);
           setPaymentStatus(null);
           setPaymentResponse(null);
+          setStatusMessage('');
+        } else if (status === 'pending') {
+          setStatusMessage('Waiting for M-PESA confirmation...');
         }
       } catch (err) {
         console.error('Payment status check error:', err);
@@ -96,6 +129,7 @@ const BookingConfirmationPage = () => {
           clearInterval(pollIntervalRef.current);
           setError('Payment not found. Please try again.');
           setPaymentStatus(null);
+          setStatusMessage('');
         }
       }
     }, 5000);
@@ -104,9 +138,10 @@ const BookingConfirmationPage = () => {
     setTimeout(() => {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
-        if (paymentStatus === 'initiated') {
+        if (paymentStatus === 'initiated' || paymentStatus === 'pending') {
           setPaymentStatus('expired');
           setError('Payment request expired. Please try again.');
+          setStatusMessage('');
         }
       }
     }, 600000);
@@ -153,14 +188,20 @@ const BookingConfirmationPage = () => {
             </div>
           </div>
 
-          {paymentStatus === 'initiated' ? (
+          {(paymentStatus === 'initiated' || paymentStatus === 'pending' || paymentStatus === 'completed') ? (
             <div className="space-y-4">
               <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-800">Payment Initiated</h3>
-                <p className="mt-2">Please check your phone for the M-PESA prompt and enter your PIN to complete the payment.</p>
+                <h3 className="font-semibold text-blue-800">
+                  {paymentStatus === 'completed' ? 'Payment Successful' : 'Payment Processing'}
+                </h3>
+                <p className="mt-2">{statusMessage}</p>
                 <div className="mt-4 flex items-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
-                  <p className="text-sm text-gray-600">Waiting for payment confirmation...</p>
+                  <p className="text-sm text-gray-600">
+                    {paymentStatus === 'completed' 
+                      ? 'Finalizing your booking...' 
+                      : 'Waiting for payment confirmation...'}
+                  </p>
                 </div>
               </div>
             </div>
