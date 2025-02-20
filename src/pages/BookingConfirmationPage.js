@@ -4,17 +4,20 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://moihub.onrender.com/api';
 
+
 const BookingConfirmationPage = () => {
   const navigate = useNavigate();
   const [bookingDetails, setBookingDetails] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); 
   const [paymentResponse, setPaymentResponse] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
+  const [paymentStartTime, setPaymentStartTime] = useState(null);
   
   const pollIntervalRef = useRef(null);
+  const STK_TIMEOUT_SECONDS = 60; // Allow 60 seconds for user to input PIN
 
   useEffect(() => {
     try {
@@ -59,6 +62,7 @@ const BookingConfirmationPage = () => {
 
       setPaymentResponse(response.data);
       setPaymentStatus('initiated');
+      setPaymentStartTime(Date.now());
       setStatusMessage('Payment initiated. Please check your phone for M-PESA prompt.');
       startPaymentStatusCheck(response.data.payment_id);
       
@@ -73,9 +77,13 @@ const BookingConfirmationPage = () => {
 
   const startPaymentStatusCheck = (paymentId) => {
     const token = localStorage.getItem('token');
-    setStatusMessage('Waiting for payment confirmation...');
+    setStatusMessage('Waiting for M-PESA prompt on your phone...');
+    let attemptCount = 0;
 
     pollIntervalRef.current = setInterval(async () => {
+      attemptCount++;
+      const elapsedSeconds = Math.floor((Date.now() - paymentStartTime) / 1000);
+      
       try {
         const response = await axios.get(
           `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
@@ -83,6 +91,10 @@ const BookingConfirmationPage = () => {
         );
 
         const { status } = response.data;
+        
+        // Reset error if we get a valid response
+        if (error && status) setError(null);
+        
         setPaymentStatus(status);
 
         if (status === 'completed') {
@@ -121,15 +133,34 @@ const BookingConfirmationPage = () => {
           setPaymentResponse(null);
           setStatusMessage('');
         } else if (status === 'pending') {
-          setStatusMessage('Waiting for M-PESA confirmation...');
+          setStatusMessage('M-PESA transaction in progress. Please enter your PIN if prompted.');
+        } else if (status === 'initiated') {
+          // Update message based on time elapsed
+          if (elapsedSeconds < 10) {
+            setStatusMessage('Sending M-PESA request to your phone...');
+          } else if (elapsedSeconds < 20) {
+            setStatusMessage('M-PESA request sent. Please check your phone.');
+          } else {
+            setStatusMessage('Waiting for you to enter your M-PESA PIN...');
+          }
         }
       } catch (err) {
         console.error('Payment status check error:', err);
+        
+        // Only show "Payment not found" error after the STK timeout period
         if (err.response?.status === 404) {
-          clearInterval(pollIntervalRef.current);
-          setError('Payment not found. Please try again.');
-          setPaymentStatus(null);
-          setStatusMessage('');
+          if (elapsedSeconds > STK_TIMEOUT_SECONDS) {
+            clearInterval(pollIntervalRef.current);
+            setError('Payment request expired or not found. Please try again.');
+            setPaymentStatus(null);
+            setStatusMessage('');
+          } else {
+            // During the STK timeout window, show patient waiting messages
+            setStatusMessage(`Waiting for M-PESA prompt (${STK_TIMEOUT_SECONDS - elapsedSeconds}s)...`);
+          }
+        } else if (attemptCount > 5) {
+          // For general errors, only show after multiple failed attempts
+          setError('Having trouble checking payment status. Please wait...');
         }
       }
     }, 5000);
@@ -169,6 +200,13 @@ const BookingConfirmationPage = () => {
     );
   }
 
+  const getStatusColor = () => {
+    if (paymentStatus === 'completed') return 'bg-green-50 border-green-200';
+    if (paymentStatus === 'failed' || paymentStatus === 'expired' || paymentStatus === 'cancelled') 
+      return 'bg-red-50 border-red-200';
+    return 'bg-blue-50 border-blue-200';
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -190,20 +228,31 @@ const BookingConfirmationPage = () => {
 
           {(paymentStatus === 'initiated' || paymentStatus === 'pending' || paymentStatus === 'completed') ? (
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-800">
+              <div className={`${getStatusColor()} border p-4 rounded-lg`}>
+                <h3 className={`font-semibold ${
+                  paymentStatus === 'completed' ? 'text-green-800' : 
+                  paymentStatus === 'failed' ? 'text-red-800' : 'text-blue-800'
+                }`}>
                   {paymentStatus === 'completed' ? 'Payment Successful' : 'Payment Processing'}
                 </h3>
                 <p className="mt-2">{statusMessage}</p>
                 <div className="mt-4 flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+                  <div className={`animate-spin rounded-full h-4 w-4 border-b-2 ${
+                    paymentStatus === 'completed' ? 'border-green-500' : 'border-blue-500'
+                  } mr-2`}></div>
                   <p className="text-sm text-gray-600">
                     {paymentStatus === 'completed' 
                       ? 'Finalizing your booking...' 
-                      : 'Waiting for payment confirmation...'}
+                      : 'Please be patient during the payment process...'}
                   </p>
                 </div>
               </div>
+              
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
             </div>
           ) : (
             <form onSubmit={handlePayment} className="space-y-4">
