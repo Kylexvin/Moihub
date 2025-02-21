@@ -36,7 +36,7 @@ const BookingConfirmationPage = () => {
       socketRef.current = io(SOCKET_URL, {
         auth: { token },
         transports: ['websocket'],
-        reconnection: truegit 
+        reconnection: true 
       });
 
       socketRef.current.on('connect', () => {
