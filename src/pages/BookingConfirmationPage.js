@@ -19,61 +19,218 @@ const BookingConfirmationPage = () => {
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
 
-  useEffect(() => {
-    try {
-      const storedDetails = sessionStorage.getItem('selectedSeats');
-      if (!storedDetails) throw new Error('No booking details found');
-      setBookingDetails(JSON.parse(storedDetails));
-    } catch (err) {
-      setError('Unable to load booking details. Please try selecting your seat again.');
-    } finally {
-      setLoading(false);
-    }
+ // Modify the useEffect for better socket handling
+useEffect(() => {
+  try {
+    const storedDetails = sessionStorage.getItem('selectedSeats');
+    if (!storedDetails) throw new Error('No booking details found');
+    setBookingDetails(JSON.parse(storedDetails));
+  } catch (err) {
+    setError('Unable to load booking details. Please try selecting your seat again.');
+  } finally {
+    setLoading(false);
+  }
 
-    // Socket.io connection
-    const token = localStorage.getItem('token');
-    if (token) {
-      socketRef.current = io(SOCKET_URL, {
-        auth: { token },
-        transports: ['websocket'],
-        reconnection: true 
-      });
+  // Socket.io connection with better error handling
+  const token = localStorage.getItem('token');
+  if (token) {
+    socketRef.current = io(SOCKET_URL, {
+      auth: { token },
+      transports: ['websocket', 'polling'], // Fall back to polling if websocket fails
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
+    });
 
-      socketRef.current.on('connect', () => {
-        console.log('Socket connected');
-      });
+    socketRef.current.on('connect', () => {
+      console.log('Socket connected with ID:', socketRef.current.id);
+    });
+    
+    socketRef.current.on('connect_error', (err) => {
+      console.error('Socket connection error:', err);
+      // If socket fails to connect after attempts, initiate polling automatically
+      if (!pollIntervalRef.current && paymentResponse?.payment_id) {
+        console.log('Starting fallback polling due to socket connection failure');
+        startPaymentStatusCheck(paymentResponse.payment_id);
+      }
+    });
 
-      socketRef.current.on('payment_requested', (data) => {
-        console.log('Payment requested:', data);
-        setPaymentStatus('stk_pushed');
-        setPaymentMessage('M-PESA request sent to your phone');
-      });
+    socketRef.current.on('payment_requested', (data) => {
+      console.log('Payment requested:', data);
+      setPaymentStatus('stk_pushed');
+      setPaymentMessage('M-PESA request sent to your phone');
+    });
 
-      socketRef.current.on('payment_status_update', (data) => {
-        console.log('Payment status update:', data);
-        setPaymentStatus(data.status);
-        setPaymentMessage(data.message || getStatusMessage(data.status));
+    socketRef.current.on('payment_status_update', (data) => {
+      console.log('Payment status update:', data);
+      setPaymentStatus(data.status);
+      setPaymentMessage(data.message || getStatusMessage(data.status));
+      
+      if (data.status === 'completed') {
+        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+        sessionStorage.removeItem('selectedSeats');
         
-        if (data.status === 'completed') {
-          sessionStorage.removeItem('selectedSeats');
-          navigate('/mybookings', { state: { bookingDetails: data } });
-        }
-      });
+        // Store transaction data for the booking page
+        const bookingData = {
+          ...data,
+          registration: bookingDetails?.registration,
+          route: bookingDetails?.route,
+          seats: bookingDetails?.seats,
+          departure_time: bookingDetails?.departure_time
+        };
+        
+        navigate('/mybookings', { state: { bookingDetails: bookingData } });
+      }
+    });
 
-      socketRef.current.on('seat_update', (data) => {
-        console.log('Seat update:', data);
-        if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
-          setPaymentMessage('Your seat has been confirmed!');
+    socketRef.current.on('seat_update', (data) => {
+      console.log('Seat update:', data);
+      if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
+        setPaymentMessage('Your seat has been confirmed!');
+      }
+    });
+    
+    socketRef.current.on('disconnect', (reason) => {
+      console.log('Socket disconnected:', reason);
+      // Start polling if socket disconnects during a payment
+      if (paymentStatus && ['stk_pushed', 'processing'].includes(paymentStatus) && 
+          paymentResponse?.payment_id && !pollIntervalRef.current) {
+        console.log('Starting fallback polling due to socket disconnect');
+        startPaymentStatusCheck(paymentResponse.payment_id);
+      }
+    });
+  }
+
+  return () => {
+    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    if (socketRef.current) socketRef.current.disconnect();
+  };
+}, [navigate]);
+
+// Improve the payment initiation function
+const handlePayment = async (e) => {
+  e.preventDefault();
+  
+  // More comprehensive phone validation for Safaricom
+  if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
+    setError('Please enter a valid Safaricom phone number');
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setError(null);
+    
+    // Format phone number to ensure it starts with 254
+    let formattedPhone = phoneNumber;
+    if (formattedPhone.startsWith('+')) formattedPhone = formattedPhone.substring(1);
+    if (formattedPhone.startsWith('0')) formattedPhone = `254${formattedPhone.substring(1)}`;
+    if (!formattedPhone.startsWith('254')) formattedPhone = `254${formattedPhone}`;
+    
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Please log in to continue');
+
+    const response = await axios.post(
+      `${API_BASE_URL}/bookings/payments/initiate`,
+      { phone_number: formattedPhone },
+      { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+    );
+
+    if (!response.data?.payment_id) throw new Error('Invalid payment response');
+
+    setPaymentResponse(response.data);
+    setPaymentStatus('stk_pushed');
+    setPaymentMessage('M-PESA request sent to your phone. Please check your phone and enter your PIN when prompted.');
+    
+    // Start fallback polling with a delay to give socket a chance to work
+    setTimeout(() => {
+      if (['stk_pushed', 'processing'].includes(paymentStatus)) {
+        console.log('Starting delayed fallback polling');
+        startPaymentStatusCheck(response.data.payment_id);
+      }
+    }, 15000);
+    
+  } catch (err) {
+    setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
+    setPaymentStatus(null);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Improve the polling mechanism
+const startPaymentStatusCheck = (paymentId) => {
+  // Don't start if already polling
+  if (pollIntervalRef.current) {
+    console.log('Polling already in progress. Skipping duplicate polling.');
+    return;
+  }
+  
+  console.log('Starting payment status polling for:', paymentId);
+  const token = localStorage.getItem('token');
+  let failedAttempts = 0;
+
+  pollIntervalRef.current = setInterval(async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+
+      const { status } = response.data;
+      console.log('Poll status:', status);
+      
+      // Reset failed attempts counter on successful request
+      failedAttempts = 0;
+      
+      // Only update if the status has changed
+      if (paymentStatus !== status) {
+        setPaymentStatus(status);
+        setPaymentMessage(getStatusMessage(status));
+      }
+
+      if (status === 'completed') {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        
+        sessionStorage.removeItem('selectedSeats');
+        navigate('/mybookings', { state: { bookingDetails: response.data } });
+      } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        setError(`Payment ${status}. ${getStatusMessage(status)}`);
+      }
+    } catch (err) {
+      console.error('Payment status check error:', err);
+      failedAttempts++;
+      
+      // Stop polling after 3 consecutive failed attempts
+      if (failedAttempts >= 3) {
+        console.error('Too many failed polling attempts. Stopping poll.');
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        
+        // Only show error if we're not completed yet
+        if (paymentStatus !== 'completed') {
+          setError('Network issues while checking payment status. Please check My Bookings section to verify your booking.');
         }
-      });
+      }
     }
+  }, 6000); // Poll every 6 seconds
 
-    return () => {
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      if (socketRef.current) socketRef.current.disconnect();
-    };
-  }, [navigate]);
-
+  // Stop polling after 5 minutes (M-Pesa timeout)
+  setTimeout(() => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+      
+      if (['initiated', 'stk_pushed', 'processing'].includes(paymentStatus)) {
+        setPaymentStatus('expired');
+        setError('Payment request may have expired. Please check your M-PESA messages to confirm if payment was processed, then check My Bookings section.');
+      }
+    }
+  }, 300000); // 5 minutes
+}
   const getStatusMessage = (status) => {
     switch(status) {
       case 'stk_pushed': return 'M-PESA request sent to your phone';
@@ -87,95 +244,7 @@ const BookingConfirmationPage = () => {
     }
   };
 
-  const handlePayment = async (e) => {
-    e.preventDefault();
-    
-    if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
-      setError('Please enter a valid Safaricom phone number');
-      return;
-    }
 
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const formattedPhone = phoneNumber.startsWith('254') ? phoneNumber : `254${phoneNumber.slice(1)}`;
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('Please log in to continue');
-
-      const response = await axios.post(
-        `${API_BASE_URL}/bookings/payments/initiate`,
-        { phone_number: formattedPhone },
-        { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
-      );
-
-      if (!response.data?.payment_id) throw new Error('Invalid payment response');
-
-      setPaymentResponse(response.data);
-      setPaymentStatus('initiated');
-      setPaymentMessage('Payment initiated, preparing M-PESA request...');
-      
-      // Start fallback polling in case socket fails
-      startPaymentStatusCheck(response.data.payment_id);
-      
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
-      setPaymentStatus(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const startPaymentStatusCheck = (paymentId) => {
-    // Fallback polling mechanism in case socket updates fail
-    const token = localStorage.getItem('token');
-
-    pollIntervalRef.current = setInterval(async () => {
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
-          { headers: { 'Authorization': `Bearer ${token}` } }
-        );
-
-        const { status } = response.data;
-        
-        // Only update if socket hasn't already updated
-        if (paymentStatus !== 'completed' && paymentStatus !== status) {
-          setPaymentStatus(status);
-          setPaymentMessage(getStatusMessage(status));
-        }
-
-        if (status === 'completed') {
-          clearInterval(pollIntervalRef.current);
-          if (paymentStatus !== 'completed') {
-            sessionStorage.removeItem('selectedSeats');
-            navigate('/mybookings', { state: { bookingDetails: response.data } });
-          }
-        } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
-          clearInterval(pollIntervalRef.current);
-          setError(`Payment ${status}. ${getStatusMessage(status)}`);
-        }
-      } catch (err) {
-        console.error('Payment status check error:', err);
-        if (err.response?.status === 404) {
-          clearInterval(pollIntervalRef.current);
-          setError('Payment not found. Please try again.');
-          setPaymentStatus(null);
-        }
-      }
-    }, 8000); // Longer interval since this is a fallback
-
-    // Stop polling after 10 minutes (matching backend timeout)
-    setTimeout(() => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        if (paymentStatus === 'initiated' || paymentStatus === 'stk_pushed') {
-          setPaymentStatus('expired');
-          setError('Payment request expired. Please try again.');
-        }
-      }
-    }, 600000);
-  };
 
   const renderPaymentStatusUI = () => {
     if (!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus)) {
@@ -223,7 +292,7 @@ const BookingConfirmationPage = () => {
     );
   }
 
-  if (error && !bookingDetails && !loading) {
+  if (error && !loading) {
     return (
       <div className="p-4 text-red-500 text-center">
         <p className="font-medium">{error}</p>
