@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://moihub.onrender.com/api';
+const API_BASE_URL = 'https://moihub.onrender.com/api';
+const SOCKET_URL = 'https://moihub.onrender.com';
 
 const BookingConfirmationPage = () => {
   const navigate = useNavigate();
   const [bookingDetails, setBookingDetails] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [paymentMessage, setPaymentMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(''); 
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
-  const [statusMessage, setStatusMessage] = useState('');
-  const [paymentStartTime, setPaymentStartTime] = useState(null);
-  const [timeRemaining, setTimeRemaining] = useState(null);
   
+  const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
-  const timerIntervalRef = useRef(null);
-  const STK_TIMEOUT_SECONDS = 120; // Giving more time for MPesa to process
 
   useEffect(() => {
     try {
@@ -31,28 +30,61 @@ const BookingConfirmationPage = () => {
       setLoading(false);
     }
 
-    // Cleanup polling on unmount
+    // Socket.io connection
+    const token = localStorage.getItem('token');
+    if (token) {
+      socketRef.current = io(SOCKET_URL, {
+        auth: { token },
+        transports: ['websocket'],
+        reconnection: truegit 
+      });
+
+      socketRef.current.on('connect', () => {
+        console.log('Socket connected');
+      });
+
+      socketRef.current.on('payment_requested', (data) => {
+        console.log('Payment requested:', data);
+        setPaymentStatus('stk_pushed');
+        setPaymentMessage('M-PESA request sent to your phone');
+      });
+
+      socketRef.current.on('payment_status_update', (data) => {
+        console.log('Payment status update:', data);
+        setPaymentStatus(data.status);
+        setPaymentMessage(data.message || getStatusMessage(data.status));
+        
+        if (data.status === 'completed') {
+          sessionStorage.removeItem('selectedSeats');
+          navigate('/mybookings', { state: { bookingDetails: data } });
+        }
+      });
+
+      socketRef.current.on('seat_update', (data) => {
+        console.log('Seat update:', data);
+        if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
+          setPaymentMessage('Your seat has been confirmed!');
+        }
+      });
+    }
+
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (socketRef.current) socketRef.current.disconnect();
     };
-  }, []);
+  }, [navigate]);
 
-  const formatPhoneNumber = (phone) => {
-    // Remove any non-digit characters
-    let cleaned = phone.replace(/\D/g, '');
-    
-    // If it starts with 0, replace with 254
-    if (cleaned.startsWith('0')) {
-      cleaned = '254' + cleaned.slice(1);
+  const getStatusMessage = (status) => {
+    switch(status) {
+      case 'stk_pushed': return 'M-PESA request sent to your phone';
+      case 'processing': return 'Processing your payment...';
+      case 'completed': return 'Payment successful! Confirming your seat...';
+      case 'failed': return 'Payment failed. Please try again.';
+      case 'cancelled': return 'Payment was cancelled. Please try again.';
+      case 'expired': return 'Payment request expired. Please try again.';
+      case 'refund_required': return 'There was an issue confirming your seat. A refund will be processed.';
+      default: return 'Waiting for payment status...';
     }
-    
-    // If it doesn't start with 254, add it
-    if (!cleaned.startsWith('254')) {
-      cleaned = '254' + cleaned;
-    }
-    
-    return cleaned;
   };
 
   const handlePayment = async (e) => {
@@ -66,186 +98,121 @@ const BookingConfirmationPage = () => {
     try {
       setLoading(true);
       setError(null);
-      setStatusMessage('Initiating payment...');
       
-      const formattedPhone = formatPhoneNumber(phoneNumber);
+      const formattedPhone = phoneNumber.startsWith('254') ? phoneNumber : `254${phoneNumber.slice(1)}`;
       const token = localStorage.getItem('token');
-      
-      if (!token) {
-        throw new Error('Please log in to continue');
-      }
+      if (!token) throw new Error('Please log in to continue');
 
       const response = await axios.post(
         `${API_BASE_URL}/bookings/payments/initiate`,
         { phone_number: formattedPhone },
-        { 
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+        { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
 
-      if (!response.data?.payment_id) {
-        throw new Error('Invalid payment response');
-      }
+      if (!response.data?.payment_id) throw new Error('Invalid payment response');
 
       setPaymentResponse(response.data);
       setPaymentStatus('initiated');
-      setPaymentStartTime(Date.now());
-      setStatusMessage('STK Push sent. Check your phone for the MPesa prompt.');
+      setPaymentMessage('Payment initiated, preparing M-PESA request...');
       
-      // Start countdown timer
-      startCountdownTimer();
-      
-      // Begin polling for payment status
+      // Start fallback polling in case socket fails
       startPaymentStatusCheck(response.data.payment_id);
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to initiate payment';
-      console.error('Payment initiation error:', err);
-      setError(errorMessage);
+      setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
       setPaymentStatus(null);
-      setStatusMessage('');
     } finally {
       setLoading(false);
     }
   };
 
-  const startCountdownTimer = () => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-    }
-
-    setTimeRemaining(STK_TIMEOUT_SECONDS);
-    
-    timerIntervalRef.current = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 1) {
-          clearInterval(timerIntervalRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
   const startPaymentStatusCheck = (paymentId) => {
+    // Fallback polling mechanism in case socket updates fail
     const token = localStorage.getItem('token');
-    if (!token) return;
 
-    if (pollIntervalRef.current) {
-      clearInterval(pollIntervalRef.current);
-    }
+    pollIntervalRef.current = setInterval(async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
+        );
 
-    // Initial check immediately
-    checkPaymentStatus(paymentId, token);
+        const { status } = response.data;
+        
+        // Only update if socket hasn't already updated
+        if (paymentStatus !== 'completed' && paymentStatus !== status) {
+          setPaymentStatus(status);
+          setPaymentMessage(getStatusMessage(status));
+        }
 
-    // Then start polling
-    pollIntervalRef.current = setInterval(() => {
-      checkPaymentStatus(paymentId, token);
-    }, 3000); // Check every 3 seconds for faster feedback
+        if (status === 'completed') {
+          clearInterval(pollIntervalRef.current);
+          if (paymentStatus !== 'completed') {
+            sessionStorage.removeItem('selectedSeats');
+            navigate('/mybookings', { state: { bookingDetails: response.data } });
+          }
+        } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
+          clearInterval(pollIntervalRef.current);
+          setError(`Payment ${status}. ${getStatusMessage(status)}`);
+        }
+      } catch (err) {
+        console.error('Payment status check error:', err);
+        if (err.response?.status === 404) {
+          clearInterval(pollIntervalRef.current);
+          setError('Payment not found. Please try again.');
+          setPaymentStatus(null);
+        }
+      }
+    }, 8000); // Longer interval since this is a fallback
 
-    // Auto-cancel polling after timeout
+    // Stop polling after 10 minutes (matching backend timeout)
     setTimeout(() => {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
-        if (paymentStatus === 'initiated' || paymentStatus === 'pending') {
+        if (paymentStatus === 'initiated' || paymentStatus === 'stk_pushed') {
           setPaymentStatus('expired');
           setError('Payment request expired. Please try again.');
-          setStatusMessage('');
         }
       }
-    }, STK_TIMEOUT_SECONDS * 1000);
+    }, 600000);
   };
 
-  const checkPaymentStatus = async (paymentId, token) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/bookings/payments/status/${paymentId}`,
-        { headers: { 'Authorization': `Bearer ${token}` } }
-      );
-
-      const { status } = response.data;
-      
-      // Only update if status changed or we got an actual status
-      if (status && status !== paymentStatus) {
-        setPaymentStatus(status);
-        
-        // Handle different payment states
-        switch (status) {
-          case 'completed':
-            clearInterval(pollIntervalRef.current);
-            clearInterval(timerIntervalRef.current);
-            setStatusMessage('Payment successful! Processing your booking...');
-            
-            try {
-              // Try to recover the payment if needed
-              await axios.post(
-                `${API_BASE_URL}/bookings/payments/${paymentId}/recover`,
-                {},
-                { headers: { 'Authorization': `Bearer ${token}` } }
-              );
-              
-              setStatusMessage('Booking confirmed! Redirecting to your bookings...');
-              
-              setTimeout(() => {
-                sessionStorage.removeItem('selectedSeats');
-                navigate('/my-bookings');
-              }, 2000);
-              
-            } catch (bookErr) {
-              setError('Payment successful but booking failed. Please contact support.');
-              setStatusMessage('');
-            }
-            break;
-            
-          case 'failed':
-            clearInterval(pollIntervalRef.current);
-            clearInterval(timerIntervalRef.current);
-            setError(`Payment failed: ${response.data.provider_response || 'Transaction declined'}`);
-            setStatusMessage('');
-            break;
-            
-          case 'cancelled':
-            clearInterval(pollIntervalRef.current);
-            clearInterval(timerIntervalRef.current);
-            setError('Payment cancelled. Please try again.');
-            setStatusMessage('');
-            break;
-            
-          case 'expired':
-            clearInterval(pollIntervalRef.current);
-            clearInterval(timerIntervalRef.current);
-            setError('MPesa prompt expired. Please try again.');
-            setStatusMessage('');
-            break;
-            
-          case 'pending':
-            setStatusMessage('MPesa transaction in progress. Please complete the payment on your phone.');
-            break;
-            
-          case 'initiated':
-            const elapsedSeconds = Math.floor((Date.now() - paymentStartTime) / 1000);
-            if (elapsedSeconds < 10) {
-              setStatusMessage('MPesa prompt sent. Please check your phone.');
-            } else {
-              setStatusMessage('Waiting for you to complete the payment...');
-            }
-            break;
-            
-          default:
-            setStatusMessage('Checking payment status...');
-        }
-      }
-    } catch (err) {
-      console.error('Payment status check error:', err);
-      
-      // Don't show error for standard polling errors
-      if (err.response?.status !== 404) {
-        setStatusMessage('Waiting for payment confirmation...');
-      }
+  const renderPaymentStatusUI = () => {
+    if (!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus)) {
+      return null;
     }
+
+    const isProcessing = ['initiated', 'stk_pushed', 'processing'].includes(paymentStatus);
+    const isSuccess = paymentStatus === 'completed';
+    const needsAction = paymentStatus === 'refund_required';
+    
+    let bgColor = 'bg-blue-50 border-blue-200';
+    let textColor = 'text-blue-800';
+    
+    if (isSuccess) {
+      bgColor = 'bg-green-50 border-green-200';
+      textColor = 'text-green-800';
+    } else if (needsAction) {
+      bgColor = 'bg-yellow-50 border-yellow-200';
+      textColor = 'text-yellow-800';
+    }
+
+    return (
+      <div className={`space-y-4 ${isProcessing ? 'animate-pulse' : ''}`}>
+        <div className={`${bgColor} border p-4 rounded-lg`}>
+          <h3 className={`font-semibold ${textColor}`}>
+            {isProcessing ? 'Payment In Progress' : 'Payment Status'}
+          </h3>
+          <p className="mt-2">{paymentMessage}</p>
+          {isProcessing && (
+            <div className="mt-4 flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+              <p className="text-sm text-gray-600">Please wait...</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   if (loading && !bookingDetails && !error) {
@@ -270,13 +237,6 @@ const BookingConfirmationPage = () => {
     );
   }
 
-  const getStatusColor = () => {
-    if (paymentStatus === 'completed') return 'bg-green-50 border-green-200';
-    if (paymentStatus === 'failed' || paymentStatus === 'expired' || paymentStatus === 'cancelled') 
-      return 'bg-red-50 border-red-200';
-    return 'bg-blue-50 border-blue-200';
-  };
-
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -290,71 +250,15 @@ const BookingConfirmationPage = () => {
             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
               <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
               <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
-              <p><span className="font-medium">Departure:</span> {bookingDetails?.departure_time}</p>
-              <p><span className="font-medium">Seat:</span> {bookingDetails?.seats?.join(', ')}</p>
+              <p><span className="font-medium">Departure Time:</span> {bookingDetails?.departure_time}</p>
+              <p><span className="font-medium">Selected Seat:</span> {bookingDetails?.seats?.join(', ')}</p>
               <p><span className="font-medium">Price:</span> KES {bookingDetails?.route?.basePrice}</p>
             </div>
           </div>
 
-          {(paymentStatus === 'initiated' || paymentStatus === 'pending' || paymentStatus === 'completed') ? (
-            <div className="space-y-4">
-              <div className={`${getStatusColor()} border p-4 rounded-lg`}>
-                <div className="flex justify-between items-center">
-                  <h3 className={`font-semibold ${
-                    paymentStatus === 'completed' ? 'text-green-800' : 
-                    paymentStatus === 'failed' ? 'text-red-800' : 'text-blue-800'
-                  }`}>
-                    {paymentStatus === 'completed' ? 'Payment Successful' : 'Payment Processing'}
-                  </h3>
-                  
-                  {timeRemaining > 0 && (paymentStatus === 'initiated' || paymentStatus === 'pending') && (
-                    <span className="text-sm bg-gray-100 px-2 py-1 rounded-full">
-                      {timeRemaining}s
-                    </span>
-                  )}
-                </div>
-                
-                <p className="mt-2">{statusMessage}</p>
-                
-                {(paymentStatus === 'initiated' || paymentStatus === 'pending') && (
-                  <div className="mt-4">
-                    <div className="flex items-center mb-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
-                      <p className="text-sm text-gray-600">Waiting for payment confirmation...</p>
-                    </div>
-                    <div className="bg-yellow-50 border border-yellow-100 p-3 rounded text-sm text-yellow-800">
-                      <p className="font-medium">Important:</p>
-                      <ul className="list-disc list-inside mt-1 space-y-1">
-                        <li>Look for MPesa prompt on your phone</li>
-                        <li>Enter your MPesa PIN to complete payment</li>
-                        <li>Don't leave this page until payment completes</li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              )}
-              
-              {(paymentStatus === 'failed' || paymentStatus === 'expired' || paymentStatus === 'cancelled') && (
-                <button 
-                  onClick={() => {
-                    setPaymentStatus(null);
-                    setPaymentResponse(null);
-                    setError(null);
-                    setStatusMessage('');
-                  }}
-                  className="w-full py-3 px-4 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium"
-                >
-                  Try Again
-                </button>
-              )}
-            </div>
-          ) : (
+          {renderPaymentStatusUI()}
+
+          {!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus) ? (
             <form onSubmit={handlePayment} className="space-y-4">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -364,30 +268,20 @@ const BookingConfirmationPage = () => {
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="e.g., 0712345678"
+                  placeholder="e.g., 254712345678"
                   className="w-full p-2 border border-gray-300 rounded-md"
                   required
                 />
-                <p className="text-sm text-gray-500">Enter your Safaricom number (e.g., 0712345678 or 254712345678)</p>
+                <p className="text-sm text-gray-500">Enter your Safaricom number in the format: 254712345678</p>
               </div>
 
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              )}
+              {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
 
-              <button 
-                type="submit" 
-                disabled={loading} 
-                className={`w-full py-3 px-4 rounded-md text-white font-medium ${
-                  loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
-                }`}
-              >
+              <button type="submit" disabled={loading} className={`w-full py-3 px-4 rounded-md text-white font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
                 {loading ? 'Processing...' : 'Pay Now'}
               </button>
             </form>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
