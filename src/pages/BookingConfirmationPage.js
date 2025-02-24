@@ -17,7 +17,6 @@ const BookingConfirmationPage = () => {
   const [error, setError] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
-  const [socketConnected, setSocketConnected] = useState(false);
 
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
@@ -34,26 +33,6 @@ const BookingConfirmationPage = () => {
     });
   };
 
-  // Function to handle successful payment and redirect
-  const handlePaymentSuccess = (data) => {
-    console.log('Payment successful:', data);
-    notify('Payment successful! Redirecting to your bookings...', 'success');
-    
-    // Clear any polling intervals
-    if (pollIntervalRef.current) {
-      clearInterval(pollIntervalRef.current);
-      pollIntervalRef.current = null;
-    }
-    
-    // Clear session storage
-    sessionStorage.removeItem('selectedSeats');
-    
-    // Short delay before navigation to ensure notification is seen
-    setTimeout(() => {
-      navigate('/mybookings', { state: { bookingDetails: data } });
-    }, 1500);
-  };
-
   useEffect(() => {
     try {
       const storedDetails = sessionStorage.getItem('selectedSeats');
@@ -67,118 +46,72 @@ const BookingConfirmationPage = () => {
     }
 
     // Socket.io connection
-    setupSocketConnection();
+    const token = localStorage.getItem('token');
+    if (token) {
+      socketRef.current = io(SOCKET_URL, {
+        auth: { token },
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      });
+
+      socketRef.current.on('connect', () => {
+        console.log('Socket connected with ID:', socketRef.current.id);
+        notify('Connected to real-time updates.', 'success');
+      });
+
+      socketRef.current.on('connect_error', (err) => {
+        console.error('Socket connection error:', err);
+        notify('Real-time updates unavailable. Falling back to polling.', 'warning');
+        if (!pollIntervalRef.current && paymentResponse?.payment_id) {
+          startPaymentStatusCheck(paymentResponse.payment_id);
+        }
+      });
+
+      socketRef.current.on('payment_requested', (data) => {
+        console.log('Payment requested:', data);
+        setPaymentStatus('stk_pushed');
+        setPaymentMessage('M-PESA request sent to your phone');
+        notify('M-PESA request sent. Please check your phone.', 'info');
+      });
+
+      socketRef.current.on('payment_status_update', (data) => {
+        console.log('Payment status update:', data);
+        setPaymentStatus(data.status);
+        setPaymentMessage(data.message || getStatusMessage(data.status));
+
+        if (data.status === 'completed') {
+          if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+          sessionStorage.removeItem('selectedSeats');
+          notify('Payment successful! Your seat has been booked.', 'success');
+          navigate('/mybookings', { state: { bookingDetails: data } });
+        } else if (data.status === 'failed') {
+          notify('Payment failed. Please try again.', 'error');
+        }
+      });
+
+      socketRef.current.on('seat_update', (data) => {
+        console.log('Seat update:', data);
+        if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
+          notify('Your seat has been confirmed!', 'success');
+        }
+      });
+
+      socketRef.current.on('disconnect', (reason) => {
+        console.log('Socket disconnected:', reason);
+        if (paymentStatus && ['stk_pushed', 'processing'].includes(paymentStatus) &&
+            paymentResponse?.payment_id && !pollIntervalRef.current) {
+          startPaymentStatusCheck(paymentResponse.payment_id);
+        }
+      });
+    }
 
     return () => {
-      cleanupResources();
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+      if (socketRef.current) socketRef.current.disconnect();
     };
-  }, []);
-
-  const setupSocketConnection = () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No authentication token found');
-      notify('Authentication error. Please log in again.', 'error');
-      return;
-    }
-
-    // Clean up existing socket if any
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-    }
-
-    socketRef.current = io(SOCKET_URL, {
-      auth: { token },
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
-
-    socketRef.current.on('connect', () => {
-      console.log('Socket connected with ID:', socketRef.current.id);
-      setSocketConnected(true);
-      notify('Connected to real-time updates.', 'success');
-    });
-
-    socketRef.current.on('connect_error', (err) => {
-      console.error('Socket connection error:', err);
-      setSocketConnected(false);
-      notify('Real-time updates unavailable. Falling back to polling.', 'warning');
-      
-      // Start polling if we have a payment in progress
-      if (paymentResponse?.payment_id && ['stk_pushed', 'processing'].includes(paymentStatus)) {
-        startPaymentStatusCheck(paymentResponse.payment_id);
-      }
-    });
-
-    socketRef.current.on('payment_requested', (data) => {
-      console.log('Payment requested:', data);
-      setPaymentStatus('stk_pushed');
-      setPaymentMessage('M-PESA request sent to your phone');
-      notify('M-PESA request sent. Please check your phone.', 'info');
-    });
-
-    // Listen for payment status updates
-    socketRef.current.on('payment_status_update', (data) => {
-      console.log('Payment status update received:', data);
-      setPaymentStatus(data.status);
-      setPaymentMessage(data.message || getStatusMessage(data.status));
-
-      if (data.status === 'completed') {
-        handlePaymentSuccess(data);
-      } else if (data.status === 'failed') {
-        notify('Payment failed. Please try again.', 'error');
-      }
-    });
-
-    // Listen for payment completed event
-    socketRef.current.on('payment_completed', (data) => {
-      console.log('Payment completed event received:', data);
-      setPaymentStatus('completed');
-      setPaymentMessage(data.message || 'Payment successful! Your seat has been booked.');
-      handlePaymentSuccess(data);
-    });
-
-    // Listen for booking confirmed event
-    socketRef.current.on('booking_confirmed', (data) => {
-      console.log('Booking confirmed event received:', data);
-      setPaymentStatus('completed');
-      setPaymentMessage('Booking confirmed! Redirecting to your bookings...');
-      handlePaymentSuccess(data);
-    });
-
-    socketRef.current.on('seat_update', (data) => {
-      console.log('Seat update:', data);
-      if (data.status === 'booked' && 
-          bookingDetails?.seats?.includes(data.seat_number.toString())) {
-        notify('Your seat has been confirmed!', 'success');
-      }
-    });
-
-    socketRef.current.on('disconnect', (reason) => {
-      console.log('Socket disconnected:', reason);
-      setSocketConnected(false);
-      
-      // If we have a payment in progress, fall back to polling
-      if (['stk_pushed', 'processing'].includes(paymentStatus) && 
-          paymentResponse?.payment_id && !pollIntervalRef.current) {
-        startPaymentStatusCheck(paymentResponse.payment_id);
-      }
-    });
-  };
-
-  const cleanupResources = () => {
-    if (pollIntervalRef.current) {
-      clearInterval(pollIntervalRef.current);
-      pollIntervalRef.current = null;
-    }
-    
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current = null;
-    }
-  };
+  }, [navigate]);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -223,8 +156,6 @@ const BookingConfirmationPage = () => {
         }
       );
 
-      console.log('Payment initiation response:', response.data);
-
       if (!response.data?.payment_id) throw new Error('Invalid payment response');
 
       setPaymentResponse(response.data);
@@ -232,19 +163,12 @@ const BookingConfirmationPage = () => {
       setPaymentMessage('M-PESA request sent to your phone. Please check your phone and enter your PIN when prompted.');
       notify('M-PESA request sent. Please check your phone.', 'info');
 
-      // Ensure we're connected via socket
-      if (!socketConnected) {
-        setupSocketConnection();
-      }
-
-      // If socket fails, fall back to polling after some time
       setTimeout(() => {
-        if (['stk_pushed', 'processing'].includes(paymentStatus) && !socketConnected) {
+        if (['stk_pushed', 'processing'].includes(paymentStatus)) {
           startPaymentStatusCheck(response.data.payment_id, token);
         }
       }, 15000);
     } catch (err) {
-      console.error('Payment initiation error:', err);
       setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
       notify('Failed to initiate payment. Please try again.', 'error');
     } finally {
@@ -253,10 +177,8 @@ const BookingConfirmationPage = () => {
   };
 
   const startPaymentStatusCheck = (paymentId, authToken) => {
-    // Don't start polling if we already have an interval running
     if (pollIntervalRef.current) return;
 
-    console.log('Starting payment status polling for ID:', paymentId);
     const token = authToken || localStorage.getItem('token');
     if (!token) {
       setError('Authentication error. Please try logging in again.');
@@ -265,30 +187,14 @@ const BookingConfirmationPage = () => {
     }
 
     let failedAttempts = 0;
-    let totalAttempts = 0;
-    const MAX_FAILED_ATTEMPTS = 3;
-    const MAX_TOTAL_ATTEMPTS = 25; // ~2.5 minutes at 6 second intervals
 
     pollIntervalRef.current = setInterval(async () => {
-      if (totalAttempts >= MAX_TOTAL_ATTEMPTS) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-        setPaymentStatus('expired');
-        setError('Payment request timed out. Please check your M-PESA messages or My Bookings section.');
-        notify('Payment request timed out. Please check My Bookings.', 'warning');
-        return;
-      }
-
-      totalAttempts++;
-      
       try {
-        console.log(`Polling attempt ${totalAttempts} for payment ${paymentId}`);
         const response = await axios.get(
           `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
 
-        console.log('Payment status response:', response.data);
         const { status } = response.data;
         setPaymentStatus(status);
         setPaymentMessage(getStatusMessage(status));
@@ -296,7 +202,8 @@ const BookingConfirmationPage = () => {
         if (status === 'completed') {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
-          handlePaymentSuccess(response.data);
+          sessionStorage.removeItem('selectedSeats');
+          navigate('/mybookings', { state: { bookingDetails: response.data } });
         } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
@@ -304,16 +211,27 @@ const BookingConfirmationPage = () => {
           notify(`Payment ${status}. ${getStatusMessage(status)}`, 'error');
         }
       } catch (err) {
-        console.error('Error checking payment status:', err);
         failedAttempts++;
-        if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+        if (failedAttempts >= 3) {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
           setError('Network issues while checking payment status. Please check My Bookings section.');
           notify('Network issues. Please check My Bookings section.', 'error');
         }
       }
-    }, 6000); // Poll every 6 seconds
+    }, 6000);
+
+    setTimeout(() => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        if (['initiated', 'stk_pushed', 'processing'].includes(paymentStatus)) {
+          setPaymentStatus('expired');
+          setError('Payment request may have expired. Please check your M-PESA messages.');
+          notify('Payment request expired. Please check your M-PESA messages.', 'warning');
+        }
+      }
+    }, 300000);
   };
 
   const getStatusMessage = (status) => {
@@ -341,15 +259,6 @@ const BookingConfirmationPage = () => {
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="p-6 border-b border-gray-200">
           <h1 className="text-2xl font-bold">Booking Confirmation</h1>
-          {socketConnected ? (
-            <div className="mt-2 text-sm text-green-600">
-              Connected to real-time updates
-            </div>
-          ) : (
-            <div className="mt-2 text-sm text-orange-500">
-              Using polling for payment updates
-            </div>
-          )}
         </div>
 
         <div className="p-6 space-y-6">
@@ -397,21 +306,6 @@ const BookingConfirmationPage = () => {
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h3 className="font-semibold text-blue-800">Payment Status</h3>
               <p className="mt-2">{paymentMessage}</p>
-              
-              {paymentStatus === 'stk_pushed' && (
-                <div className="mt-4 animate-pulse flex items-center justify-center">
-                  <div className="h-3 w-3 bg-blue-600 rounded-full mr-1"></div>
-                  <div className="h-3 w-3 bg-blue-600 rounded-full mr-1"></div>
-                  <div className="h-3 w-3 bg-blue-600 rounded-full"></div>
-                </div>
-              )}
-              
-              {paymentStatus === 'stk_pushed' && (
-                <p className="mt-4 text-sm text-gray-600">
-                  If you don't receive an M-PESA prompt, please check your phone's notifications
-                  and ensure you have sufficient funds.
-                </p>
-              )}
             </div>
           )}
         </div>
