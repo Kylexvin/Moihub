@@ -17,6 +17,7 @@ const BookingConfirmationPage = () => {
   const [error, setError] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
@@ -85,7 +86,7 @@ const BookingConfirmationPage = () => {
           if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
           sessionStorage.removeItem('selectedSeats');
           notify('Payment successful! Your seat has been booked.', 'success');
-          navigate('/mybookings', { state: { bookingDetails: data } });
+          setBookingConfirmed(true); // Set booking confirmed to true
         } else if (data.status === 'failed') {
           notify('Payment failed. Please try again.', 'error');
         }
@@ -112,6 +113,18 @@ const BookingConfirmationPage = () => {
       if (socketRef.current) socketRef.current.disconnect();
     };
   }, [navigate]);
+
+  // Handle navigation after booking is confirmed
+  useEffect(() => {
+    if (bookingConfirmed) {
+      // Navigate to the user's bookings page after 5 seconds
+      const timer = setTimeout(() => {
+        navigate('/mybookings', { state: { bookingConfirmed: true } });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [bookingConfirmed, navigate]);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -203,7 +216,7 @@ const BookingConfirmationPage = () => {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
           sessionStorage.removeItem('selectedSeats');
-          navigate('/mybookings', { state: { bookingDetails: response.data } });
+          setBookingConfirmed(true); // Set booking confirmed to true
         } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
@@ -262,51 +275,60 @@ const BookingConfirmationPage = () => {
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Booking Details</h2>
-            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
-              <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
-              <p><span className="font-medium">Departure Time:</span> {bookingDetails?.departure_time}</p>
-              <p><span className="font-medium">Selected Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
-              <p><span className="font-medium">Price per Seat:</span> KES {bookingDetails?.route?.currentPrice}</p>
-              <p><span className="font-medium">Number of Seats:</span> {bookingDetails?.seats?.length || 0}</p>
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <p className="font-semibold text-lg text-blue-700">
-                  Total Amount: KES {calculateTotalAmount()}
-                </p>
-              </div>
+          {bookingConfirmed ? (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <h3 className="font-semibold text-green-800">Booking Confirmed!</h3>
+              <p className="mt-2">Your booking has been confirmed. You will be redirected to your bookings shortly.</p>
             </div>
-          </div>
-
-          {!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus) ? (
-            <form onSubmit={handlePayment} className="space-y-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  M-PESA Phone Number
-                </label>
-                <input
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="e.g., 254712345678"
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  required
-                />
-                <p className="text-sm text-gray-500">Enter your Safaricom number in the format: 254712345678</p>
-              </div>
-
-              {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
-
-              <button type="submit" disabled={loading} className={`w-full py-3 px-4 rounded-md text-white font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
-                {loading ? 'Processing...' : `Pay Now - KES ${calculateTotalAmount()}`}
-              </button>
-            </form>
           ) : (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h3 className="font-semibold text-blue-800">Payment Status</h3>
-              <p className="mt-2">{paymentMessage}</p>
-            </div>
+            <>
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Booking Details</h2>
+                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                  <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
+                  <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
+                  <p><span className="font-medium">Departure Time:</span> {bookingDetails?.departure_time}</p>
+                  <p><span className="font-medium">Selected Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
+                  <p><span className="font-medium">Price per Seat:</span> KES {bookingDetails?.route?.currentPrice}</p>
+                  <p><span className="font-medium">Number of Seats:</span> {bookingDetails?.seats?.length || 0}</p>
+                  <div className="border-t border-gray-200 pt-2 mt-2">
+                    <p className="font-semibold text-lg text-blue-700">
+                      Total Amount: KES {calculateTotalAmount()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus) ? (
+                <form onSubmit={handlePayment} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      M-PESA Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="e.g., 254712345678"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                    <p className="text-sm text-gray-500">Enter your Safaricom number in the format: 254712345678</p>
+                  </div>
+
+                  {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
+
+                  <button type="submit" disabled={loading} className={`w-full py-3 px-4 rounded-md text-white font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
+                    {loading ? 'Processing...' : `Pay Now - KES ${calculateTotalAmount()}`}
+                  </button>
+                </form>
+              ) : (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h3 className="font-semibold text-blue-800">Payment Status</h3>
+                  <p className="mt-2">{paymentMessage}</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
