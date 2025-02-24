@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://moigosip.onrender.com/api/auth'; // Adjust to your backend URL
+const BASE_URL = 'https://moihub.onrender.com/api/auth'; // Adjust to your backend URL
 
 export const authService = {
   register: async (userData) => {
