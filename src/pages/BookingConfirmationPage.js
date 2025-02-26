@@ -18,9 +18,11 @@ const BookingConfirmationPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
+  const [redirectCountdown, setRedirectCountdown] = useState(null);
 
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
+  const redirectTimerRef = useRef(null);
 
   // Initialize Toastify notifications
   const notify = (message, type = 'info') => {
@@ -50,6 +52,22 @@ const BookingConfirmationPage = () => {
   };
 
   useEffect(() => {
+    // Check for pending payments from previous sessions
+    const pendingPayment = localStorage.getItem('pendingPayment');
+    if (pendingPayment) {
+      try {
+        const { paymentId, status } = JSON.parse(pendingPayment);
+        console.log('Found pending payment:', paymentId, status);
+        if (paymentId) {
+          startPaymentStatusCheck(paymentId);
+        }
+        localStorage.removeItem('pendingPayment');
+      } catch (e) {
+        console.error('Error parsing pending payment:', e);
+        localStorage.removeItem('pendingPayment');
+      }
+    }
+
     // Load booking details from session storage
     try {
       const storedDetails = sessionStorage.getItem('selectedSeats');
@@ -121,18 +139,15 @@ const BookingConfirmationPage = () => {
             pollIntervalRef.current = null;
           }
           
-          sessionStorage.removeItem('selectedSeats');
+          // Don't remove session storage yet, wait until redirect
           notify('Payment successful! Your seat has been booked.', 'success');
           
-          // Ensure we have booking details to pass to the next page
-          const navigationData = {
+          // Start countdown for redirection
+          startRedirectCountdown({
             state: { 
               bookingDetails: data.booking || data
             }
-          };
-          
-          console.log('Navigating to /mybookings with data:', navigationData);
-          navigate('/mybookings', navigationData);
+          });
         } else if (data.status === 'failed') {
           notify('Payment failed. Please try again.', 'error');
         }
@@ -140,6 +155,8 @@ const BookingConfirmationPage = () => {
 
       socketRef.current.on('payment_completed', (data) => {
         console.log('Payment completed event received:', data);
+        console.log('Payment completed payload:', JSON.stringify(data));
+        
         setPaymentStatus('completed');
         setPaymentMessage('Payment successful! Your seat has been booked.');
         
@@ -148,12 +165,14 @@ const BookingConfirmationPage = () => {
           pollIntervalRef.current = null;
         }
         
-        sessionStorage.removeItem('selectedSeats');
+        // Don't remove session storage yet, wait until redirect
         notify('Payment successful! Your seat has been booked.', 'success');
         
-        // Navigate to bookings page
-        navigate('/mybookings', { 
-          state: { bookingDetails: data.booking || data } 
+        // Start countdown for redirection
+        startRedirectCountdown({
+          state: { 
+            bookingDetails: data.booking || data
+          }
         });
       });
 
@@ -183,12 +202,46 @@ const BookingConfirmationPage = () => {
         pollIntervalRef.current = null;
       }
       
+      if (redirectTimerRef.current) {
+        clearInterval(redirectTimerRef.current);
+        redirectTimerRef.current = null;
+      }
+      
       if (socketRef.current) {
         console.log('Disconnecting socket');
         socketRef.current.disconnect();
       }
+      
+      // Check if we were in a payment flow and never got confirmation
+      if (paymentStatus === 'stk_pushed' || paymentStatus === 'processing') {
+        console.log('Payment was in progress but component unmounted');
+        // Store this state in localStorage to handle page refreshes
+        localStorage.setItem('pendingPayment', JSON.stringify({
+          paymentId: paymentResponse?.payment_id,
+          status: paymentStatus
+        }));
+      }
     };
   }, [navigate]);
+
+  // Function to start countdown before redirecting
+  const startRedirectCountdown = (navigationData) => {
+    setRedirectCountdown(5); // 5 seconds countdown
+    
+    redirectTimerRef.current = setInterval(() => {
+      setRedirectCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(redirectTimerRef.current);
+          redirectTimerRef.current = null;
+          sessionStorage.removeItem('selectedSeats'); // Now remove from session storage
+          console.log('Navigating to /mybookings with data:', navigationData);
+          navigate('/mybookings', navigationData);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -293,9 +346,13 @@ const BookingConfirmationPage = () => {
           console.log('Payment completed via polling');
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
-          sessionStorage.removeItem('selectedSeats');
+          
           notify('Payment successful! Your seat has been booked.', 'success');
-          navigate('/mybookings', { state: { bookingDetails: response.data } });
+          
+          // Start countdown for redirection
+          startRedirectCountdown({ 
+            state: { bookingDetails: response.data }
+          });
         } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
           console.log(`Payment ${status} via polling`);
           clearInterval(pollIntervalRef.current);
@@ -407,10 +464,37 @@ const BookingConfirmationPage = () => {
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h3 className="font-semibold text-blue-800">Payment Status</h3>
               <p className="mt-2">{paymentMessage}</p>
+              
               {paymentStatus === 'stk_pushed' && (
                 <div className="mt-4 flex items-center">
                   <div className="animate-spin mr-2 h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
                   <span className="text-sm text-blue-600">Waiting for M-PESA confirmation...</span>
+                </div>
+              )}
+              
+              {paymentStatus === 'processing' && (
+                <div className="mt-4 flex items-center">
+                  <div className="animate-spin mr-2 h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                  <span className="text-sm text-blue-600">Processing your payment...</span>
+                </div>
+              )}
+              
+              {paymentStatus === 'completed' && (
+                <div className="mt-4">
+                  <div className="flex items-center text-green-600 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span>Payment completed successfully!</span>
+                  </div>
+                  
+                  {redirectCountdown !== null && (
+                    <div className="bg-green-50 p-3 border border-green-200 rounded-md text-center">
+                      <p className="text-green-700">
+                        Redirecting to My Bookings in <span className="font-bold">{redirectCountdown}</span> seconds...
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
