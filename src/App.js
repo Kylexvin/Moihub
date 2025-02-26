@@ -43,8 +43,7 @@ import VehicleSelectionPage from './pages/VehicleSelectionPage';
 import SeatSelectionPage from './pages/SeatSelectionPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import PaymentInitiationPage from './pages/PaymentInitiationPage';
-import TicketPage from './pages/TicketPage';
-import MyBookingsPage from './pages/MyBookingsPage';
+import MyBookings from './components/MyBookings';
 
 // Data Imports
 import plotsData from './data/plots.json';
@@ -203,10 +202,10 @@ const App = () => {
           />
 
           <Route
-            path="/my-bookings"
+            path="/mybookings"
             element={(
               <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
-                <MyBookingsPage />
+                <MyBookings/>
               </ProtectedRoute>
             )}
           />
