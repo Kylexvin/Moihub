@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useCallback, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts, setSearchQuery, resetProducts } from '../redux/slices/productSlice';
 import './MarkertHub.css';
 
 const getRelativeTime = (date) => {
@@ -24,24 +24,32 @@ const getRelativeTime = (date) => {
 };
 
 const SearchPanel = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const searchQuery = useSelector(state => state.products.searchQuery);
   
   const handleSearch = (e) => {
     const value = e.target.value;
-    setSearchTerm(value);
     onSearch(value);
   };
 
   return (
-    <div className="bg-gradient-to-r from-green-500 to-green-900 rounded-lg shadow-lg p-4 mb-3"> <div className="flex flex-col gap-4"><input type="text" placeholder="Search by name or description..." value={searchTerm} onChange={handleSearch} className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" /> </div> </div>
+    <div className="bg-gradient-to-r from-green-500 to-green-900 rounded-lg shadow-lg p-4 mb-3">
+      <div className="flex flex-col gap-4">
+        <input 
+          type="text" 
+          placeholder="Search by name or description..." 
+          value={searchQuery} 
+          onChange={handleSearch} 
+          className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" 
+        />
+      </div>
+    </div>
   );
-  
 };
 
 const ProductCard = ({ product, contactSeller }) => {
-  const [imageStatus, setImageStatus] = useState('loading');
-  const [retryCount, setRetryCount] = useState(0);
-  const [relativeTime, setRelativeTime] = useState(getRelativeTime(product.createdAt));
+  const [imageStatus, setImageStatus] = React.useState('loading');
+  const [retryCount, setRetryCount] = React.useState(0);
+  const [relativeTime, setRelativeTime] = React.useState(getRelativeTime(product.createdAt));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -124,16 +132,28 @@ const ProductCard = ({ product, contactSeller }) => {
 };
 
 const MarketHub = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { 
+    filteredItems, 
+    loading, 
+    error, 
+    page, 
+    hasMore 
+  } = useSelector(state => state.products);
+  
   const observer = useRef();
-  const ITEMS_PER_PAGE = 10;
+  
+  // Reset products when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(resetProducts());
+    };
+  }, [dispatch]);
+
+  // Initial data fetch
+  useEffect(() => {
+    dispatch(fetchProducts({ page: 1 }));
+  }, [dispatch]);
 
   const lastProductElementRef = useCallback(node => {
     if (loading) return;
@@ -141,46 +161,22 @@ const MarketHub = () => {
     
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1);
+        dispatch(fetchProducts({ page: page + 1 }));
       }
     });
     
     if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
-
-  const fetchProducts = async (pageNum) => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`https://markethubbackend.onrender.com/api/products/approved?page=${pageNum}&limit=${ITEMS_PER_PAGE}`);
-      
-      setProducts(prev => {
-        const newProducts = pageNum === 1 ? response.data : [...prev, ...response.data];
-        setHasMore(response.data.length === ITEMS_PER_PAGE);
-        return newProducts;
-      });
-      
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to load products. Please try again later.');
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts(page);
-  }, [page]); 
-
-  useEffect(() => {
-    const filtered = products.filter(product => 
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery, products]);
+  }, [loading, hasMore, page, dispatch]);
 
   const handleSearch = (searchTerm) => {
-    setSearchQuery(searchTerm);
-    setPage(1);
+    // If search term changes drastically, reset to page 1
+    if (searchTerm !== '') {
+      dispatch(resetProducts());
+      dispatch(setSearchQuery(searchTerm));
+      dispatch(fetchProducts({ page: 1 }));
+    } else {
+      dispatch(setSearchQuery(searchTerm));
+    }
   };
 
   const contactSeller = (sellerWhatsApp) => {
@@ -236,8 +232,8 @@ const MarketHub = () => {
           
           <h2 className="section-titlee">Products for you</h2>
           <div className="products-gridd">
-            {filteredProducts.map((product, index) => {
-              if (filteredProducts.length === index + 1) {
+            {filteredItems.map((product, index) => {
+              if (filteredItems.length === index + 1) {
                 return (
                   <div ref={lastProductElementRef} key={product._id}>
                     <ProductCard 
@@ -265,13 +261,13 @@ const MarketHub = () => {
             
             {error && <p className="text-red-500 text-center p-4">{error}</p>}
             
-            {!loading && !hasMore && filteredProducts.length > 0 && (
+            {!loading && !hasMore && filteredItems.length > 0 && (
               <p className="w-full text-center p-4 text-gray-500">
                 No more products to load
               </p>
             )}
             
-            {!loading && filteredProducts.length === 0 && (
+            {!loading && filteredItems.length === 0 && (
               <p className="w-full text-center p-4 text-gray-500">
                 No products found matching your search
               </p>
