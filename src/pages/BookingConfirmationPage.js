@@ -18,23 +18,11 @@ const BookingConfirmationPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentResponse, setPaymentResponse] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
-  const [redirectCountdown, setRedirectCountdown] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [completedBookingDetails, setCompletedBookingDetails] = useState(null);
 
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
-  const redirectTimerRef = useRef(null);
-
-  // Initialize Toastify notifications
-  const notify = (message, type = 'info') => {
-    toast[type](message, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
 
   // Extract user ID from JWT token
   const getUserIdFromToken = () => {
@@ -49,6 +37,51 @@ const BookingConfirmationPage = () => {
       console.error('Error extracting user ID from token:', e);
       return null;
     }
+  };
+
+  // Status message mapping - centralized for consistency
+  const STATUS_MESSAGES = {
+    stk_pushed: 'M-PESA request sent to your phone',
+    processing: 'Processing your payment...',
+    completed: 'Payment successful! Your seat has been booked.',
+    failed: 'Payment failed. Please try again.',
+    cancelled: 'Payment was cancelled. Please try again.',
+    expired: 'Payment request expired. Please try again.',
+    refund_required: 'There was an issue confirming your seat. A refund will be processed.'
+  };
+
+  // Notification function - centralized for consistent notifications
+  const notify = (status, customMessage = null) => {
+    const messageMap = {
+      stk_pushed: 'M-PESA request sent. Please check your phone.',
+      processing: 'Processing your payment...',
+      completed: 'Payment successful! Your seat has been booked.',
+      failed: 'Payment failed. Please try again.',
+      cancelled: 'Payment was cancelled. Please try again.',
+      expired: 'Payment request expired. Please try again.',
+      refund_required: 'There was an issue confirming your seat. A refund will be processed.',
+      socket_connected: 'Connected to real-time updates.',
+      socket_disconnected: 'Lost connection. Falling back to polling for updates.',
+      network_error: 'Network issues. Please check My Bookings section.',
+      auth_error: 'Authentication error. Please log in again.',
+      invalid_phone: 'Invalid phone number. Please enter a valid Safaricom number.',
+      loading_error: 'Unable to load booking details. Please try again.'
+    };
+    
+    const message = customMessage || messageMap[status] || status;
+    const type = ['completed', 'socket_connected'].includes(status) ? 'success' 
+               : ['failed', 'cancelled', 'expired', 'refund_required', 'network_error', 'auth_error', 'invalid_phone', 'loading_error'].includes(status) ? 'error'
+               : ['socket_disconnected'].includes(status) ? 'warning' 
+               : 'info';
+    
+    toast[type](message, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   };
 
   useEffect(() => {
@@ -75,7 +108,7 @@ const BookingConfirmationPage = () => {
       setBookingDetails(JSON.parse(storedDetails));
     } catch (err) {
       setError('Unable to load booking details. Please try selecting your seat again.');
-      notify('Unable to load booking details. Please try again.', 'error');
+      notify('loading_error');
     } finally {
       setLoading(false);
     }
@@ -103,7 +136,7 @@ const BookingConfirmationPage = () => {
           socketRef.current.emit('join_user_room', { userId });
         }
         
-        notify('Connected to real-time updates.', 'success');
+        notify('socket_connected');
       });
 
       socketRef.current.on('room_joined', (data) => {
@@ -113,7 +146,7 @@ const BookingConfirmationPage = () => {
       socketRef.current.on('connect_error', (err) => {
         console.error('Socket connection error:', err);
         setSocketConnected(false);
-        notify('Real-time updates unavailable. Falling back to polling.', 'warning');
+        notify('socket_disconnected');
         
         // Start polling if payment is in progress
         if (paymentResponse?.payment_id && !pollIntervalRef.current) {
@@ -123,63 +156,25 @@ const BookingConfirmationPage = () => {
 
       socketRef.current.on('payment_requested', (data) => {
         console.log('Payment requested event received:', data);
-        setPaymentStatus('stk_pushed');
-        setPaymentMessage('M-PESA request sent to your phone');
-        notify('M-PESA request sent. Please check your phone.', 'info');
+        handlePaymentStatusUpdate('stk_pushed');
       });
 
       socketRef.current.on('payment_status_update', (data) => {
         console.log('Payment status update event received:', data);
-        setPaymentStatus(data.status);
-        setPaymentMessage(data.message || getStatusMessage(data.status));
-
-        if (data.status === 'completed') {
-          if (pollIntervalRef.current) {
-            clearInterval(pollIntervalRef.current);
-            pollIntervalRef.current = null;
-          }
-          
-          // Don't remove session storage yet, wait until redirect
-          notify('Payment successful! Your seat has been booked.', 'success');
-          
-          // Start countdown for redirection
-          startRedirectCountdown({
-            state: { 
-              bookingDetails: data.booking || data
-            }
-          });
-        } else if (data.status === 'failed') {
-          notify('Payment failed. Please try again.', 'error');
-        }
+        handlePaymentStatusUpdate(data.status, data.message, data);
       });
 
       socketRef.current.on('payment_completed', (data) => {
         console.log('Payment completed event received:', data);
         console.log('Payment completed payload:', JSON.stringify(data));
         
-        setPaymentStatus('completed');
-        setPaymentMessage('Payment successful! Your seat has been booked.');
-        
-        if (pollIntervalRef.current) {
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        }
-        
-        // Don't remove session storage yet, wait until redirect
-        notify('Payment successful! Your seat has been booked.', 'success');
-        
-        // Start countdown for redirection
-        startRedirectCountdown({
-          state: { 
-            bookingDetails: data.booking || data
-          }
-        });
+        handlePaymentStatusUpdate('completed', null, data.booking || data);
       });
 
       socketRef.current.on('seat_update', (data) => {
         console.log('Seat update event received:', data);
         if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
-          notify('Your seat has been confirmed!', 'success');
+          notify(null, 'Your seat has been confirmed!');
         }
       });
 
@@ -190,7 +185,7 @@ const BookingConfirmationPage = () => {
         // Start polling if we were in the middle of a payment
         if (paymentStatus && ['stk_pushed', 'processing'].includes(paymentStatus) &&
             paymentResponse?.payment_id && !pollIntervalRef.current) {
-          notify('Lost connection. Falling back to polling for updates.', 'warning');
+          notify('socket_disconnected');
           startPaymentStatusCheck(paymentResponse.payment_id);
         }
       });
@@ -200,11 +195,6 @@ const BookingConfirmationPage = () => {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
         pollIntervalRef.current = null;
-      }
-      
-      if (redirectTimerRef.current) {
-        clearInterval(redirectTimerRef.current);
-        redirectTimerRef.current = null;
       }
       
       if (socketRef.current) {
@@ -222,25 +212,32 @@ const BookingConfirmationPage = () => {
         }));
       }
     };
-  }, [navigate]);
+  }, [navigate, paymentStatus, paymentResponse]);
 
-  // Function to start countdown before redirecting
-  const startRedirectCountdown = (navigationData) => {
-    setRedirectCountdown(5); // 5 seconds countdown
-    
-    redirectTimerRef.current = setInterval(() => {
-      setRedirectCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(redirectTimerRef.current);
-          redirectTimerRef.current = null;
-          sessionStorage.removeItem('selectedSeats'); // Now remove from session storage
-          console.log('Navigating to /mybookings with data:', navigationData);
-          navigate('/mybookings', navigationData);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  // Centralized payment status update handler
+  const handlePaymentStatusUpdate = (status, customMessage = null, bookingData = null) => {
+    setPaymentStatus(status);
+    setPaymentMessage(customMessage || STATUS_MESSAGES[status] || '');
+    notify(status, customMessage);
+
+    if (status === 'completed') {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+      
+      // Save completed booking details for modal
+      setCompletedBookingDetails(bookingData || paymentResponse);
+      
+      // Show success modal
+      setShowSuccessModal(true);
+    } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+      setError(`Payment ${status}. ${STATUS_MESSAGES[status]}`);
+    }
   };
 
   const handlePayment = async (e) => {
@@ -248,13 +245,13 @@ const BookingConfirmationPage = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Authentication required. Please log in to continue.');
-      notify('Please log in to continue.', 'error');
+      notify('auth_error');
       return;
     }
 
     if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
       setError('Please enter a valid Safaricom phone number');
-      notify('Invalid phone number. Please enter a valid Safaricom number.', 'error');
+      notify('invalid_phone');
       return;
     }
 
@@ -293,9 +290,7 @@ const BookingConfirmationPage = () => {
       if (!response.data?.payment_id) throw new Error('Invalid payment response');
 
       setPaymentResponse(response.data);
-      setPaymentStatus('stk_pushed');
-      setPaymentMessage('M-PESA request sent to your phone. Please check your phone and enter your PIN when prompted.');
-      notify('M-PESA request sent. Please check your phone.', 'info');
+      handlePaymentStatusUpdate('stk_pushed');
 
       // Always start polling after a delay as a fallback
       setTimeout(() => {
@@ -307,7 +302,7 @@ const BookingConfirmationPage = () => {
     } catch (err) {
       console.error('Payment initiation error:', err);
       setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
-      notify('Failed to initiate payment. Please try again.', 'error');
+      notify(null, 'Failed to initiate payment. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -322,7 +317,7 @@ const BookingConfirmationPage = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Authentication error. Please try logging in again.');
-      notify('Authentication error. Please log in again.', 'error');
+      notify('auth_error');
       return;
     }
 
@@ -339,27 +334,7 @@ const BookingConfirmationPage = () => {
 
         console.log('Poll response:', response.data);
         const { status } = response.data;
-        setPaymentStatus(status);
-        setPaymentMessage(getStatusMessage(status));
-
-        if (status === 'completed') {
-          console.log('Payment completed via polling');
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-          
-          notify('Payment successful! Your seat has been booked.', 'success');
-          
-          // Start countdown for redirection
-          startRedirectCountdown({ 
-            state: { bookingDetails: response.data }
-          });
-        } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
-          console.log(`Payment ${status} via polling`);
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-          setError(`Payment ${status}. ${getStatusMessage(status)}`);
-          notify(`Payment ${status}. ${getStatusMessage(status)}`, 'error');
-        }
+        handlePaymentStatusUpdate(status, null, response.data);
       } catch (err) {
         console.error('Error polling payment status:', err);
         failedAttempts++;
@@ -367,7 +342,7 @@ const BookingConfirmationPage = () => {
           clearInterval(pollIntervalRef.current);
           pollIntervalRef.current = null;
           setError('Network issues while checking payment status. Please check My Bookings section.');
-          notify('Network issues. Please check My Bookings section.', 'error');
+          notify('network_error');
         }
       }
     }, 6000);
@@ -379,25 +354,10 @@ const BookingConfirmationPage = () => {
         clearInterval(pollIntervalRef.current);
         pollIntervalRef.current = null;
         if (['initiated', 'stk_pushed', 'processing'].includes(paymentStatus)) {
-          setPaymentStatus('expired');
-          setError('Payment request may have expired. Please check your M-PESA messages.');
-          notify('Payment request expired. Please check your M-PESA messages.', 'warning');
+          handlePaymentStatusUpdate('expired');
         }
       }
     }, 300000); // 5 minutes
-  };
-
-  const getStatusMessage = (status) => {
-    switch (status) {
-      case 'stk_pushed': return 'M-PESA request sent to your phone';
-      case 'processing': return 'Processing your payment...';
-      case 'completed': return 'Payment successful! Confirming your seat...';
-      case 'failed': return 'Payment failed. Please try again.';
-      case 'cancelled': return 'Payment was cancelled. Please try again.';
-      case 'expired': return 'Payment request expired. Please try again.';
-      case 'refund_required': return 'There was an issue confirming your seat. A refund will be processed.';
-      default: return 'Waiting for payment status...';
-    }
   };
 
   const calculateTotalAmount = () => {
@@ -406,12 +366,76 @@ const BookingConfirmationPage = () => {
     return basePrice * numSeats;
   };
 
+  // Success Modal Component
+  const SuccessModal = ({ show, onClose, bookingData }) => {
+    if (!show) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-90vh overflow-y-auto">
+          <div className="flex justify-between items-center border-b border-gray-200 p-4">
+            <h2 className="text-xl font-bold text-green-700">Booking Successful!</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-center mb-4">
+              <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id}</p>
+              <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
+              <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
+              <p><span className="font-medium">Departure:</span> {bookingDetails?.departure_time}</p>
+              <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
+              <p><span className="font-medium">Amount Paid:</span> KES {calculateTotalAmount()}</p>
+            </div>
+            
+            <div className="text-center space-y-4 mt-4">
+              <p className="text-gray-600">Your ticket is now confirmed and ready!</p>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-3">
+                <button 
+                  onClick={() => navigate('/mybookings')} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md transition-colors duration-300"
+                >
+                  View My Bookings
+                </button>
+                <button 
+                  onClick={() => navigate('/')} 
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-md transition-colors duration-300"
+                >
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <ToastContainer />
+      <SuccessModal 
+        show={showSuccessModal} 
+        onClose={() => setShowSuccessModal(false)} 
+        bookingData={completedBookingDetails} 
+      />
+      
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold">Booking Confirmation</h1>
+          <h1 className="text-2xl font-bold">Confirmation of Booking</h1>
           {socketConnected ? (
             <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Live updates active</span>
           ) : (
@@ -479,7 +503,7 @@ const BookingConfirmationPage = () => {
                 </div>
               )}
               
-              {paymentStatus === 'completed' && (
+              {paymentStatus === 'completed' && !showSuccessModal && (
                 <div className="mt-4">
                   <div className="flex items-center text-green-600 mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -488,13 +512,12 @@ const BookingConfirmationPage = () => {
                     <span>Payment completed successfully!</span>
                   </div>
                   
-                  {redirectCountdown !== null && (
-                    <div className="bg-green-50 p-3 border border-green-200 rounded-md text-center">
-                      <p className="text-green-700">
-                        Redirecting to My Bookings in <span className="font-bold">{redirectCountdown}</span> seconds...
-                      </p>
-                    </div>
-                  )}
+                  <button 
+                    onClick={() => setShowSuccessModal(true)}
+                    className="mt-2 w-full py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors duration-300"
+                  >
+                    View Booking Details
+                  </button>
                 </div>
               )}
             </div>
