@@ -48,6 +48,7 @@ import MyBookings from './components/MyBookings';
 // Data Imports
 import plotsData from './data/plots.json';
 import ShopData from './data/ShopData.json';
+import MatatuAdmin from './components/admin/MatatuAdmin';
 
 // Authentication Service
 import { authService } from './services/authService';
@@ -158,6 +159,14 @@ const App = () => {
           />
 
           {/* MoiLink Routes */}
+          <Route
+            path="/moilinkadmin"
+            element={(
+              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+                <MatatuAdmin />
+              </ProtectedRoute>
+            )}
+          />
           <Route
             path="/moilinktravellers"
             element={(
