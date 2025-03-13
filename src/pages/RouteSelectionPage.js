@@ -125,14 +125,14 @@ const RouteSelectionPage = () => {
         </div>
       )}
 
-      <nav className="bottom-nav">
+      <div className="bottom-navv">
         <a href="/" className="nav-item">
           <i className="fas fa-book"></i> Booking
         </a>
-        <a href="/tickets" className="nav-item">
+        <a href="/tickets" className="nav-itemm">
           <i className="fas fa-ticket"></i> Tickets
         </a>
-      </nav>
+      </div>
     </div>
   );
 };

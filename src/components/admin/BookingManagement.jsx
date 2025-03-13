@@ -8,7 +8,6 @@ import {
   Filter,
   X,
   BarChart as BarChartIcon,
-  PieChart as PieChartIcon,
   List
 } from 'lucide-react';
 import {
@@ -39,12 +38,8 @@ const BookingManagement = ({ setError, setSuccess }) => {
   const [filters, setFilters] = useState({
     status: '',
     date: '',
-    route: '',
     search: ''
   });
-  
-  // State for routes (for filter dropdown)
-  const [routes, setRoutes] = useState([]);
   
   // State for view mode (table or graphs)
   const [viewMode, setViewMode] = useState('table');
@@ -64,9 +59,12 @@ const BookingManagement = ({ setError, setSuccess }) => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://moihub.onrender.com/api//api/bookings', getApiConfig());
-      setBookings(response.data);
-      setFilteredBookings(response.data);
+      const response = await axios.get('https://moihub.onrender.com/api/bookings', getApiConfig());
+      
+      // Ensure we're getting an array of bookings
+      const bookingsData = Array.isArray(response.data) ? response.data : [];
+      setBookings(bookingsData);
+      setFilteredBookings(bookingsData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -75,29 +73,18 @@ const BookingManagement = ({ setError, setSuccess }) => {
     }
   };
   
-  // Fetch routes for filter dropdown
-  const fetchRoutes = async () => {
-    try {
-      const response = await axios.get('https://moihub.onrender.com/api/routes', getApiConfig());
-      setRoutes(response.data);
-    } catch (error) {
-      console.error("Error fetching routes:", error);
-    }
-  };
-  
   // Load data on component mount
   useEffect(() => {
     fetchBookings();
-    fetchRoutes();
   }, []);
   
   // Apply filters when filters state changes
   useEffect(() => {
-    applyFilters();
-  }, [filters, bookings]);
-  
-  // Filter bookings based on selected filters
-  const applyFilters = () => {
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+      setFilteredBookings([]);
+      return;
+    }
+    
     let result = [...bookings];
     
     // Apply status filter
@@ -109,29 +96,23 @@ const BookingManagement = ({ setError, setSuccess }) => {
     if (filters.date) {
       const filterDate = new Date(filters.date).toDateString();
       result = result.filter(booking => {
-        const bookingDate = new Date(booking.bookingDate).toDateString();
+        const bookingDate = new Date(booking.travelDate).toDateString();
         return bookingDate === filterDate;
       });
-    }
-    
-    // Apply route filter
-    if (filters.route) {
-      result = result.filter(booking => booking.routeId === filters.route);
     }
     
     // Apply search filter
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       result = result.filter(booking => 
-        booking.passengerName?.toLowerCase().includes(searchTerm) ||
-        booking.referenceNumber?.toLowerCase().includes(searchTerm) ||
-        booking.phoneNumber?.toLowerCase().includes(searchTerm)
+        booking.user?.username?.toLowerCase().includes(searchTerm) ||
+        booking.matatu?.registrationNumber?.toLowerCase().includes(searchTerm)
       );
     }
     
     setFilteredBookings(result);
     setCurrentPage(1); // Reset to first page when filters change
-  };
+  }, [filters, bookings]);
   
   // Handle filter changes
   const handleFilterChange = (e) => {
@@ -144,7 +125,6 @@ const BookingManagement = ({ setError, setSuccess }) => {
     setFilters({
       status: '',
       date: '',
-      route: '',
       search: ''
     });
   };
@@ -180,14 +160,12 @@ const BookingManagement = ({ setError, setSuccess }) => {
     }
   };
   
-  // Get route name by ID
-  const getRouteName = (routeId) => {
-    const route = routes.find(r => r._id === routeId);
-    return route ? `${route.startLocation} - ${route.endLocation}` : 'Unknown Route';
-  };
-  
   // Prepare data for status distribution pie chart
   const getStatusDistributionData = () => {
+    if (!Array.isArray(filteredBookings) || filteredBookings.length === 0) {
+      return [];
+    }
+    
     const statusCounts = {};
     
     filteredBookings.forEach(booking => {
@@ -201,34 +179,41 @@ const BookingManagement = ({ setError, setSuccess }) => {
     }));
   };
   
-  // Prepare data for route bookings bar chart
-  const getRouteBookingsData = () => {
-    const routeCounts = {};
+  // Prepare data for matatu bookings bar chart
+  const getMatatuBookingsData = () => {
+    if (!Array.isArray(filteredBookings) || filteredBookings.length === 0) {
+      return [];
+    }
+    
+    const matatuCounts = {};
     
     filteredBookings.forEach(booking => {
-      const routeId = booking.routeId;
-      if (routeId) {
-        const routeName = getRouteName(routeId);
-        routeCounts[routeName] = (routeCounts[routeName] || 0) + 1;
+      if (booking.matatu?.registrationNumber) {
+        const regNumber = booking.matatu.registrationNumber;
+        matatuCounts[regNumber] = (matatuCounts[regNumber] || 0) + 1;
       }
     });
     
-    return Object.keys(routeCounts)
-      .map(route => ({
-        name: route,
-        bookings: routeCounts[route]
+    return Object.keys(matatuCounts)
+      .map(regNumber => ({
+        name: regNumber,
+        bookings: matatuCounts[regNumber]
       }))
       .sort((a, b) => b.bookings - a.bookings)
-      .slice(0, 10); // Show top 10 routes only
+      .slice(0, 10); // Show top 10 matatus only
   };
   
   // Prepare data for daily bookings trend
   const getDailyBookingsTrendData = () => {
+    if (!Array.isArray(filteredBookings) || filteredBookings.length === 0) {
+      return [];
+    }
+    
     const dateCounts = {};
     
     filteredBookings.forEach(booking => {
-      if (booking.bookingDate) {
-        const date = new Date(booking.bookingDate).toLocaleDateString();
+      if (booking.travelDate) {
+        const date = new Date(booking.travelDate).toLocaleDateString();
         dateCounts[date] = (dateCounts[date] || 0) + 1;
       }
     });
@@ -242,8 +227,19 @@ const BookingManagement = ({ setError, setSuccess }) => {
       .slice(-14); // Show last 14 days only
   };
   
+  // Calculate total revenue
+  const calculateTotalRevenue = () => {
+    if (!Array.isArray(filteredBookings) || filteredBookings.length === 0) {
+      return 0;
+    }
+    
+    return filteredBookings.reduce((sum, booking) => {
+      return sum + (booking.payment?.amount || booking.fare || 0);
+    }, 0);
+  };
+  
   // Colors for pie chart
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
   
   return (
     <div className="space-y-4">
@@ -274,7 +270,7 @@ const BookingManagement = ({ setError, setSuccess }) => {
           </div>
           
           {/* Clear filters button */}
-          {(filters.status || filters.date || filters.route || filters.search) && (
+          {(filters.status || filters.date || filters.search) && (
             <button 
               onClick={clearFilters}
               className="text-xs flex items-center text-gray-500 hover:text-gray-700"
@@ -285,12 +281,12 @@ const BookingManagement = ({ setError, setSuccess }) => {
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Search input */}
           <div className="relative">
             <input
               type="text"
-              placeholder="Search bookings..."
+              placeholder="Search by username or vehicle reg..."
               className="w-full pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               name="search"
               value={filters.search}
@@ -324,21 +320,6 @@ const BookingManagement = ({ setError, setSuccess }) => {
             />
             <Calendar className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           </div>
-          
-          {/* Route filter */}
-          <select
-            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
-            name="route"
-            value={filters.route}
-            onChange={handleFilterChange}
-          >
-            <option value="">All Routes</option>
-            {routes.map(route => (
-              <option key={route._id} value={route._id}>
-                {route.startLocation} - {route.endLocation}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
       
@@ -351,48 +332,84 @@ const BookingManagement = ({ setError, setSuccess }) => {
       )}
       
       {/* No results message */}
-      {!loading && filteredBookings.length === 0 && (
+      {!loading && (!Array.isArray(filteredBookings) || filteredBookings.length === 0) && (
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
           <p className="text-gray-500">No bookings found matching your filters.</p>
         </div>
       )}
       
+      {/* Booking statistics summary cards */}
+      {!loading && Array.isArray(filteredBookings) && filteredBookings.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="text-sm font-medium text-gray-500">Total Bookings</div>
+            <div className="text-2xl font-bold mt-1">{filteredBookings.length}</div>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="text-sm font-medium text-gray-500">Confirmed Bookings</div>
+            <div className="text-2xl font-bold mt-1 text-green-600">
+              {filteredBookings.filter(b => b.status?.toLowerCase() === 'confirmed').length}
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="text-sm font-medium text-gray-500">Total Revenue</div>
+            <div className="text-2xl font-bold mt-1 text-blue-600">
+              KES {calculateTotalRevenue().toLocaleString()}
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="text-sm font-medium text-gray-500">Avg. Fare</div>
+            <div className="text-2xl font-bold mt-1 text-purple-600">
+              KES {filteredBookings.length > 0 ? Math.round(calculateTotalRevenue() / filteredBookings.length).toLocaleString() : 0}
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Table View */}
-      {!loading && filteredBookings.length > 0 && viewMode === 'table' && (
+      {!loading && Array.isArray(filteredBookings) && filteredBookings.length > 0 && viewMode === 'table' && (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Ref</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Passenger</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Route</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle Reg</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Travel Date</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seat</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fare</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {currentItems.map((booking) => (
                   <tr key={booking._id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-gray-900">{booking.referenceNumber || 'N/A'}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-blue-600">{booking._id.slice(-6)}</td>
                     <td className="px-4 py-3">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{booking.passengerName || 'N/A'}</div>
-                        <div className="text-xs text-gray-500">{booking.phoneNumber || 'N/A'}</div>
+                        <div className="text-sm font-medium text-gray-900">{booking.user?.username || 'N/A'}</div>
+                        <div className="text-xs text-gray-500">{booking.user?.email || 'N/A'}</div>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500">
-                      {getRouteName(booking.routeId)}
+                      {booking.matatu?.registrationNumber || 'N/A'}
+                      {booking.matatu?.departureTime && <div className="text-xs">Departure: {booking.matatu.departureTime}</div>}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{formatDate(booking.bookingDate)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">{formatDate(booking.travelDate)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">
+                      {booking.seatNumber || 'N/A'}
+                    </td>
                     <td className="px-4 py-3 text-sm">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getStatusColor(booking.status)}`}>
                         {booking.status || 'Unknown'}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
-                      {booking.amount ? booking.amount.toLocaleString('en-US', { style: 'currency', currency: 'KES' }) : 'N/A'}
+                      KES {booking.payment?.amount || booking.fare || 'N/A'}
                     </td>
                   </tr>
                 ))}
@@ -401,60 +418,53 @@ const BookingManagement = ({ setError, setSuccess }) => {
           </div>
           
           {/* Pagination */}
-          <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6 flex items-center justify-between">
-            <div className="text-xs text-gray-500">
-              Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredBookings.length)} of {filteredBookings.length} bookings
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`p-1 rounded ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
+          {filteredBookings.length > itemsPerPage && (
+            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6 flex items-center justify-between">
+              <div className="text-xs text-gray-500">
+                Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredBookings.length)} of {filteredBookings.length} bookings
+              </div>
               
-              {Array.from({ length: Math.ceil(filteredBookings.length / itemsPerPage) }, (_, i) => {
-                // Show only a limited range of pages for better UX
-                if (
-                  i === 0 || 
-                  i === Math.ceil(filteredBookings.length / itemsPerPage) - 1 ||
-                  (i >= currentPage - 2 && i <= currentPage + 2)
-                ) {
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`p-1 rounded ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                
+                {Array.from({ length: Math.min(5, Math.ceil(filteredBookings.length / itemsPerPage)) }, (_, i) => {
+                  const pageNum = i + 1;
                   return (
                     <button
                       key={i}
-                      onClick={() => paginate(i + 1)}
-                      className={`px-2 py-1 text-xs rounded ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                      onClick={() => paginate(pageNum)}
+                      className={`px-2 py-1 text-xs rounded ${currentPage === pageNum ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
                     >
-                      {i + 1}
+                      {pageNum}
                     </button>
                   );
-                } else if (
-                  i === currentPage - 3 || 
-                  i === currentPage + 3
-                ) {
-                  return <span key={i} className="text-gray-500">...</span>;
-                } else {
-                  return null;
-                }
-              })}
-              
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === Math.ceil(filteredBookings.length / itemsPerPage)}
-                className={`p-1 rounded ${currentPage === Math.ceil(filteredBookings.length / itemsPerPage) ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
+                })}
+                
+                {Math.ceil(filteredBookings.length / itemsPerPage) > 5 && (
+                  <span className="text-gray-500">...</span>
+                )}
+                
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage === Math.ceil(filteredBookings.length / itemsPerPage)}
+                  className={`p-1 rounded ${currentPage === Math.ceil(filteredBookings.length / itemsPerPage) ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
       
       {/* Analytics/Graph View */}
-      {!loading && filteredBookings.length > 0 && viewMode === 'graphs' && (
+      {!loading && Array.isArray(filteredBookings) && filteredBookings.length > 0 && viewMode === 'graphs' && (
         <div className="space-y-4">
           {/* Status distribution pie chart */}
           <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -484,13 +494,13 @@ const BookingManagement = ({ setError, setSuccess }) => {
             </div>
           </div>
           
-          {/* Top routes by bookings */}
+          {/* Top vehicles by bookings */}
           <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <h3 className="text-base font-medium mb-4">Most Popular Routes</h3>
+            <h3 className="text-base font-medium mb-4">Most Popular Vehicles</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={getRouteBookingsData()}
+                  data={getMatatuBookingsData()}
                   layout="vertical"
                   margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
                 >
@@ -522,35 +532,6 @@ const BookingManagement = ({ setError, setSuccess }) => {
                   <Bar dataKey="bookings" fill="#0088FE" name="Daily Bookings" />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
-          </div>
-          
-          {/* Booking statistics summary cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm font-medium text-gray-500">Total Bookings</div>
-              <div className="text-2xl font-bold mt-1">{filteredBookings.length}</div>
-            </div>
-            
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm font-medium text-gray-500">Confirmed Bookings</div>
-              <div className="text-2xl font-bold mt-1 text-green-600">
-                {filteredBookings.filter(b => b.status?.toLowerCase() === 'confirmed').length}
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm font-medium text-gray-500">Pending Bookings</div>
-              <div className="text-2xl font-bold mt-1 text-yellow-600">
-                {filteredBookings.filter(b => b.status?.toLowerCase() === 'pending').length}
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm font-medium text-gray-500">Cancelled Bookings</div>
-              <div className="text-2xl font-bold mt-1 text-red-600">
-                {filteredBookings.filter(b => b.status?.toLowerCase() === 'cancelled').length}
-              </div>
             </div>
           </div>
         </div>

@@ -83,14 +83,14 @@ const VehicleSelectionPage = () => {
         {lastUpdated && <p className="updated-time">Updated {new Date(lastUpdated).toLocaleTimeString()}</p>}
       </div>
 
-      <nav className="bottom-nav">
-        <a href="/" className="nav-item">
-          <i className="fas fa-book"></i> Booking
+      <div className="bottom-navv">
+        <a href="/" className="nav-itemm">
+          <i className="fas fa-book"></i> Routes
         </a>
-        <a href="/tickets" className="nav-item">
+        <a href="/mybookings" className="nav-itemm">
           <i className="fas fa-ticket"></i> Tickets
         </a>
-      </nav>
+      </div>
     </div>
   );
 };
