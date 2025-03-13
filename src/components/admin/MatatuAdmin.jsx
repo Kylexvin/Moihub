@@ -16,6 +16,7 @@ import {
 // Import components
 import RoutesManagement from './RoutesManagement';
 import MatatusManagement from './MatatusManagement';
+import PaymentManagement from './PaymentManagement';
 
 const MatatuAdmin = () => {
   // Navigation hook
@@ -112,7 +113,7 @@ const MatatuAdmin = () => {
       case 'bookings':
         return <div className="p-4">Bookings - Coming Soon</div>;
       case 'transactions':
-        return <div className="p-4">Transactions - Coming Soon</div>;
+        return <PaymentManagement setError={setError} setSuccess={setSuccess} />;
     }
   };
 

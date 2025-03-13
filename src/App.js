@@ -44,11 +44,12 @@ import SeatSelectionPage from './pages/SeatSelectionPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import PaymentInitiationPage from './pages/PaymentInitiationPage';
 import MyBookings from './components/MyBookings';
+import QrScanner from './components/admin/QrScanner';
+import MatatuAdmin from './components/admin/MatatuAdmin';
 
 // Data Imports
 import plotsData from './data/plots.json';
 import ShopData from './data/ShopData.json';
-import MatatuAdmin from './components/admin/MatatuAdmin';
 
 // Authentication Service
 import { authService } from './services/authService';
@@ -162,11 +163,20 @@ const App = () => {
           <Route
             path="/moilinkadmin"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+              <ProtectedRoute allowedRoles={['writer', 'admin']}>
                 <MatatuAdmin />
               </ProtectedRoute>
             )}
           />
+           <Route
+            path="/verifybooking"
+            element={(
+             
+                <QrScanner />
+              
+            )}
+          />
+
           <Route
             path="/moilinktravellers"
             element={(
