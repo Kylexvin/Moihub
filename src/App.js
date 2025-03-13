@@ -183,7 +183,7 @@ const App = () => {
               </ProtectedRoute>
             )}
           />
-          <Route
+           <Route
   path="/seat-selection/:matatuId"
   element={(
     <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>

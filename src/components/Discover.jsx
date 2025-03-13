@@ -128,6 +128,22 @@ const ServiceMarketplace = () => {
       ]
     },
     {
+      category: "poshomill",
+      providers: [
+        {
+          id: "poshomill",
+          name: "Poshomill ",
+          phone: "254717233222",
+          hasPage: false,
+          rating: 4.7,
+          reviews: 89,
+          location: "Opp View",
+          tags: ["Grade 1", "Grade 2"],
+          availability: "Available Now"
+        }
+      ]
+    },
+    {
       category: "Mama Fua",
       providers: [
         {
