@@ -35,7 +35,7 @@ const MyBookings = () => {
           return;
         }
 
-        const response = await axios.get(`https://moigosip.onrender.com/api/bookings/user/${userId}`, {
+        const response = await axios.get(`https://moihub.onrender.com/api/bookings/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

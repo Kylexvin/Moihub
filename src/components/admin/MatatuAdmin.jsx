@@ -17,6 +17,7 @@ import {
 import RoutesManagement from './RoutesManagement';
 import MatatusManagement from './MatatusManagement';
 import PaymentManagement from './PaymentManagement';
+import BookingManagement from './BookingManagement';
 
 const MatatuAdmin = () => {
   // Navigation hook
@@ -111,12 +112,11 @@ const MatatuAdmin = () => {
       default:
         return <div className="p-4">Dashboard - Coming Soon</div>;
       case 'bookings':
-        return <div className="p-4">Bookings - Coming Soon</div>;
+        return<BookingManagement setError={setError} setSuccess={setSuccess} />;
       case 'transactions':
         return <PaymentManagement setError={setError} setSuccess={setSuccess} />;
     }
   };
-
   // Nav item component
   const NavItem = ({ icon: Icon, title, id }) => (
     <button
