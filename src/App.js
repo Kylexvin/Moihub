@@ -163,7 +163,7 @@ const App = () => {
           <Route
             path="/moilinkadmin"
             element={(
-              <ProtectedRoute allowedRoles={['writer', 'admin']}>
+              <ProtectedRoute allowedRoles={['user','writer', 'admin']}>
                 <MatatuAdmin />
               </ProtectedRoute>
             )}
