@@ -84,7 +84,7 @@ const PaymentManagement = () => {
         throw new Error('Authentication required. Please log in again.');
       }
       
-      const response = await fetch(`http://localhost:5000/api/bookings/payments?${queryParams}`, {
+      const response = await fetch(`https://moihub.onrender.com/api/bookings/payments?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const PaymentManagement = () => {
         throw new Error('Authentication required. Please log in again.');
       }
       
-      const response = await fetch(`http://localhost:5000/api/bookings/payments/${paymentId}`, {
+      const response = await fetch(`https://moihub.onrender.com/api/bookings/payments/${paymentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

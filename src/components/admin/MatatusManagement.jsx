@@ -32,7 +32,7 @@ const MatatusManagement = ({ setError, setSuccess }) => {
   };
 
   // Base API URL
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = 'https://moihub.onrender.com/api';
 
   // Fetch data on component mount
   useEffect(() => {
