@@ -1,339 +1,577 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Check, X, Loader2, Clock, Info } from 'lucide-react';
 import axios from 'axios';
-import { io } from 'socket.io-client';
-import { ToastContainer, toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast, ToastContainer } from 'react-toastify';
+import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = 'https://moihub.onrender.com/api';
-const SOCKET_URL = 'https://moihub.onrender.com';
+const STORAGE_KEY = 'seatSelectionData';
 
-const BookingConfirmationPage = () => {
+const SeatSelectionPage = () => {
+  const { matatuId } = useParams();
   const navigate = useNavigate();
-  const [bookingDetails, setBookingDetails] = useState(null);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-  const [paymentMessage, setPaymentMessage] = useState('');
+  const [matatu, setMatatu] = useState(null);
+  const [selectedSeat, setSelectedSeat] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [seatLoading, setSeatLoading] = useState(null);
   const [error, setError] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentResponse, setPaymentResponse] = useState(null);
-  const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [seatStatuses, setSeatStatuses] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
-  const socketRef = useRef(null);
-  const pollIntervalRef = useRef(null);
-
-  // Initialize Toastify notifications
-  const notify = (message, type = 'info') => {
-    toast[type](message, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
-
+  // Check authentication status and get user ID
   useEffect(() => {
-    try {
-      const storedDetails = sessionStorage.getItem('selectedSeats');
-      if (!storedDetails) throw new Error('No booking details found');
-      setBookingDetails(JSON.parse(storedDetails));
-    } catch (err) {
-      setError('Unable to load booking details. Please try selecting your seat again.');
-      notify('Unable to load booking details. Please try again.', 'error');
-    } finally {
-      setLoading(false);
-    }
+    const token = localStorage.getItem('token');
+    const storedUserId = localStorage.getItem('userId');
+    setIsAuthenticated(!!token);
+    setUserId(storedUserId);
+  }, []);
 
-    // Socket.io connection
+  // Add auth token to requests
+  useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      socketRef.current = io(SOCKET_URL, {
-        auth: { token },
-        transports: ['websocket', 'polling'],
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-      });
-
-      socketRef.current.on('connect', () => {
-        console.log('Socket connected with ID:', socketRef.current.id);
-        notify('Connected to real-time updates.', 'success');
-      });
-
-      socketRef.current.on('connect_error', (err) => {
-        console.error('Socket connection error:', err);
-        notify('Real-time updates unavailable. Falling back to polling.', 'warning');
-        if (!pollIntervalRef.current && paymentResponse?.payment_id) {
-          startPaymentStatusCheck(paymentResponse.payment_id);
-        }
-      });
-
-      socketRef.current.on('payment_requested', (data) => {
-        console.log('Payment requested:', data);
-        setPaymentStatus('stk_pushed');
-        setPaymentMessage('M-PESA request sent to your phone');
-        notify('M-PESA request sent. Please check your phone.', 'info');
-      });
-
-      socketRef.current.on('payment_status_update', (data) => {
-        console.log('Payment status update:', data);
-        setPaymentStatus(data.status);
-        setPaymentMessage(data.message || getStatusMessage(data.status));
-
-        if (data.status === 'completed') {
-          if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-          sessionStorage.removeItem('selectedSeats');
-          notify('Payment successful! Your seat has been booked.', 'success');
-          setBookingConfirmed(true); // Set booking confirmed to true
-        } else if (data.status === 'failed') {
-          notify('Payment failed. Please try again.', 'error');
-        }
-      });
-
-      socketRef.current.on('seat_update', (data) => {
-        console.log('Seat update:', data);
-        if (data.status === 'booked' && bookingDetails?.seats?.includes(data.seat_number)) {
-          notify('Your seat has been confirmed!', 'success');
-        }
-      });
-
-      socketRef.current.on('disconnect', (reason) => {
-        console.log('Socket disconnected:', reason);
-        if (paymentStatus && ['stk_pushed', 'processing'].includes(paymentStatus) &&
-            paymentResponse?.payment_id && !pollIntervalRef.current) {
-          startPaymentStatusCheck(paymentResponse.payment_id);
-        }
-      });
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+  }, []);
 
-    return () => {
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      if (socketRef.current) socketRef.current.disconnect();
-    };
-  }, [navigate]);
+  // Load persisted seat selection from session storage
+  const loadPersistedSeatSelection = useCallback(async () => {
+    if (!isAuthenticated || !userId) return;
 
-  // Handle navigation after booking is confirmed
+    try {
+      const storedData = sessionStorage.getItem(STORAGE_KEY);
+      if (!storedData) return;
+
+      const { seatData, matatuIdStored, expiryTime } = JSON.parse(storedData);
+
+      // Check if data is for current matatu and still valid
+      if (matatuIdStored !== matatuId || new Date(expiryTime) < new Date()) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+
+      // Verify seat lock is still valid on server
+      const checkResponse = await axios.get(
+        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seatData.seatNumber}`
+      );
+
+      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
+        setSelectedSeat({
+          ...seatData,
+          lock_expiry: checkResponse.data.lock_expiry
+        });
+
+        // Show toast notification that selection was restored
+        toast.info('Your previous seat selection has been restored');
+      } else {
+        // Clear invalid selection
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
+    } catch (error) {
+      console.error('Error loading persisted seat selection:', error);
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+  }, [matatuId, isAuthenticated, userId]);
+
+  // Fetch initial matatu data
   useEffect(() => {
-    if (bookingConfirmed) {
-      // Navigate to the user's bookings page after 5 seconds
-      const timer = setTimeout(() => {
-        navigate('/mybookings', { state: { bookingConfirmed: true } });
-      }, 5000);
+    const fetchMatatu = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_BASE_URL}/matatus/${matatuId}`);
+        setMatatu(response.data);
 
-      return () => clearTimeout(timer);
+        const statuses = {};
+        response.data.seatLayout.forEach(seat => {
+          statuses[seat.seatNumber] = {
+            isBooked: seat.isBooked,
+            locked_by: seat.locked_by,
+            lock_expiry: seat.lock_expiry,
+            _id: seat._id
+          };
+        });
+        setSeatStatuses(statuses);
+
+        // Once matatu data is loaded, try to restore persisted seat selection
+        await loadPersistedSeatSelection();
+      } catch (err) {
+        console.error('Error fetching matatu:', err);
+        setError('Failed to fetch matatu details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatatu();
+  }, [matatuId, loadPersistedSeatSelection]);
+
+  // Store selected seat in session storage when it changes
+  useEffect(() => {
+    if (selectedSeat && selectedSeat.lock_expiry) {
+      const dataToStore = {
+        seatData: selectedSeat,
+        matatuIdStored: matatuId,
+        expiryTime: selectedSeat.lock_expiry
+      };
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
+    } else if (!selectedSeat) {
+      sessionStorage.removeItem(STORAGE_KEY);
     }
-  }, [bookingConfirmed, navigate]);
+  }, [selectedSeat, matatuId]);
 
-  const handlePayment = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError('Authentication required. Please log in to continue.');
-      notify('Please log in to continue.', 'error');
-      return;
-    }
+  // Periodically refresh seat statuses
+  useEffect(() => {
+    const refreshSeatStatuses = async () => {
+      if (!matatuId) return;
 
-    if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
-      setError('Please enter a valid Safaricom phone number');
-      notify('Invalid phone number. Please enter a valid Safaricom number.', 'error');
+      try {
+        const response = await axios.get(`${API_BASE_URL}/matatus/${matatuId}`);
+
+        const statuses = {};
+        response.data.seatLayout.forEach(seat => {
+          statuses[seat.seatNumber] = {
+            isBooked: seat.isBooked,
+            locked_by: seat.locked_by,
+            lock_expiry: seat.lock_expiry,
+            _id: seat._id
+          };
+        });
+        setSeatStatuses(statuses);
+
+        // If selected seat is no longer valid, deselect it
+        if (selectedSeat) {
+          const currentSeat = response.data.seatLayout.find(s => s._id === selectedSeat._id);
+          const now = new Date().toISOString();
+          if (!currentSeat || 
+              currentSeat.isBooked || 
+              !currentSeat.locked_by || 
+              currentSeat.locked_by !== userId ||
+              (currentSeat.lock_expiry && new Date(currentSeat.lock_expiry) < new Date(now))) {
+            setSelectedSeat(null);
+            toast.warn('Your seat reservation has expired');
+          }
+        }
+      } catch (err) {
+        console.error('Error refreshing seat statuses:', err);
+      }
+    };
+
+    const refreshInterval = setInterval(refreshSeatStatuses, 20000); // Refresh every 20 seconds
+    return () => clearInterval(refreshInterval);
+  }, [matatuId, selectedSeat, userId]);
+
+  // Watch for seat lock expiry and notify user
+  useEffect(() => {
+    if (!selectedSeat || !selectedSeat.lock_expiry) return;
+
+    const checkExpiryApproaching = () => {
+      const now = new Date();
+      const expiry = new Date(selectedSeat.lock_expiry);
+      const timeRemaining = expiry - now;
+
+      // Notify when 30 seconds left
+      if (timeRemaining > 0 && timeRemaining <= 30000) {
+        toast.warn('Your seat reservation will expire soon!', {
+          autoClose: 5000
+        });
+      }
+    };
+
+    const timer = setInterval(checkExpiryApproaching, 500);
+    return () => clearInterval(timer);
+  }, [selectedSeat]);
+
+  const showModal = (message) => {
+    setModalMessage(message);
+    setIsModalOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleLoginRedirect = () => {
+    sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+    navigate('/login');
+    hideModal();
+  };
+
+  const handleSeatClick = async (seat) => {
+    if (!isAuthenticated) {
+      showModal('You need to be logged in to select seats. Would you like to log in now?');
       return;
     }
 
     try {
-      setLoading(true);
-      setError(null);
+      setSeatLoading(seat.seatNumber);
 
-      let formattedPhone = phoneNumber;
-      if (formattedPhone.startsWith('+')) formattedPhone = formattedPhone.substring(1);
-      if (formattedPhone.startsWith('0')) formattedPhone = `254${formattedPhone.substring(1)}`;
-      if (!formattedPhone.startsWith('254')) formattedPhone = `254${formattedPhone}`;
+      // If clicking the same seat, deselect it
+      if (selectedSeat && selectedSeat._id === seat._id) {
+        setSelectedSeat(null);
+        setSeatLoading(null);
+        return;
+      }
 
-      const payload = {
-        phone_number: formattedPhone,
-        registration: bookingDetails?.registration,
-        route_id: bookingDetails?.route?.id,
-        seats: bookingDetails?.seats,
-        departure_time: bookingDetails?.departure_time,
-      };
+      // If another seat is selected, deselect it first
+      if (selectedSeat) {
+        setSelectedSeat(null);
+      }
 
-      const response = await axios.post(
-        `${API_BASE_URL}/bookings/payments/initiate`,
-        payload,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
+      // Check seat availability first
+      const checkResponse = await axios.get(
+        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seat.seatNumber}`
       );
 
-      if (!response.data?.payment_id) throw new Error('Invalid payment response');
+      if (checkResponse.data.status === 'booked') {
+        toast.error('This seat is already booked');
+        setSeatLoading(null);
+        return;
+      }
 
-      setPaymentResponse(response.data);
-      setPaymentStatus('stk_pushed');
-      setPaymentMessage('M-PESA request sent to your phone. Please check your phone and enter your PIN when prompted.');
-      notify('M-PESA request sent. Please check your phone.', 'info');
+      if (checkResponse.data.status === 'locked' && !checkResponse.data.locked_by_you) {
+        toast.warning('This seat is temporarily locked by another user');
+        setSeatLoading(null);
+        return;
+      }
 
-      setTimeout(() => {
-        if (['stk_pushed', 'processing'].includes(paymentStatus)) {
-          startPaymentStatusCheck(response.data.payment_id, token);
-        }
-      }, 15000);
+      // If it's already locked by this user, just select it
+      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
+        setSelectedSeat({
+          ...checkResponse.data.seat,
+          matatu_details: checkResponse.data.matatu_details,
+          lock_expiry: checkResponse.data.lock_expiry
+        });
+        toast.success(`Seat ${seat.seatNumber} selected`);
+        setSeatLoading(null);
+        return;
+      }
+
+      // If available, lock the seat
+      const lockResponse = await axios.post(`${API_BASE_URL}/bookings/${matatuId}/lock/${seat._id}`);
+
+      if (lockResponse.data.message.includes('successfully')) {
+        const { seat: lockedSeat, lock_expiry, matatu_details } = lockResponse.data;
+
+        setSelectedSeat({
+          ...lockedSeat,
+          matatu_details,
+          lock_expiry
+        });
+
+        toast.success(`Seat ${lockedSeat.seatNumber} reserved for 3 minutes`);
+
+        // Update seat statuses to reflect the lock
+        setSeatStatuses(prev => {
+          const newStatuses = {...prev};
+          Object.keys(newStatuses).forEach(seatNum => {
+            if (newStatuses[seatNum].locked_by === userId) {
+              newStatuses[seatNum] = {
+                ...newStatuses[seatNum],
+                locked_by: null,
+                lock_expiry: null
+              };
+            }
+          });
+
+          newStatuses[lockedSeat.seatNumber] = {
+            isBooked: lockedSeat.isBooked,
+            locked_by: userId,
+            lock_expiry: lock_expiry,
+            _id: lockedSeat._id
+          };
+
+          return newStatuses;
+        });
+
+        // Show SweetAlert2 modal
+        Swal.fire({
+          title: 'Book Now',
+          text: `Do you want to book seat ${lockedSeat.seatNumber} now?`,
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Book Now',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            proceedToBooking();
+          } else {
+            setSelectedSeat(null);
+          }
+        });
+      }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
-      notify('Failed to initiate payment. Please try again.', 'error');
+      if (err.response?.status === 401) {
+        showModal('Your session has expired. Please log in again.');
+      } else {
+        console.error('Error handling seat selection:', err);
+        const message = err.response?.data?.message || 'Failed to select seat. Please try again.';
+        toast.error(message);
+      }
     } finally {
-      setLoading(false);
+      setSeatLoading(null);
     }
   };
 
-  const startPaymentStatusCheck = (paymentId, authToken) => {
-    if (pollIntervalRef.current) return;
-
-    const token = authToken || localStorage.getItem('token');
-    if (!token) {
-      setError('Authentication error. Please try logging in again.');
-      notify('Authentication error. Please log in again.', 'error');
+  const proceedToBooking = async () => {
+    if (!isAuthenticated) {
+      showModal('You need to be logged in to proceed with booking. Would you like to log in now?');
       return;
     }
 
-    let failedAttempts = 0;
+    if (!selectedSeat) {
+      toast.info('Please select a seat');
+      return;
+    }
 
-    pollIntervalRef.current = setInterval(async () => {
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/bookings/payments/${paymentId}/status`,
-          { headers: { 'Authorization': `Bearer ${token}` } }
-        );
+    try {
+      // Show loading toast
+      const loadingToast = toast.loading('Verifying seat reservation...');
 
-        const { status } = response.data;
-        setPaymentStatus(status);
-        setPaymentMessage(getStatusMessage(status));
+      // Double-check seat lock before proceeding
+      const response = await axios.get(
+        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${selectedSeat.seatNumber}`
+      );
 
-        if (status === 'completed') {
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-          sessionStorage.removeItem('selectedSeats');
-          setBookingConfirmed(true); // Set booking confirmed to true
-        } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-          setError(`Payment ${status}. ${getStatusMessage(status)}`);
-          notify(`Payment ${status}. ${getStatusMessage(status)}`, 'error');
-        }
-      } catch (err) {
-        failedAttempts++;
-        if (failedAttempts >= 3) {
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-          setError('Network issues while checking payment status. Please check My Bookings section.');
-          notify('Network issues. Please check My Bookings section.', 'error');
-        }
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
+      if (response.data.status !== 'locked' || !response.data.locked_by_you) {
+        toast.error('Your seat lock has expired. Please select the seat again.');
+        setSelectedSeat(null);
+        return;
       }
-    }, 6000);
 
-    setTimeout(() => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-        if (['initiated', 'stk_pushed', 'processing'].includes(paymentStatus)) {
-          setPaymentStatus('expired');
-          setError('Payment request may have expired. Please check your M-PESA messages.');
-          notify('Payment request expired. Please check your M-PESA messages.', 'warning');
-        }
+      // All checks passed, proceed to booking
+      sessionStorage.setItem('selectedSeats', JSON.stringify({
+        matatuId,
+        seats: [selectedSeat.seatNumber],
+        seatIds: [selectedSeat._id],
+        price: matatu.currentPrice,
+        registration: matatu.registrationNumber,
+        departure_time: selectedSeat.matatu_details.departure_time,
+        route: selectedSeat.matatu_details.route
+      }));
+
+      navigate(`/booking-confirmation/${matatuId}/${selectedSeat._id}`);
+    } catch (err) {
+      console.error('Error verifying seat lock:', err);
+      if (err.response?.status === 401) {
+        showModal('Your session has expired. Please log in again.');
+      } else {
+        toast.error('Failed to verify seat status. Please try again.');
       }
-    }, 300000);
-  };
-
-  const getStatusMessage = (status) => {
-    switch (status) {
-      case 'stk_pushed': return 'M-PESA request sent to your phone';
-      case 'processing': return 'Processing your payment...';
-      case 'completed': return 'Payment successful! Confirming your seat...';
-      case 'failed': return 'Payment failed. Please try again.';
-      case 'cancelled': return 'Payment was cancelled. Please try again.';
-      case 'expired': return 'Payment request expired. Please try again.';
-      case 'refund_required': return 'There was an issue confirming your seat. A refund will be processed.';
-      default: return 'Waiting for payment status...';
     }
   };
 
-  const calculateTotalAmount = () => {
-    const basePrice = bookingDetails?.route?.basePrice || 0;
-    const numSeats = bookingDetails?.seats?.length || 0;
-    return basePrice * numSeats;
-  };
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-gray-50">
+      <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      <p className="text-gray-600 font-medium">Loading seat information...</p>
+    </div>
+  );
 
-  return (
-    <div className="max-w-2xl mx-auto p-4">
-      <ToastContainer />
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold">Booking Confirmation</h1>
-        </div>
-
-        <div className="p-6 space-y-6">
-          {bookingConfirmed ? (
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <h3 className="font-semibold text-green-800">Booking Confirmed!</h3>
-              <p className="mt-2">Your booking has been confirmed. You will be redirected to your bookings shortly.</p>
-            </div>
-          ) : (
-            <>
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Booking Details</h2>
-                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                  <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
-                  <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
-                  <p><span className="font-medium">Departure Time:</span> {bookingDetails?.departure_time}</p>
-                  <p><span className="font-medium">Selected Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
-                  <p><span className="font-medium">Price per Seat:</span> KES {bookingDetails?.route?.currentPrice}</p>
-                  <p><span className="font-medium">Number of Seats:</span> {bookingDetails?.seats?.length || 0}</p>
-                  <div className="border-t border-gray-200 pt-2 mt-2">
-                    <p className="font-semibold text-lg text-blue-700">
-                      Total Amount: KES {calculateTotalAmount()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus) ? (
-                <form onSubmit={handlePayment} className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      M-PESA Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="e.g., 254712345678"
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                      required
-                    />
-                    <p className="text-sm text-gray-500">Enter your Safaricom number in the format: 254712345678</p>
-                  </div>
-
-                  {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
-
-                  <button type="submit" disabled={loading} className={`w-full py-3 px-4 rounded-md text-white font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}>
-                    {loading ? 'Processing...' : `Pay Now - KES ${calculateTotalAmount()}`}
-                  </button>
-                </form>
-              ) : (
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h3 className="font-semibold text-blue-800">Payment Status</h3>
-                  <p className="mt-2">{paymentMessage}</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+  if (error) return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+      <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+        <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-gray-800 mb-4">{error}</h2>
+        <p className="text-gray-600 mb-6">There was a problem loading the seat layout. Please try again.</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow"
+        >
+          Retry
+        </button>
       </div>
     </div>
   );
-};
 
-export default BookingConfirmationPage;
+  if (!matatu) return null;
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <ToastContainer position="top-right" theme="colored" />
+  
+      {/* Modal for login prompts */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full"
+          >
+            <h3 className="text-lg font-semibold mb-3">Login Required</h3>
+            <p className="mb-4 text-gray-700">{modalMessage}</p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={hideModal}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLoginRedirect}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Log In
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+  
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white rounded-xl shadow-lg overflow-hidden"
+      >
+        {/* Header */}
+        <div className="p-6 border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <h1 className="text-2xl font-bold text-gray-800">
+            Select Your Seat - {matatu.registrationNumber}
+          </h1>
+          <div className="mt-2 flex items-center">
+            {!isAuthenticated && (
+              <span className="text-sm text-gray-600 flex items-center">
+                <Info size={16} className="text-blue-500 mr-1" />
+                Please log in to select a seat and make a booking
+              </span>
+            )}
+            {isAuthenticated && selectedSeat && (
+              <span className="text-sm font-medium text-green-600 flex items-center">
+                <Check size={16} className="mr-1" />
+                Seat {selectedSeat.seatNumber} reserved for you
+              </span>
+            )}
+          </div>
+        </div>
+  
+        <div className="p-6">
+          {/* Vehicle Info */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6 space-y-3 bg-blue-50 p-5 rounded-xl border border-blue-100"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <p className="text-sm text-gray-500">Route</p>
+                <p className="font-medium">
+                  {matatu.route?.origin} - {matatu.route?.destination}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Departure Time</p>
+                <p className="font-medium">{matatu.departureTime}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Price per seat</p>
+                <p className="font-medium">KSH {matatu.currentPrice}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Selected seat</p>
+                <p className="font-medium">
+                  {selectedSeat ? selectedSeat.seatNumber : "None"}
+                </p>
+              </div>
+            </div>
+  
+            {selectedSeat && (
+              <div className="border-t border-blue-200 pt-3 mt-3">
+                <p className="font-medium text-lg text-blue-800">
+                  Total amount: KSH {matatu.currentPrice}
+                </p>
+              </div>
+            )}
+          </motion.div>
+  
+          {/* Countdown Timer */}
+          {selectedSeat && selectedSeat.lock_expiry && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-center gap-3"
+            >
+              <Clock className="text-blue-500" size={20} />
+              <div className="text-center">
+                <p className="text-blue-700 font-medium">
+                  Your seat is reserved for{" "}
+                  {Math.floor((new Date(selectedSeat.lock_expiry) - new Date()) / 60000)}{" "}
+                  minutes
+                </p>
+              </div>
+            </motion.div>
+          )}
+  
+          {/* Seat Layout */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+            className="bg-gray-100 rounded-xl p-6 shadow-inner"
+          >
+            <div className="relative p-4 bg-gray-100 rounded-lg mb-6 text-center font-medium text-white">
+              <p>Driver's Area</p>
+            </div>
+  
+            <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+              {matatu.seatLayout.map((seat) => (
+                <motion.button
+                  key={seat._id}
+                  whileHover={
+                    !seat.isBooked ? { scale: 1.05 } : {}
+                  }
+                  whileTap={
+                    !seat.isBooked ? { scale: 0.95 } : {}
+                  }
+                  onClick={() => handleSeatClick(seat)}
+                  disabled={seat.isBooked}
+                  className={`w-full p-6 rounded-xl text-center transition-all
+                    border-2 shadow-sm ${
+                      seat.isBooked
+                        ? "bg-red-100 border-red-500 text-red-700"
+                        : "bg-white border-blue-300 text-blue-700 hover:bg-blue-50"
+                    }`}
+                >
+                  <span className="font-medium text-lg">Seat {seat.seatNumber}</span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+  
+          {/* Legend */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 flex flex-wrap gap-4 text-sm bg-white p-4 rounded-lg shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-white border-2 border-blue-300 rounded"></div>
+              <span>Available</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-green-500 border-2 border-green-600 rounded"></div>
+              <span>Selected</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-red-100 border-2 border-red-500 rounded"></div>
+              <span>Booked</span>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}; 
+  export default SeatSelectionPage;
+  

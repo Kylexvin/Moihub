@@ -33,7 +33,7 @@ const VehicleSelectionPage = () => {
     <div className="vehicle-selection-page">
       <div className="moilink-card">
         <h2>Moilink Travelers</h2>
-        <p>Your Journey, Our Priority</p>
+        <p className="moilinkcard-slogan">Your Journey, Our Priority</p>
       </div>
 
       <div className="destination-panel">
@@ -84,13 +84,13 @@ const VehicleSelectionPage = () => {
       </div>
 
       <div className="bottom-navv">
-        <a href="/" className="nav-itemm">
-          <i className="fas fa-book"></i> Routes
-        </a>
-        <a href="/mybookings" className="nav-itemm">
-          <i className="fas fa-ticket"></i> Tickets
-        </a>
-      </div>
+    <a href="/moilinktravellers" className="nav-item">
+        <i className="fas fa-route"></i> Routes
+    </a>
+    <a href="/mybookings" className="nav-itemm">
+        <i className="fas fa-book"></i> Bookings
+    </a>
+</div>
     </div>
   );
 };

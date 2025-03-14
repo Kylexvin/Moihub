@@ -5,6 +5,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
 
 const API_BASE_URL = 'https://moihub.onrender.com/api';
 const STORAGE_KEY = 'seatSelectionData';
@@ -166,26 +167,44 @@ const SeatSelectionPage = () => {
     return () => clearInterval(refreshInterval);
   }, [matatuId, selectedSeat, userId]);
 
-  // Watch for seat lock expiry and notify user
-  useEffect(() => {
-    if (!selectedSeat || !selectedSeat.lock_expiry) return;
+// Watch for seat lock expiry and notify user with SweetAlert
+// Watch for seat lock expiry and notify user with SweetAlert
+useEffect(() => {
+  if (!selectedSeat || !selectedSeat.lock_expiry) return;
+  
+  let alertShown = false;
+  
+  const checkExpiryApproaching = () => {
+    const now = new Date();
+    const expiry = new Date(selectedSeat.lock_expiry);
+    const timeRemaining = expiry - now;
     
-    const checkExpiryApproaching = () => {
-      const now = new Date();
-      const expiry = new Date(selectedSeat.lock_expiry);
-      const timeRemaining = expiry - now;
+    // Notify when 30 seconds left, but only once
+    if (timeRemaining > 0 && timeRemaining <= 30000 && !alertShown) {
+      alertShown = true;
       
-      // Notify when 30 seconds left
-      if (timeRemaining > 0 && timeRemaining <= 30000) {
-        toast.warn('Your seat reservation will expire soon!', {
-          autoClose: 5000
-        });
-      }
-    };
-    
-    const timer = setInterval(checkExpiryApproaching, 5000);
-    return () => clearInterval(timer);
-  }, [selectedSeat]);
+      Swal.fire({
+        title: 'Warning!',
+        text: 'Your seat reservation will expire soon!',
+        icon: 'warning',
+        confirmButtonText: 'Proceed to Book',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel Reservation',
+        timer: 25000,
+        timerProgressBar: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          proceedToBooking();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          setSelectedSeat(null);
+        }
+      });
+    }
+  };
+  
+  const timer = setInterval(checkExpiryApproaching, 5000);
+  return () => clearInterval(timer);
+}, [selectedSeat]); 
 
   const showModal = (message) => {
     setModalMessage(message);
@@ -201,107 +220,6 @@ const SeatSelectionPage = () => {
     navigate('/login');
     hideModal();
   };
-
-  const handleSeatClick = async (seat) => {
-    if (!isAuthenticated) {
-      showModal('You need to be logged in to select seats. Would you like to log in now?');
-      return;
-    }
-
-    try {
-      setSeatLoading(seat.seatNumber);
-
-      // If clicking the same seat, deselect it
-      if (selectedSeat && selectedSeat._id === seat._id) {
-        setSelectedSeat(null);
-        setSeatLoading(null);
-        return;
-      }
-
-      // If another seat is selected, deselect it first
-      if (selectedSeat) {
-        setSelectedSeat(null);
-      }
-
-      // Check seat availability first
-      const checkResponse = await axios.get(
-        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seat.seatNumber}`
-      );
-      
-      if (checkResponse.data.status === 'booked') {
-        toast.error('This seat is already booked');
-        setSeatLoading(null);
-        return;
-      }
-      
-      if (checkResponse.data.status === 'locked' && !checkResponse.data.locked_by_you) {
-        toast.warning('This seat is temporarily locked by another user');
-        setSeatLoading(null);
-        return;
-      }
-      
-      // If it's already locked by this user, just select it
-      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
-        setSelectedSeat({
-          ...checkResponse.data.seat,
-          matatu_details: checkResponse.data.matatu_details,
-          lock_expiry: checkResponse.data.lock_expiry
-        });
-        toast.success(`Seat ${seat.seatNumber} selected`);
-        setSeatLoading(null);
-        return;
-      }
-
-      // If available, lock the seat
-      const lockResponse = await axios.post(`${API_BASE_URL}/bookings/${matatuId}/lock/${seat._id}`);
-      
-      if (lockResponse.data.message.includes('successfully')) {
-        const { seat: lockedSeat, lock_expiry, matatu_details } = lockResponse.data;
-        
-        setSelectedSeat({
-          ...lockedSeat,
-          matatu_details,
-          lock_expiry
-        });
-
-        toast.success(`Seat ${lockedSeat.seatNumber} reserved for 3 minutes`);
-
-        // Update seat statuses to reflect the lock
-        setSeatStatuses(prev => {
-          const newStatuses = {...prev};
-          Object.keys(newStatuses).forEach(seatNum => {
-            if (newStatuses[seatNum].locked_by === userId) {
-              newStatuses[seatNum] = {
-                ...newStatuses[seatNum],
-                locked_by: null,
-                lock_expiry: null
-              };
-            }
-          });
-          
-          newStatuses[lockedSeat.seatNumber] = {
-            isBooked: lockedSeat.isBooked,
-            locked_by: userId,
-            lock_expiry: lock_expiry,
-            _id: lockedSeat._id
-          };
-          
-          return newStatuses;
-        });
-      }
-    } catch (err) {
-      if (err.response?.status === 401) {
-        showModal('Your session has expired. Please log in again.');
-      } else {
-        console.error('Error handling seat selection:', err);
-        const message = err.response?.data?.message || 'Failed to select seat. Please try again.';
-        toast.error(message);
-      }
-    } finally {
-      setSeatLoading(null);
-    }
-  };
-
   const proceedToBooking = async () => {
     if (!isAuthenticated) {
       showModal('You need to be logged in to proceed with booking. Would you like to log in now?');
@@ -352,6 +270,134 @@ const SeatSelectionPage = () => {
       }
     }
   };
+  const handleSeatClick = async (seat) => {
+    if (!isAuthenticated) {
+      showModal('You need to be logged in to select seats. Would you like to log in now?');
+      return;
+    }
+  
+    try {
+      setSeatLoading(seat.seatNumber);
+  
+      // If clicking the same seat, deselect it
+      if (selectedSeat && selectedSeat._id === seat._id) {
+        setSelectedSeat(null);
+        setSeatLoading(null);
+        return;
+      }
+  
+      // If another seat is selected, deselect it first
+      if (selectedSeat) {
+        setSelectedSeat(null);
+      }
+  
+      // Check seat availability first
+      const checkResponse = await axios.get(
+        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seat.seatNumber}`
+      );
+      
+      if (checkResponse.data.status === 'booked') {
+        toast.error('This seat is already booked');
+        setSeatLoading(null);
+        return;
+      }
+      
+      if (checkResponse.data.status === 'locked' && !checkResponse.data.locked_by_you) {
+        toast.warning('This seat is temporarily locked by another user');
+        setSeatLoading(null);
+        return;
+      }
+      
+      // If it's already locked by this user, just select it
+      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
+        setSelectedSeat({
+          ...checkResponse.data.seat,
+          matatu_details: checkResponse.data.matatu_details,
+          lock_expiry: checkResponse.data.lock_expiry
+        });
+        toast.success(`Seat ${seat.seatNumber} selected`);
+        setSeatLoading(null);
+        return;
+      }
+  
+      // If available, lock the seat
+      const lockResponse = await axios.post(`${API_BASE_URL}/bookings/${matatuId}/lock/${seat._id}`);
+      
+      if (lockResponse.data.message.includes('successfully')) {
+        const { seat: lockedSeat, lock_expiry, matatu_details } = lockResponse.data;
+        
+        setSelectedSeat({
+          ...lockedSeat,
+          matatu_details,
+          lock_expiry
+        });
+      
+        // Show SweetAlert with direct booking navigation
+        Swal.fire({
+          title: 'Seat Reserved!',
+          html: `<div>
+            <p>Seat ${lockedSeat.seatNumber} reserved for 3 minutes</p>
+            <p class="mt-2">Price: KSH ${matatu.currentPrice}</p>
+          </div>`,
+          icon: 'success',
+          confirmButtonText: 'Book Now',
+          confirmButtonColor: '#2563eb', // blue-600
+          showCancelButton: true,
+          cancelButtonText: 'Select Another Seat',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Navigate directly instead of calling proceedToBooking
+            sessionStorage.setItem('selectedSeats', JSON.stringify({
+              matatuId,
+              seats: [lockedSeat.seatNumber],
+              seatIds: [lockedSeat._id],
+              price: matatu.currentPrice,
+              registration: matatu.registrationNumber,
+              departure_time: matatu_details.departure_time,
+              route: matatu_details.route
+            }));
+            
+            navigate(`/booking-confirmation/${matatuId}/${lockedSeat._id}`);
+          }
+        });
+  
+        // Update seat statuses to reflect the lock
+        setSeatStatuses(prev => {
+          const newStatuses = {...prev};
+          Object.keys(newStatuses).forEach(seatNum => {
+            if (newStatuses[seatNum].locked_by === userId) {
+              newStatuses[seatNum] = {
+                ...newStatuses[seatNum],
+                locked_by: null,
+                lock_expiry: null
+              };
+            }
+          });
+          
+          newStatuses[lockedSeat.seatNumber] = {
+            isBooked: lockedSeat.isBooked,
+            locked_by: userId,
+            lock_expiry: lock_expiry,
+            _id: lockedSeat._id
+          };
+          
+          return newStatuses;
+        });
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        showModal('Your session has expired. Please log in again.');
+      } else {
+        console.error('Error handling seat selection:', err);
+        const message = err.response?.data?.message || 'Failed to select seat. Please try again.';
+        toast.error(message);
+      }
+    } finally {
+      setSeatLoading(null);
+    }
+  };
+
+
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-gray-50">
@@ -593,25 +639,8 @@ const SeatSelectionPage = () => {
             </motion.div>
           )}
 
-          {/* Continue Button */}
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            whileHover={isAuthenticated && selectedSeat ? { scale: 1.02 } : {}}
-            className={`w-full mt-6 px-6 py-4 rounded-lg text-white transition-all shadow-md
-              ${!isAuthenticated || !selectedSeat
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-600 hover:bg-blue-700'}`}
-            disabled={!isAuthenticated || !selectedSeat}
-            onClick={proceedToBooking}
-          >
-            {!isAuthenticated 
-              ? 'Please Log In to Book Seat'
-              : !selectedSeat
-                ? 'Select a Seat to Continue'
-                : `Proceed to Book Seat ${selectedSeat.seatNumber}`}
-          </motion.button>
+
+
         </div>
       </motion.div>
     </div>
