@@ -441,6 +441,7 @@ const MatatusManagement = ({ setError, setSuccess }) => {
                                   <div className="text-xs text-gray-600 mb-2">
                                     <div className="truncate"><span className="font-medium">By:</span> {seat.booked_by.username}</div>
                                     <div className="truncate"><span className="font-medium">Email:</span> {seat.booked_by.email}</div>
+                                    <div className="truncate"><span className="font-medium">Phone:</span> {seat.booked_by.phone_number || "N/A"}</div>
                                   </div>
                                 )}
                                 
