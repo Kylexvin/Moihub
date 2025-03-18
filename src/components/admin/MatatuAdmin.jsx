@@ -46,7 +46,7 @@ const MatatuAdmin = () => {
       const decoded = jwtDecode(token); // Decode token
       setIsAuthenticated(true);
       setUserRole(decoded.role); // Get role from token
-      setUserName(decoded.name || 'Admin'); // Get user name if available
+      setUserName(decoded.name || 'Kylex'); // Get user name if available
 
       if (decoded.role !== "admin") {
         navigate("/"); // Redirect non-admin users

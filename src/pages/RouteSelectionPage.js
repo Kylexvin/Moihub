@@ -1,38 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { MapPin, Map, Clock, Route, CheckCircle } from 'lucide-react';
+import { fetchRoutes, setSelectedDestination } from "../redux/slices/routeSlice";
 import "./v3.css";
 
 const RouteSelectionPage = () => {
-  const [routes, setRoutes] = useState([]);
-  const [selectedDestination, setSelectedDestination] = useState("");
-  const [totalRoutes, setTotalRoutes] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState(null);
+  const dispatch = useDispatch();
+  const { 
+    filteredRoutes, 
+    routes, 
+    selectedDestination, 
+    totalRoutes, 
+    lastUpdated, 
+    status 
+  } = useSelector((state) => state.routes);
+  
+  const isLoading = status === 'loading';
 
   useEffect(() => {
-    fetchRoutes();
-  }, []);
+    dispatch(fetchRoutes());
+  }, [dispatch]);
 
-  const fetchRoutes = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch("https://moihub.onrender.com/api/routes");
-      const data = await response.json();
-      setRoutes(data);
-      setTotalRoutes(data.length);
-      setLastUpdated(new Date());
-    } catch (error) {
-      console.error("Error fetching routes:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleDestinationChange = (e) => {
+    dispatch(setSelectedDestination(e.target.value));
+  };
+
+  const handleRefresh = () => {
+    dispatch(fetchRoutes());
   };
 
   const uniqueDestinations = [...new Set(routes.map((route) => route.destination))];
-
-  const filteredRoutes = selectedDestination
-   ? routes.filter((route) => route.destination === selectedDestination)
-    : routes;
 
   return (
     <div>
@@ -43,12 +40,15 @@ const RouteSelectionPage = () => {
             <p className="moilinkcard-slogan">Your Journey, Our Priority</p>
           </div>
           <div className="moilinkcard moilinkstats-card">
-            <p className="moilinkstats-number">TOTAL ROUTES: {totalRoutes}<br/>{lastUpdated && <p className="updated-time">Updated {new Date(lastUpdated).toLocaleTimeString()}</p>}</p>
+            <p className="moilinkstats-number">TOTAL ROUTES: {totalRoutes}
+              <br/>{lastUpdated && 
+                <p className="updated-time">Updated {new Date(lastUpdated).toLocaleTimeString()}</p>
+              }
+            </p>
             <div className="refresh-container">
-              <button className="refresh-btn" onClick={fetchRoutes} disabled={isLoading}>
+              <button className="refresh-btn" onClick={handleRefresh} disabled={isLoading}>
                 Refresh
               </button>
-              
             </div>
           </div>
         </div>
@@ -59,9 +59,9 @@ const RouteSelectionPage = () => {
         <select
           className="search-btn"
           value={selectedDestination}
-          onChange={(e) => setSelectedDestination(e.target.value)}
+          onChange={handleDestinationChange}
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Choose a destination
           </option>
           {uniqueDestinations.map((destination) => (
@@ -125,15 +125,14 @@ const RouteSelectionPage = () => {
         </div>
       )}
 
-<div className="bottom-navv">
-    <a href="/moilinktravellers" className="nav-item">
-        <i className="fas fa-route"></i> Routes
-    </a>
-    <a href="/mybookings" className="nav-itemm">
-        <i className="fas fa-book"></i> Bookings
-    </a>
-</div>
-
+      <div className="bottom-navv">
+        <a href="/moilinktravellers" className="nav-itemm">
+          <i className="fas fa-route"></i> Routes
+        </a>
+        <a href="/mybookings" className="nav-itemm">
+          <i className="fas fa-book"></i> Bookings
+        </a>
+      </div>
     </div>
   );
 };

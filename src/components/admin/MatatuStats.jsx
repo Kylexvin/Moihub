@@ -126,11 +126,11 @@ const MatatuStats = () => {
       </div>
 
       {/* Debug info - remove this in production */}
-      {transactions.length === 0 && (
+      {/* {transactions.length === 0 && (
         <div className="bg-yellow-100 p-4 mb-4 rounded border border-yellow-400">
           No transaction data loaded. Please check API endpoints.
         </div>
-      )}
+      )} */}
 
       {/* Transaction Status Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

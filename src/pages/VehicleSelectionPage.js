@@ -1,46 +1,39 @@
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { CheckCircle, Clock, Route } from "lucide-react"; // Use Lucide icons
+import { CheckCircle, Clock, Route } from "lucide-react";
+import { fetchMatatus, setSelectedMatatu } from "../redux/slices/vehicleSlice";
 
 const VehicleSelectionPage = () => {
-  const [matatus, setMatatus] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const { routeId } = useParams(); // Get routeId from URL params
-  const navigate = useNavigate(); // React Router navigation
+  const dispatch = useDispatch();
+  const { matatus, lastUpdated, status, error } = useSelector((state) => state.vehicles);
+  const isLoading = status === 'loading';
+  const { routeId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchMatatus();
-  }, [routeId]);
-
-  const fetchMatatus = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`https://moihub.onrender.com/api/routes/matatu/${routeId}`);
-      if (!response.ok) throw new Error("Failed to fetch data.");
-      const data = await response.json();
-      setMatatus(data.matatus || []);
-      setLastUpdated(new Date());
-    } catch (error) {
-      setError("Error fetching matatus. Please try again later.");
-    } finally {
-      setIsLoading(false);
+    if (routeId) {
+      dispatch(fetchMatatus(routeId));
     }
+  }, [dispatch, routeId]);
+
+  const handleSelectMatatu = (matatu) => {
+    dispatch(setSelectedMatatu(matatu));
+    navigate(`/seat-selection/${matatu._id}`);
   };
 
   return (
     <div className="vehicle-selection-page">
       <div className="moilink-card">
         <h2>Moilink Travelers</h2>
-        <p className="moilinkcard-slogan">Your Journey, Our Priority</p>
+        
       </div>
 
       <div className="destination-panel">
         {isLoading ? (
-           <div className='load-c'>
-           <span className="loader"></span>
-         </div>
+          <div className='load-c'>
+            <span className="loader"></span>
+          </div>
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : matatus.length === 0 ? (
@@ -70,7 +63,7 @@ const VehicleSelectionPage = () => {
               </div>
               <button
                 className="select-matatu-btn"
-                onClick={() => navigate(`/seat-selection/${matatu._id}`)}
+                onClick={() => handleSelectMatatu(matatu)}
               >
                 <CheckCircle size={16} /> Select Matatu
               </button>
@@ -84,13 +77,13 @@ const VehicleSelectionPage = () => {
       </div>
 
       <div className="bottom-navv">
-    <a href="/moilinktravellers" className="nav-item">
-        <i className="fas fa-route"></i> Routes
-    </a>
-    <a href="/mybookings" className="nav-itemm">
-        <i className="fas fa-book"></i> Bookings
-    </a>
-</div>
+        <a href="/moilinktravellers" className="nav-itemm">
+          <i className="fas fa-route"></i> Routes
+        </a>
+        <a href="/mybookings" className="nav-itemm">
+          <i className="fas fa-book"></i> Bookings
+        </a>
+      </div>
     </div>
   );
 };
