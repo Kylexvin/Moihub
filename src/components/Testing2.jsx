@@ -1,577 +1,619 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Check, X, Loader2, Clock, Info } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
-import { toast, ToastContainer } from 'react-toastify';
-import Swal from 'sweetalert2';
+import { io } from 'socket.io-client';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = 'https://moihub.onrender.com/api';
-const STORAGE_KEY = 'seatSelectionData';
+const SOCKET_URL = 'https://moihub.onrender.com';
 
-const SeatSelectionPage = () => {
-  const { matatuId } = useParams();
+const BookingConfirmationPage = () => {
   const navigate = useNavigate();
-  const [matatu, setMatatu] = useState(null);
-  const [selectedSeat, setSelectedSeat] = useState(null);
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [seatLoading, setSeatLoading] = useState(null);
   const [error, setError] = useState(null);
-  const [seatStatuses, setSeatStatuses] = useState({});
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [showTooltip, setShowTooltip] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [paymentResponse, setPaymentResponse] = useState(null);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [completedBookingDetails, setCompletedBookingDetails] = useState(null);
 
-  // Check authentication status and get user ID
-  useEffect(() => {
+  const socketRef = useRef(null);
+  const pollIntervalRef = useRef(null);
+
+  // Status messages for payment tracking
+  const STATUS_MESSAGES = {
+    stk_pushed: 'M-PESA request sent to your phone',
+    processing: 'Processing your payment...',
+    completed: 'Payment successful! Your seat has been booked.',
+    failed: 'Payment failed. Please try again.',
+    cancelled: 'Payment was cancelled. Please try again.',
+    expired: 'Payment request expired. Please try again.',
+    refund_required: 'There was an issue confirming your seat. A refund will be processed.'
+  };
+
+  // Notification handler
+  const notify = (status, customMessage = null) => {
+    const messageMap = {
+      stk_pushed: 'M-PESA request sent. Please check your phone.',
+      processing: 'Processing your payment...',
+      completed: 'Payment successful! Your seat has been booked.',
+      failed: 'Payment failed. Please try again.',
+      cancelled: 'Payment was cancelled. Please try again.',
+      expired: 'Payment request expired. Please try again.',
+      refund_required: 'There was an issue confirming your seat. A refund will be processed.',
+      socket_connected: 'Connected to real-time updates.',
+      socket_disconnected: 'Lost connection. Falling back to polling for updates.',
+      network_error: 'Network issues. Please check My Bookings section.',
+      auth_error: 'Authentication error. Please log in again.',
+      invalid_phone: 'Invalid phone number. Please enter a valid Safaricom number.',
+      loading_error: 'Unable to load booking details. Please try again.'
+    };
+    
+    const message = customMessage || messageMap[status] || status;
+    const type = ['completed', 'socket_connected'].includes(status) ? 'success' 
+               : ['failed', 'cancelled', 'expired', 'refund_required', 'network_error', 'auth_error', 'invalid_phone', 'loading_error'].includes(status) ? 'error'
+               : ['socket_disconnected'].includes(status) ? 'warning' 
+               : 'info';
+    
+    toast[type](message, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
+  // Extract user ID from JWT token
+  const getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
-    const storedUserId = localStorage.getItem('userId');
-    setIsAuthenticated(!!token);
-    setUserId(storedUserId);
-  }, []);
+    if (!token) return null;
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(window.atob(base64));
+      return payload.userId || payload.id;
+    } catch (e) {
+      console.error('Error extracting user ID from token:', e);
+      return null;
+    }
+  };
 
-  // Add auth token to requests
   useEffect(() => {
+    // Check for pending payments from previous sessions
+    const pendingPayment = localStorage.getItem('pendingPayment');
+    if (pendingPayment) {
+      try {
+        const { paymentId, status } = JSON.parse(pendingPayment);
+        if (paymentId) {
+          startPaymentStatusCheck(paymentId);
+        }
+        localStorage.removeItem('pendingPayment');
+      } catch (e) {
+        localStorage.removeItem('pendingPayment');
+      }
+    }
+
+    // Load booking details from session storage
+    try {
+      const storedDetails = sessionStorage.getItem('selectedSeats');
+      if (!storedDetails) throw new Error('No booking details found');
+      setBookingDetails(JSON.parse(storedDetails));
+    } catch (err) {
+      setError('Unable to load booking details. Please try selecting your seat again.');
+      notify('loading_error');
+    } finally {
+      setLoading(false);
+    }
+
+    // Socket.io connection
     const token = localStorage.getItem('token');
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-  }, []);
+      socketRef.current = io(SOCKET_URL, {
+        auth: { token },
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      });
 
-  // Load persisted seat selection from session storage
-  const loadPersistedSeatSelection = useCallback(async () => {
-    if (!isAuthenticated || !userId) return;
-
-    try {
-      const storedData = sessionStorage.getItem(STORAGE_KEY);
-      if (!storedData) return;
-
-      const { seatData, matatuIdStored, expiryTime } = JSON.parse(storedData);
-
-      // Check if data is for current matatu and still valid
-      if (matatuIdStored !== matatuId || new Date(expiryTime) < new Date()) {
-        sessionStorage.removeItem(STORAGE_KEY);
-        return;
-      }
-
-      // Verify seat lock is still valid on server
-      const checkResponse = await axios.get(
-        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seatData.seatNumber}`
-      );
-
-      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
-        setSelectedSeat({
-          ...seatData,
-          lock_expiry: checkResponse.data.lock_expiry
-        });
-
-        // Show toast notification that selection was restored
-        toast.info('Your previous seat selection has been restored');
-      } else {
-        // Clear invalid selection
-        sessionStorage.removeItem(STORAGE_KEY);
-      }
-    } catch (error) {
-      console.error('Error loading persisted seat selection:', error);
-      sessionStorage.removeItem(STORAGE_KEY);
-    }
-  }, [matatuId, isAuthenticated, userId]);
-
-  // Fetch initial matatu data
-  useEffect(() => {
-    const fetchMatatu = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/matatus/${matatuId}`);
-        setMatatu(response.data);
-
-        const statuses = {};
-        response.data.seatLayout.forEach(seat => {
-          statuses[seat.seatNumber] = {
-            isBooked: seat.isBooked,
-            locked_by: seat.locked_by,
-            lock_expiry: seat.lock_expiry,
-            _id: seat._id
-          };
-        });
-        setSeatStatuses(statuses);
-
-        // Once matatu data is loaded, try to restore persisted seat selection
-        await loadPersistedSeatSelection();
-      } catch (err) {
-        console.error('Error fetching matatu:', err);
-        setError('Failed to fetch matatu details');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMatatu();
-  }, [matatuId, loadPersistedSeatSelection]);
-
-  // Store selected seat in session storage when it changes
-  useEffect(() => {
-    if (selectedSeat && selectedSeat.lock_expiry) {
-      const dataToStore = {
-        seatData: selectedSeat,
-        matatuIdStored: matatuId,
-        expiryTime: selectedSeat.lock_expiry
-      };
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
-    } else if (!selectedSeat) {
-      sessionStorage.removeItem(STORAGE_KEY);
-    }
-  }, [selectedSeat, matatuId]);
-
-  // Periodically refresh seat statuses
-  useEffect(() => {
-    const refreshSeatStatuses = async () => {
-      if (!matatuId) return;
-
-      try {
-        const response = await axios.get(`${API_BASE_URL}/matatus/${matatuId}`);
-
-        const statuses = {};
-        response.data.seatLayout.forEach(seat => {
-          statuses[seat.seatNumber] = {
-            isBooked: seat.isBooked,
-            locked_by: seat.locked_by,
-            lock_expiry: seat.lock_expiry,
-            _id: seat._id
-          };
-        });
-        setSeatStatuses(statuses);
-
-        // If selected seat is no longer valid, deselect it
-        if (selectedSeat) {
-          const currentSeat = response.data.seatLayout.find(s => s._id === selectedSeat._id);
-          const now = new Date().toISOString();
-          if (!currentSeat || 
-              currentSeat.isBooked || 
-              !currentSeat.locked_by || 
-              currentSeat.locked_by !== userId ||
-              (currentSeat.lock_expiry && new Date(currentSeat.lock_expiry) < new Date(now))) {
-            setSelectedSeat(null);
-            toast.warn('Your seat reservation has expired');
-          }
+      socketRef.current.on('connect', () => {
+        setSocketConnected(true);
+        
+        // Join user-specific room
+        const userId = getUserIdFromToken();
+        if (userId) {
+          socketRef.current.emit('join_user_room', { userId });
         }
-      } catch (err) {
-        console.error('Error refreshing seat statuses:', err);
+        
+        notify('socket_connected');
+      });
+
+      socketRef.current.on('connect_error', () => {
+        setSocketConnected(false);
+        notify('socket_disconnected');
+        
+        // Start polling if payment is in progress
+        if (paymentResponse?.payment_id && !pollIntervalRef.current) {
+          startPaymentStatusCheck(paymentResponse.payment_id);
+        }
+      });
+
+      socketRef.current.on('payment_requested', () => {
+        handlePaymentStatusUpdate('stk_pushed');
+      });
+
+      socketRef.current.on('payment_status_update', (data) => {
+        handlePaymentStatusUpdate(data.status, data.message, data);
+      });
+
+      socketRef.current.on('payment_completed', (data) => {
+        handlePaymentStatusUpdate('completed', null, data.booking || data);
+      });
+
+      socketRef.current.on('disconnect', () => {
+        setSocketConnected(false);
+        
+        // Start polling if we were in the middle of a payment
+        if (paymentStatus && ['stk_pushed', 'processing'].includes(paymentStatus) &&
+            paymentResponse?.payment_id && !pollIntervalRef.current) {
+          notify('socket_disconnected');
+          startPaymentStatusCheck(paymentResponse.payment_id);
+        }
+      });
+    }
+
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+      
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+      
+      // Check if we were in a payment flow and never got confirmation
+      if (paymentStatus === 'stk_pushed' || paymentStatus === 'processing') {
+        // Store this state in localStorage to handle page refreshes
+        localStorage.setItem('pendingPayment', JSON.stringify({
+          paymentId: paymentResponse?.payment_id,
+          status: paymentStatus
+        }));
       }
     };
+  }, [navigate, paymentStatus, paymentResponse]);
 
-    const refreshInterval = setInterval(refreshSeatStatuses, 20000); // Refresh every 20 seconds
-    return () => clearInterval(refreshInterval);
-  }, [matatuId, selectedSeat, userId]);
+  // Centralized payment status update handler
+  const handlePaymentStatusUpdate = (status, customMessage = null, bookingData = null) => {
+    setPaymentStatus(status);
+    notify(status, customMessage);
 
-  // Watch for seat lock expiry and notify user
-  useEffect(() => {
-    if (!selectedSeat || !selectedSeat.lock_expiry) return;
-
-    const checkExpiryApproaching = () => {
-      const now = new Date();
-      const expiry = new Date(selectedSeat.lock_expiry);
-      const timeRemaining = expiry - now;
-
-      // Notify when 30 seconds left
-      if (timeRemaining > 0 && timeRemaining <= 30000) {
-        toast.warn('Your seat reservation will expire soon!', {
-          autoClose: 5000
-        });
+    if (status === 'completed') {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
       }
-    };
-
-    const timer = setInterval(checkExpiryApproaching, 500);
-    return () => clearInterval(timer);
-  }, [selectedSeat]);
-
-  const showModal = (message) => {
-    setModalMessage(message);
-    setIsModalOpen(true);
+      
+      // Save completed booking details for modal
+      setCompletedBookingDetails(bookingData || paymentResponse);
+      
+      // Show success modal
+      setShowSuccessModal(true);
+    } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+      setError(`Payment ${status}. ${STATUS_MESSAGES[status]}`);
+    }
   };
 
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Authentication required. Please log in to continue.');
+      notify('auth_error');
+      return;
+    }
 
-  const handleLoginRedirect = () => {
-    sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-    navigate('/login');
-    hideModal();
-  };
-
-  const handleSeatClick = async (seat) => {
-    if (!isAuthenticated) {
-      showModal('You need to be logged in to select seats. Would you like to log in now?');
+    if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
+      setError('Please enter a valid Safaricom phone number');
+      notify('invalid_phone');
       return;
     }
 
     try {
-      setSeatLoading(seat.seatNumber);
+      setLoading(true);
+      setError(null);
 
-      // If clicking the same seat, deselect it
-      if (selectedSeat && selectedSeat._id === seat._id) {
-        setSelectedSeat(null);
-        setSeatLoading(null);
-        return;
-      }
+      let formattedPhone = phoneNumber;
+      if (formattedPhone.startsWith('+')) formattedPhone = formattedPhone.substring(1);
+      if (formattedPhone.startsWith('0')) formattedPhone = `254${formattedPhone.substring(1)}`;
+      if (!formattedPhone.startsWith('254')) formattedPhone = `254${formattedPhone}`;
 
-      // If another seat is selected, deselect it first
-      if (selectedSeat) {
-        setSelectedSeat(null);
-      }
+      const payload = {
+        phone_number: formattedPhone,
+        registration: bookingDetails?.registration,
+        route_id: bookingDetails?.route?.id,
+        seats: bookingDetails?.seats,
+        departure_time: bookingDetails?.departure_time,
+      };
 
-      // Check seat availability first
-      const checkResponse = await axios.get(
-        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${seat.seatNumber}`
+      const response = await axios.post(
+        `${API_BASE_URL}/bookings/payments/initiate`,
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
       );
 
-      if (checkResponse.data.status === 'booked') {
-        toast.error('This seat is already booked');
-        setSeatLoading(null);
-        return;
-      }
+      if (!response.data?.payment_id) throw new Error('Invalid payment response');
 
-      if (checkResponse.data.status === 'locked' && !checkResponse.data.locked_by_you) {
-        toast.warning('This seat is temporarily locked by another user');
-        setSeatLoading(null);
-        return;
-      }
+      setPaymentResponse(response.data);
+      handlePaymentStatusUpdate('stk_pushed');
 
-      // If it's already locked by this user, just select it
-      if (checkResponse.data.status === 'locked' && checkResponse.data.locked_by_you) {
-        setSelectedSeat({
-          ...checkResponse.data.seat,
-          matatu_details: checkResponse.data.matatu_details,
-          lock_expiry: checkResponse.data.lock_expiry
-        });
-        toast.success(`Seat ${seat.seatNumber} selected`);
-        setSeatLoading(null);
-        return;
-      }
-
-      // If available, lock the seat
-      const lockResponse = await axios.post(`${API_BASE_URL}/bookings/${matatuId}/lock/${seat._id}`);
-
-      if (lockResponse.data.message.includes('successfully')) {
-        const { seat: lockedSeat, lock_expiry, matatu_details } = lockResponse.data;
-
-        setSelectedSeat({
-          ...lockedSeat,
-          matatu_details,
-          lock_expiry
-        });
-
-        toast.success(`Seat ${lockedSeat.seatNumber} reserved for 3 minutes`);
-
-        // Update seat statuses to reflect the lock
-        setSeatStatuses(prev => {
-          const newStatuses = {...prev};
-          Object.keys(newStatuses).forEach(seatNum => {
-            if (newStatuses[seatNum].locked_by === userId) {
-              newStatuses[seatNum] = {
-                ...newStatuses[seatNum],
-                locked_by: null,
-                lock_expiry: null
-              };
-            }
-          });
-
-          newStatuses[lockedSeat.seatNumber] = {
-            isBooked: lockedSeat.isBooked,
-            locked_by: userId,
-            lock_expiry: lock_expiry,
-            _id: lockedSeat._id
-          };
-
-          return newStatuses;
-        });
-
-        // Show SweetAlert2 modal
-        Swal.fire({
-          title: 'Book Now',
-          text: `Do you want to book seat ${lockedSeat.seatNumber} now?`,
-          icon: 'info',
-          showCancelButton: true,
-          confirmButtonText: 'Book Now',
-          cancelButtonText: 'Cancel'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            proceedToBooking();
-          } else {
-            setSelectedSeat(null);
-          }
-        });
-      }
+      // Start polling after a delay as a fallback
+      setTimeout(() => {
+        if (['stk_pushed', 'processing', 'initiated'].includes(paymentStatus)) {
+          startPaymentStatusCheck(response.data.payment_id);
+        }
+      }, 15000);
     } catch (err) {
-      if (err.response?.status === 401) {
-        showModal('Your session has expired. Please log in again.');
-      } else {
-        console.error('Error handling seat selection:', err);
-        const message = err.response?.data?.message || 'Failed to select seat. Please try again.';
-        toast.error(message);
-      }
+      setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
+      notify(null, 'Failed to initiate payment. Please try again.');
     } finally {
-      setSeatLoading(null);
+      setLoading(false);
     }
   };
 
-  const proceedToBooking = async () => {
-    if (!isAuthenticated) {
-      showModal('You need to be logged in to proceed with booking. Would you like to log in now?');
+  const startPaymentStatusCheck = (paymentId) => {
+    if (pollIntervalRef.current) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Authentication error. Please try logging in again.');
+      notify('auth_error');
       return;
     }
 
-    if (!selectedSeat) {
-      toast.info('Please select a seat');
-      return;
-    }
+    let failedAttempts = 0;
 
-    try {
-      // Show loading toast
-      const loadingToast = toast.loading('Verifying seat reservation...');
+    pollIntervalRef.current = setInterval(async () => {
+      try {
+        const response = await axios.get(
+         `${API_BASE_URL}/bookings/payments/status/${paymentId}`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
+        );
 
-      // Double-check seat lock before proceeding
-      const response = await axios.get(
-        `${API_BASE_URL}/bookings/${matatuId}/check-seat?seat_number=${selectedSeat.seatNumber}`
-      );
-
-      // Dismiss loading toast
-      toast.dismiss(loadingToast);
-
-      if (response.data.status !== 'locked' || !response.data.locked_by_you) {
-        toast.error('Your seat lock has expired. Please select the seat again.');
-        setSelectedSeat(null);
-        return;
+        const { status } = response.data;
+        handlePaymentStatusUpdate(status, null, response.data);
+      } catch (err) {
+        failedAttempts++;
+        if (failedAttempts >= 3) {
+          clearInterval(pollIntervalRef.current);
+          pollIntervalRef.current = null;
+          setError('Network issues while checking payment status. Please check My Bookings section.');
+          notify('network_error');
+        }
       }
+    }, 6000);
 
-      // All checks passed, proceed to booking
-      sessionStorage.setItem('selectedSeats', JSON.stringify({
-        matatuId,
-        seats: [selectedSeat.seatNumber],
-        seatIds: [selectedSeat._id],
-        price: matatu.currentPrice,
-        registration: matatu.registrationNumber,
-        departure_time: selectedSeat.matatu_details.departure_time,
-        route: selectedSeat.matatu_details.route
-      }));
-
-      navigate(`/booking-confirmation/${matatuId}/${selectedSeat._id}`);
-    } catch (err) {
-      console.error('Error verifying seat lock:', err);
-      if (err.response?.status === 401) {
-        showModal('Your session has expired. Please log in again.');
-      } else {
-        toast.error('Failed to verify seat status. Please try again.');
+    // Clear polling after 5 minutes if no completion
+    setTimeout(() => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        if (['initiated', 'stk_pushed', 'processing'].includes(paymentStatus)) {
+          handlePaymentStatusUpdate('expired');
+        }
       }
-    }
+    }, 300000); // 5 minutes
   };
 
-  if (loading) return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-gray-50">
-      <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
-      <p className="text-gray-600 font-medium">Loading seat information...</p>
-    </div>
-  );
+  // Payment Status Indicator Component
+  const PaymentStatusIndicator = ({ status }) => {
+    const statusConfig = {
+      stk_pushed: {
+        icon: 'phone',
+        color: 'blue',
+        title: 'M-PESA Request Sent',
+        description: 'Please check your phone and enter your PIN'
+      },
+      processing: {
+        icon: 'refresh',
+        color: 'blue',
+        title: 'Processing Payment',
+        description: 'We are processing your transaction'
+      },
+      completed: {
+        icon: 'check-circle',
+        color: 'green',
+        title: 'Payment Successful',
+        description: 'Your booking has been confirmed'
+      },
+      failed: {
+        icon: 'x-circle',
+        color: 'red',
+        title: 'Payment Failed',
+        description: 'Please try again or use a different number'
+      },
+      expired: {
+        icon: 'clock',
+        color: 'yellow',
+        title: 'Request Expired',
+        description: 'The payment request has expired'
+      },
+      cancelled: {
+        icon: 'x',
+        color: 'red',
+        title: 'Payment Cancelled',
+        description: 'You cancelled the M-PESA request'
+      }
+    };
 
-  if (error) return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
-        <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-800 mb-4">{error}</h2>
-        <p className="text-gray-600 mb-6">There was a problem loading the seat layout. Please try again.</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow"
-        >
-          Retry
-        </button>
+    const config = statusConfig[status] || {
+      icon: 'info',
+      color: 'gray',
+      title: 'Unknown Status',
+      description: 'Please wait...'
+    };
+
+    const getIcon = () => {
+      switch (config.icon) {
+        case 'phone':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+          );
+          case 'refresh':
+            return (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H9"
+                />
+              </svg>
+            );
+          
+        case 'check-circle':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          );
+        case 'x-circle':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          );
+        case 'clock':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          );
+        case 'x':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          );
+        default:
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          );
+      }
+    };
+
+    const colorClasses = {
+      blue: 'text-blue-600 bg-blue-100',
+      green: 'text-green-600 bg-green-100',
+      red: 'text-red-600 bg-red-100',
+      yellow: 'text-yellow-600 bg-yellow-100',
+      gray: 'text-gray-600 bg-gray-100'
+    };
+
+    return (
+      <div className="flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+        <div className={`p-3 rounded-full ${colorClasses[config.color]}`}>
+          {getIcon()}
+        </div>
+        <div className="ml-4">
+          <h3 className="font-medium">{config.title}</h3>
+          <p className="text-sm text-gray-500">{config.description}</p>
+        </div>
+      </div>
+    );
+  };
+
+  // Success Modal Component
+  const SuccessModal = ({ show, onClose, bookingData }) => {
+    if (!show) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="flex justify-between items-center border-b border-gray-200 p-4">
+            <h2 className="text-xl font-bold text-green-700">Booking Successful!</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-center mb-4">
+              <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id}</p>
+              <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
+              <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
+              <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
+            </div>
+            
+            <div className="text-center space-y-4 mt-4">
+              <p className="text-gray-600">Your ticket is now confirmed!</p>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-3">
+                <button 
+                  onClick={() => navigate('/mybookings')} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md transition-colors duration-300"
+                >
+                  View My Bookings
+                </button>
+                <button 
+                  onClick={() => navigate('/')} 
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-md transition-colors duration-300"
+                >
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Calculate total amount for display
+  const getTotalAmount = () => {
+    const basePrice = bookingDetails?.route?.basePrice || bookingDetails?.route?.currentPrice || 0;
+    const numSeats = bookingDetails?.seats?.length || 0;
+    return basePrice * numSeats;
+  };
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <ToastContainer />
+      <SuccessModal 
+        show={showSuccessModal} 
+        onClose={() => setShowSuccessModal(false)} 
+        bookingData={completedBookingDetails} 
+      />
+      
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="p-4 bg-blue-50 border-b border-blue-100">
+          <h1 className="text-xl font-bold text-blue-800">Payment</h1>
+          {socketConnected && (
+            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+              Live updates
+            </span>
+          )}
+        </div>
+
+        <div className="p-4">
+          {/* Basic booking info */}
+          <div className="mb-4 bg-gray-50 p-3 rounded-lg text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Route:</span>
+              <span className="font-medium">{bookingDetails?.route?.name}</span>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="text-gray-600">Seat(s):</span>
+              <span className="font-medium">{bookingDetails?.seats?.join(', ')}</span>
+            </div>
+            <div className="flex justify-between mt-1 border-t border-gray-200 pt-1">
+              <span className="text-gray-600">Total:</span>
+              <span className="font-bold text-blue-700">KES {getTotalAmount()}</span>
+            </div>
+          </div>
+
+          {/* Payment status indicator */}
+          {paymentStatus && (
+            <div className="mb-4">
+              <PaymentStatusIndicator status={paymentStatus} />
+            </div>
+          )}
+
+          {/* Payment form or status */}
+          {!paymentStatus || ['failed', 'expired', 'cancelled'].includes(paymentStatus) ? (
+            <form onSubmit={handlePayment} className="space-y-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  M-PESA Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="e.g., 254712345678"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  required
+                />
+                <p className="text-xs text-gray-500">Enter your Safaricom number (254xxxxxxxxx)</p>
+              </div>
+
+              {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
+
+              <button 
+                type="submit" 
+                disabled={loading} 
+                className={`w-full py-3 px-4 rounded-md text-white font-medium flex items-center justify-center ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  `Pay KES ${getTotalAmount()}`
+                )}
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {/* Payment tracking animation for in-progress states */}
+              {['stk_pushed', 'processing'].includes(paymentStatus) && (
+                <div className="flex flex-col items-center justify-center py-4">
+                  <div className="relative">
+                    <div className="h-16 w-16 rounded-full border-4 border-blue-200 flex items-center justify-center">
+                      <div className="h-12 w-12 rounded-full border-4 border-t-blue-600 animate-spin"></div>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-center text-sm text-gray-600">
+                    {paymentStatus === 'stk_pushed' ? 
+                      'Please enter your M-PESA PIN when prompted on your phone' : 
+                      'Processing your payment...'}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
+};
 
-  if (!matatu) return null;
-
-  return (
-    <div className="max-w-4xl mx-auto p-4">
-      <ToastContainer position="top-right" theme="colored" />
-  
-      {/* Modal for login prompts */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full"
-          >
-            <h3 className="text-lg font-semibold mb-3">Login Required</h3>
-            <p className="mb-4 text-gray-700">{modalMessage}</p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={hideModal}
-                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleLoginRedirect}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
-                Log In
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-  
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white rounded-xl shadow-lg overflow-hidden"
-      >
-        {/* Header */}
-        <div className="p-6 border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Select Your Seat - {matatu.registrationNumber}
-          </h1>
-          <div className="mt-2 flex items-center">
-            {!isAuthenticated && (
-              <span className="text-sm text-gray-600 flex items-center">
-                <Info size={16} className="text-blue-500 mr-1" />
-                Please log in to select a seat and make a booking
-              </span>
-            )}
-            {isAuthenticated && selectedSeat && (
-              <span className="text-sm font-medium text-green-600 flex items-center">
-                <Check size={16} className="mr-1" />
-                Seat {selectedSeat.seatNumber} reserved for you
-              </span>
-            )}
-          </div>
-        </div>
-  
-        <div className="p-6">
-          {/* Vehicle Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="mb-6 space-y-3 bg-blue-50 p-5 rounded-xl border border-blue-100"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <p className="text-sm text-gray-500">Route</p>
-                <p className="font-medium">
-                  {matatu.route?.origin} - {matatu.route?.destination}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Departure Time</p>
-                <p className="font-medium">{matatu.departureTime}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Price per seat</p>
-                <p className="font-medium">KSH {matatu.currentPrice}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Selected seat</p>
-                <p className="font-medium">
-                  {selectedSeat ? selectedSeat.seatNumber : "None"}
-                </p>
-              </div>
-            </div>
-  
-            {selectedSeat && (
-              <div className="border-t border-blue-200 pt-3 mt-3">
-                <p className="font-medium text-lg text-blue-800">
-                  Total amount: KSH {matatu.currentPrice}
-                </p>
-              </div>
-            )}
-          </motion.div>
-  
-          {/* Countdown Timer */}
-          {selectedSeat && selectedSeat.lock_expiry && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-center gap-3"
-            >
-              <Clock className="text-blue-500" size={20} />
-              <div className="text-center">
-                <p className="text-blue-700 font-medium">
-                  Your seat is reserved for{" "}
-                  {Math.floor((new Date(selectedSeat.lock_expiry) - new Date()) / 60000)}{" "}
-                  minutes
-                </p>
-              </div>
-            </motion.div>
-          )}
-  
-          {/* Seat Layout */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-            className="bg-gray-100 rounded-xl p-6 shadow-inner"
-          >
-            <div className="relative p-4 bg-gray-100 rounded-lg mb-6 text-center font-medium text-white">
-              <p>Driver's Area</p>
-            </div>
-  
-            <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
-              {matatu.seatLayout.map((seat) => (
-                <motion.button
-                  key={seat._id}
-                  whileHover={
-                    !seat.isBooked ? { scale: 1.05 } : {}
-                  }
-                  whileTap={
-                    !seat.isBooked ? { scale: 0.95 } : {}
-                  }
-                  onClick={() => handleSeatClick(seat)}
-                  disabled={seat.isBooked}
-                  className={`w-full p-6 rounded-xl text-center transition-all
-                    border-2 shadow-sm ${
-                      seat.isBooked
-                        ? "bg-red-100 border-red-500 text-red-700"
-                        : "bg-white border-blue-300 text-blue-700 hover:bg-blue-50"
-                    }`}
-                >
-                  <span className="font-medium text-lg">Seat {seat.seatNumber}</span>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-  
-          {/* Legend */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-6 flex flex-wrap gap-4 text-sm bg-white p-4 rounded-lg shadow-sm"
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-white border-2 border-blue-300 rounded"></div>
-              <span>Available</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-green-500 border-2 border-green-600 rounded"></div>
-              <span>Selected</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-red-100 border-2 border-red-500 rounded"></div>
-              <span>Booked</span>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
-    </div>
-  );
-}; 
-  export default SeatSelectionPage;
-  
+export default BookingConfirmationPage;
