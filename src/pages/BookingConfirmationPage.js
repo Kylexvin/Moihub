@@ -24,16 +24,36 @@ const BookingConfirmationPage = () => {
   const pollIntervalRef = useRef(null);
 
   // Status messages for payment tracking
-  const STATUS_MESSAGES = {
-    stk_pushed: 'M-PESA request sent to your phone',
-    processing: 'Processing your payment...',
-    completed: 'Payment successful! Your seat has been booked.',
-    failed: 'Payment failed. Please try again.',
-    cancelled: 'Payment was cancelled. Please try again.',
-    expired: 'Payment request expired. Please try again.',
-    refund_required: 'There was an issue confirming your seat. A refund will be processed.'
-  };
 
+const STATUS_MESSAGES = {
+  stk_pushed: 'M-PESA request sent to your phone',
+  processing: 'Processing your payment...',
+  completed: 'Payment successful! Your seat has been booked.',
+  failed: 'Payment failed. Please try again.',
+  cancelled: 'Payment was cancelled. Please try again.',
+  expired: 'Payment request expired. Please try again.',
+  refund_required: 'There was an issue confirming your seat. A refund will be processed.'
+};
+// Add after your other const definitions, around line 40
+const formatTransactionDate = (transactionDate) => {
+  if (!transactionDate) return '';
+  
+  // Backend sends date in format YYYYMMDDHHmmss
+  const dateStr = transactionDate.toString();
+  if (dateStr.length !== 14) return dateStr;
+  
+  try {
+    const year = dateStr.substring(0, 4);
+    const month = dateStr.substring(4, 6);
+    const day = dateStr.substring(6, 8);
+    const hour = dateStr.substring(8, 10);
+    const minute = dateStr.substring(10, 12);
+    
+    return `${day}/${month}/${year} ${hour}:${minute}`;
+  } catch (e) {
+    return dateStr;
+  }
+};
   // Notification handler
   const notify = (status, customMessage = null) => {
     const messageMap = {
@@ -151,10 +171,16 @@ const BookingConfirmationPage = () => {
         handlePaymentStatusUpdate(data.status, data.message, data);
       });
 
-      socketRef.current.on('payment_completed', (data) => {
-        handlePaymentStatusUpdate('completed', null, data.booking || data);
-      });
-
+     
+socketRef.current.on('payment_completed', (data) => {
+  // Extract booking details from the data structure returned by backend
+  const bookingData = {
+    ...data.booking,
+    receipt: data.receipt,
+    transaction_date: data.transaction_date
+  };
+  handlePaymentStatusUpdate('completed', null, bookingData);
+});
       socketRef.current.on('disconnect', () => {
         setSocketConnected(false);
         
@@ -192,24 +218,27 @@ const BookingConfirmationPage = () => {
   const handlePaymentStatusUpdate = (status, customMessage = null, bookingData = null) => {
     setPaymentStatus(status);
     notify(status, customMessage);
-
+  
     if (status === 'completed') {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
         pollIntervalRef.current = null;
       }
-      
-      // Save completed booking details for modal
-      setCompletedBookingDetails(bookingData || paymentResponse);
-      
-      // Show success modal
+      const formattedBookingData = {
+        ...bookingData,
+        // Ensure we have access to these properties from either structure
+        booking_id: bookingData?.booking_id || bookingData?._id || paymentResponse?.payment_id,
+        receipt: bookingData?.receipt || bookingData?.transaction_details?.receipt_number,
+        transaction_date: bookingData?.transaction_date || bookingData?.transaction_details?.transaction_date
+      };
+      setCompletedBookingDetails(formattedBookingData);
       setShowSuccessModal(true);
     } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
         pollIntervalRef.current = null;
       }
-      setError(`Payment ${status}. ${STATUS_MESSAGES[status]}`);
+      setError(`Payment ${status}. ${customMessage || STATUS_MESSAGES[status]}`);
     }
   };
 
@@ -256,7 +285,10 @@ const BookingConfirmationPage = () => {
         }
       );
 
-      if (!response.data?.payment_id) throw new Error('Invalid payment response');
+      if (!response.data?.payment_id) {
+        throw new Error('Invalid payment response. Missing payment ID.');
+      }
+      
 
       setPaymentResponse(response.data);
       handlePaymentStatusUpdate('stk_pushed');
@@ -266,7 +298,7 @@ const BookingConfirmationPage = () => {
         if (['stk_pushed', 'processing', 'initiated'].includes(paymentStatus)) {
           startPaymentStatusCheck(response.data.payment_id);
         }
-      }, 15000);
+      }, 20000); 
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to initiate payment. Please try again.');
       notify(null, 'Failed to initiate payment. Please try again.');
@@ -290,12 +322,13 @@ const BookingConfirmationPage = () => {
     pollIntervalRef.current = setInterval(async () => {
       try {
         const response = await axios.get(
-         `${API_BASE_URL}/bookings/payments/status/${paymentId}`,
+          `${API_BASE_URL}/bookings/payments/status/${paymentId}`,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
-
-        const { status } = response.data;
-        handlePaymentStatusUpdate(status, null, response.data);
+      
+        const { status, message } = response.data;
+        // Pass the complete response data for additional details
+        handlePaymentStatusUpdate(status, message || null, response.data);
       } catch (err) {
         failedAttempts++;
         if (failedAttempts >= 3) {
@@ -466,12 +499,19 @@ const BookingConfirmationPage = () => {
               </div>
             </div>
             
-            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id}</p>
-              <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
-              
-              <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
-            </div>
+
+<div className="bg-gray-50 p-4 rounded-lg space-y-2">
+  <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
+  <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
+  
+  {/* Add these lines to display receipt details */}
+  {completedBookingDetails?.receipt && (
+    <p><span className="font-medium">Receipt:</span> {completedBookingDetails.receipt}</p>
+  )}
+  {completedBookingDetails?.transaction_date && (
+    <p><span className="font-medium">Transaction Date:</span> {formatTransactionDate(completedBookingDetails.transaction_date)}</p>
+  )}
+</div>
             
             <div className="text-center space-y-4 mt-4">
               <p className="text-gray-600">Your ticket is now confirmed!</p>
