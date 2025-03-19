@@ -22,7 +22,7 @@ const BookingConfirmationPage = () => {
 
   const socketRef = useRef(null);
   const pollIntervalRef = useRef(null);
-  const lastNotifiedStatus = useRef(null);
+
   // Status messages for payment tracking
   const STATUS_MESSAGES = {
     stk_pushed: 'M-PESA request sent to your phone',
@@ -35,44 +35,38 @@ const BookingConfirmationPage = () => {
   };
 
   // Notification handler
-// Notification handler
-const notify = (status, customMessage = null) => {
-  // Don't show multiple notifications for the same status
-  if (status === lastNotifiedStatus.current) return;
-  lastNotifiedStatus.current = status;
-  
-  const messageMap = {
-    stk_pushed: 'M-PESA request sent. Please check your phone.',
-    processing: 'Processing your payment...',
-    completed: 'Payment successful! Your seat has been booked.',
-    failed: 'Payment failed. Please try again.',
-    cancelled: 'Payment was cancelled. Please try again.',
-    expired: 'Payment request expired. Please try again.',
-    refund_required: 'There was an issue confirming your seat. A refund will be processed.',
-    socket_connected: 'Connected to real-time updates.',
-    socket_disconnected: 'Lost connection. Falling back to polling for updates.',
-    network_error: 'Network issues. Please check My Bookings section.',
-    auth_error: 'Authentication required. Please log in to continue.',
-    invalid_phone: 'Invalid phone number. Please enter a valid Safaricom number.',
-    loading_error: 'Unable to load booking details. Please try again.'
+  const notify = (status, customMessage = null) => {
+    const messageMap = {
+      stk_pushed: 'M-PESA request sent. Please check your phone.',
+      processing: 'Processing your payment...',
+      completed: 'Payment successful! Your seat has been booked.',
+      failed: 'Payment failed. Please try again.',
+      cancelled: 'Payment was cancelled. Please try again.',
+      expired: 'Payment request expired. Please try again.',
+      refund_required: 'There was an issue confirming your seat. A refund will be processed.',
+      socket_connected: 'Connected to real-time updates.',
+      socket_disconnected: 'Lost connection. Falling back to polling for updates.',
+      network_error: 'Network issues. Please check My Bookings section.',
+      auth_error: 'Authentication error. Please log in again.',
+      invalid_phone: 'Invalid phone number. Please enter a valid Safaricom number.',
+      loading_error: 'Unable to load booking details. Please try again.'
+    };
+    
+    const message = customMessage || messageMap[status] || status;
+    const type = ['completed', 'socket_connected'].includes(status) ? 'success' 
+               : ['failed', 'cancelled', 'expired', 'refund_required', 'network_error', 'auth_error', 'invalid_phone', 'loading_error'].includes(status) ? 'error'
+               : ['socket_disconnected'].includes(status) ? 'warning' 
+               : 'info';
+    
+    toast[type](message, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   };
-  
-  const message = customMessage || messageMap[status] || status;
-  const type = ['completed', 'socket_connected'].includes(status) ? 'success' 
-             : ['failed', 'cancelled', 'expired', 'refund_required', 'network_error', 'auth_error', 'invalid_phone', 'loading_error'].includes(status) ? 'error'
-             : ['socket_disconnected'].includes(status) ? 'warning' 
-             : 'info';
-  
-  toast[type](message, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    toastId: status, // Prevent duplicate toasts
-  });
-};
 
   // Extract user ID from JWT token
   const getUserIdFromToken = () => {
@@ -158,8 +152,7 @@ const notify = (status, customMessage = null) => {
       });
 
       socketRef.current.on('payment_completed', (data) => {
-        console.log('Payment completed event received:', data);
-        handlePaymentStatusUpdate('completed', data.message, data.booking || data);
+        handlePaymentStatusUpdate('completed', null, data.booking || data);
       });
 
       socketRef.current.on('disconnect', () => {
@@ -197,10 +190,9 @@ const notify = (status, customMessage = null) => {
 
   // Centralized payment status update handler
   const handlePaymentStatusUpdate = (status, customMessage = null, bookingData = null) => {
-    console.log(`Payment status update: ${status}`, bookingData);
     setPaymentStatus(status);
     notify(status, customMessage);
-  
+
     if (status === 'completed') {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
@@ -212,15 +204,12 @@ const notify = (status, customMessage = null) => {
       
       // Show success modal
       setShowSuccessModal(true);
-      
-      // Clear pending payment status
-      localStorage.removeItem('pendingPayment');
     } else if (['failed', 'expired', 'cancelled', 'refund_required'].includes(status)) {
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
         pollIntervalRef.current = null;
       }
-      setError(`Payment ${status}. ${STATUS_MESSAGES[status] || 'Please try again.'}`);
+      setError(`Payment ${status}. ${STATUS_MESSAGES[status]}`);
     }
   };
 
@@ -368,13 +357,7 @@ const notify = (status, customMessage = null) => {
         color: 'red',
         title: 'Payment Cancelled',
         description: 'You cancelled the M-PESA request'
-      },
-refund_required: {
-  icon: 'alert',
-  color: 'yellow',
-  title: 'Refund Required',
-  description: 'There was an issue with your booking. A refund will be processed.'
-}
+      }
     };
 
     const config = statusConfig[status] || {
@@ -428,12 +411,6 @@ refund_required: {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           );
-          case 'alert':
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-  ); 
         default:
           return (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -490,7 +467,7 @@ refund_required: {
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id || ''}</p>
+              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id}</p>
               <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
               
               <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
