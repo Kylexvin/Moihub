@@ -1,4 +1,51 @@
 [
+    {
+        "id": "bipolarcafe",
+        "name": "Tasty Tasters",
+        "category": "food delivery",
+        "phone": "0701943718",
+        "description": "They are located just around school of engineering-Ngeria.",
+        "location": "Ngeria",
+        "rating": 4.8,
+        "foodTypes": ["Milk", "Viazi", "Chapo"],
+        "deliveryTime": "20-25 mins",
+        "offer": "Stage and School",
+        "hasDetails": true,
+        "products": [
+          {
+              "id": "steak1",
+              "name": "Andazi",
+              "price":"5/-", 
+              "image": "../delish/andazi.jpg"
+          },
+            {
+                "id": "steak2",
+                "name": "Chapati",
+                "price": 15,
+                "image": "../delish/chapo.jpg"
+            },
+            {
+                "id": "steak3",
+                "name": "Beans",
+                "price": 40,
+                "image": "../delish/beans.jpg"
+            },
+  
+            {
+              "id": "steak5",
+              "name": "Ndengu",
+              "price": 30,
+              "image": "../delish/ndengu.jpg"
+          },
+            {
+              "id": "steak4",
+              "name": "Viazi",
+              "price": "Varies",
+              "image": "../delish/viazi.jpg"
+          }
+        ]
+    },
+
   {
       "id": "villapark",
       "name": "Villa Park",
@@ -54,52 +101,7 @@
           }
       ]
   },
-  {
-      "id": "bipolarcafe",
-      "name": "Bipolar Cafe",
-      "category": "food delivery",
-      "phone": "0701943718",
-      "description": "They are located just around school of engineering-Ngeria.",
-      "location": "Ngeria",
-      "rating": 4.8,
-      "foodTypes": ["Milk", "Viazi", "Chapo"],
-      "deliveryTime": "20-25 mins",
-      "offer": "Stage and School",
-      "hasDetails": true,
-      "products": [
-        {
-            "id": "steak1",
-            "name": "Andazi",
-            "price":"5/-", 
-            "image": "../delish/andazi.jpg"
-        },
-          {
-              "id": "steak2",
-              "name": "Chapati",
-              "price": 15,
-              "image": "../delish/chapo.jpg"
-          },
-          {
-              "id": "steak3",
-              "name": "Beans",
-              "price": 40,
-              "image": "../delish/beans.jpg"
-          },
 
-          {
-            "id": "steak5",
-            "name": "Ndengu",
-            "price": 30,
-            "image": "../delish/ndengu.jpg"
-        },
-          {
-            "id": "steak4",
-            "name": "Viazi",
-            "price": "Varies",
-            "image": "../delish/viazi.jpg"
-        }
-      ]
-  },
   {
     "id": "summerplace",
     "name": "Summer Palace",

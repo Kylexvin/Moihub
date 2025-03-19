@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import './styles.css';
 
@@ -10,6 +10,25 @@ const navLinkStyle = {
 };
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is logged in using localStorage
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+  
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem('token');
+    
+    // Update state
+    setIsLoggedIn(false);
+    
+    // Redirect to home page
+    window.location.href = '/';
+  };
+
   return (
     <>
       <SpeedInsights />
@@ -80,11 +99,25 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          {/* Login button at the bottom */}
+          {/* Login/Logout button */}
           <div className="navbar-footer">
-            <a href="/login" className="btn btn-outline-light" style={{ marginTop: '10px', fontSize: '16px' }}>
-              Login
-            </a>
+            {isLoggedIn ? (
+              <button 
+                onClick={handleLogout} 
+                className="btn btn-outline-light" 
+                style={{ marginTop: '10px', fontSize: '16px' }}
+              >
+                Logout
+              </button>
+            ) : (
+              <a 
+                href="/login" 
+                className="btn btn-outline-light" 
+                style={{ marginTop: '10px', fontSize: '16px' }}
+              >
+                Login
+              </a>
+            )}
           </div>
         </div>
       </nav>
