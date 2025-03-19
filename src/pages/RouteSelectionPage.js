@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MapPin, Map, Clock, Route, CheckCircle } from 'lucide-react';
 import { fetchRoutes, setSelectedDestination } from "../redux/slices/routeSlice";
 import "./v3.css";
-
+import { Navigate } from "react-router-dom";
 const RouteSelectionPage = () => {
   const dispatch = useDispatch();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const { 
     filteredRoutes, 
     routes, 
@@ -20,7 +22,25 @@ const RouteSelectionPage = () => {
   useEffect(() => {
     dispatch(fetchRoutes());
   }, [dispatch]);
+  useEffect(() => {
+    // Check if token exists in localStorage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setCheckingAuth(false);
+  }, []);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchRoutes());
+    }
+  }, [dispatch, isAuthenticated]);
+
+  // Return to login if not authenticated
+  if (!checkingAuth && !isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
   const handleDestinationChange = (e) => {
     dispatch(setSelectedDestination(e.target.value));
   };

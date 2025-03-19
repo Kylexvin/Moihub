@@ -111,7 +111,7 @@ const MatatuAdmin = () => {
         return <MatatusManagement setError={setError} setSuccess={setSuccess} />;
       case 'dashboard':
       default:
-        return <MatatuStats setError={setError} setSuccess={setSuccess} />;
+        return <BookingManagement setError={setError} setSuccess={setSuccess} />;
       case 'bookings':
         return<BookingManagement setError={setError} setSuccess={setSuccess} />;
       case 'transactions':
@@ -148,7 +148,7 @@ const MatatuAdmin = () => {
           <NavItem icon={Home} title="Dashboard" id="dashboard" />
           <NavItem icon={MapPin} title="Routes" id="routes" />
           <NavItem icon={Bus} title="Matatus" id="matatus" />
-          <NavItem icon={BookOpen} title="Bookings" id="bookings" />
+        
           <NavItem icon={DollarSign} title="Transactions" id="transactions" />
         </nav>
         

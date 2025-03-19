@@ -25,27 +25,28 @@ const MatatuStats = () => {
         const usersData = await usersRes.json();
         const matatusData = await matatusRes.json();
         
-        // Get transactions from the response (handle both data structures)
-        const allTransactions = bookingsData.data || bookingsData.bookings || [];
+        // Extract bookings from the response correctly
+        const allTransactions = bookingsData.bookings || [];
+        console.log('Transactions:', allTransactions); // Debug
         setTransactions(allTransactions);
         
-        // Calculate sum of completed payments - making sure to access the correct property
+        // Calculate sum of completed payments based on actual structure
         const completedPayments = allTransactions
-          .filter(transaction => transaction.status === 'completed')
-          .reduce((total, transaction) => total + (transaction.amount || 0), 0);
+          .filter(transaction => transaction.payment && transaction.payment.status === 'completed')
+          .reduce((total, transaction) => total + (parseFloat(transaction.payment.amount) || 0), 0);
         
         // Set all the stats
         setStats({
           completedPayments,
-          totalUsers: usersData.length || 0,
+          totalUsers: Array.isArray(usersData) ? usersData.length : 0,
           totalMatatus: matatusData.count || 0,
-          completedTransactions: allTransactions.filter(t => t.status === 'completed').length,
+          completedTransactions: allTransactions.filter(t => t.payment && t.payment.status === 'completed').length,
           totalTransactions: allTransactions.length,
         });
         
         // Process payment status data for pie chart
         const statusCounts = allTransactions.reduce((acc, transaction) => {
-          const status = transaction.status || 'unknown';
+          const status = transaction.payment ? transaction.payment.status : 'unknown';
           acc[status] = (acc[status] || 0) + 1;
           return acc;
         }, {});
@@ -61,23 +62,27 @@ const MatatuStats = () => {
         const trendsByDate = {};
         
         allTransactions.forEach(transaction => {
-          const date = new Date(transaction.created_at).toLocaleDateString();
+          // Use booking date or payment date if available
+          const date = new Date(transaction.travelDate || transaction.createdAt || new Date()).toLocaleDateString();
+          const paymentStatus = transaction.payment ? transaction.payment.status : 'unknown';
           
           if (!trendsByDate[date]) {
             trendsByDate[date] = { 
               date, 
               completed: 0, 
-              expired: 0, 
               pending: 0, 
+              confirmed: 0,
+              cancelled: 0,
+              unknown: 0,
               totalAmount: 0 
             };
           }
           
-          const status = transaction.status || 'unknown';
-          trendsByDate[date][status] = (trendsByDate[date][status] || 0) + 1;
+          // Increment the appropriate status counter
+          trendsByDate[date][paymentStatus] = (trendsByDate[date][paymentStatus] || 0) + 1;
           
-          if (status === 'completed') {
-            trendsByDate[date].totalAmount += (transaction.amount || 0);
+          if (paymentStatus === 'completed') {
+            trendsByDate[date].totalAmount += parseFloat(transaction.payment?.amount || 0);
           }
         });
         
@@ -99,8 +104,10 @@ const MatatuStats = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
   const STATUS_COLORS = {
     completed: '#10B981', // green
-    expired: '#EF4444',   // red
+    confirmed: '#3B82F6', // blue
     pending: '#F59E0B',   // amber
+    cancelled: '#EF4444', // red
+    unknown: '#9CA3AF',   // gray
   };
 
   return (
@@ -109,7 +116,7 @@ const MatatuStats = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <StatCard 
           title="Completed Payments" 
-          value={`Ksh ${stats.completedPayments}`} 
+          value={`Ksh ${stats.completedPayments.toFixed(2)}`} 
           icon="cash"
           subtitle={`${stats.completedTransactions} transactions`}
         />
@@ -125,12 +132,12 @@ const MatatuStats = () => {
         />
       </div>
 
-      {/* Debug info - remove this in production */}
-      {/* {transactions.length === 0 && (
+      {/* Debug info */}
+      {transactions.length === 0 && (
         <div className="bg-yellow-100 p-4 mb-4 rounded border border-yellow-400">
           No transaction data loaded. Please check API endpoints.
         </div>
-      )} */}
+      )}
 
       {/* Transaction Status Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -178,8 +185,9 @@ const MatatuStats = () => {
                 <Tooltip />
                 <Legend />
                 <Line type="monotone" dataKey="completed" stroke="#10B981" activeDot={{ r: 8 }} name="Completed" />
-                <Line type="monotone" dataKey="expired" stroke="#EF4444" name="Expired" />
+                <Line type="monotone" dataKey="confirmed" stroke="#3B82F6" name="Confirmed" />
                 <Line type="monotone" dataKey="pending" stroke="#F59E0B" name="Pending" />
+                <Line type="monotone" dataKey="cancelled" stroke="#EF4444" name="Cancelled" />
               </LineChart>
             </ResponsiveContainer>
           ) : (
@@ -197,35 +205,36 @@ const MatatuStats = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receipt</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Travel Date</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {transactions.slice(0, 5).map((transaction) => (
                 <tr key={transaction._id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {transaction.transaction_details?.receipt_number || 'N/A'}
+                    {transaction._id?.substring(0, 8) || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {transaction.user?.username || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    Ksh {transaction.amount}
+                    Ksh {transaction.payment?.amount || transaction.fare || 0}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${transaction.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                        transaction.status === 'expired' ? 'bg-red-100 text-red-800' : 
+                      ${transaction.payment?.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                        transaction.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
+                        transaction.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                         'bg-yellow-100 text-yellow-800'}`}>
-                      {transaction.status}
+                      {transaction.payment?.status || transaction.status || 'unknown'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(transaction.created_at).toLocaleString()}
+                    {new Date(transaction.travelDate).toLocaleDateString()}
                   </td>
                 </tr>
               ))}
@@ -244,18 +253,15 @@ const MatatuStats = () => {
       {/* Payment Amount Distribution */}
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-4">Completed Payments</h2>
-        {transactions.filter(t => t.status === 'completed').length > 0 ? (
+        {transactions.filter(t => t.payment && t.payment.status === 'completed').length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={transactions.filter(t => t.status === 'completed').slice(0, 10)}>
+            <BarChart data={transactions.filter(t => t.payment && t.payment.status === 'completed').slice(0, 10)}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey={(transaction) => 
-                transaction.transaction_details?.receipt_number || 
-                transaction._id.substring(0, 8)
-              } />
+              <XAxis dataKey={(transaction) => transaction._id?.substring(0, 8) || 'unknown'} />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="amount" fill="#3B82F6" name="Amount (Ksh)" />
+              <Bar dataKey="payment.amount" fill="#3B82F6" name="Amount (Ksh)" />
             </BarChart>
           </ResponsiveContainer>
         ) : (

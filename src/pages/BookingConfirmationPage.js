@@ -492,7 +492,7 @@ refund_required: {
             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
               <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id || ''}</p>
               <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
-              <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
+              
               <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
             </div>
             
