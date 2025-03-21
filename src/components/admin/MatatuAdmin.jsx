@@ -5,16 +5,13 @@ import { jwtDecode } from 'jwt-decode';
 import { 
   Home, 
   MapPin, 
-  Bus, 
-  BookOpen, 
+  Bus,  
   DollarSign, 
   AlertCircle, 
   User, 
   LogOut,
   Moon,
-  Sun,
-  BarChart3,
-  Settings
+  Sun,  
 } from 'lucide-react';
 
 // Import components
@@ -32,6 +29,7 @@ const MatatuAdmin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [userName, setUserName] = useState('');
+  const [loading, setLoading] = useState(true); // Added loading state
   
   // UI states
   const [error, setError] = useState(null);
@@ -39,7 +37,7 @@ const MatatuAdmin = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [darkMode, setDarkMode] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
+
   // Check authentication first
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -47,20 +45,24 @@ const MatatuAdmin = () => {
       navigate("/"); // Redirect if no token
       return;
     }
-
+  
     try {
-      const decoded = jwtDecode(token); // Decode token
+      const decoded = jwtDecode(token);
       setIsAuthenticated(true);
-      setUserRole(decoded.role); // Get role from token
-      setUserName(decoded.name || 'Kylex'); // Get user name if available
+      setUserRole(decoded.role?.trim().toLowerCase());
+      setUserName(decoded.name || "-");
 
-      if (decoded.role !== "admin") {
-        navigate("/"); // Redirect non-admin users
+      console.log("Decoded Role:", decoded.role?.trim().toLowerCase());
+      
+      if (decoded.role?.trim().toLowerCase() !== "admin") {
+        navigate("/");
       }
     } catch (error) {
       console.error("Invalid token:", error);
-      localStorage.removeItem("token"); // Clear invalid token
+      localStorage.removeItem("token");
       navigate("/");
+    } finally {
+      setLoading(false); // Set loading to false after auth check
     }
   }, [navigate]);
 
@@ -99,6 +101,15 @@ const MatatuAdmin = () => {
     navigate("/");
   };
 
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   // Early return if not authenticated or not admin
   if (!isAuthenticated || userRole !== "admin") {
     return (
@@ -117,6 +128,7 @@ const MatatuAdmin = () => {
       </div>
     );
   }
+
 
   // Render the active component based on currentView
   const renderActiveComponent = () => {

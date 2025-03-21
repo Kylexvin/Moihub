@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://moihub.onrender.com/api/auth'; // Adjust to your backend URL
+const BASE_URL = 'https://moihub.onrender.com/api/auth';
 
 export const authService = {
   register: async (userData) => {
@@ -8,6 +8,7 @@ export const authService = {
       const response = await axios.post(`${BASE_URL}/register`, userData);
       return response.data;
     } catch (error) {
+      console.error("Registration Error:", error.response ? error.response.data : error.message);
       throw error.response ? error.response.data : new Error('Registration failed');
     }
   },
@@ -15,16 +16,19 @@ export const authService = {
   login: async (credentials) => {
     try {
       const response = await axios.post(`${BASE_URL}/login`, credentials);
-      
-      // Store token, user ID, and role in localStorage
+      console.log("Raw API Response:", response.data);
+
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userId', response.data.userId);
-        localStorage.setItem('role', response.data.role); // Store the user role
+        localStorage.setItem('role', response.data.role);
+      } else {
+        throw new Error("Token is missing in response!");
       }
-      
+
       return response.data;
     } catch (error) {
+      console.error("Login Error:", error.response ? error.response.data : error.message);
       throw error.response ? error.response.data : new Error('Login failed');
     }
   },
@@ -32,16 +36,22 @@ export const authService = {
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    localStorage.removeItem('role'); // Remove role on logout
+    localStorage.removeItem('role');
   },
 
   isAuthenticated: () => {
-    return !!localStorage.getItem('token'); // Checks if a token exists
+    return !!localStorage.getItem('token');
+  },
+
+  getRole: () => {
+    return localStorage.getItem('role');
+  },
+
+  isAdmin: () => {
+    return localStorage.getItem('role') === 'admin';
   },
 
   isWriter: () => {
-    // Checks if the user role is 'writer'
     return localStorage.getItem('role') === 'writer';
   }
 };
- 

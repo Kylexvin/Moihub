@@ -22,13 +22,24 @@ function Login({ setIsAuthenticated }) {
 
     try {
       const response = await authService.login(credentials);
-      setIsAuthenticated(true);
-      
-      const redirectUrl = location.state?.from || getDashboardRoute(response.role) || '/';
+      console.log("Login Success:", response);
 
+      if (!response.role) {
+        throw new Error("User role is missing from response!");
+      }
+
+      localStorage.setItem('role', response.role); // Ensure role is stored
+      const userRole = localStorage.getItem('role');
+      console.log("Stored Role in LocalStorage:", userRole);
+
+      setIsAuthenticated(true);
+
+      const redirectUrl = location.state?.from || getDashboardRoute(userRole) || '/';
       navigate(redirectUrl, { replace: true });
+
     } catch (err) {
-      setError(err.message || 'Invalid email/username or password');
+      console.error("Login Error:", err);
+      setError(err.message || "Invalid email/username or password");
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +47,7 @@ function Login({ setIsAuthenticated }) {
 
   const getDashboardRoute = (role) => {
     switch (role) {
-      case 'admin': return '/admin-dashboard';
+      case 'admin': return '/moilinkadmin';
       case 'writer': return '/post-list';
       default: return '/';
     }

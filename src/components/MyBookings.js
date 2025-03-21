@@ -4,7 +4,11 @@ import axios from 'axios';
 import QRCode from 'react-qr-code';
 import { toast } from 'react-toastify';
 import { Calendar, Clock, CreditCard, Map, CheckCircle, X, ArrowLeft, Search, Filter, Download, SortDesc } from 'lucide-react';
-import { useReactToPrint } from 'react-to-print';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+// Initialize pdfMake
+pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts.vfs;
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -16,49 +20,243 @@ const MyBookings = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedBooking, setSelectedBooking] = useState(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const navigate = useNavigate();
-  
-  // Create a ref for the printable component
-  const printRef = useRef(null);
   
   // Check if user is authenticated
   const isAuthenticated = localStorage.getItem('token') ? true : false;
   
-  // Setup for PDF printing
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-    documentTitle: `Booking_${selectedBooking?.matatu?.registrationNumber || 'Unknown'}_${new Date(selectedBooking?.travelDate || Date.now()).toLocaleDateString()}`,
-    onBeforePrint: () => {
-      setIsPrinting(true);
-      toast.info('Preparing your download...');
-    },
-    onAfterPrint: () => {
-      toast.success('Booking downloaded successfully!');
-      setIsPrinting(false);
-    },
-    onPrintError: () => {
-      toast.error('Failed to download ticket. Please try again.');
+  // Function to handle download all bookings
+  const downloadAllBookings = () => {
+    if (isPrinting || bookings.length === 0) return;
+    
+    setIsPrinting(true);
+    toast.info('Preparing your bookings for download...', {
+      position: "top-right",
+      autoClose: 2000
+    });
+    
+    try {
+      // Create a well-structured PDF document definition
+      const docDefinition = {
+        pageSize: 'A4',
+        pageMargins: [40, 60, 40, 60],
+        header: {
+          text: 'MoiLink Travellers',
+          alignment: 'center',
+          margin: [0, 20, 0, 10],
+          style: 'header'
+        },
+        footer: function(currentPage, pageCount) {
+          return {
+            text: `Page ${currentPage} of ${pageCount}`,
+            alignment: 'center',
+            margin: [0, 10, 0, 0],
+            style: 'footer'
+          };
+        },
+        content: [
+          {
+            text: 'All Bookings',
+            style: 'subheader',
+            alignment: 'center',
+            margin: [0, 0, 0, 5]
+          },
+          {
+            text: `Generated on: ${new Date().toLocaleString()}`,
+            style: 'date',
+            alignment: 'center',
+            margin: [0, 0, 0, 20]
+          },
+          // The bookings will be added here
+        ],
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true,
+            color: '#FF6600' // Orange color matching your UI
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true
+          },
+          date: {
+            fontSize: 10,
+            color: '#666666'
+          },
+          footer: {
+            fontSize: 8,
+            color: '#666666'
+          },
+          bookingHeader: {
+            fontSize: 14,
+            bold: true,
+            color: 'white',
+            fillColor: function(rowIndex, node, columnIndex) {
+              return getStatusColor(bookings[rowIndex].status);
+            },
+            margin: [0, 5, 0, 5]
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 10,
+            color: '#666666'
+          },
+          tableValue: {
+            fontSize: 10
+          },
+          statusBadge: {
+            fontSize: 10,
+            bold: true,
+            alignment: 'center'
+          }
+        }
+      };
+      
+      // Function to determine color based on status
+      const getStatusColor = (status) => {
+        switch(status) {
+          case 'confirmed': return '#4CAF50'; // Green
+          case 'pending': return '#FF9800';   // Yellow/Orange
+          case 'cancelled': return '#F44336'; // Red
+          default: return '#9E9E9E';          // Gray
+        }
+      };
+      
+      // Function to get status badge style
+      const getStatusBadgeStyle = (status) => {
+        let color;
+        switch(status) {
+          case 'confirmed': color = '#4CAF50'; break;
+          case 'pending': color = '#FF9800'; break;
+          case 'cancelled': color = '#F44336'; break;
+          default: color = '#9E9E9E';
+        }
+        
+        return {
+          fontSize: 10,
+          bold: true,
+          alignment: 'center',
+          color: color
+        };
+      };
+      
+      // Add each booking as a separate section
+      bookings.forEach((booking, index) => {
+        // Status display with appropriate color
+        const statusText = booking.status ? 
+          booking.status.charAt(0).toUpperCase() + booking.status.slice(1) : 'N/A';
+        
+        const bookingSection = {
+          stack: [
+            {
+              table: {
+                headerRows: 1,
+                widths: ['*'],
+                body: [
+                  [
+                    {
+                      text: booking.route?.name || 'Unknown Route',
+                      style: 'bookingHeader'
+                    }
+                  ]
+                ]
+              },
+              layout: {
+                fillColor: function(rowIndex, node, columnIndex) {
+                  return (rowIndex === 0) ? getStatusColor(booking.status) : null;
+                }
+              }
+            },
+            // Status badge
+            {
+              text: statusText,
+              style: 'statusBadge',
+              color: getStatusColor(booking.status),
+              margin: [0, 5, 0, 10]
+            },
+            // Booking details table
+            {
+              table: {
+                widths: ['auto', '*'],
+                body: [
+                  [
+                    { text: 'Number Plate', style: 'tableHeader' },
+                    { text: booking.matatu?.registrationNumber || 'N/A', style: 'tableValue' }
+                  ],
+                  [
+                    { text: 'Seat Number', style: 'tableHeader' },
+                    { text: booking.seatNumber || 'N/A', style: 'tableValue' }
+                  ],
+                  [
+                    { text: 'Booking Date', style: 'tableHeader' },
+                    { 
+                      text: new Date(booking.travelDate).toLocaleDateString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric' 
+                      }), 
+                      style: 'tableValue' 
+                    }
+                  ],
+                  [
+                    { text: 'Departure Time', style: 'tableHeader' },
+                    { text: booking.matatu?.departureTime || 'N/A', style: 'tableValue' }
+                  ],
+                  [
+                    { text: 'Fare', style: 'tableHeader' },
+                    { text: `Ksh ${booking.fare}`, style: 'tableValue' }
+                  ]
+                ]
+              },
+              layout: 'lightHorizontalLines'
+            },
+            // Booking ID for reference
+            {
+              text: `Booking ID: ${booking._id || 'N/A'}`,
+              fontSize: 8,
+              color: '#999999',
+              alignment: 'right',
+              margin: [0, 5, 0, 0]
+            }
+          ],
+          margin: [0, 0, 0, 20]
+        };
+        
+        // Add a page break before all bookings except the first one
+        if (index > 0) {
+          docDefinition.content.push({ text: '', pageBreak: 'before' });
+        }
+        
+        docDefinition.content.push(bookingSection);
+      });
+      
+      // Add summary at the end
+      docDefinition.content.push({
+        text: 'Thank you for traveling with MoiLink Travellers',
+        alignment: 'center',
+        style: 'subheader',
+        margin: [0, 20, 0, 5]
+      });
+      
+      // Generate and download the PDF
+      pdfMake.createPdf(docDefinition).download(`MoiLink_All_Bookings_${new Date().toLocaleDateString()}.pdf`);
+      
+      toast.success('All bookings downloaded successfully!', {
+        position: "top-right",
+        autoClose: 3000
+      });
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to download bookings. Please try again.', {
+        position: "top-right",
+        autoClose: 3000
+      });
+    } finally {
       setIsPrinting(false);
     }
-  });
-
-  // Function to handle download button click
-  const downloadTicket = (booking) => {
-    setSelectedBooking(booking);
-    
-    // Use setTimeout to ensure selectedBooking is updated before printing
-    setTimeout(() => {
-      if (printRef.current) {
-        handlePrint();
-      } else {
-        toast.error('Unable to generate ticket. Please try again.');
-      }
-    }, 300);
   };
   
   useEffect(() => {
+    // Existing fetchBookings function remains the same
     const fetchBookings = async () => {
       if (!isAuthenticated) {
         setLoading(false);
@@ -93,7 +291,10 @@ const MyBookings = () => {
         setLoading(false);
         
         if (err.response && err.response.status === 401) {
-          toast.error('Session expired. Please login again.');
+          toast.error('Session expired. Please login again.', {
+            position: "top-right",
+            autoClose: 3000
+          });
           localStorage.removeItem('token');
           navigate('/login');
         }
@@ -103,7 +304,7 @@ const MyBookings = () => {
     fetchBookings();
   }, [navigate, isAuthenticated, filterStatus, searchTerm, sortBy, page, limit]);
   
-  // Get the status badge class and text
+  // Get the status badge class and text - This remains the same for the UI
   const getStatusBadge = (status) => {
     switch(status) {
       case 'confirmed':
@@ -133,21 +334,14 @@ const MyBookings = () => {
     }
   };
   
-  // Booking card component that can be printed
-  const BookingCard = ({ booking, isPrintable = false }) => {
+  // Booking card component for UI display - remains the same
+  const BookingCard = ({ booking }) => {
     const statusBadge = getStatusBadge(booking.status);
     
     return (
-      <div className={`bg-blue-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${isPrintable ? 'p-4 max-w-md mx-auto' : ''}`}>
-        {isPrintable && (
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold">Booking Confirmation</h2>
-            <p className="text-sm text-gray-600">MoiLink Travellers</p>
-          </div>
-        )}
-        
+      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
         <div className={`py-3 px-4 ${
-          booking.status === 'confirmed' ? 'bg-green-600' : 
+          booking.status === 'confirmed' ? 'bg-orange-600' : 
           booking.status === 'pending' ? 'bg-yellow-600' : 'bg-red-600'
         } text-white flex justify-between items-center`}>
           <h3 className="font-semibold">{booking.route?.name || 'Unknown Route'}</h3>
@@ -171,7 +365,7 @@ const MyBookings = () => {
                 size={150}
                 level="H"
               />
-              <p className="text-xs text-center mt-2 text-red-500">For Admin to scan </p>
+              <p className="text-xs text-center mt-2 text-red-500">For Admin to scan</p>
             </div>
           </div>
           
@@ -230,49 +424,12 @@ const MyBookings = () => {
               </div>
             </div>
           </div>
-          
-          {isPrintable && (
-            <div className="mt-8 border-t pt-4 text-center">
-              <p className="text-sm text-gray-600">Thank you for traveling with MoiLink Travellers</p>
-              <p className="text-xs text-gray-500">Printed on: {new Date().toLocaleString()}</p>
-            </div>
-          )}
         </div>
-        
-        {!isPrintable && (
-          <div className="px-4 pb-4">
-            <button 
-              onClick={() => downloadTicket(booking)}
-              disabled={isPrinting}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300 w-full flex items-center justify-center"
-            >
-              {isPrinting ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Download size={16} className="mr-2" /> Download Ticket
-                </>
-              )}
-            </button>
-          </div>
-        )}
       </div>
     );
   };
   
-  // Hidden printable component - just one instance now, controlled by selectedBooking
-  const PrintableCard = () => {
-    return (
-      <div className="hidden">
-        <div ref={printRef}>
-          {selectedBooking && <BookingCard booking={selectedBooking} isPrintable={true} />}
-        </div>
-      </div>
-    );
-  };
+  // The rest of your component remains the same...
   
   if (!isAuthenticated) {
     return (
@@ -360,6 +517,24 @@ const MyBookings = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-3">
+            {bookings.length > 0 && (
+              <button 
+                onClick={downloadAllBookings}
+                disabled={isPrinting}
+                className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-300 flex items-center justify-center text-sm"
+              >
+                {isPrinting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} className="mr-1" /> Download All Bookings
+                  </>
+                )}
+              </button>
+            )}
             <button 
               onClick={() => navigate('/moilinktravellers')}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300 flex items-center justify-center text-sm"
@@ -380,7 +555,7 @@ const MyBookings = () => {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-grow">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-
+                <Search size={16} className="text-gray-400" />
               </div>
               <input
                 type="text"
@@ -500,9 +675,6 @@ const MyBookings = () => {
           </>
         )}
       </div>
-      
-      {/* Hidden printable component */}
-      <PrintableCard />
     </div>
   );
 };

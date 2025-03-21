@@ -163,7 +163,7 @@ const App = () => {
           <Route
             path="/moilinkadmin"
             element={(
-              <ProtectedRoute allowedRoles={['user','writer', 'admin']}>
+              <ProtectedRoute allowedRoles={['writer', 'admin']}>
                 <MatatuAdmin />
               </ProtectedRoute>
             )}
@@ -180,52 +180,52 @@ const App = () => {
           <Route
             path="/moilinktravellers"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+              
                 <RouteSelectionPage />
-              </ProtectedRoute>
+             
             )}
           />
           <Route
             path="/VehicleSelectionPage/:routeId"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+              
                 <VehicleSelectionPage />
-              </ProtectedRoute>
+             
             )}
           />
            <Route
   path="/seat-selection/:matatuId"
   element={(
-    <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+   
       <SeatSelectionPage />
-    </ProtectedRoute>
+   
   )}
 />
 
 <Route
             path="/booking-confirmation/:matatuId/:seatId"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+            
                 <BookingConfirmationPage />
-              </ProtectedRoute>
+              
             )}
           />
 
 <Route
             path="/payment/initiate"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+           
                 <PaymentInitiationPage />
-              </ProtectedRoute>
+             
             )}
           />
 
           <Route
             path="/mybookings"
             element={(
-              <ProtectedRoute allowedRoles={['user', 'writer', 'admin']}>
+            
                 <MyBookings/>
-              </ProtectedRoute>
+             
             )}
           />
 
