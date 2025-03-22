@@ -27,6 +27,15 @@ const HomeCards = () => {
 
       <div className="service-card">
       <div className="service-grid">
+
+  {/* moilink*/}
+  <Link to="/moilinktravellers" className="service-itemm">
+    <div className="service-icon">
+      <img src="images/moilink.png" alt="moilinkLogo" />
+    </div>
+    <div className="service-namee">MoiLink Travellers</div>
+  </Link>
+
   {/* Rental Booking */}
   <Link to="/book" className="service-itemm">
     <div className="service-icon">

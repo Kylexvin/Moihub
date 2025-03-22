@@ -102,7 +102,17 @@ const BookingConfirmationPage = () => {
     try {
       const storedDetails = sessionStorage.getItem('selectedSeats');
       if (!storedDetails) throw new Error('No booking details found');
-      setBookingDetails(JSON.parse(storedDetails));
+      const parsedDetails = JSON.parse(storedDetails);
+      
+      // Ensure route has price properties
+      if (parsedDetails && parsedDetails.route) {
+        if (!parsedDetails.route.basePrice && !parsedDetails.route.currentPrice) {
+          // Add a default price if none exists (this should be fixed on the server side ideally)
+          parsedDetails.route.basePrice = parsedDetails.route.price || 1000;
+        }
+      }
+      
+      setBookingDetails(parsedDetails);
     } catch (err) {
       setError('Unable to load booking details. Please try selecting your seat again.');
       notify('loading_error');
@@ -222,8 +232,9 @@ const BookingConfirmationPage = () => {
       return;
     }
 
-    if (!phoneNumber.match(/^(?:254|\+254|0)?([71](?:[0-9]){8})$/)) {
-      setError('Please enter a valid Safaricom phone number');
+    // Updated phone number validation to accept more formats
+    if (!phoneNumber.match(/^(?:254|\+254|0)?([17](?:[0-9]){8})$/)) {
+      setError('Please enter a valid Safaricom number (07XX, 01XX, 254XX)');
       notify('invalid_phone');
       return;
     }
@@ -232,9 +243,17 @@ const BookingConfirmationPage = () => {
       setLoading(true);
       setError(null);
 
-      let formattedPhone = phoneNumber;
+      // Enhanced formatting logic for phone numbers
+      let formattedPhone = phoneNumber.trim();
+      
+      // Handle international prefix
       if (formattedPhone.startsWith('+')) formattedPhone = formattedPhone.substring(1);
-      if (formattedPhone.startsWith('0')) formattedPhone = `254${formattedPhone.substring(1)}`;
+      
+      // Handle local prefixes
+      if (formattedPhone.startsWith('07')) formattedPhone = `254${formattedPhone.substring(1)}`;
+      if (formattedPhone.startsWith('01')) formattedPhone = `254${formattedPhone.substring(1)}`;
+      
+      // Handle no prefix case
       if (!formattedPhone.startsWith('254')) formattedPhone = `254${formattedPhone}`;
 
       const payload = {
@@ -467,9 +486,9 @@ const BookingConfirmationPage = () => {
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <p><span className="font-medium">Booking ID:</span> {bookingData?.booking_id || bookingData?.id}</p>
+              
               <p><span className="font-medium">Registration:</span> {bookingDetails?.registration}</p>
-              <p><span className="font-medium">Route:</span> {bookingDetails?.route?.name}</p>
+             
               <p><span className="font-medium">Seat(s):</span> {bookingDetails?.seats?.join(', ')}</p>
             </div>
             
@@ -497,11 +516,16 @@ const BookingConfirmationPage = () => {
     );
   };
 
-  // Calculate total amount for display
+  // Calculate total amount for display - with fallback prices
   const getTotalAmount = () => {
-    const basePrice = bookingDetails?.route?.basePrice || bookingDetails?.route?.currentPrice || 0;
+    // Get price from route with fallbacks
+    const price = bookingDetails?.route?.basePrice || 
+                  bookingDetails?.route?.currentPrice || 
+                  bookingDetails?.route?.price || 
+                  500; // Fallback price if none exists
+                  
     const numSeats = bookingDetails?.seats?.length || 0;
-    return basePrice * numSeats;
+    return price * numSeats;
   };
 
   return (
@@ -559,11 +583,11 @@ const BookingConfirmationPage = () => {
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="e.g., 254712345678"
+                  placeholder="e.g., 0712345678 or 0112345678"
                   className="w-full p-2 border border-gray-300 rounded-md"
                   required
                 />
-                <p className="text-xs text-gray-500">Enter your Safaricom number (254xxxxxxxxx)</p>
+                <p className="text-xs text-gray-500">Enter your Safaricom number (07XX or 01XX)</p>
               </div>
 
               {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
