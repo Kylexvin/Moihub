@@ -187,7 +187,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            
         }
 
         .select-route-btn:hover {
@@ -218,7 +218,23 @@
 .matatu-card:hover {
     transform: scale(1.02);
 }
-
+/* Direct booking button */
+.contact-direct-btn {
+    margin-top: 10px;
+    background: #0369a1;
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    width: auto;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .contact-direct-btn:hover {
+    background-color: #2980b9;
+  }
 /* Matatu Header */
 .matatu-header {
     display: flex;
@@ -338,4 +354,104 @@
                 flex-direction: column;
             }
         }
-        
+ /* Price disclaimer */
+.price-disclaimer {
+    background-color: #f8f9fa;
+    padding: 10px;
+    width: auto;
+    border-radius: 5px;
+    margin: 15px;
+    font-size: 0.85rem;
+    color: #555;
+    border-left: 3px solid #cfe413;
+  }
+  
+  /* Price container with label */
+
+  /* Route actions */
+  .route-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .inquire-btn {
+    padding: 8px;
+    background-color: transparent;
+    color: #3498db;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  
+  .inquire-btn:hover {
+    background-color: #ebf5fd;
+  }
+  
+  /* Contact modal */
+  .contact-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: rgb(243, 240, 227);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .modal-content h3 {
+    margin-top: 0;
+    color: #333333;
+  }
+  
+  .contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .contact-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #240ee7;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .contact-option:hover {
+    background-color: #0715db;
+  }
+  
+  .close-modal-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .close-modal-btn:hover {
+    background-color: #2980b9;
+  }

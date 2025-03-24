@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MapPin, Map, Clock, Route, CheckCircle } from 'lucide-react';
+import { MapPin, Map, Clock, Route, CheckCircle, Phone, MessageCircle } from 'lucide-react';
 import { fetchRoutes, setSelectedDestination } from "../redux/slices/routeSlice";
 import "./v3.css";
 import { Navigate } from "react-router-dom";
+
 const RouteSelectionPage = () => {
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [showContactModal, setShowContactModal] = useState(false);
+  
   const { 
     filteredRoutes, 
     routes, 
@@ -22,6 +25,7 @@ const RouteSelectionPage = () => {
   useEffect(() => {
     dispatch(fetchRoutes());
   }, [dispatch]);
+  
   useEffect(() => {
     // Check if token exists in localStorage
     const token = localStorage.getItem('token');
@@ -41,12 +45,17 @@ const RouteSelectionPage = () => {
   if (!checkingAuth && !isAuthenticated) {
     return <Navigate to="/login" />;
   }
+  
   const handleDestinationChange = (e) => {
     dispatch(setSelectedDestination(e.target.value));
   };
 
   const handleRefresh = () => {
     dispatch(fetchRoutes());
+  };
+
+  const toggleContactModal = () => {
+    setShowContactModal(!showContactModal);
   };
 
   const uniqueDestinations = [...new Set(routes.map((route) => route.destination))];
@@ -90,7 +99,29 @@ const RouteSelectionPage = () => {
             </option>
           ))}
         </select>
+        <button className="contact-direct-btn" onClick={toggleContactModal}>
+          <Phone size={16} /> Direct Booking
+        </button>
       </div>
+
+      {/* Direct Booking Modal */}
+      {showContactModal && (
+        <div className="contact-modal">
+          <div className="modal-content">
+            <h3>Contact Us for Direct Booking</h3>
+            <p>Need a custom route or have special requirements?</p>
+            <div className="contact-options">
+              <a href="tel:+254745276898" className="contact-option">
+                <Phone size={16} /> Call: Tap here to call us!
+              </a>
+              <a href="https://wa.me/254745276898" className="contact-option">
+                <MessageCircle size={16} /> WhatsApp: Click here to text us!
+              </a>
+            </div>
+            <button className="close-modal-btn" onClick={toggleContactModal}>Close</button>
+          </div>
+        </div>
+      )}
 
       {isLoading ? (
         <div className='load-c'>
@@ -98,6 +129,9 @@ const RouteSelectionPage = () => {
         </div>
       ) : (
         <div id="route-container">
+          <div className="price-disclaimer">
+            <p>*Price may be the min paid for booking.</p>
+          </div>
           {filteredRoutes.map((route) => (
             <div key={route._id} className="route-card">
               <div className="route-header">
@@ -134,12 +168,20 @@ const RouteSelectionPage = () => {
                   </div>
                 </div>
               </div>
-              <button
-                className="select-route-btn"
-                onClick={() => (window.location.href = `/VehicleSelectionPage/${route._id}`)}
-              >
-                <CheckCircle size={16} /> Select Route
-              </button>
+              <div className="route-actions">
+                <button
+                  className="select-route-btn"
+                  onClick={() => (window.location.href = `/VehicleSelectionPage/${route._id}`)}
+                >
+                  <CheckCircle size={16} /> Select Route
+                </button>
+                <button
+                  className="inquire-btn"
+                  onClick={toggleContactModal}
+                >
+                  Need a custom quote?
+                </button>
+              </div>
             </div>
           ))}
         </div>

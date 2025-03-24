@@ -1,0 +1,102 @@
+[{
+    "id": "bipolarcafe",
+    "name": "Tasty Tasters",
+    "category": "food delivery",
+    "phone": "0701943718",
+    "description": "They are located just around school of engineering-Ngeria.",
+    "location": "Ngeria",
+    "rating": 4.8,
+    "foodTypes": ["Milk", "Viazi", "Chapo"],
+    "deliveryTime": "20-25 mins",
+    "offer": "Stage and School",
+    "hasDetails": true,
+    "products": [
+      {
+          "id": "steak1",
+          "name": "Andazi",
+          "price":"5/-", 
+          "image": "../delish/andazi.jpg"
+      },
+        {
+            "id": "steak2",
+            "name": "Chapati",
+            "price": 15,
+            "image": "../delish/chapo.jpg"
+        },
+        {
+            "id": "steak3",
+            "name": "Beans",
+            "price": 40,
+            "image": "../delish/beans.jpg"
+        },
+
+        {
+          "id": "steak5",
+          "name": "Ndengu",
+          "price": 30,
+          "image": "../delish/ndengu.jpg"
+      },
+        {
+          "id": "steak4",
+          "name": "Viazi",
+          "price": "Varies",
+          "image": "../delish/viazi.jpg"
+      }
+    ]
+}
+,
+{
+  "id": "villapark",
+  "name": "Villa Park",
+  "category": "food delivery",
+  "phone": "0768610613",
+  "description": "Villa Park offers a wide variety of delicious foods including Chips, Bhajia, and more. Enjoy our special offer and fast delivery service.",
+  "location": "stage",
+  "rating": 4.8,
+  "foodTypes": ["Chips", "Bhajia", "Mahamri"],
+  "deliveryTime": "10-20 mins",
+  "offer": "Stage, Hostels, Mabs Chebarus & Kesses ",
+  "hasDetails": true,
+  "products": [
+      {
+          "id": "steak1",
+          "name": "Chips",
+          "price":" 1/4 @ 100",
+          "price2":" 1/2 @ 140",
+          "price3":" Full @ 280",
+          "image": "../delish/image1.png"
+      },
+    {
+        "id": "pilau1",
+        "name": "Pilau",
+        "price":"Beef,Plain,Special, Beef Fry, Vegetable Pilau,Pilau Peas ",
+        "image": "../delish/pilau.jpg"
+    },
+
+      {
+        "id": "steak2",
+        "name": "Bhajia",
+        "price":"Varies", 
+        "image": "../delish/bhajia.jpg"
+    },
+    {
+        "id": "steak5",
+        "name": "Mahamri",
+        "price":"5/-", 
+        "image": "../delish/andazi.jpg"
+    },
+      {
+          "id": "steak3",
+          "name": "Soda",
+          "price":" 300ml @ 40",
+          "price2":" 500ml @ 60",    
+          "image": "../delish/image3.png"
+      },
+      {
+          "id": "steak4",
+          "name": "Fries + Smokie",
+          "price": 70,
+          "image": "../delish/friesspecial.jpg"
+      }
+  ]
+}]
