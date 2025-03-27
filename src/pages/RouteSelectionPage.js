@@ -136,7 +136,7 @@ const RouteSelectionPage = () => {
             <div key={route._id} className="route-card">
               <div className="route-header">
                 <span className="route-name">{route.name}</span>
-                <span className="route-price">KSH {route.basePrice}</span>
+                {/* <span className="route-price">KSH {route.basePrice}</span> */}
               </div>
               <div className="route-info">
                 <div className="route-detail">

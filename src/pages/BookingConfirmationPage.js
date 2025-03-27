@@ -108,7 +108,7 @@ const BookingConfirmationPage = () => {
       if (parsedDetails && parsedDetails.route) {
         if (!parsedDetails.route.basePrice && !parsedDetails.route.currentPrice) {
           // Add a default price if none exists (this should be fixed on the server side ideally)
-          parsedDetails.route.basePrice = parsedDetails.route.price || 1000;
+          // parsedDetails.route.basePrice = parsedDetails.route.price || 1000;
         }
       }
       
@@ -517,16 +517,16 @@ const BookingConfirmationPage = () => {
   };
 
   // Calculate total amount for display - with fallback prices
-  const getTotalAmount = () => {
-    // Get price from route with fallbacks
-    const price = bookingDetails?.route?.basePrice || 
-                  bookingDetails?.route?.currentPrice || 
-                  bookingDetails?.route?.price || 
-                  500; // Fallback price if none exists
+  // const getTotalAmount = () => {
+  //   // Get price from route with fallbacks
+  //   const price = bookingDetails?.route?.basePrice || 
+  //                 bookingDetails?.route?.currentPrice || 
+  //                 bookingDetails?.route?.price || 
+  //                 500; // Fallback price if none exists
                   
-    const numSeats = bookingDetails?.seats?.length || 0;
-    return price * numSeats;
-  };
+  //   const numSeats = bookingDetails?.seats?.length || 0;
+  //   return price * numSeats;
+  // };
 
   return (
     <div className="max-w-md mx-auto p-4">
@@ -551,17 +551,17 @@ const BookingConfirmationPage = () => {
         <div className="p-4">
           {/* Basic booking info */}
           <div className="mb-4 bg-gray-50 p-3 rounded-lg text-sm">
+            
             <div className="flex justify-between">
-              <span className="text-gray-600">Route:</span>
-              <span className="font-medium">{bookingDetails?.route?.name}</span>
+
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-gray-600">Seat(s):</span>
-              <span className="font-medium">{bookingDetails?.seats?.join(', ')}</span>
+              {/* <span className="text-gray-600">Seat(s):</span>
+              <span className="font-medium">{bookingDetails?.seats?.join(', ')}</span> */}
             </div>
             <div className="flex justify-between mt-1 border-t border-gray-200 pt-1">
-              <span className="text-gray-600">Total:</span>
-              <span className="font-bold text-blue-700">KES {getTotalAmount()}</span>
+              
+              
             </div>
           </div>
 
@@ -583,11 +583,14 @@ const BookingConfirmationPage = () => {
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="e.g., 0712345678 or 0112345678"
+                  placeholder="0712345678 or 0112345678"
                   className="w-full p-2 border border-gray-300 rounded-md"
                   required
                 />
-                <p className="text-xs text-gray-500">Enter your Safaricom number (07XX or 01XX)</p>
+                <p className="text-xs text-gray-500">Pay direct or choose to pay via a till and contact admin for direct booking at 0745276898</p>
+                <div className="mt-2 text-xs text-gray-500 italic">
+              * Minimum booking is KES 500 per seat
+            </div>
               </div>
 
               {error && <div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-sm text-red-600">{error}</p></div>}
@@ -606,7 +609,7 @@ const BookingConfirmationPage = () => {
                     Processing...
                   </>
                 ) : (
-                  `Pay KES ${getTotalAmount()}`
+                  `Pay Now.`
                 )}
               </button>
             </form>
