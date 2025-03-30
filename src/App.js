@@ -46,7 +46,7 @@ import PaymentInitiationPage from './pages/PaymentInitiationPage';
 import MyBookings from './components/MyBookings';
 import QrScanner from './components/admin/QrScanner';
 import MatatuAdmin from './components/admin/MatatuAdmin';
-
+import ChatbotDashboard from './components/ChatbotDashboard'
 // Data Imports
 import plotsData from './data/plots.json';
 import ShopData from './data/ShopData.json';
@@ -132,7 +132,14 @@ const App = () => {
           <Route path="/shops/:categoryId" element={<ShopList shops={ShopData.shops} />} />
           <Route path="/products/:shopId" element={<ProductList shops={ShopData.shops} />} />
           <Route path="/markethub" element={<MarketHub />} />
-
+          <Route
+            path="/moihub_ai"
+            element={(
+              // <ProtectedRoute allowedRoles={['writer', 'admin']}>
+                <ChatbotDashboard />
+              // </ProtectedRoute>
+            )}
+          />
           {/* Blog Routes */}
           <Route path="/blog" element={<BlogHomepage />} /> 
           <Route path="/blog/:id" element={<BlogPost />} />
