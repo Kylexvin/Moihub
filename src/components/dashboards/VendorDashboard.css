@@ -1,0 +1,190 @@
+
+/* Mobile-first styles for the vendor dashboard */
+.vendor-dashboard {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #fafaf8 !important;
+  min-height: 100vh !important;
+  box-sizing: border-box;
+}
+
+
+/* Dashboard header */
+.dashboard-header {
+  background-color: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Top navigation styles */
+.top-navigation {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 0; /* Ensures no space above */
+  padding: 0.5rem 1rem;
+  background-color: #ec8209;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 10000000000;
+}
+
+
+.nav-button {
+  flex: 1;
+  white-space: nowrap;
+  padding: 0.75rem 0.5rem;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e7eaec;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 0.4rem;
+}
+
+.nav-button.active {
+  color: #f5f0f0;
+  background-color: rgba(230, 143, 12, 0.07)!important;
+  border-bottom: 2px solid #f4f6f8 !important;
+  font-weight: 500 !important;
+}
+
+.nav-button:hover:not(.active) {
+  background-color: rgba(0, 0, 0, 0.03)!important;
+}
+
+/* Notification badge */
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 30%;
+  background-color: #ff3b30;
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Component container */
+.component-container {
+  background-color: #fcfafa;
+  border-radius: 12px;
+  margin: auto;
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-height: 100vh;
+}
+
+/* Page title */
+.page-title {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+.page-title h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .nav-button {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.4rem;
+  }
+  
+  .component-container {
+    padding: 0.75rem;
+  }
+}
+.expired-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.expired-message {
+  background: white;
+  padding: 2rem;
+  max-width: 100%;
+  height: 100vh;
+  text-align: center;
+
+}
+
+.bg-yellow-100 {
+  background-color: #fefcbf;
+}
+
+.text-yellow-800 {
+  color: #b45309;
+}
+
+.nav-button.active {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.component-container {
+  padding: 20px;
+}
+
+/* For slightly larger screens */
+@media (min-width: 768px) {
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .nav-button {
+    flex-direction: row;
+    font-size: 0.9rem;
+    padding: 0.8rem 1rem;
+    justify-content: center;
+  }
+  
+  .nav-button span {
+    margin-left: 0.5rem;
+  }
+  
+  .notification-badge {
+    right: 5px;
+  }
+  
+  .page-title h2 {
+    font-size: 1.3rem;
+  }
+}

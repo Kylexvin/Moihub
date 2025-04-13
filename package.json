@@ -33,6 +33,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.0",
     "react-scripts": "^5.0.1",
+    "react-switch": "^7.1.0",
     "react-to-pdf": "^1.0.1",
     "react-to-print": "^3.0.5",
     "react-toastify": "^10.0.5",

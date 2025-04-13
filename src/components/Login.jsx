@@ -49,6 +49,7 @@ function Login({ setIsAuthenticated }) {
     switch (role) {
       case 'admin': return '/moilinkadmin';
       case 'writer': return '/post-list';
+      case 'vendor': return '/vendor/dashboard/';
       default: return '/';
     }
   };

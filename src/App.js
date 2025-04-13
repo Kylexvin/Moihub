@@ -50,9 +50,16 @@ import ChatbotDashboard from './components/ChatbotDashboard'
 // Data Imports
 import plotsData from './data/plots.json';
 import ShopData from './data/ShopData.json';
-
 // Authentication Service
 import { authService } from './services/authService';
+ 
+//food imports
+import VendorDashboard from './components/dashboards/VendorDashboard';
+import VendorManagement from './components/dashboards/VendorManagement';
+import UpgradeToVendor from './components/UpgradeToVendor';
+
+
+
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -147,6 +154,7 @@ const App = () => {
           {/* Authentication Routes */}
           <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />
           <Route path="/register" element={<Register setIsAuthenticated={handleLogin} />} />
+          <Route path="/vendor/upgrade" element={<UpgradeToVendor  />} />
 
           {/* Protected Blog Routes */}
           <Route
@@ -235,6 +243,18 @@ const App = () => {
              
             )}
           />
+{/* Food Routes */}
+<Route 
+          path="/vendor/dashboard/" 
+          element={
+           
+              <VendorDashboard />
+            
+          } 
+        />
+<Route path="/admin/foodvendors/" element={<VendorManagement/>}/>
+
+
 
           {/* Catch-all Route */}
           <Route path="*" element={<NotFoundPage />} />

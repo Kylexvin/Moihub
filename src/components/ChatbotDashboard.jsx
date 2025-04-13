@@ -10,7 +10,7 @@ const ChatbotDashboard = () => {
 
   // Fetch stored knowledge
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/knowledge")
+    fetch("https://moihub-chatbot.onrender.com/knowledge")
       .then((res) => res.json())
       .then((data) => setKnowledgeBase(data));
   }, []);
