@@ -8,9 +8,11 @@ import './Register.css'; // Reuse the Register styles
 
 function UpgradeToVendor() {
   const [formData, setFormData] = useState({
+    shopName: '',
     phone: '',
     location: '',
   });
+  
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -62,48 +64,63 @@ function UpgradeToVendor() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="phone">Phone Number</label>
-            <div className="input-wrapper">
-             
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                placeholder="Enter your phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-          </div>
+  <div className="form-group">
+    <label htmlFor="shopName">Shop Name</label>
+    <div className="input-wrapper">
+      <input
+        type="text"
+        id="shopName"
+        name="shopName"
+        placeholder="Enter your shop name"
+        value={formData.shopName}
+        onChange={handleChange}
+        required
+        className="form-input"
+      />
+    </div>
+  </div>
 
-          <div className="form-group">
-            <label htmlFor="location">Location</label>
-            <div className="input-wrapper">
-              
-              <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder="Enter your location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-          </div>
+  <div className="form-group">
+    <label htmlFor="phone">Phone Number</label>
+    <div className="input-wrapper">
+      <input
+        type="text"
+        id="phone"
+        name="phone"
+        placeholder="Enter your phone"
+        value={formData.phone}
+        onChange={handleChange}
+        required
+        className="form-input"
+      />
+    </div>
+  </div>
 
-          <button
-            type="submit"
-            className="auth-submit-btn"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Submitting...' : 'Submit for Approval'}
-          </button>
-        </form>
+  <div className="form-group">
+    <label htmlFor="location">Location</label>
+    <div className="input-wrapper">
+      <input
+        type="text"
+        id="location"
+        name="location"
+        placeholder="Enter your location"
+        value={formData.location}
+        onChange={handleChange}
+        required
+        className="form-input"
+      />
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    className="auth-submit-btn"
+    disabled={isLoading}
+  >
+    {isLoading ? 'Submitting...' : 'Submit for Approval'}
+  </button>
+</form>
+
       </div>
     </div>
   );

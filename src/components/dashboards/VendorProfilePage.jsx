@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { AlertCircle, CheckCircle, XCircle, Phone, MapPin, User, Mail, ShieldCheck, Power, Store } from 'lucide-react';
+import { AlignLeft, Image } from 'lucide-react';
 
 const VendorProfilePage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const VendorProfilePage = () => {
   // Form state
   const [formData, setFormData] = useState({
     phone: '',
+    description: '',
     location: ''
   });
 
@@ -199,11 +201,6 @@ const VendorProfilePage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="bg-white shadow rounded-lg p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Vendor Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage your store profile and settings</p>
-        </header>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Profile Overview Card */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -315,60 +312,85 @@ const VendorProfilePage = () => {
             </div>
           </div>
           
-          {/* Edit Profile Card */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="bg-green-600 p-4">
-              <h2 className="text-xl font-semibold text-white flex items-center">
-                <User className="mr-2" size={20} />
-                Edit Profile
-              </h2>
-            </div>
-            <div className="p-6">
-              <form onSubmit={updateProfile}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="phone">
-                    <div className="flex items-center">
-                      <Phone size={16} className="mr-2" />
-                      Phone Number
-                    </div>
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-                <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="location">
-                    <div className="flex items-center">
-                      <MapPin size={16} className="mr-2" />
-                      Location
-                    </div>
-                  </label>
-                  <input
-                    id="location"
-                    name="location"
-                    type="text"
-                    className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="Enter your store location"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring transition-colors"
-                  disabled={loading}
-                >
-                  {loading ? 'Updating...' : 'Update Profile'}
-                </button>
-              </form>
-            </div>
+{/* Edit Profile Card */}
+<div className="bg-white rounded-lg shadow overflow-hidden">
+  <div className="bg-green-600 p-4">
+    <h2 className="text-xl font-semibold text-white flex items-center">
+      <User className="mr-2" size={20} />
+      Edit Profile
+    </h2>
+  </div>
+  <div className="p-6">
+    <form onSubmit={updateProfile}>
+      {/* Phone Number */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="phone">
+          <div className="flex items-center">
+            <Phone size={16} className="mr-2" />
+            Phone Number
           </div>
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="text"
+          className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Enter your phone number"
+        />
+      </div>
+
+      {/* Location */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="location">
+          <div className="flex items-center">
+            <MapPin size={16} className="mr-2" />
+            Location
+          </div>
+        </label>
+        <input
+          id="location"
+          name="location"
+          type="text"
+          className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          value={formData.location}
+          onChange={handleChange}
+          placeholder="Enter your store location"
+        />
+      </div>
+
+      {/* Shop Description */}
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="description">
+          <div className="flex items-center">
+            <AlignLeft size={16} className="mr-2" />
+            Shop Description
+          </div>
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Write something about your shop"
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring transition-colors"
+        disabled={loading}
+      >
+        {loading ? 'Updating...' : 'Update Profile'}
+      </button>
+    </form>
+  </div>
+</div>
+
           
           {/* Danger Zone Card */}
           <div className="bg-white rounded-lg shadow overflow-hidden">

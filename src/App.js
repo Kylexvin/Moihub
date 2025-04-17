@@ -57,6 +57,7 @@ import { authService } from './services/authService';
 import VendorDashboard from './components/dashboards/VendorDashboard';
 import VendorManagement from './components/dashboards/VendorManagement';
 import UpgradeToVendor from './components/UpgradeToVendor';
+import VendorPage from './components/VendorPage';
 
 
 
@@ -122,7 +123,6 @@ const App = () => {
           {/* Existing Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/marketplace" element={<BuyersPage />} />
-          <Route path="/food-delivery" element={<MoiDelish />} />
           <Route path="/provider/:providerId" element={<ProviderDetails />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/sellers" element={<SellersPage />} />
@@ -253,7 +253,8 @@ const App = () => {
           } 
         />
 <Route path="/admin/foodvendors/" element={<VendorManagement/>}/>
-
+<Route path="/food-delivery" element={<MoiDelish />} />
+<Route path="/vendor/:vendorId" element={<VendorPage/>}/>
 
 
           {/* Catch-all Route */}

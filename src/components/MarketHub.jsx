@@ -1,7 +1,9 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, setSearchQuery, resetProducts } from '../redux/slices/productSlice';
+import { setSearchQuery, resetProducts, setSearching } from '../redux/slices/productSlice';
+import { useGetProductsQuery } from '../services/productApi';
 import './MarkertHub.css';
+import debounce from 'lodash/debounce';
 
 const getRelativeTime = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -25,22 +27,39 @@ const getRelativeTime = (date) => {
 
 const SearchPanel = ({ onSearch }) => {
   const searchQuery = useSelector(state => state.products.searchQuery);
+  const searching = useSelector(state => state.products.searching);
   
-  const handleSearch = (e) => {
+  // Create a debounced search function
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      onSearch(value);
+    }, 500),
+    [onSearch]
+  );
+  
+  const handleSearchChange = (e) => {
     const value = e.target.value;
-    onSearch(value);
+    setSearchQuery(value);
+    debouncedSearch(value);
   };
 
   return (
     <div className="bg-gradient-to-r from-green-500 to-green-900 rounded-lg shadow-lg p-4 mb-3">
       <div className="flex flex-col gap-4">
-        <input 
-          type="text" 
-          placeholder="Search by name or description..." 
-          value={searchQuery} 
-          onChange={handleSearch} 
-          className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" 
-        />
+        <div className="relative w-full">
+          <input 
+            type="text" 
+            placeholder="Search by name or description..." 
+            value={searchQuery} 
+            onChange={handleSearchChange} 
+            className="w-full px-4 py-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" 
+          />
+          {searching && (
+            <div className="absolute right-3 top-2">
+              <i className="fas fa-spinner fa-spin text-gray-500"></i>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -85,6 +104,7 @@ const ProductCard = ({ product, contactSeller }) => {
           alt={product.name}
           onLoad={handleImageLoad}
           onError={handleImageError}
+          loading="lazy" // Add lazy loading for images
           style={{
             opacity: imageStatus === 'loaded' ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',
@@ -133,50 +153,52 @@ const ProductCard = ({ product, contactSeller }) => {
 
 const MarketHub = () => {
   const dispatch = useDispatch();
-  const { 
-    filteredItems, 
-    loading, 
-    error, 
-    page, 
-    hasMore 
-  } = useSelector(state => state.products);
+  const searchQuery = useSelector(state => state.products.searchQuery);
+  const cachedItems = useSelector(state => state.products.items);
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  // RTK Query hook with pagination and search parameters
+  const {
+    data,
+    error: rtkError,
+    isLoading,
+    isFetching,
+    isSuccess
+  } = useGetProductsQuery({
+    page: currentPage,
+    limit: 10,
+    searchQuery
+  });
+  
+  // Determine what data to display - RTK Query data or cached items
+  const displayItems = (data?.products || []).length > 0 ? data.products : cachedItems;
+  const hasMore = data?.pagination?.hasMore || false;
   
   const observer = useRef();
-  
-  // Reset products when component unmounts
-  useEffect(() => {
-    return () => {
-      dispatch(resetProducts());
-    };
-  }, [dispatch]);
-
-  // Initial data fetch
-  useEffect(() => {
-    dispatch(fetchProducts({ page: 1 }));
-  }, [dispatch]);
-
   const lastProductElementRef = useCallback(node => {
-    if (loading) return;
+    if (isLoading || isFetching) return;
     if (observer.current) observer.current.disconnect();
     
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
-        dispatch(fetchProducts({ page: page + 1 }));
+        setCurrentPage(prevPage => prevPage + 1);
       }
-    });
+    }, { threshold: 0.5 });
     
     if (node) observer.current.observe(node);
-  }, [loading, hasMore, page, dispatch]);
+  }, [isLoading, isFetching, hasMore]);
 
+  // Reset pagination when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+    dispatch(resetProducts());
+  }, [searchQuery, dispatch]);
+  
   const handleSearch = (searchTerm) => {
-    // If search term changes drastically, reset to page 1
-    if (searchTerm !== '') {
-      dispatch(resetProducts());
-      dispatch(setSearchQuery(searchTerm));
-      dispatch(fetchProducts({ page: 1 }));
-    } else {
-      dispatch(setSearchQuery(searchTerm));
-    }
+    dispatch(setSearching(true));
+    dispatch(setSearchQuery(searchTerm));
+    // The search will trigger through the useGetProductsQuery parameters
   };
 
   const contactSeller = (sellerWhatsApp) => {
@@ -184,56 +206,66 @@ const MarketHub = () => {
     window.open(whatsappLink, '_blank');
   };
 
+  // Show cached data immediately on first render
+  useEffect(() => {
+    // If we have cached data and are on the first load, show a message
+    if (cachedItems.length > 0 && isLoading && currentPage === 1 && !searchQuery) {
+      console.log('Showing cached data while fetching fresh data');
+    }
+  }, [cachedItems, isLoading, currentPage, searchQuery]);
+
   return (
     <>
       <div className="Homee">
-        <nav className="navv">
-          <div className="nav-contentt">
-            <div className="logoo">MarketHub</div>
-            <div className="nav-buttonss">
-              <button
-                className="nav-btn login-btnn"
-                onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/login'}
-              >
-                <i className="fas fa-sign-in-alt"></i> Login
-              </button>
-              <button
-                className="nav-btn register-btnn"
-                onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
-              >
-                Register
-              </button>
-            </div>
-          </div>
-        </nav>
+        
 
         <section className="heroo">
-          <div className="hero-contentt">
-            <h1>Buy and Sell in Moi University</h1>
-            <p>Join us and trade your items safely and easily on your trusted marketplace platform.</p>
-          </div>
-        </section>
+  <div className="hero-contentt">
+    <h1>Buy and Sell in Moi University</h1>
+    <p>Join us and trade your items safely and easily on your trusted marketplace platform.</p>
+  </div>
+</section>
 
-        <div className="seller-cardd">
-          <div className="seller-card-contentt">
-            <h2>Want to Sell Your Items?</h2>
-            <p>Create a free account and start selling to potential buyers in Moi University.</p>
-            <button 
-              className="nav-btn register-btnn" 
-              onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
-            >
-              <i className="fas fa-plus-circle"></i> Start Selling Today
-            </button>
-          </div>
-        </div>
+<div className="seller-cardd">
+  <div className="seller-card-contentt">
+    <h2>Want to Sell Your Items?</h2>
+    <p>Create a free account and start selling to potential buyers in Moi University.</p>
+    
+    <div className="seller-buttons">
+      <button 
+        className="nav-btn login-btnn" 
+        onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/login'}
+      >
+        <i className="fas fa-sign-in-alt"></i> Login
+      </button>
+
+      <button 
+        className="nav-btn register-btnn" 
+        onClick={() => window.location.href = 'https://markethub-mocha.vercel.app/register'}
+      >
+        <i className="fas fa-plus-circle"></i> Start Selling Today
+      </button>
+    </div>
+  </div>
+</div>
+
       
         <div className="containerr">
           <SearchPanel onSearch={handleSearch} />
           
           <h2 className="section-titlee">Products for you</h2>
+          
+          {/* Show "Using cached data" notification if applicable */}
+          {cachedItems.length > 0 && isLoading && currentPage === 1 && !searchQuery && (
+            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded" role="alert">
+              <p className="text-sm">Showing cached products while loading fresh data...</p>
+            </div>
+          )}
+          
           <div className="products-gridd">
-            {filteredItems.map((product, index) => {
-              if (filteredItems.length === index + 1) {
+            {/* Show cached data if available and still loading fresh data */}
+            {displayItems.map((product, index) => {
+              if (displayItems.length === index + 1) {
                 return (
                   <div ref={lastProductElementRef} key={product._id}>
                     <ProductCard 
@@ -253,21 +285,31 @@ const MarketHub = () => {
               }
             })}
             
-            {loading && (
+            {/* Loading indicators */}
+            {(isLoading || isFetching) && (
               <div className="w-full text-center p-4">
-                <p><i className="fas fa-spinner fa-spin"></i> Loading more products...</p>
+                <p><i className="fas fa-spinner fa-spin"></i> Loading products...</p>
               </div>
             )}
             
-            {error && <p className="text-red-500 text-center p-4">{error}</p>}
+            {/* Error handling */}
+            {rtkError && (
+              <div className="w-full text-center p-4">
+                <p className="text-red-500">
+                  {typeof rtkError === 'string' ? rtkError : 'Error loading products. Please try again.'}
+                </p>
+              </div>
+            )}
             
-            {!loading && !hasMore && filteredItems.length > 0 && (
+            {/* End of list message */}
+            {isSuccess && !isFetching && !hasMore && displayItems.length > 0 && (
               <p className="w-full text-center p-4 text-gray-500">
-                No more products to load
+                You've reached the end of the list
               </p>
             )}
             
-            {!loading && filteredItems.length === 0 && (
+            {/* No products message */}
+            {isSuccess && !isLoading && !isFetching && displayItems.length === 0 && (
               <p className="w-full text-center p-4 text-gray-500">
                 No products found matching your search
               </p>
