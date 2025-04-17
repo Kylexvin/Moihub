@@ -1,40 +1,45 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Homecards.css';
-
+import { Car, Truck, Home, GraduationCap, Book, Coffee, ShoppingBag } from "lucide-react";
 
 const HomeCards = () => {
   return (
     <div>
-   <div className="discover-banner">
-  <div className="discover-content">
-    <div className="discover-info">
-      <div className="discover-icon">
-        <img src="images/discover.png" alt="Discover Icon" />
+    <Link to="/discover" className="discover-banner" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+    <div className="discover-content">
+      <div className="discover-info">
+        <div className="discover-icon">
+          <img src="images/discover.png" alt="Discover Icon" />
+        </div>
+        <div className="discover-text">
+          <h3 className="discover-title">Discover Services</h3>
+          <p className="discover-subtitle">Find the best around Moi University</p>
+        </div>
       </div>
-      <div className="discover-text">
-        <h3 className="discover-title">Discover Services</h3>
-        <p className="discover-subtitle">Find the best around Moi University</p>
+      <div className="chevron-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
       </div>
     </div>
-    <Link to="/discover" className="chevron-right">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    </Link>
-  </div>
-</div>
+    
+    {/* Service icons footer with evenly distributed icons */}
+    <div className="services-preview">
 
+      <p className="services-hint">Bodaboda, TukTuks, Mamafua, Gas Deliveries etc</p>
+    </div>
+  </Link>
       <div className="service-card">
       <div className="service-grid">
 
   {/* moilink*/}
-  <Link to="/moilinktravellers" className="service-itemm">
+  {/* <Link to="/moilinktravellers" className="service-itemm">
     <div className="service-icon">
       <img src="images/moilink.png" alt="moilinkLogo" />
     </div>
     <div className="service-namee">MoiLink Travellers</div>
-  </Link>
+  </Link> */}
 
   {/* Rental Booking */}
   <Link to="/book" className="service-itemm">
