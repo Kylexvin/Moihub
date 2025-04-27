@@ -1,15 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './categorylist.css';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import CustomerCare from './customercare';
+import axios from 'axios';
 
-const CategoryList = ({ categories }) => {
+const CategoryList = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Scroll to the top when the component mounts
     window.scrollTo(0, 0);
+    
+    // Fetch categories from the API
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/eshop/vendor/categories');
+        if (response.data.success) {
+          setCategories(response.data.data);
+        } else {
+          setError('Failed to fetch categories');
+        }
+      } catch (err) {
+        setError('Error connecting to the server');
+        console.error('Error fetching categories:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
   }, []); // Empty dependency array ensures it runs only once when the component mounts
 
   const handleCategoryClick = (categoryId) => {
@@ -37,6 +60,25 @@ const CategoryList = ({ categories }) => {
     // Add additional logic here, such as making a phone call
     window.location.href = "tel:0745276898";
   };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading categories...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <h3>Error</h3>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Try Again</button>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -76,51 +118,28 @@ const CategoryList = ({ categories }) => {
         </div>
 
         <section className="card-intro">
-          {/* <div className="landing">
-            <div className="square">
-              <i className="fas fa-map-marker-alt fa-2x" style={{ color: 'green' }}></i>
-              <h3>STAGE</h3>
-            </div>
-            <div className="rectangle">
-              <a href='/learnmore' className="cta">
-                Learn More
-              </a>
-            </div>
-          </div> */}
-
           <div className="ad-card">
             <div className="ad-content">
               <div className="ad-heading">Space for Hire!</div>
               <div className="ad-description">Place your ad here. If you can see this, so your clients. Contact us today.</div>
-              {/* <button className="cta-button">
-                Shop Now
-              </button> */}
             </div>
           </div>
 
-        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-  <path
-    fill="#27a844"
-    fillOpacity="1"
-    d="M0,224L48,197.3C96,171,192,117,288,106.7C384,96,480,128,576,149.3C672,171,768,181,864,170.7C960,160,1056,128,1152,138.7C1248,149,1344,203,1392,229.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
-    transform="scale(1, -1) translate(0, -320)"
-  ></path>
-</svg> */}
           <section className="shopping-categories">
             <div className="category-grid">
               {categories.map((category) => (
                 <a
-                  key={category.id}
-                  href={`/shops/${category.id}`}
+                  key={category._id}
+                  href={`/shops/${category._id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleCategoryClick(category.id); 
+                    handleCategoryClick(category._id); 
                   }}
-                  className={`category-card category-${category.id}`}
+                  className={`category-card category-${category._id}`}
                 >
                   <div className="card-content">
                     <div className="card-icon">
-                      <i className={`fas fa-${category.icon}`}></i>
+                    <i className={`fas fa-${category.icon}`}></i>
                     </div>
                     <h3 className="card-title">{category.name}</h3>
                   </div>
@@ -128,10 +147,6 @@ const CategoryList = ({ categories }) => {
               ))}
             </div>
           </section>
-          
-          {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
-            <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-          </svg> */}
         </section>
         <CustomerCare />
       </section>

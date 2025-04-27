@@ -23,9 +23,9 @@ import MoiDelish from './components/MoiDelish';
 import ProviderDetails from './components/ProviderDetails';
 import GreenHub from './components/GreenHub';
 import OurTeam from './components/Team';
-import DownloadApp from './components/DownloadApp';
+//import DownloadApp from './components/DownloadApp';
 import MarketHub from './components/MarketHub';
-
+import EshopDashboard from './components/eshop/EshopDashboard';
 // Blog-related Components
 import Login from './components/Login';
 import Register from './components/Register';
@@ -49,7 +49,7 @@ import MatatuAdmin from './components/admin/MatatuAdmin';
 import ChatbotDashboard from './components/ChatbotDashboard'
 // Data Imports
 import plotsData from './data/plots.json';
-import ShopData from './data/ShopData.json';
+
 // Authentication Service
 import { authService } from './services/authService';
  
@@ -135,9 +135,7 @@ const App = () => {
           <Route path="/pharmacy" element={<Echem cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/book" element={<Booking plots={plotsData} />} />
           <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
-          <Route path="/eshop" element={<CategoryList categories={ShopData.categories} />} />
-          <Route path="/shops/:categoryId" element={<ShopList shops={ShopData.shops} />} />
-          <Route path="/products/:shopId" element={<ProductList shops={ShopData.shops} />} />
+         
           <Route path="/markethub" element={<MarketHub />} />
           <Route
             path="/moihub_ai"
@@ -255,6 +253,15 @@ const App = () => {
 <Route path="/admin/foodvendors/" element={<VendorManagement/>}/>
 <Route path="/food-delivery" element={<MoiDelish />} />
 <Route path="/vendor/:vendorId" element={<VendorPage/>}/>
+
+          {/* eshop */}
+          <Route path="/eshop" element={<CategoryList />} />
+          <Route path="/shops/:categoryId" element={<ShopList />} />
+          <Route path="/products/:shopId" element={<ProductList />} />
+          <Route path="/eshop/dashboard" element={<EshopDashboard />} />
+
+
+
 
 
           {/* Catch-all Route */}

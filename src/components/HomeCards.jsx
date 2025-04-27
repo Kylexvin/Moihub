@@ -74,12 +74,12 @@ const HomeCards = () => {
   </Link>
 
   {/* E-Shop */}
-  <Link to="/eshop" className="service-itemm">
-    <div className="service-icon">
-      <img src="images/eshop.png" alt="E-shop Logo" />
-    </div>
-    <div className="service-namee">E-Shop</div>
-  </Link>
+   {/* <Link to="/eshop" className="service-itemm">
+     <div className="service-icon">
+       <img src="images/eshop.png" alt="E-shop Logo" />
+     </div>
+     <div className="service-namee">E-Shop</div>
+   </Link> */}
 
   {/* Groceries */}
   <Link to="/greenhub" className="service-itemm">
