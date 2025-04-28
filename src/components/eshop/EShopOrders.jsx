@@ -14,7 +14,7 @@ const EShopOrders = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/eshop/orders/vendor', {
+      const response = await axios.get('https://moihub.onrender.com/api/eshop/orders/vendor', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setOrders(response.data.data);
@@ -32,7 +32,7 @@ const EShopOrders = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/eshop/orders/vendor/${orderId}/status`,
+        `https://moihub.onrender.com/api/eshop/orders/vendor/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -80,7 +80,7 @@ function Login({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="input-wrapper">
-              <Lock size={20} className="input-icon" />
+             
               <input
                 type="password"
                 id="password"

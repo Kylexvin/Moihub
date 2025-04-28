@@ -83,14 +83,14 @@ const ProductForm = ({ product, onClose, onProductUpdate, getAuthConfig }) => {
       if (isEditing) {
         // Update existing product
         response = await axios.put(
-          `http://localhost:5000/api/eshop/vendor/product/${product._id}`,
+          `https://moihub.onrender.com/api/eshop/vendor/product/${product._id}`,
           form,
           { headers }
         );
       } else {
         // Create new product
         response = await axios.post(
-          'http://localhost:5000/api/eshop/vendor/product/create',
+          'https://moihub.onrender.com/api/eshop/vendor/product/create',
           form,
           { headers }
         );

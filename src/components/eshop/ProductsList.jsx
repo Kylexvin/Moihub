@@ -24,7 +24,7 @@ const ProductList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        'http://localhost:5000/api/eshop/vendor/my-products',
+        'https://moihub.onrender.com/api/eshop/vendor/my-products',
         getAuthConfig()
       );
       setProducts(response.data.data);
@@ -43,7 +43,7 @@ const ProductList = () => {
   const toggleAvailability = async (productId) => {
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/eshop/vendor/product/${productId}/toggle`,
+        `https://moihub.onrender.com/api/eshop/vendor/product/${productId}/toggle`,
         {},
         getAuthConfig()
       );
@@ -64,7 +64,7 @@ const ProductList = () => {
     
     try {
       await axios.delete(
-        `http://localhost:5000/api/eshop/vendor/product/${productId}`,
+        `https://moihub.onrender.com/api/eshop/vendor/product/${productId}`,
         getAuthConfig()
       );
       toast.success('Product deleted successfully');

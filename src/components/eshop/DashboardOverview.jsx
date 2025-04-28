@@ -12,7 +12,7 @@ const DashboardOverview = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://localhost:5000/api/eshop/vendor/dashboard', {
+        const res = await axios.get('https://moihub.onrender.com/api/eshop/vendor/dashboard', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }

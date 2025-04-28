@@ -18,7 +18,7 @@ const CategoryList = () => {
     // Fetch categories from the API
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/eshop/vendor/categories');
+        const response = await axios.get('https://moihub.onrender.com/api/eshop/vendor/categories');
         if (response.data.success) {
           setCategories(response.data.data);
         } else {

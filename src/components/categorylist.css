@@ -155,14 +155,18 @@ text-decoration:none;
   font-size: 2rem;
   margin-bottom: 1rem;
   color: #4a90e2;
-}
+} 
 
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
+  color: black;
 }
-/* categorylist.css */
+.card-title:hover {
+ color: black;
+}
+
 
 /* Bright and colorful category backgrounds */
 .category-Boutique { background-color: #d0e8ff; } /* Bright light blue */

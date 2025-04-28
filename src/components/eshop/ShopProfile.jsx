@@ -62,7 +62,7 @@ const ShopProfile = () => {
       console.log('Sending data:', formData);
       
       const res = await axios.put(
-        'http://localhost:5000/api/eshop/vendor/profile',
+        'https://moihub.onrender.com/api/eshop/vendor/profile',
         formData,
         {
           headers: {
