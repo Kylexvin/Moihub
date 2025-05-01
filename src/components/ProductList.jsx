@@ -54,7 +54,7 @@ const fetchShopAndProducts = async () => {
   try {
     // Fetch products which also contains shop data
     const productsResponse = await axios.get(
-      `http://localhost:5000/api/eshop/vendor/shop/${shopId}/products?page=1&limit=50`
+      `https://moihub.onrender.com/api/eshop/vendor/shop/${shopId}/products?page=1&limit=50`
     );
     
     if (productsResponse.data.success) {
@@ -214,9 +214,9 @@ const fetchShopAndProducts = async () => {
       setIsLoading(true);
       setOrderError(null); // Clear any previous errors
       
-      // Format order data EXACTLY as in your successful Postman request
+      
       const orderData = {
-        shopId: shopId, // Make sure this is the raw ID string from params
+        shopId: shopId, 
         items: orderItems.map(item => ({
           productId: item.productId,
           quantity: item.quantity
@@ -229,7 +229,7 @@ const fetchShopAndProducts = async () => {
       
       // Use the config object for the request with the correct token
       const response = await axios.post(
-        'http://localhost:5000/api/eshop/orders/place',
+        'https://moihub.onrender.com/api/eshop/orders/place',
         orderData,
         config
       );
@@ -247,7 +247,7 @@ const fetchShopAndProducts = async () => {
         setTimeout(() => {
           setOrderSuccess(false);
           setShowOrderSummary(false);
-        }, 3000);
+        }, 2000);
       } else {
         setOrderError(response.data.message || 'Order failed. Please try again.');
       }

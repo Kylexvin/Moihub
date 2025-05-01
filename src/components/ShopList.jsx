@@ -19,7 +19,7 @@ const ShopList = () => {
     // Fetch category details to get the name
     const fetchCategoryName = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/eshop/vendor/categories`);
+        const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories`);
         if (response.data.success) {
           const category = response.data.data.find(cat => cat._id === categoryId);
           if (category) {
@@ -43,7 +43,7 @@ const ShopList = () => {
     // Fetch shops for the specific category
     const fetchShops = async (name) => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/eshop/vendor/categories/${name}/shops`);
+        const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories/${name}/shops`);
         if (response.data.success) {
           setShops(response.data.data);
         } else {
