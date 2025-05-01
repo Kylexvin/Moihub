@@ -50,6 +50,7 @@ function Login({ setIsAuthenticated }) {
       case 'admin': return '/moilinkadmin';
       case 'writer': return '/post-list';
       case 'vendor': return '/vendor/dashboard/';
+      case 'shopowner': return '/eshop/dashboard/';
       default: return '/';
     }
   };
