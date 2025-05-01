@@ -1,12 +1,13 @@
 // src/components/eshop/DashboardOverview.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, Clock, DollarSign, Users } from 'lucide-react';
+import { Package, ShoppingBag, Clock, DollarSign, Users, TrendingUp, ChevronRight, AlertCircle } from 'lucide-react';
 
 const DashboardOverview = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -39,14 +40,15 @@ const DashboardOverview = () => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center">
+        <AlertCircle className="h-5 w-5 mr-2" />
         <p>{error}</p>
       </div>
     );
   }
 
   if (!dashboardData) {
-    return <p>No dashboard data available.</p>;
+    return <p className="text-center py-8 text-gray-500">No dashboard data available.</p>;
   }
 
   const formatDate = (dateString) => {
@@ -58,154 +60,264 @@ const DashboardOverview = () => {
     });
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Shop Information */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
+  // Mobile navigation tabs
+  const renderTabs = () => (
+    <div className="flex overflow-x-auto mb-4 md:hidden bg-gray-50 rounded-lg p-1">
+      <button 
+        onClick={() => setActiveTab('overview')}
+        className={`flex-1 py-2 px-3 text-sm font-medium rounded-md ${
+          activeTab === 'overview' ? 'bg-white shadow text-blue-600' : 'text-gray-600'
+        }`}
+      >
+        Overview
+      </button>
+      <button 
+        onClick={() => setActiveTab('stats')}
+        className={`flex-1 py-2 px-3 text-sm font-medium rounded-md ${
+          activeTab === 'stats' ? 'bg-white shadow text-blue-600' : 'text-gray-600'
+        }`}
+      >
+        Stats
+      </button>
+      <button 
+        onClick={() => setActiveTab('orders')}
+        className={`flex-1 py-2 px-3 text-sm font-medium rounded-md ${
+          activeTab === 'orders' ? 'bg-white shadow text-blue-600' : 'text-gray-600'
+        }`}
+      >
+        Orders
+      </button>
+    </div>
+  );
+
+  // Shop information card
+  const renderShopInfo = () => (
+    <div className="bg-white shadow-md rounded-lg p-4 md:p-6 border-l-4 border-blue-500">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+        <div>
           <h3 className="text-xl font-semibold text-gray-800">{dashboardData.shop.shopName}</h3>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-            dashboardData.shop.isOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-          }`}>
-            {dashboardData.shop.isOpen ? 'Open' : 'Closed'}
-          </span>
+          <p className="text-gray-600 text-sm mt-1">{dashboardData.shop.description}</p>
         </div>
-        <p className="text-gray-600 mb-2">{dashboardData.shop.description}</p>
-        <p className="text-gray-600 mb-2">{dashboardData.shop.address}</p>
-        <p className="text-gray-600 mb-4">{dashboardData.shop.phoneNumber}</p>
-        
-        <div className="pt-4 border-t border-gray-200">
+        <span className={`mt-2 md:mt-0 px-3 py-1 rounded-full text-sm font-medium inline-flex items-center ${
+          dashboardData.shop.isOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          <span className={`h-2 w-2 rounded-full mr-1 ${dashboardData.shop.isOpen ? 'bg-green-500' : 'bg-red-500'}`}></span>
+          {dashboardData.shop.isOpen ? 'Open' : 'Closed'}
+        </span>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+        <div className="flex items-center">
+          <span className="text-gray-500 mr-2">📍</span>
+          {dashboardData.shop.address}
+        </div>
+        <div className="flex items-center">
+          <span className="text-gray-500 mr-2">📱</span>
+          {dashboardData.shop.phoneNumber}
+        </div>
+      </div>
+      
+      <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
           <p className="text-sm text-gray-600">
-            Subscription valid until: <span className="font-medium">{formatDate(dashboardData.shop.subscriptionEndDate)}</span>
-          </p>
-          <p className="text-sm text-gray-600 mt-1">
-            Status: <span className={`font-medium ${dashboardData.isSubscriptionValid ? 'text-green-600' : 'text-red-600'}`}>
+            Subscription: <span className={`font-medium ${dashboardData.isSubscriptionValid ? 'text-green-600' : 'text-red-600'}`}>
               {dashboardData.isSubscriptionValid ? 'Active' : 'Expired'}
             </span>
           </p>
         </div>
+        <div>
+          <p className="text-sm text-gray-600">
+            Valid until: <span className="font-medium">{formatDate(dashboardData.shop.subscriptionEndDate)}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Stats grid
+  const renderStatsGrid = () => (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      {/* Products */}
+      <div className="bg-gradient-to-br from-blue-50 to-blue-100 shadow-md rounded-lg p-4">
+        <div className="flex items-center">
+          <div className="bg-blue-500 p-2 md:p-3 rounded-full">
+            <Package className="h-4 w-4 md:h-5 md:w-5 text-white" />
+          </div>
+          <div className="ml-3">
+            <p className="text-xs md:text-sm text-gray-500">Products</p>
+            <p className="text-lg md:text-xl font-semibold text-gray-800">{dashboardData.totalProducts}</p>
+          </div>
+        </div>
+        <p className="mt-2 text-xs md:text-sm text-gray-600">
+          {dashboardData.availableProducts} available
+        </p>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Products */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="flex items-center">
-            <div className="bg-blue-100 p-3 rounded-full">
-              <Package className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-gray-500 text-sm">Total Products</p>
-              <p className="text-2xl font-semibold text-gray-800">{dashboardData.totalProducts}</p>
-            </div>
+      {/* Orders */}
+      <div className="bg-gradient-to-br from-green-50 to-green-100 shadow-md rounded-lg p-4">
+        <div className="flex items-center">
+          <div className="bg-green-500 p-2 md:p-3 rounded-full">
+            <ShoppingBag className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </div>
-          <p className="mt-2 text-sm text-gray-600">
-            {dashboardData.availableProducts} available for sale
-          </p>
-        </div>
-
-        {/* Orders */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="flex items-center">
-            <div className="bg-green-100 p-3 rounded-full">
-              <ShoppingBag className="h-6 w-6 text-green-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-gray-500 text-sm">Total Orders</p>
-              <p className="text-2xl font-semibold text-gray-800">{dashboardData.totalOrders}</p>
-            </div>
-          </div>
-          <p className="mt-2 text-sm text-gray-600">
-            {dashboardData.pendingOrders} pending orders
-          </p>
-        </div>
-
-        {/* Revenue */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="flex items-center">
-            <div className="bg-purple-100 p-3 rounded-full">
-              <DollarSign className="h-6 w-6 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-gray-500 text-sm">Total Revenue</p>
-              <p className="text-2xl font-semibold text-gray-800">
-                ${dashboardData.totalRevenue || 0}
-              </p>
-            </div>
+          <div className="ml-3">
+            <p className="text-xs md:text-sm text-gray-500">Orders</p>
+            <p className="text-lg md:text-xl font-semibold text-gray-800">{dashboardData.totalOrders}</p>
           </div>
         </div>
+        <p className="mt-2 text-xs md:text-sm text-gray-600">
+          {dashboardData.pendingOrders} pending
+        </p>
+      </div>
 
-        {/* Shop Status */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="flex items-center">
-            <div className="bg-yellow-100 p-3 rounded-full">
-              <Clock className="h-6 w-6 text-yellow-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-gray-500 text-sm">Shop Status</p>
-              <p className="text-2xl font-semibold text-gray-800">
-                {dashboardData.shop.isApproved ? 'Approved' : 'Pending'}
-              </p>
-            </div>
+      {/* Revenue */}
+      <div className="bg-gradient-to-br from-purple-50 to-purple-100 shadow-md rounded-lg p-4">
+        <div className="flex items-center">
+          <div className="bg-purple-500 p-2 md:p-3 rounded-full">
+            <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </div>
+          <div className="ml-3">
+            <p className="text-xs md:text-sm text-gray-500">Revenue</p>
+            <p className="text-lg md:text-xl font-semibold text-gray-800">
+              ${dashboardData.totalRevenue || 0}
+            </p>
+          </div>
+        </div>
+        <div className="mt-2 flex items-center text-xs text-green-600">
+          <TrendingUp className="h-3 w-3 mr-1" />
+          <span>This month</span>
         </div>
       </div>
 
-      {/* Recent Orders */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h3>
-        
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Order ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Items
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
+      {/* Shop Status */}
+      <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 shadow-md rounded-lg p-4">
+        <div className="flex items-center">
+          <div className="bg-yellow-500 p-2 md:p-3 rounded-full">
+            <Clock className="h-4 w-4 md:h-5 md:w-5 text-white" />
+          </div>
+          <div className="ml-3">
+            <p className="text-xs md:text-sm text-gray-500">Status</p>
+            <p className="text-lg md:text-xl font-semibold text-gray-800">
+              {dashboardData.shop.isApproved ? 'Approved' : 'Pending'}
+            </p>
+          </div>
+        </div>
+        <div className="mt-2 text-xs md:text-sm text-gray-600">
+          {dashboardData.shop.isApproved ? 'Your shop is live' : 'Under review'}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Recent orders table/cards
+  const renderRecentOrders = () => (
+    <div className="bg-white shadow-md rounded-lg p-4 md:p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">Recent Orders</h3>
+        <button className="text-blue-600 text-sm flex items-center hover:underline">
+          View all <ChevronRight className="h-4 w-4 ml-1" />
+        </button>
+      </div>
+      
+      {/* Desktop table - hidden on mobile */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Order ID
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Items
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Total
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {dashboardData.recentOrders.map((order) => (
+              <tr key={order._id} className="hover:bg-gray-50">
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium">
+                  #{order._id.substring(0, 8)}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                  {formatDate(order.createdAt)}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                  {order.items.length}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                  ${order.totalAmount}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                    ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                      order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
+                      order.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                      'bg-red-100 text-red-800'}
+                  `}>
+                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {dashboardData.recentOrders.map((order) => (
-                <tr key={order._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order._id.substring(0, 8)}...
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(order.createdAt)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.items.length}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${order.totalAmount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                        order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
-                        order.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                        'bg-red-100 text-red-800'}
-                    `}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile cards - shown only on mobile */}
+      <div className="md:hidden space-y-3">
+        {dashboardData.recentOrders.map((order) => (
+          <div key={order._id} className="bg-gray-50 rounded-lg p-3 border-l-4 border-blue-500">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-medium text-sm">#{order._id.substring(0, 8)}</span>
+              <span className={`px-2 py-1 inline-flex text-xs leading-4 font-medium rounded-full 
+                ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                  order.status === 'processing' ? 'bg-blue-100 text-blue-800' : 
+                  order.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                  'bg-red-100 text-red-800'}
+              `}>
+                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-1 text-xs text-gray-500">
+              <div>Date:</div>
+              <div className="text-right">{formatDate(order.createdAt)}</div>
+              <div>Items:</div>
+              <div className="text-right">{order.items.length}</div>
+              <div>Total:</div>
+              <div className="text-right font-medium text-gray-900">${order.totalAmount}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="px-2 py-4 md:px-4 space-y-4 bg-gray-100 min-h-screen">
+      {/* Mobile tabs */}
+      {renderTabs()}
+
+      {/* Shop Info - Always visible on desktop, conditional on mobile */}
+      <div className={activeTab === 'overview' ? 'block' : 'hidden md:block'}>
+        {renderShopInfo()}
+      </div>
+
+      {/* Stats Grid - Always visible on desktop, conditional on mobile */}
+      <div className={activeTab === 'stats' || activeTab === 'overview' ? 'block' : 'hidden md:block'}>
+        {renderStatsGrid()}
+      </div>
+
+      {/* Recent Orders - Always visible on desktop, conditional on mobile */}
+      <div className={activeTab === 'orders' || activeTab === 'overview' ? 'block' : 'hidden md:block'}>
+        {renderRecentOrders()}
       </div>
     </div>
   );
