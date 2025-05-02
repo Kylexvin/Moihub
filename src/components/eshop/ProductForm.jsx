@@ -35,7 +35,7 @@ const ProductForm = ({ product, onClose, onProductUpdate, getAuthConfig, categor
     if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.description) newErrors.description = 'Description is required';
     if (!formData.price) newErrors.price = 'Price is required';
-    if (!formData.category) newErrors.category = 'Category is required';
+    // if (!formData.category) newErrors.category = 'Category is required';
     if (!isEditing && !formData.image) newErrors.image = 'Product image is required';
     
     setErrors(newErrors);
@@ -172,9 +172,25 @@ const ProductForm = ({ product, onClose, onProductUpdate, getAuthConfig, categor
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="category">
-              Category*
-            </label>
+          <input
+  type="text"
+  id="category"
+  name="category"
+  value={formData.category}
+  onChange={handleChange}
+  placeholder="Enter or choose category"
+  list="category-options"
+  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+    errors.category ? 'border-red-500' : ''
+  }`}
+/>
+
+<datalist id="category-options">
+  {categories?.map((category) => (
+    <option key={category._id || category} value={category.name || category} />
+  ))}
+</datalist>
+
             <select
               id="category"
               name="category"

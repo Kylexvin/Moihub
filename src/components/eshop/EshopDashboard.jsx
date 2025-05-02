@@ -184,18 +184,21 @@ const EshopDashboard = () => {
               <h1 className="text-xl font-bold text-white">Shop Dashboard</h1>
             </div>
             
-            {subscription && subscription.isActive && (
-              <div className={`px-4 py-2 text-sm ${daysRemaining <= 7 ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'}`}>
-                <div className="flex items-center">
-                  {daysRemaining <= 7 && <AlertTriangle className="w-4 h-4 mr-1" />}
-                  <span>
-                    {daysRemaining <= 7 
-                      ? `Subscription: ${daysRemaining} days left` 
-                      : `Subscription active`}
-                  </span>
+            {/* Subscription status is hidden but functionality remains */}
+            <div className="hidden">
+              {subscription && subscription.isActive && (
+                <div className={`px-4 py-2 text-sm ${daysRemaining <= 7 ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'}`}>
+                  <div className="flex items-center">
+                    {daysRemaining <= 7 && <AlertTriangle className="w-4 h-4 mr-1" />}
+                    <span>
+                      {daysRemaining <= 7 
+                        ? `Subscription: ${daysRemaining} days left` 
+                        : `Subscription active`}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
             
             <div className="flex flex-col flex-grow overflow-y-auto">
               <nav className="flex-1 px-2 py-4 space-y-1">
@@ -294,7 +297,7 @@ const EshopDashboard = () => {
         {/* Main content */}
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* Mobile header */}
-          <div className="block md:hidden bg-white shadow">
+          <div className="block md:hidden fixed top-0 left-0 right-0 z-10 bg-white shadow">
             <div className="flex items-center justify-between h-16 px-4 border-b">
               <div className="flex items-center">
                 <button 
@@ -318,17 +321,19 @@ const EshopDashboard = () => {
               </div>
             </div>
             
-            {/* Mobile subscription notification */}
-            {subscription && subscription.isActive && daysRemaining <= 7 && (
-              <div className="px-4 py-2 bg-yellow-50 text-yellow-700 text-sm border-b flex items-center">
-                <AlertTriangle className="w-4 h-4 mr-1" />
-                <span>Subscription: {daysRemaining} days remaining</span>
-              </div>
-            )}
+            {/* Mobile subscription notification - hidden but functionality remains */}
+            <div className="hidden">
+              {subscription && subscription.isActive && daysRemaining <= 7 && (
+                <div className="px-4 py-2 bg-yellow-50 text-yellow-700 text-sm border-b flex items-center">
+                  <AlertTriangle className="w-4 h-4 mr-1" />
+                  <span>Subscription: {daysRemaining} days remaining</span>
+                </div>
+              )}
+            </div>
             
-            {/* Mobile menu dropdown */}
+            {/* Mobile menu dropdown - Now positioned absolute below the header */}
             {mobileMenuOpen && (
-              <div className="bg-white border-b shadow-lg">
+              <div className="absolute w-full bg-white border-b shadow-lg">
                 <nav className="px-2 py-3 space-y-1">
                   <button 
                     className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
@@ -408,67 +413,6 @@ const EshopDashboard = () => {
                 </nav>
               </div>
             )}
-          
-            {/* Mobile navigation tabs - Fixed at bottom */}
-            {/* <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-10 md:hidden">
-              <div className="flex">
-                <button 
-                  className={`flex-1 py-3 flex flex-col items-center justify-center ${
-                    activeComponent === 'dashboard' ? 'text-blue-600' : 'text-gray-500'
-                  }`}
-                  onClick={() => {
-                    setActiveComponent('dashboard');
-                    setIsAddingProduct(false);
-                    setViewingOrderId(null);
-                  }}
-                >
-                  <Home className="h-5 w-5" />
-                  <span className="text-xs mt-1">Home</span>
-                </button>
-                
-                <button 
-                  className={`flex-1 py-3 flex flex-col items-center justify-center ${
-                    activeComponent === 'products' ? 'text-blue-600' : 'text-gray-500'
-                  }`}
-                  onClick={() => {
-                    setActiveComponent('products');
-                    setIsAddingProduct(false);
-                    setViewingOrderId(null);
-                  }}
-                >
-                  <Package className="h-5 w-5" />
-                  <span className="text-xs mt-1">Products</span>
-                </button>
-                
-                <button 
-                  className={`flex-1 py-3 flex flex-col items-center justify-center ${
-                    activeComponent === 'orders' ? 'text-blue-600' : 'text-gray-500'
-                  }`}
-                  onClick={() => {
-                    setActiveComponent('orders');
-                    setIsAddingProduct(false);
-                    setViewingOrderId(null);
-                  }}
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span className="text-xs mt-1">Orders</span>
-                </button>
-                
-                <button 
-                  className={`flex-1 py-3 flex flex-col items-center justify-center ${
-                    activeComponent === 'settings' ? 'text-blue-600' : 'text-gray-500'
-                  }`}
-                  onClick={() => {
-                    setActiveComponent('settings');
-                    setIsAddingProduct(false);
-                    setViewingOrderId(null);
-                  }}
-                >
-                  <Settings className="h-5 w-5" />
-                  <span className="text-xs mt-1">Settings</span>
-                </button>
-              </div>
-            </div> */}
           </div>
           
           {/* Page content */}
@@ -514,24 +458,29 @@ const EshopDashboard = () => {
                       {activeComponent === 'dashboard' && 'Dashboard Overview'}
                       {activeComponent === 'products' && 'My Products'}
                       {activeComponent === 'orders' && 'Orders'}
-                      {activeComponent === 'settings' && 'Shop Profile'}
+                      {/* Changed to not display 'Shop Profile' but keep functionality */}
+                      {activeComponent === 'settings' && 'Settings'}
                     </h2>
-                    {subscription && (
-                      <div className="mt-2 flex items-center">
-                        <div className={`
-                          px-3 py-1 rounded-full text-sm
-                          ${daysRemaining <= 7 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-green-100 text-green-800'
-                          }
-                        `}>
-                          {daysRemaining <= 7 
-                            ? `Subscription expires in ${daysRemaining} days` 
-                            : 'Subscription active'
-                          }
+                    
+                    {/* Subscription status is hidden but functionality remains */}
+                    <div className="hidden">
+                      {subscription && (
+                        <div className="mt-2 flex items-center">
+                          <div className={`
+                            px-3 py-1 rounded-full text-sm
+                            ${daysRemaining <= 7 
+                              ? 'bg-yellow-100 text-yellow-800' 
+                              : 'bg-green-100 text-green-800'
+                            }
+                          `}>
+                            {daysRemaining <= 7 
+                              ? `Subscription expires in ${daysRemaining} days` 
+                              : 'Subscription active'
+                            }
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

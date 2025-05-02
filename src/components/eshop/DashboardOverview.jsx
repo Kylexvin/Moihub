@@ -90,50 +90,7 @@ const DashboardOverview = () => {
     </div>
   );
 
-  // Shop information card
-  const renderShopInfo = () => (
-    <div className="bg-white shadow-md rounded-lg p-4 md:p-6 border-l-4 border-blue-500">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800">{dashboardData.shop.shopName}</h3>
-          <p className="text-gray-600 text-sm mt-1">{dashboardData.shop.description}</p>
-        </div>
-        <span className={`mt-2 md:mt-0 px-3 py-1 rounded-full text-sm font-medium inline-flex items-center ${
-          dashboardData.shop.isOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
-          <span className={`h-2 w-2 rounded-full mr-1 ${dashboardData.shop.isOpen ? 'bg-green-500' : 'bg-red-500'}`}></span>
-          {dashboardData.shop.isOpen ? 'Open' : 'Closed'}
-        </span>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
-        <div className="flex items-center">
-          <span className="text-gray-500 mr-2">📍</span>
-          {dashboardData.shop.address}
-        </div>
-        <div className="flex items-center">
-          <span className="text-gray-500 mr-2">📱</span>
-          {dashboardData.shop.phoneNumber}
-        </div>
-      </div>
-      
-      <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <p className="text-sm text-gray-600">
-            Subscription: <span className={`font-medium ${dashboardData.isSubscriptionValid ? 'text-green-600' : 'text-red-600'}`}>
-              {dashboardData.isSubscriptionValid ? 'Active' : 'Expired'}
-            </span>
-          </p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">
-            Valid until: <span className="font-medium">{formatDate(dashboardData.shop.subscriptionEndDate)}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
+ 
   // Stats grid
   const renderStatsGrid = () => (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
@@ -304,11 +261,6 @@ const DashboardOverview = () => {
     <div className="px-2 py-4 md:px-4 space-y-4 bg-gray-100 min-h-screen">
       {/* Mobile tabs */}
       {renderTabs()}
-
-      {/* Shop Info - Always visible on desktop, conditional on mobile */}
-      <div className={activeTab === 'overview' ? 'block' : 'hidden md:block'}>
-        {renderShopInfo()}
-      </div>
 
       {/* Stats Grid - Always visible on desktop, conditional on mobile */}
       <div className={activeTab === 'stats' || activeTab === 'overview' ? 'block' : 'hidden md:block'}>
