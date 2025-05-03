@@ -138,7 +138,7 @@ const ProductList = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -155,7 +155,7 @@ const ProductList = () => {
               className="mr-2 p-2 rounded-full hover:bg-gray-100 text-gray-600"
               disabled={refreshing}
             >
-              <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin text-blue-500' : ''}`} />
+              <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin text-emerald-500' : ''}`} />
             </button>
             <div className="relative flex-grow md:flex-grow-0 md:w-64 mr-2">
               <input
@@ -163,13 +163,13 @@ const ProductList = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full py-2 px-3 pl-9 rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="w-full py-2 px-3 pl-9 rounded border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
               />
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             </div>
             <button 
               onClick={addNewProduct}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 md:px-4 rounded flex items-center text-sm md:text-base font-medium transition duration-200"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-3 md:px-4 rounded flex items-center text-sm md:text-base font-medium transition duration-200"
             >
               <Plus className="h-4 w-4 mr-1" /> Add Product
             </button>
@@ -209,7 +209,7 @@ const ProductList = () => {
             <p className="text-gray-500 mb-4">Add your first product to start selling.</p>
             <button 
               onClick={addNewProduct}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded inline-flex items-center"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded inline-flex items-center"
             >
               <Plus className="h-4 w-4 mr-2" /> Add First Product
             </button>
@@ -258,7 +258,7 @@ const ProductList = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          product.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          product.isAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                         }`}>
                           {product.isAvailable ? 'Available' : 'Unavailable'}
                         </span>
@@ -267,7 +267,7 @@ const ProductList = () => {
                         <div className="flex space-x-3">
                           <button
                             onClick={() => editProduct(product)}
-                            className="text-blue-600 hover:text-blue-900 flex items-center"
+                            className="text-emerald-600 hover:text-emerald-900 flex items-center"
                             title="Edit"
                           >
                             <Edit className="h-4 w-4" />
@@ -275,7 +275,7 @@ const ProductList = () => {
                           <button
                             onClick={() => toggleAvailability(product._id)}
                             className={`flex items-center ${
-                              product.isAvailable ? 'text-yellow-600 hover:text-yellow-900' : 'text-green-600 hover:text-green-900'
+                              product.isAvailable ? 'text-yellow-600 hover:text-yellow-900' : 'text-emerald-600 hover:text-emerald-900'
                             }`}
                             title={product.isAvailable ? 'Disable' : 'Enable'}
                           >
@@ -312,7 +312,7 @@ const ProductList = () => {
                     />
                     <div className="absolute top-0 right-0 mt-2 mr-2">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        product.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        product.isAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
                       }`}>
                         {product.isAvailable ? 'Available' : 'Unavailable'}
                       </span>
@@ -322,32 +322,35 @@ const ProductList = () => {
                     <h3 className="font-medium text-gray-900 text-lg">{product.name}</h3>
                     <p className="text-gray-500 text-sm mt-1 line-clamp-2">{product.description}</p>
                     <div className="mt-2 text-lg font-semibold text-gray-900">${product.price.toFixed(2)}</div>
-                    
+
                     {/* Action buttons */}
-                    <div className="flex justify-between mt-4 pt-3 border-t border-gray-100">
+                    <div className="flex justify-between mt-4 pt-3 border-t bg-emerald-600/700 border-gray-100">
                       <button
                         onClick={() => editProduct(product)}
-                        className="flex items-center text-blue-600 font-medium"
+                        className="flex items-center text-emerald-600 font-medium"
+                        title="Edit"
                       >
-                        <Edit className="h-4 w-4 mr-1" /> Edit
+                        <Edit className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => toggleAvailability(product._id)}
                         className={`flex items-center font-medium ${
-                          product.isAvailable ? 'text-yellow-600' : 'text-green-600'
+                          product.isAvailable ? 'text-yellow-600' : 'text-emerald-600'
                         }`}
+                        title={product.isAvailable ? 'Disable' : 'Enable'}
                       >
                         {product.isAvailable ? (
-                          <><EyeOff className="h-4 w-4 mr-1" /> Disable</>
+                          <EyeOff className="h-5 w-5" />
                         ) : (
-                          <><Eye className="h-4 w-4 mr-1" /> Enable</>
+                          <Eye className="h-5 w-5" />
                         )}
                       </button>
                       <button
                         onClick={() => deleteProduct(product._id, product.name)}
                         className="flex items-center text-red-600 font-medium"
+                        title="Delete"
                       >
-                        <Trash2 className="h-4 w-4 mr-1" /> Delete
+                        <Trash2 className="h-5 w-5" />
                       </button>
                     </div>
                   </div>

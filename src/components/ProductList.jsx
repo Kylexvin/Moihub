@@ -20,6 +20,7 @@ const ProductList = () => {
   const [orderError, setOrderError] = useState(null);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loadingImages, setLoadingImages] = useState({});
 
   // Get token from localStorage with correct key
   const token = localStorage.getItem('token');
@@ -48,39 +49,50 @@ const ProductList = () => {
   // Fetch shop and product data
   useEffect(() => {
     console.log("Shop ID from params:", shopId);
-    
 
-const fetchShopAndProducts = async () => {
-  try {
-    // Fetch products which also contains shop data
-    const productsResponse = await axios.get(
-      `https://moihub.onrender.com/api/eshop/vendor/shop/${shopId}/products?page=1&limit=50`
-    );
-    
-    if (productsResponse.data.success) {
-      // Set products
-      setProducts(productsResponse.data.data);
-      
-      // Extract shop data from the same response
-      if (productsResponse.data.shop) {
-        setShop({
-          name: productsResponse.data.shop.name,
-          contactNumber: productsResponse.data.shop.contactNumber
-        });
-      } else {
-        // Fallback if shop data is missing
-        setShop({
-          name: "Shop Details",
-          contactNumber: "Contact for details"
-        });
+    const fetchShopAndProducts = async () => {
+      try {
+        // Fetch products which also contains shop data
+        const productsResponse = await axios.get(
+          `https://moihub.onrender.com/api/eshop/vendor/shop/${shopId}/products?page=1&limit=50`
+        );
+        
+        if (productsResponse.data.success) {
+          // Filter out products where isAvailable is false
+          const availableProducts = productsResponse.data.data.filter(
+            product => product.isAvailable === true
+          );
+          
+          // Set up initial loading state for all product images
+          const initialLoadingState = {};
+          availableProducts.forEach(product => {
+            initialLoadingState[product._id] = true;
+          });
+          setLoadingImages(initialLoadingState);
+          
+          // Set only available products
+          setProducts(availableProducts);
+          
+          // Extract shop data from the same response
+          if (productsResponse.data.shop) {
+            setShop({
+              name: productsResponse.data.shop.name,
+              contactNumber: productsResponse.data.shop.contactNumber
+            });
+          } else {
+            // Fallback if shop data is missing
+            setShop({
+              name: "Shop Details",
+              contactNumber: "Contact for details"
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    };
 
     fetchShopAndProducts();
     window.scrollTo(0, 0);
@@ -93,13 +105,15 @@ const fetchShopAndProducts = async () => {
     }));
   };
 
-  const handleOrderLink = (product) => {
-    if (!shop || !shop.contactNumber) return;
-    
-    const message = `Hello, I would like to order the following item:\n\nProduct: ${product.name}\nPrice: Ksh ${product.price}\n\nThank you!`;
-    const phoneNumber = shop.contactNumber?.replace(/\+/g, '');
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+  const handleImageLoad = (productId) => {
+    setLoadingImages(prev => ({
+      ...prev,
+      [productId]: false
+    }));
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = 'https://via.placeholder.com/150?text=No+Image';
   };
 
   const addToOrderSummary = (product) => {
@@ -157,22 +171,6 @@ const fetchShopAndProducts = async () => {
     return orderItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  const handleWhatsAppOrder = () => {
-    if (!shop || !shop.contactNumber) return;
-    
-    const cartItems = orderItems
-      .map(
-        (item) => `${item.name} x${item.quantity} - Ksh ${item.price * item.quantity}`
-      )
-      .join('\n');
-    const totalPrice = getTotalPrice();
-    const message = `Hello, I would like to order the following items:\n\n${cartItems}\n\nTotal: Ksh ${totalPrice}\n\nThank you!`;
-    const phoneNumber = shop.contactNumber?.replace(/\+/g, '');
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  };
-  
-
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setOrderFormData((prev) => ({
@@ -214,7 +212,6 @@ const fetchShopAndProducts = async () => {
       setIsLoading(true);
       setOrderError(null); // Clear any previous errors
       
-      
       const orderData = {
         shopId: shopId, 
         items: orderItems.map(item => ({
@@ -225,7 +222,7 @@ const fetchShopAndProducts = async () => {
         contactNumber: orderFormData.contactNumber
       };
   
-      console.log('Sending order with data:', orderData); // Log the exact data being sent
+      console.log('Sending order with data:', orderData);
       
       // Use the config object for the request with the correct token
       const response = await axios.post(
@@ -259,7 +256,6 @@ const fetchShopAndProducts = async () => {
         // Server returned an error response
         if (error.response.status === 401) {
           setOrderError('Your session has expired. Please refresh the page and try again.');
-          // Don't show login button since we're assuming user is logged in
         } else if (error.response.status === 404) {
           setOrderError('Shop or products not found. Please refresh the page.');
         } else {
@@ -277,12 +273,6 @@ const fetchShopAndProducts = async () => {
     }
   };
 
-  const handleLogin = () => {
-    // Save current path to redirect back after login
-    localStorage.setItem('redirectAfterLogin', window.location.pathname);
-    navigate('/login');
-  };
-  
   // Loading state
   if (isLoading) {
     return (
@@ -297,10 +287,10 @@ const fetchShopAndProducts = async () => {
   if (products.length === 0) {
     return (
       <div className="product-list-container">
-       <div className="shop-info p-4 bg-white shadow-md rounded-2xl">
-  <h2 className="text-xl font-semibold text-gray-800">{shop?.name || "Shop Details"}</h2>
-  <p className="text-sm text-gray-500">Contact: {shop?.contactNumber || "Contact for details"}</p>
-</div>
+        <div className="shop-info p-4 bg-white shadow-md rounded-2xl">
+          <h2 className="text-xl font-semibold text-gray-800">{shop?.name || "Shop Details"}</h2>
+          <p className="text-sm text-gray-500">Contact: {shop?.contactNumber || "Contact for details"}</p>
+        </div>
         <div className="no-products">
           <i className="fas fa-box-open"></i>
           <p>No products available in this shop.</p>
@@ -315,50 +305,35 @@ const fetchShopAndProducts = async () => {
   return (
     <>
       <div className="product-list-container"> 
-      <div className="relative">
-  {/* Shop info card */}
-  <div className="shop-info p-4 bg-white shadow-md flex justify-between items-center rounded-none">
-  <h2 className="text-lg font-semibold text-gray-800">
-    {shop?.name || "Shop Details"}
-  </h2>
-  <p className="text-sm text-gray-500">
-    <i className="fas fa-phone mr-1"></i>
-    {shop?.contactNumber || "N/A"}
-  </p>
-</div>
-
-
-  {/* Floating WhatsApp button */}
-  {shop?.contactNumber && (
-    <a
-  href={`https://wa.me/${shop?.contactNumber?.replace('+', '')}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 z-50 animate-bounce"
->
-  <i className="fab fa-whatsapp"></i>
-  Chat
-</a>
-
-  
-  )}
-</div>
-
+        <div className="relative">
+          {/* Shop info card */}
+          <div className="shop-info p-4 bg-white shadow-md flex justify-between items-center rounded-none">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {shop?.name || "Shop Details"}
+            </h2>
+            <p className="text-sm text-gray-500">
+              <i className="fas fa-phone mr-1"></i>
+              {shop?.contactNumber || "N/A"}
+            </p>
+          </div>
+        </div>
 
         <div className="product-list">
-       
-
           <div className="card-container">
             {products.map((product) => (
               <div className="mini-card" key={product._id}>
                 <div className="img-container" id={`product${product._id}`}>
+                  {loadingImages[product._id] && (
+                    <div className="image-loading-spinner">
+                      <div className="spinner"></div>
+                    </div>
+                  )}
                   <img
-                    className="item-photo"
+                    className={`item-photo ${loadingImages[product._id] ? 'loading' : 'loaded'}`}
                     src={product.image}
                     alt={product.name}
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/150?text=No+Image';
-                    }}
+                    onLoad={() => handleImageLoad(product._id)}
+                    onError={handleImageError}
                   />
                 </div>
 
@@ -379,15 +354,6 @@ const fetchShopAndProducts = async () => {
                     >
                       <i className="fas fa-info-circle"></i>
                     </button>
-                    {shop?.phoneNumber && (
-                      <button
-                        className="button-n"
-                        onClick={() => handleOrderLink(product)}
-                        aria-label="Order via WhatsApp"
-                      >
-                        <i className="fab fa-whatsapp"></i>
-                      </button>
-                    )}
                     <button
                       className="button-n"
                       onClick={() => addToOrderSummary(product)}
@@ -457,9 +423,7 @@ const fetchShopAndProducts = async () => {
                             src={item.image} 
                             alt={item.name} 
                             className="order-item-image" 
-                            onError={(e) => {
-                              e.target.src = 'https://via.placeholder.com/50?text=No+Image';
-                            }}
+                            onError={handleImageError}
                           />
                           <div className="order-item-info">
                             <span className="order-item-name">{item.name}</span>
@@ -537,14 +501,6 @@ const fetchShopAndProducts = async () => {
                   ) : null}
                   
                   <div className="order-actions">
-                    {shop?.phoneNumber && (
-                      <button 
-                        className="whatsapp-order-button" 
-                        onClick={handleWhatsAppOrder}
-                      >
-                        <i className="fab fa-whatsapp"></i> Order via WhatsApp
-                      </button>
-                    )}
                     <button 
                       className="place-order-button" 
                       onClick={handlePlaceOrder}
