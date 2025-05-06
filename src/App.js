@@ -58,6 +58,7 @@ import VendorDashboard from './components/dashboards/VendorDashboard';
 import VendorManagement from './components/dashboards/VendorManagement';
 import UpgradeToVendor from './components/UpgradeToVendor';
 import VendorPage from './components/VendorPage';
+import UpgradeEshop from './components/UpgradeEshop';
 
 
 
@@ -259,7 +260,7 @@ const App = () => {
           <Route path="/shops/:categoryId" element={<ShopList />} />
           <Route path="/products/:shopId" element={<ProductList />} />
           <Route path="/eshop/dashboard" element={<EshopDashboard />} />
-
+          <Route path="/eshop/upgrade" element={<UpgradeEshop/>}  />
 
 
 

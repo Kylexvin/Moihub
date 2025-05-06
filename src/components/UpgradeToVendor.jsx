@@ -33,7 +33,7 @@ function UpgradeToVendor() {
           return;
         }
         
-        const res = await axios.get('http://localhost:5000/api/food/vendors/check-status', {
+        const res = await axios.get('https://moihub.onrender.com/api/food/vendors/check-status', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -124,7 +124,7 @@ function UpgradeToVendor() {
       
       // Fixed typo in URL (was 'locallhost')
       const res = await axios.post(
-        'http://localhost:5000/api/food/vendors/register',
+        'https://moihub.onrender.com/api/food/vendors/register',
         formData,
         {
           headers: {
