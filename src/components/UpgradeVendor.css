@@ -1,0 +1,245 @@
+/* UpgradeVendor.css */
+.vendor-upgrade-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  
+  .upgrade-form-wrapper {
+    width: 100%;
+    max-width: 550px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .upgrade-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .upgrade-icon {
+    color: #4a6cf7;
+    margin-bottom: 1rem;
+  }
+  
+  .upgrade-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d2939;
+    margin-bottom: 0.5rem;
+  }
+  
+  .upgrade-header p {
+    color: #667085;
+    font-size: 1rem;
+  }
+  
+  .upgrade-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    color: #344054;
+    font-size: 0.9rem;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    color: #667085;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 12px 12px 42px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+  }
+  
+  .form-input:focus {
+    border-color: #4a6cf7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.12);
+  }
+  
+  .form-input::placeholder {
+    color: #98a2b3;
+  }
+  
+  .notice-box {
+    background-color: #f8f9fc;
+    border-left: 4px solid #4a6cf7;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 0.5rem 0;
+  }
+  
+  .notice-box p {
+    color: #475467;
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+  }
+  
+  .upgrade-submit-btn {
+    background-color: #4a6cf7;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+  
+  .upgrade-submit-btn:hover {
+    background-color: #3a5bd9;
+  }
+  
+  .upgrade-submit-btn:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  
+  /* Vendor status styles */
+  .vendor-status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  
+  .status-card {
+    width: 100%;
+    max-width: 500px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    text-align: center;
+  }
+  
+  .status-icon {
+    color: #4a6cf7;
+    margin-bottom: 1rem;
+  }
+  
+  .status-card h2 {
+    font-size: 1.5rem;
+    color: #1d2939;
+    margin-bottom: 1rem;
+  }
+  
+  .status-card p {
+    color: #475467;
+    margin-bottom: 0.5rem;
+  }
+  
+  .back-button {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #e5e7eb;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .vendor-upgrade-container, .vendor-status-container {
+      padding: 1rem;
+    }
+    
+    .upgrade-form-wrapper, .status-card {
+      padding: 1.5rem;
+    }
+    
+    .upgrade-header h2 {
+      font-size: 1.5rem;
+    }
+  }
+  /* Add these styles to your UpgradeVendor.css file */
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    background-color: #f59e0b; /* Amber for pending */
+  }
+  
+  .status-card {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .status-icon {
+    color: #3b82f6;
+    margin-bottom: 1rem;
+  }
+  
+  .vendor-status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 2rem;
+    background-color: #f9fafb;
+  }
+  
+  .back-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .back-button:hover {
+    background-color: #2563eb;
+  }
