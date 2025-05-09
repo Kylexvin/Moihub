@@ -259,7 +259,9 @@ const App = () => {
           <Route path="/eshop" element={<CategoryList />} />
           <Route path="/shops/:categoryId" element={<ShopList />} />
           <Route path="/products/:shopId" element={<ProductList />} />
+          {/* <ProtectedRoute allowedRoles={['vendor']}> */}
           <Route path="/eshop/dashboard" element={<EshopDashboard />} />
+          {/* </ProtectedRoute> */}
           <Route path="/eshop/upgrade" element={<UpgradeEshop/>}  />
 
 

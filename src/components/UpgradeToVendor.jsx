@@ -193,7 +193,7 @@ function UpgradeToVendor() {
           <div className="button-group">
             <button 
               className="back-button"
-              onClick={() => navigate('/profile')}
+              onClick={() => navigate('/')}
             >
               Back to Profile
             </button>
@@ -274,7 +274,7 @@ function UpgradeToVendor() {
           
           <div className="notice-box">
             <p><strong>Note:</strong> Your application will be reviewed by an administrator.</p>
-            <p>This process typically takes 24-48 hours. You'll receive an email notification once approved.</p>
+            <p>This process typically takes 6-24 hours. You'll receive an whatsApp notification once approved.</p>
           </div>
           
           <button

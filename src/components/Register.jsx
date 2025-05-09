@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserPlus, Mail, Lock } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { authService } from '../services/authService';
 import './Register.css';
 
@@ -107,7 +107,6 @@ function Register({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <div className="input-wrapper">
-              <Mail size={20} className="input-icon" />
               <input
                 type="email"
                 id="email"
@@ -124,7 +123,6 @@ function Register({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="input-wrapper">
-              <Lock size={20} className="input-icon" />
               <input
                 type="password"
                 id="password"
@@ -141,7 +139,6 @@ function Register({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <div className="input-wrapper">
-              <Lock size={20} className="input-icon" />
               <input
                 type="password"
                 id="confirmPassword"
