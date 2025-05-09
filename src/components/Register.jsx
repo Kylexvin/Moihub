@@ -66,7 +66,7 @@ function Register({ setIsAuthenticated }) {
         } else if (role === 'admin') {
           navigate('/admin-dashboard');
         } else {
-          navigate('/');
+          navigate('/login');
         }
       }, 2000);
     } catch (err) {

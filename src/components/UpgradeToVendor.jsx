@@ -15,6 +15,7 @@ function UpgradeToVendor() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVendor, setIsVendor] = useState(false);
   const [vendorStatus, setVendorStatus] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
   
   // Check if user is already a vendor
@@ -52,22 +53,25 @@ function UpgradeToVendor() {
             });
             setTimeout(() => navigate('/vendor-dashboard'), 2000);
           } else {
-            Swal.fire({
-              icon: 'info',
-              title: 'Pending Approval',
-              text: 'Your vendor application is pending approval. Please wait for admin confirmation.',
-              confirmButtonColor: '#3085d6'
-            });
+            // Instead of immediately showing alert, just update the state
+            setShowForm(false);
           }
+        } else {
+          // If not a vendor, show the form
+          setShowForm(true);
         }
       } catch (err) {
         console.error('Error checking vendor status:', err);
+        // Show error but still allow form display for retry
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to check vendor status. Please try again later.',
+          text: 'Failed to check vendor status. You can still submit an application.',
           confirmButtonColor: '#3085d6'
         });
+        
+        // Show form even if there was an error checking status
+        setShowForm(true);
       }
     };
     
@@ -122,7 +126,6 @@ function UpgradeToVendor() {
         return;
       }
       
-      // Fixed typo in URL (was 'locallhost')
       const res = await axios.post(
         'https://moihub.onrender.com/api/food/vendors/register',
         formData,
@@ -146,9 +149,14 @@ function UpgradeToVendor() {
         confirmButtonText: 'Great!',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Refresh vendor status after successful submission
+          // Update local state with new vendor information
           setIsVendor(true);
-          navigate('/');
+          setVendorStatus({
+            ...res.data,
+            shopName: formData.shopName,
+            isApproved: false
+          });
+          setShowForm(false);
         }
       });
       
@@ -167,7 +175,13 @@ function UpgradeToVendor() {
     }
   };
 
-  if (isVendor) {
+  // Add ability to retry/create new application even if user has pending application
+  const handleNewApplication = () => {
+    setShowForm(true);
+    setIsVendor(false);
+  };
+
+  if (isVendor && !showForm) {
     return (
       <div className="vendor-status-container">
         <div className="status-card">
@@ -176,12 +190,20 @@ function UpgradeToVendor() {
           <p>Your application for <strong>{vendorStatus?.shopName || 'your shop'}</strong> is currently under review.</p>
           <p>Status: <span className="status-badge">{vendorStatus?.isApproved ? 'Approved' : 'Pending'}</span></p>
           <p>You will be notified once an admin approves your request.</p>
-          <button 
-            className="back-button"
-            onClick={() => navigate('/profile')}
-          >
-            Back to Profile
-          </button>
+          <div className="button-group">
+            <button 
+              className="back-button"
+              onClick={() => navigate('/profile')}
+            >
+              Back to Profile
+            </button>
+            <button 
+              className="new-application-button"
+              onClick={handleNewApplication}
+            >
+              Submit New Application
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -194,13 +216,17 @@ function UpgradeToVendor() {
           <Store size={48} className="upgrade-icon" />
           <h2>Become a Food Vendor</h2>
           <p>Upgrade your account to start selling on the platform</p>
+          {isVendor && (
+            <div className="notice-existing-application">
+              <p>You already have a pending application. Creating a new one will replace your previous submission.</p>
+            </div>
+          )}
         </div>
         
         <form onSubmit={handleSubmit} className="upgrade-form">
           <div className="form-group">
             <label htmlFor="shopName">Shop Name</label>
             <div className="input-wrapper">
-              
               <input
                 type="text"
                 id="shopName"
@@ -217,7 +243,6 @@ function UpgradeToVendor() {
           <div className="form-group">
             <label htmlFor="phone">Phone Number</label>
             <div className="input-wrapper">
-              
               <input
                 type="tel"
                 id="phone"
@@ -234,7 +259,6 @@ function UpgradeToVendor() {
           <div className="form-group">
             <label htmlFor="location">Business Location</label>
             <div className="input-wrapper">
-              
               <input
                 type="text"
                 id="location"
@@ -258,7 +282,7 @@ function UpgradeToVendor() {
             className="upgrade-submit-btn"
             disabled={isLoading}
           >
-            {isLoading ? 'Submitting...' : 'Submit Application'}
+            {isLoading ? 'Submitting...' : (isVendor ? 'Submit New Application' : 'Submit Application')}
           </button>
         </form>
       </div>
