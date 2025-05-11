@@ -26,7 +26,7 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       // Fetch vendor applications
-      const appRes = await fetch('http://localhost:5000/api/eshop/admin/vendor-applications', {
+      const appRes = await fetch('https://moihub.onrender.com/api/eshop/admin/vendor-applications', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
       const appData = await appRes.json();
       
       // Fetch categories
-      const catRes = await fetch('http://localhost:5000/api/eshop/vendor/categories', {
+      const catRes = await fetch('https://moihub.onrender.com/api/eshop/vendor/categories', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
