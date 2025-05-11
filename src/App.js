@@ -59,6 +59,7 @@ import VendorManagement from './components/dashboards/VendorManagement';
 import UpgradeToVendor from './components/UpgradeToVendor';
 import VendorPage from './components/VendorPage';
 import UpgradeEshop from './components/UpgradeEshop';
+import AdminDashboard from './components/eshop/AdminDashboard';
 
 
 
@@ -263,7 +264,7 @@ const App = () => {
           <Route path="/eshop/dashboard" element={<EshopDashboard />} />
           {/* </ProtectedRoute> */}
           <Route path="/eshop/upgrade" element={<UpgradeEshop/>}  />
-
+          <Route path="/admin/eshop" element={<AdminDashboard/>} />
 
 
 
