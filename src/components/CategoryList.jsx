@@ -5,6 +5,16 @@ import { Helmet } from 'react-helmet';
 import CustomerCare from './customercare';
 import axios from 'axios';
 
+// Skeleton Loading Component for Category Cards
+const CategoryCardSkeleton = () => (
+  <div className="category-card skeleton-card">
+    <div className="card-content">
+      <div className="skeleton-icon"></div>
+      <div className="skeleton-title"></div>
+    </div>
+  </div>
+);
+
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +42,11 @@ const CategoryList = () => {
       }
     };
 
-    fetchCategories();
+    // Add a minimum loading time to ensure smooth transition
+    const loadingTimer = setTimeout(fetchCategories, 500);
+
+    // Cleanup function to clear timeout
+    return () => clearTimeout(loadingTimer);
   }, []); // Empty dependency array ensures it runs only once when the component mounts
 
   const handleCategoryClick = (categoryId) => {
@@ -40,45 +54,19 @@ const CategoryList = () => {
   };
 
   const handleWhatsAppClick = () => {
-    // Customize the phone number and message as needed
     const phoneNumber = '254768610613';
     const message = 'Hello, I am here to inquire about MoiHub eShop';
-
-    // Create the WhatsApp link
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-    // Open WhatsApp link in a new tab or window
     window.open(whatsappLink, '_blank');
   };
 
   const handleExploreClick = () => {
-    // Redirect to the home page
     window.location.href = "/";
   };
 
   const handleCallClick = () => {
-    // Add additional logic here, such as making a phone call
     window.location.href = "tel:0745276898";
   };
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading categories...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <h3>Error</h3>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -127,24 +115,37 @@ const CategoryList = () => {
 
           <section className="shopping-categories">
             <div className="category-grid">
-              {categories.map((category) => (
-                <a
-                  key={category._id}
-                  href={`/shops/${category._id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleCategoryClick(category._id); 
-                  }}
-                  className={`category-card category-${category._id}`}
-                >
-                  <div className="card-content">
-                    <div className="card-icon">
-                    <i className={`fas fa-${category.icon}`}></i>
+              {loading 
+                ? Array.from({ length: 6 }).map((_, index) => (
+                    <CategoryCardSkeleton key={index} />
+                  ))
+                : error 
+                ? (
+                    <div className="error-container">
+                      <h3>Error</h3>
+                      <p>{error}</p>
+                      <button onClick={() => window.location.reload()}>Try Again</button>
                     </div>
-                    <h3 className="card-title">{category.name}</h3>
-                  </div>
-                </a>
-              ))}
+                  )
+                : categories.map((category) => (
+                    <a
+                      key={category._id}
+                      href={`/shops/${category._id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCategoryClick(category._id); 
+                      }}
+                      className={`category-card category-${category._id}`}
+                    >
+                      <div className="card-content">
+                        <div className="card-icon">
+                          <i className={`fas fa-${category.icon}`}></i>
+                        </div>
+                        <h3 className="card-title">{category.name}</h3>
+                      </div>
+                    </a>
+                  ))
+              }
             </div>
           </section>
         </section>

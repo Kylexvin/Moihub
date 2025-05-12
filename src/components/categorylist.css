@@ -367,3 +367,47 @@ a {
 .error-container button:hover {
   background-color: #218838;
 }
+/* Skeleton Loading Styles */
+.skeleton-card {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-card .card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.skeleton-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-title {
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+

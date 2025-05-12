@@ -213,38 +213,27 @@
   background-color: #218838;
 }
 
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.category-header h1 {
-  margin: 0;
-  color: #27a844;
-  font-size: 1.5rem;
+.shop-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .back-button {
-  background-color: transparent;
-  border: 1px solid #27a844;
-  color: #27a844;
-  padding: 0.5rem 1rem;
+  background-color: #f0f0f0;
+  border: none;
+  padding: 10px 15px;
   border-radius: 4px;
+  margin-bottom: 20px;
   cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  transition: background-color 0.3s ease;
 }
 
 .back-button:hover {
-  background-color: #27a844;
-  color: white;
+  background-color: #e0e0e0;
 }
+
+
 
 .no-shops-message {
   display: flex;
@@ -281,4 +270,62 @@
   border: 2px solid #27a844;
   border-radius: 5px;
   font-size: 16px;
+}
+/* Skeleton Loading Styles */
+.skeleton-card {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+}
+
+.skeleton-title .skeleton-text {
+  width: 60%;
+  height: 30px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-location .skeleton-text {
+  width: 80%;
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-description .skeleton-text {
+  height: 15px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-description .skeleton-text:last-child {
+  width: 90%;
+}
+
+.skeleton-button {
+  width: 120px;
+  height: 40px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

@@ -3,6 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './shoplist.css';
 
+// Skeleton Loading Component for Shop Cards
+const ShopCardSkeleton = () => (
+  <div className="business-card skeleton-card">
+    <div className="biz-title-card skeleton-title">
+      <div className="skeleton-text"></div>
+    </div>
+    <div className="info-cards">
+      <div className="location-card skeleton-location">
+        <div className="skeleton-text"></div>
+      </div>
+    </div>
+    <div className="additional-info">
+      <div className="info skeleton-description">
+        <div className="skeleton-text"></div>
+        <div className="skeleton-text"></div>
+      </div>
+    </div>
+    <div className="btn-container">
+      <div className="skeleton-button"></div>
+    </div>
+  </div>
+);
+
 const ShopList = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
@@ -43,6 +66,9 @@ const ShopList = () => {
     // Fetch shops for the specific category
     const fetchShops = async (name) => {
       try {
+        // Add a small delay to ensure smooth loading experience
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories/${name}/shops`);
         if (response.data.success) {
           setShops(response.data.data);
@@ -64,6 +90,10 @@ const ShopList = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleGoBack = () => {
+    navigate(-1); // Navigate to the previous page
+  };
+
   const filteredShops = shops.filter((shop) =>
     shop.shopName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -72,29 +102,19 @@ const ShopList = () => {
     navigate(`/products/${shopId}`);
   };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading shops...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <h3>Error</h3>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
-      </div>
-    );
-  }
-
   return (
-    <>
-      
-      
+    <div className="shop-list-container">
+      {/* Back Button */}
+      {/* <button className="back-button" onClick={handleGoBack}>
+        <i className="fas fa-arrow-left"></i> Back
+      </button> */}
+
+      {/* Category Header */}
+      {/* {!loading && categoryName && (
+        <h1 className="category-header">{categoryName} Shops</h1>
+      )}
+       */}
+      {/* Search Bar */}
       <section className="search-bar-container">
         <input
           type="text"
@@ -102,43 +122,63 @@ const ShopList = () => {
           value={searchQuery}
           onChange={handleSearchChange}
           className="search-input"
+          disabled={loading}
         />
       </section>
       
-      {filteredShops.length > 0 ? (
-        <section className="business-cards-container">
-          {filteredShops.map((shop) => (
-            <div className="business-card" key={shop._id}>
-              <div className="biz-title-card">
-                <h2>{shop.shopName}</h2>
+      {/* Shops Content */}
+      <section className="business-cards-container">
+        {loading 
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <ShopCardSkeleton key={index} />
+            ))
+          : error 
+          ? (
+              <div className="error-container">
+                <h3>Error</h3>
+                <p>{error}</p>
+                <button onClick={() => window.location.reload()}>Try Again</button>
               </div>
-              <div className="info-cards">
-                <div className="location-card">
-                  <h3>
-                    <i className="fas fa-map-marker-alt"></i> {shop.address}
-                  </h3>
+            )
+          : filteredShops.length > 0 
+          ? (
+              filteredShops.map((shop) => (
+                <div className="business-card" key={shop._id}>
+                  <div className="biz-title-card">
+                    <h2>{shop.shopName}</h2>
+                  </div>
+                  <div className="info-cards">
+                    <div className="location-card">
+                      <h3>
+                        <i className="fas fa-map-marker-alt"></i> {shop.address}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="additional-info">
+                    <div className="info">
+                      <p>{shop.description}</p>
+                    </div>
+                  </div>
+                  <div className="btn-container">
+                    <button 
+                      className="btn-shop" 
+                      onClick={() => handleShopClick(shop._id)}
+                    >
+                      View Shop <i className="fas fa-store"></i>
+                    </button>
+                  </div>
                 </div>
+              ))
+            )
+          : (
+              <div className="no-shops-message">
+                <i className="fas fa-store-slash"></i>
+                <p>No shops found for this category.</p>
               </div>
-              <div className="additional-info">
-                <div className="info">
-                  <p>{shop.description}</p>
-                </div>
-              </div>
-              <div className="btn-container">
-                <button className="btn-shop" onClick={() => handleShopClick(shop._id)}>
-                  View Shop <i className="fas fa-store"></i>
-                </button>
-              </div>
-            </div>
-          ))}
-        </section>
-      ) : (
-        <div className="no-shops-message">
-          <i className="fas fa-store-slash"></i>
-          <p>No shops found for this category.</p>
-        </div>
-      )}
-    </>
+            )
+        }
+      </section>
+    </div>
   );
 };
 
