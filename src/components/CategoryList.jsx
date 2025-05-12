@@ -49,8 +49,9 @@ const CategoryList = () => {
     return () => clearTimeout(loadingTimer);
   }, []); // Empty dependency array ensures it runs only once when the component mounts
 
-  const handleCategoryClick = (categoryId) => {
-    navigate(`/shops/${categoryId}`);
+  const handleCategoryClick = (categorySlug) => {
+    // Navigate using the unique slug
+    navigate(`/shops/${categorySlug}`);
   };
 
   const handleWhatsAppClick = () => {
@@ -130,10 +131,10 @@ const CategoryList = () => {
                 : categories.map((category) => (
                     <a
                       key={category._id}
-                      href={`/shops/${category._id}`}
+                      href={`/shops/${category.slug}`}
                       onClick={(e) => {
                         e.preventDefault();
-                        handleCategoryClick(category._id); 
+                        handleCategoryClick(category.slug); 
                       }}
                       className={`category-card category-${category._id}`}
                     >

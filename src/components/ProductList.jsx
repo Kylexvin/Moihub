@@ -4,7 +4,7 @@ import axios from 'axios';
 import './ProductList.css';
 
 const ProductList = () => {
-  const { shopId } = useParams();
+  const { shopSlug } = useParams();
   const navigate = useNavigate();
   const [shop, setShop] = useState(null);
   const [products, setProducts] = useState([]);
@@ -21,6 +21,7 @@ const ProductList = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loadingImages, setLoadingImages] = useState({});
+  const [fetchError, setFetchError] = useState(null);
 
   // Get token from localStorage with correct key
   const token = localStorage.getItem('token');
@@ -48,19 +49,29 @@ const ProductList = () => {
 
   // Fetch shop and product data
   useEffect(() => {
-    console.log("Shop ID from params:", shopId);
+    console.log("Shop Slug from params:", shopSlug);
 
     const fetchShopAndProducts = async () => {
       try {
+        setIsLoading(true);
+        setFetchError(null);
+
         // Fetch products which also contains shop data
         const productsResponse = await axios.get(
-          `https://moihub.onrender.com/api/eshop/vendor/shop/${shopId}/products?page=1&limit=50`
+          `https://moihub.onrender.com/api/eshop/vendor/shops/${shopSlug}/products`
         );
         
+        console.log('Full Response:', productsResponse.data);
+        
         if (productsResponse.data.success) {
-          // Filter out products where isAvailable is false
-          const availableProducts = productsResponse.data.data.filter(
-            product => product.isAvailable === true
+          // Log details about the response
+          console.log('Shop Details:', productsResponse.data.shop);
+          console.log('Products:', productsResponse.data.data);
+          console.log('Products Count:', productsResponse.data.count);
+
+          // Filter out products where isAvailable is false or undefined
+          const availableProducts = (productsResponse.data.data || []).filter(
+            product => product.isAvailable !== false
           );
           
           // Set up initial loading state for all product images
@@ -76,8 +87,9 @@ const ProductList = () => {
           // Extract shop data from the same response
           if (productsResponse.data.shop) {
             setShop({
-              name: productsResponse.data.shop.name,
-              contactNumber: productsResponse.data.shop.contactNumber
+              name: productsResponse.data.shop.name || productsResponse.data.shop.shopName,
+              contactNumber: productsResponse.data.shop.contactNumber || productsResponse.data.shop.phoneNumber,
+              shopId: productsResponse.data.shop._id // Keep shop ID for order placement
             });
           } else {
             // Fallback if shop data is missing
@@ -86,9 +98,14 @@ const ProductList = () => {
               contactNumber: "Contact for details"
             });
           }
+        } else {
+          // Log error if success is false
+          console.error('API returned success: false', productsResponse.data);
+          setFetchError(productsResponse.data.message || 'Failed to fetch products');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+        setFetchError(error.response?.data?.message || 'Error connecting to the server');
       } finally {
         setIsLoading(false);
       }
@@ -96,7 +113,7 @@ const ProductList = () => {
 
     fetchShopAndProducts();
     window.scrollTo(0, 0);
-  }, [shopId]);
+  }, [shopSlug]);
 
   const toggleInfo = (productId) => {
     setShowInfo((prevState) => ({
@@ -184,7 +201,7 @@ const ProductList = () => {
     }
   };
 
-  const handlePlaceOrder = async () => {
+ const handlePlaceOrder = async () => {
     // Check if user is authenticated with the correct token key
     if (!token) {
       setOrderError('Session expired. Please refresh the page.');
@@ -213,7 +230,7 @@ const ProductList = () => {
       setOrderError(null); // Clear any previous errors
       
       const orderData = {
-        shopId: shopId, 
+        shopId: shop.shopId, // Use shopId from shop object instead of route params
         items: orderItems.map(item => ({
           productId: item.productId,
           quantity: item.quantity
@@ -274,11 +291,22 @@ const ProductList = () => {
   };
 
   // Loading state
-  if (isLoading) {
+ if (isLoading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Loading products...</p>
+      </div>
+    );
+  }
+
+  // Error state
+  if (fetchError) {
+    return (
+      <div className="error-container">
+        <h2>Error</h2>
+        <p>{fetchError}</p>
+        <button onClick={() => window.location.reload()}>Try Again</button>
       </div>
     );
   }

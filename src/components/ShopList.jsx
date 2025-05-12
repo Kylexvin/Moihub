@@ -27,7 +27,7 @@ const ShopCardSkeleton = () => (
 );
 
 const ShopList = () => {
-  const { categoryId } = useParams();
+  const { categorySlug } = useParams(); // Changed from categoryId to categorySlug
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [shops, setShops] = useState([]);
@@ -44,10 +44,10 @@ const ShopList = () => {
       try {
         const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories`);
         if (response.data.success) {
-          const category = response.data.data.find(cat => cat._id === categoryId);
+          const category = response.data.data.find(cat => cat.slug === categorySlug);  // Find by slug
           if (category) {
             setCategoryName(category.name);
-            fetchShops(category.name);
+            fetchShops(category.slug);  // Pass slug to fetch shops
           } else {
             setError('Category not found');
             setLoading(false);
@@ -64,12 +64,12 @@ const ShopList = () => {
     };
 
     // Fetch shops for the specific category
-    const fetchShops = async (name) => {
+    const fetchShops = async (slug) => {
       try {
         // Add a small delay to ensure smooth loading experience
         await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories/${name}/shops`);
+
+        const response = await axios.get(`https://moihub.onrender.com/api/eshop/vendor/categories/${slug}/shops`);
         if (response.data.success) {
           setShops(response.data.data);
         } else {
@@ -84,7 +84,7 @@ const ShopList = () => {
     };
 
     fetchCategoryName();
-  }, [categoryId]);
+  }, [categorySlug]); // Changed dependency to categorySlug
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -98,22 +98,12 @@ const ShopList = () => {
     shop.shopName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleShopClick = (shopId) => {
-    navigate(`/products/${shopId}`);
+  const handleShopClick = (shopSlug) => {
+    navigate(`/products/${shopSlug}`); // Changed to use shop slug
   };
 
   return (
     <div className="shop-list-container">
-      {/* Back Button */}
-      {/* <button className="back-button" onClick={handleGoBack}>
-        <i className="fas fa-arrow-left"></i> Back
-      </button> */}
-
-      {/* Category Header */}
-      {/* {!loading && categoryName && (
-        <h1 className="category-header">{categoryName} Shops</h1>
-      )}
-       */}
       {/* Search Bar */}
       <section className="search-bar-container">
         <input
@@ -162,7 +152,7 @@ const ShopList = () => {
                   <div className="btn-container">
                     <button 
                       className="btn-shop" 
-                      onClick={() => handleShopClick(shop._id)}
+                      onClick={() => handleShopClick(shop.slug)} // Changed to use shop slug
                     >
                       View Shop <i className="fas fa-store"></i>
                     </button>
