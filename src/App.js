@@ -56,7 +56,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import EmailVerification from './components/EmailVerification';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import { ForgotPassword, ResetPassword, ChangePassword } from './components/Auth';
 // Transport (MoiLink)
 import RouteSelectionPage from './pages/RouteSelectionPage';
 import VehicleSelectionPage from './pages/VehicleSelectionPage';
@@ -128,7 +128,10 @@ const App = () => {
           {/* Authentication Routes */}
           <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />
           <Route path="/register" element={<Register setIsAuthenticated={handleLogin} />} />
-          <Route path="/verify-email/:token" element={<EmailVerification />} />
+          <Route path="/verify-email/:token" element={<EmailVerification />} />          
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
 
           {/* Marketplace & Shopping */}
           <Route path="/marketplace" element={<BuyersPage />} />

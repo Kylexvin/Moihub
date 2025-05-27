@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn, Lock } from 'lucide-react';
 import { authService } from '../services/authService';
+import { ForgotPasswordLink } from './Auth'
+
+
 import './Register.css';
 
 function Login({ setIsAuthenticated }) {
@@ -100,6 +103,7 @@ function Login({ setIsAuthenticated }) {
         </form>
         <div className="auth-footer">
           <p>Don't have an account? <Link to="/register" className="auth-link">Register</Link></p>
+          <ForgotPasswordLink />
         </div>
       </div>
     </div>

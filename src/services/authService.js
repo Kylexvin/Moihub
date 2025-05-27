@@ -98,6 +98,49 @@ export const authService = {
     }
   },
 
+  // NEW: Request password reset
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await api.post('/forgot-password', { email });
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  // NEW: Verify reset token
+  verifyResetToken: async (token) => {
+    try {
+      const response = await api.get(`/verify-reset-token/${token}`);
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  // NEW: Reset password with token
+  resetPassword: async (token, password) => {
+    try {
+      const response = await api.post(`/reset-password/${token}`, { password });
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  // NEW: Change password (for authenticated users)
+  changePassword: async (currentPassword, newPassword) => {
+    try {
+      const response = await api.post('/change-password', {
+        currentPassword,
+        newPassword
+      });
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
