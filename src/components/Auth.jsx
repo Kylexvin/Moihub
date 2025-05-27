@@ -1,15 +1,16 @@
 // ForgotPassword.jsx
 import { useState } from 'react';
-import { authService } from '../services/authService';// Adjust path as needed
-// ResetPassword.jsx
-import  {  useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { authService } from '../services/authService';
+import { useEffect } from 'react';
+import { useParams, useNavigate} from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +20,53 @@ const ForgotPassword = () => {
 
     try {
       const response = await authService.requestPasswordReset(email);
-      setMessage(response.message);
+      setMessage(response.message || 'Password reset link sent to your email');
+      setIsSubmitted(true);
     } catch (error) {
-      setError(error.message);
+      // Your authService already handles error formatting
+      setError(error.message || 'Something went wrong');
     }
     setLoading(false);
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+              <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Check your email
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              We've sent a password reset link to <strong>{email}</strong>
+            </p>
+            <p className="mt-4 text-xs text-gray-500">
+              Didn't receive the email? Check your spam folder or{' '}
+              <button 
+                onClick={() => setIsSubmitted(false)}
+                className="text-indigo-600 hover:text-indigo-500 underline"
+              >
+                try again
+              </button>
+            </p>
+            <div className="mt-8">
+              <Link 
+                to="/login" 
+                className="text-indigo-600 hover:text-indigo-500 font-medium"
+              >
+                ← Back to login
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -55,27 +97,35 @@ const ForgotPassword = () => {
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
-
-          {message && (
-            <div className="text-green-600 text-sm text-center">{message}</div>
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
           )}
 
           <div>
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Sending...' : 'Send Reset Link'}
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                'Send Reset Link'
+              )}
             </button>
           </div>
 
           <div className="text-center">
-            <a href="/login" className="text-indigo-600 hover:text-indigo-500">
-              Back to login
-            </a>
+            <Link to="/login" className="text-indigo-600 hover:text-indigo-500">
+              ← Back to login
+            </Link>
           </div>
         </form>
       </div>
@@ -83,6 +133,7 @@ const ForgotPassword = () => {
   );
 };
 
+// ResetPassword.jsx
 
 
 const ResetPassword = () => {
@@ -93,25 +144,29 @@ const ResetPassword = () => {
   const [error, setError] = useState('');
   const [tokenValid, setTokenValid] = useState(null);
   const [userEmail, setUserEmail] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { token } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verify token on component mount
     const verifyToken = async () => {
       try {
         const response = await authService.verifyResetToken(token);
         setTokenValid(true);
-        setUserEmail(response.email);
+        setUserEmail(response.email || '');
       } catch (error) {
         setTokenValid(false);
-        setError(error.message);
+        // Your authService already handles error formatting
+        setError(error.message || 'Invalid or expired reset token');
       }
     };
 
     if (token) {
       verifyToken();
+    } else {
+      setTokenValid(false);
+      setError('No reset token provided');
     }
   }, [token]);
 
@@ -134,40 +189,63 @@ const ResetPassword = () => {
 
     try {
       const response = await authService.resetPassword(token, password);
-      setMessage(response.message);
+      setMessage(response.message || 'Password reset successfully');
+      setIsSuccess(true);
       
       // Redirect to login after 3 seconds
       setTimeout(() => {
-        navigate('/login');
+        navigate('/login', { 
+          state: { message: 'Password reset successfully. Please log in with your new password.' }
+        });
       }, 3000);
     } catch (error) {
-      setError(error.message);
+      // Your authService already handles error formatting
+      setError(error.message || 'Failed to reset password');
     }
     setLoading(false);
   };
 
+  // Loading state
   if (tokenValid === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">Verifying reset token...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Verifying reset token...</p>
+        </div>
       </div>
     );
   }
 
+  // Invalid token state
   if (tokenValid === false) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900">Invalid Link</h2>
-            <p className="mt-2 text-red-600">{error}</p>
-            <div className="mt-4">
-              <a 
-                href="/forgot-password" 
-                className="text-indigo-600 hover:text-indigo-500"
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+              <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </div>
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Invalid Reset Link</h2>
+            <p className="mt-2 text-red-600 text-sm">{error}</p>
+            <p className="mt-4 text-gray-600 text-sm">
+              This link may have expired or already been used.
+            </p>
+            <div className="mt-6 space-y-3">
+              <Link 
+                to="/forgot-password" 
+                className="block w-full text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Request a new password reset link
-              </a>
+                Request New Reset Link
+              </Link>
+              <Link 
+                to="/login" 
+                className="block w-full text-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Back to Login
+              </Link>
             </div>
           </div>
         </div>
@@ -175,6 +253,37 @@ const ResetPassword = () => {
     );
   }
 
+  // Success state
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+              <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Password Reset Complete</h2>
+            <p className="mt-2 text-green-600 text-sm">{message}</p>
+            <p className="mt-4 text-gray-600 text-sm">
+              Redirecting to login page in a few seconds...
+            </p>
+            <div className="mt-6">
+              <Link 
+                to="/login" 
+                className="text-indigo-600 hover:text-indigo-500 font-medium"
+              >
+                Continue to Login →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Reset password form
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -184,14 +293,14 @@ const ResetPassword = () => {
           </h2>
           {userEmail && (
             <p className="mt-2 text-center text-sm text-gray-600">
-              for {userEmail}
+              for <strong>{userEmail}</strong>
             </p>
           )}
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 New Password
               </label>
               <input
@@ -199,14 +308,14 @@ const ResetPassword = () => {
                 name="password"
                 type="password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="New password"
+                className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Enter new password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="sr-only">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm Password
               </label>
               <input
@@ -214,7 +323,7 @@ const ResetPassword = () => {
                 name="confirmPassword"
                 type="password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Confirm new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -223,14 +332,8 @@ const ResetPassword = () => {
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
-
-          {message && (
-            <div className="text-green-600 text-sm text-center">
-              {message}
-              <br />
-              <span className="text-xs">Redirecting to login...</span>
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              {error}
             </div>
           )}
 
@@ -238,9 +341,19 @@ const ResetPassword = () => {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Resetting...' : 'Reset Password'}
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Resetting...
+                </>
+              ) : (
+                'Reset Password'
+              )}
             </button>
           </div>
         </form>
@@ -249,7 +362,7 @@ const ResetPassword = () => {
   );
 };
 
-// ChangePassword.jsx
+// ChangePassword.jsx (for authenticated users)
 
 
 
@@ -274,20 +387,26 @@ const ChangePassword = () => {
       return;
     }
 
+    if (newPassword === currentPassword) {
+      setError('New password must be different from current password');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setMessage('');
 
     try {
       const response = await authService.changePassword(currentPassword, newPassword);
-      setMessage(response.message);
+      setMessage(response.message || 'Password changed successfully');
       
       // Clear form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (error) {
-      setError(error.message);
+      // Your authService already handles error formatting
+      setError(error.message || 'Failed to change password');
     }
     setLoading(false);
   };
@@ -299,7 +418,7 @@ const ChangePassword = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
-            Current Password
+            Current Password *
           </label>
           <input
             id="currentPassword"
@@ -313,7 +432,7 @@ const ChangePassword = () => {
 
         <div>
           <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-            New Password
+            New Password *
           </label>
           <input
             id="newPassword"
@@ -323,11 +442,12 @@ const ChangePassword = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
+          <p className="mt-1 text-xs text-gray-500">Must be at least 6 characters long</p>
         </div>
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-            Confirm New Password
+            Confirm New Password *
           </label>
           <input
             id="confirmPassword"
@@ -340,35 +460,51 @@ const ChangePassword = () => {
         </div>
 
         {error && (
-          <div className="text-red-600 text-sm">{error}</div>
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+            {error}
+          </div>
         )}
 
         {message && (
-          <div className="text-green-600 text-sm">{message}</div>
+          <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md text-sm">
+            {message}
+          </div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Changing...' : 'Change Password'}
+          {loading ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Changing...
+            </>
+          ) : (
+            'Change Password'
+          )}
         </button>
       </form>
     </div>
   );
 };
 
-// Additional component: Add "Forgot Password" link to your existing Login component
+// ForgotPasswordLink.jsx (for Login component)
+
+
 const ForgotPasswordLink = () => {
   return (
     <div className="text-center mt-4">
-      <a 
-        href="/forgot-password" 
+      <Link 
+        to="/forgot-password" 
         className="text-sm text-indigo-600 hover:text-indigo-500"
       >
         Forgot your password?
-      </a>
+      </Link>
     </div>
   );
 };
