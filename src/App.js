@@ -56,7 +56,10 @@ import Login from './components/Login';
 import Register from './components/Register';
 import EmailVerification from './components/EmailVerification';
 import ProtectedRoute from './components/ProtectedRoute';
-import { ForgotPassword, ResetPassword, ChangePassword } from './components/Auth';
+import ChangePassword  from './components/Auth/ChangePassword';
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ResetPassword from './components/Auth/ResetPassword';
+
 // Transport (MoiLink)
 import RouteSelectionPage from './pages/RouteSelectionPage';
 import VehicleSelectionPage from './pages/VehicleSelectionPage';

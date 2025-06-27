@@ -61,15 +61,15 @@ export const authService = {
       const response = await api.post('/login', credentials);
       console.log("Raw API Response:", response.data);
 
-      if (response.data.token) {
-        // Store all user data
+      if (response.data.token && response.data.user) {
+        // Store all user data - accessing from the nested user object
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userId', response.data.userId);
-        localStorage.setItem('role', response.data.role);
-        localStorage.setItem('username', response.data.username);
-        localStorage.setItem('userEmail', response.data.email);
+        localStorage.setItem('userId', response.data.user.userId);
+        localStorage.setItem('role', response.data.user.role);
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('userEmail', response.data.user.email);
       } else {
-        throw new Error("Token is missing in response!");
+        throw new Error("Token or user data is missing in response!");
       }
 
       return response.data;
