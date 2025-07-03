@@ -3,8 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn, Lock } from 'lucide-react';
 import { authService } from '../services/authService';
 import { ForgotPasswordLink } from './Auth'
-
-
 import './Register.css';
 
 function Login({ setIsAuthenticated }) {
@@ -27,13 +25,18 @@ function Login({ setIsAuthenticated }) {
       const response = await authService.login(credentials);
       console.log("Login Success:", response);
 
-      if (!response.role) {
+      // Check for role in the nested user object
+      if (!response.user?.role) {
         throw new Error("User role is missing from response!");
       }
 
-      localStorage.setItem('role', response.role); // Ensure role is stored
-      const userRole = localStorage.getItem('role');
-      console.log("Stored Role in LocalStorage:", userRole);
+      // The authService.login already stores the role, but let's ensure it's there
+      const userRole = response.user.role;
+      console.log("User Role from Response:", userRole);
+      
+      // Verify it's stored in localStorage (authService should have done this)
+      const storedRole = localStorage.getItem('role');
+      console.log("Stored Role in LocalStorage:", storedRole);
 
       setIsAuthenticated(true);
 
@@ -84,7 +87,6 @@ function Login({ setIsAuthenticated }) {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="input-wrapper">
-             
               <input
                 type="password"
                 id="password"
