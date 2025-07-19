@@ -92,6 +92,62 @@ const LearnMore = () => {
   </p>
 </div>
 
+<div className="policy-section">
+  <h3>Finance Department</h3>
+  <p>
+    By accessing or using the MoiHub Finance Department services, you agree to follow the terms and policies outlined below. These policies ensure safe, legal, and smooth use of our financial tools and services.
+  </p>
+
+  <p>
+    1. Services Offered:<br />
+    We help with payments, payroll, budgets, and approved reimbursements.
+  </p>
+
+  <p>
+    2. Who Can Use It:<br />
+    Students, vendors, shop and hotel owners, and registered businesses with valid details.
+  </p>
+
+  <p>
+    3. Compliance:<br />
+    Users must follow all laws and anti-fraud rules. Any suspicious activity may be reported.
+  </p>
+
+  <p>
+    4. Subscription & Fees:<br />
+    A monthly fee applies and it will be renewed per agreement. There will be no access to our services if payment is missed.
+  </p>
+
+  <p>
+    5. No Refunds:<br />
+    Payments are final, double-check all details before you pay.
+  </p>
+
+  <p>
+    6. Data & Security:<br />
+    We protect your data, but you must keep your login safe and secure.
+  </p>
+
+  <p>
+    7. Our Liability:<br />
+    We’re not responsible for mistakes, outages, or weak-password hacks.
+  </p>
+
+  <p>
+    8. Access Termination:<br />
+    Your account may be suspended if you break rules, commit fraud, or don’t pay.
+  </p>
+
+  <p>
+    9. Changes to Terms:<br />
+    We may update these terms. Using the service means you accept the changes.
+  </p>
+
+
+</div>
+
+
+
 
       <div className="disclaimer">
         <p>Moihub is not supported or endorsed by the Moi University administration.This is a private entity.</p>
