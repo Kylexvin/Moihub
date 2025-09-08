@@ -11,7 +11,7 @@ const VendorPage = () => {
     const [error, setError] = useState(null);
     const [cart, setCart] = useState([]);
     const [deliveryInstructions, setDeliveryInstructions] = useState('');
-    const [orderStep, setOrderStep] = useState('menu'); // menu, checkout, confirmation
+    const [orderStep, setOrderStep] = useState('menu'); 
     const [orderStatus, setOrderStatus] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -25,7 +25,7 @@ const VendorPage = () => {
     useEffect(() => {
         const fetchFoodListings = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/food/listings/vendor/${vendorId}`);
+                const response = await fetch(`https://moihub.onrender.com/api/food/listings/vendor/${vendorId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch food listings');
                 }
@@ -159,7 +159,7 @@ const VendorPage = () => {
                 deliveryInstructions: deliveryInstructions
             };
 
-            const response = await fetch('http://localhost:5000/api/food/orders', {
+            const response = await fetch('https://moihub.onrender.com/api/food/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

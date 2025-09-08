@@ -1,10 +1,6 @@
-
-/* body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-} */
+/* ===============================
+   LAYOUT & HERO SECTION
+   =============================== */
 
 .intro-card {
     margin: 0 auto;
@@ -17,7 +13,6 @@
     color: #fff;
     padding: 20px;
     text-align: center;
-    
 }
 
 .intro-header h1 {
@@ -27,13 +22,11 @@
 }
 
 .intro-header p {
-    margin-top: 10px;
+    margin: 10px 0 20px 0;
     color: #000;
     z-index: 99999;
-    margin-bottom: 20px;
 }
 
-     
 .orange {
     background: #FF5722;
     margin-bottom: -1px;
@@ -46,6 +39,10 @@
     background-color: transparent;
     z-index: 1;
 }
+
+/* ===============================
+   SLIDESHOW
+   =============================== */
 
 .slide {
     position: absolute;
@@ -62,11 +59,15 @@
     opacity: 1;
 }
 
-img {
+.slide img {
     height: 150px;
     width: auto;
     background-color: transparent;
 }
+
+/* ===============================
+   SEARCH SECTION
+   =============================== */
 
 .search-panel {
     position: relative;
@@ -79,7 +80,7 @@ img {
     width: 100%;
     padding: 10px;
     border: none;
-    max-width:100%;
+    max-width: 100%;
     border-radius: 5px;
     border-bottom: 2px solid #FF5722;
     outline: none;
@@ -94,27 +95,30 @@ img {
     cursor: pointer;
 }
 
-.card-provider {
-    border: 1px solid coral;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    width: 100%;
-    max-width: 350px;
-    background-color: ivory;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    z-index: 2;
-    
-}
+/* ===============================
+   VENDOR CARDS
+   =============================== */
+
 .container-provider {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding:10px ;
-  }
-  
+    padding: 10px;
+}
+
+.card-provider {
+    border: 1px solid coral;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    width: 100%;
+    max-width: 350px;
+    background-color: ivory;
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
 .card-header {
     background-color: #FF6347;
     color: #fff;
@@ -123,7 +127,8 @@ img {
     align-items: center;
     border-radius: 10px;
 }
-.card-header h2{
+
+.card-header h2 {
     font-size: 20px;
 }
 
@@ -154,10 +159,21 @@ img {
     padding: 20px;
     text-align: center;
     border-radius: 10px;
+    display: flex;
+    width: 100%;
 }
 
+.card-footer .cta-button {
+    flex: 1;
+    width: 100%;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
 .cta-button {
-    background-color: #FF5722;
+    background-color: #FF6347;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -171,19 +187,17 @@ img {
 }
 
 .cta-button:hover {
-    background-color: #E64A19;
+    background-color: #FF6347;
 }
 
-/* Flexbox container for the buttons */
-.card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.cta-button a {
+    color: white;
+    text-decoration: none;
 }
+/* ===============================
+   FOOD TYPES
+   =============================== */
 
-.card-footer.single-button {
-    justify-content: center;
-}
 .food-types {
     background-color: #f8f8f8;
     padding: 10px;
@@ -219,9 +233,11 @@ img {
     content: '💫';
     color: #FF6347;
     margin-right: 5px;
-}     
-    /* For PC */
-/* Add these new styles to your existing MoiDelish.css file */
+}
+
+/* ===============================
+   MODAL
+   =============================== */
 
 .modal-overlay {
     position: fixed;
@@ -269,7 +285,7 @@ img {
 }
 
 .close-modal-button {
-    background: #FF5722;
+    background: #FF6347;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -283,13 +299,13 @@ img {
 }
 
 .close-modal-button:hover {
-    background: #E64A19;
+    background: #FF6347;
     transform: translateY(-2px);
 }
 
-.close-modal-button span {
-    margin-right: 0.5rem;
-}
+/* ===============================
+   ANIMATIONS
+   =============================== */
 
 @keyframes fadeIn {
     from { opacity: 0; }

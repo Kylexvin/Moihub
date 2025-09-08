@@ -1,15 +1,17 @@
 import React  from 'react';
 //import './home.css';
 import AdContainer from './AdContainer';
+import Hero from './uicomponents/Hero'
 //import MobileWebServiceCards from './MobileWebServiceCards';
 //import SpectacularFireworks from './SpectacularFireworks';
-import HomeCards from './HomeCards';
+import HomeCards from './HomeCards';  
 const Home = () => {
 
   return (
     <>
-  {/* <SpectacularFireworks/> */}
-      <AdContainer/>
+  {/* <SpectacularFireworks/> */} 
+      {/* <AdContainer/> */}
+      <Hero/>
       {/* <div className="ministrip-card">
         <div className="emergency-number left">
           <p> <i className="fas fa-ambulance"></i> Medical:0710761679</p>

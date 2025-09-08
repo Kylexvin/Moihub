@@ -21,7 +21,7 @@ const ApartmentDetails = ({ plots }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+        
     // Show a brief toast notification when the component mounts
     toast.warning("Please do not send payment without proper consultation.", {
       position: "top-center",
@@ -38,10 +38,6 @@ const ApartmentDetails = ({ plots }) => {
     setImageModalVisible(!imageModalVisible);
   };
 
-  const handleCallCaretaker = () => {
-    window.location.href = `tel:${apartmentDetails.contact}`;
-  };
-
   const handleImageLoad = () => {
     setImagesLoading(false);
   };
@@ -49,7 +45,7 @@ const ApartmentDetails = ({ plots }) => {
   return (
     <>
       <ToastContainer />
-
+       
       <div>
         <div className="centered-div">
           <p className="apartment-name">{apartmentDetails.name}</p>
@@ -92,12 +88,6 @@ const ApartmentDetails = ({ plots }) => {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="centered-div">
-          <button className="toggle-button" onClick={handleCallCaretaker}>
-            <i className="fas fa-phone phone-icon"></i> Contact Caretaker
-          </button>
         </div>
 
         <div className="centered-div">
