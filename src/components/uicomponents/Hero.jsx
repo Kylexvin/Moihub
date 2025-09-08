@@ -154,9 +154,10 @@ const Hero = () => {
   return (
 <div
   ref={heroRef}
-  className="relative w-full overflow-hidden"
+  className="relative w-full overflow-hidden lg:h-screen"
   style={{
-    height: `calc(100vh - 64px)`,
+    height: window.innerWidth <= 768 ? '400px' : 'auto',
+    minHeight: window.innerWidth <= 768 ? '400px' : `calc(100vh - 64px)`,
     backgroundImage: `
       url('/herobg.jpg'),
       url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><pattern id="campus" patternUnits="userSpaceOnUse" width="200" height="200"><rect width="200" height="200" fill="%23134e4a" opacity="0.05"/><circle cx="50" cy="50" r="20" fill="%2310b981" opacity="0.1"/><rect x="120" y="30" width="40" height="60" rx="5" fill="%2306d6a0" opacity="0.08"/><polygon points="30,150 70,120 110,150 110,180 30,180" fill="%23059669" opacity="0.06"/><circle cx="150" cy="150" r="15" fill="%230d9488" opacity="0.08"/></pattern></defs><rect width="100%" height="100%" fill="url(%23campus)"/><rect width="100%" height="100%" fill="url(data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.2&quot;/><circle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.15&quot;/><circle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.18&quot;/></svg>)"/></svg>'),
@@ -173,7 +174,6 @@ const Hero = () => {
   }}
   onClick={(e) => createPulseWave(e.clientX, e.clientY)}
 >
-
 
       {/* Pulse Waves */}
       {pulseWaves.map(wave => (
@@ -192,10 +192,10 @@ const Hero = () => {
       ))}
 
       {/* Floating 3D Orb */}
-      <div className="absolute left-1/4 top-1/2 transform -translate-y-1/2">
+      <div className="absolute left-4 lg:left-1/4 top-1/2 transform -translate-y-1/2">
         <div 
           ref={orbRef}
-          className="relative w-32 h-32 animate-pulse"
+          className="relative w-24 h-24 lg:w-32 lg:h-32 animate-pulse"
           style={{ animation: 'float 6s ease-in-out infinite' }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full opacity-80 blur-lg animate-spin" 
@@ -208,13 +208,13 @@ const Hero = () => {
             const service = services[serviceKey];
             const Icon = service.icon;
             const angle = (index * 180) + (Date.now() * 0.001 % 360);
-            const x = Math.cos(angle * Math.PI / 180) * 80;
-            const y = Math.sin(angle * Math.PI / 180) * 80;
+            const x = Math.cos(angle * Math.PI / 180) * (window.innerWidth <= 768 ? 60 : 80);
+            const y = Math.sin(angle * Math.PI / 180) * (window.innerWidth <= 768 ? 60 : 80);
             
             return (
               <div
                 key={serviceKey}
-                className="absolute w-12 h-12 cursor-pointer transform transition-all duration-300 hover:scale-125"
+                className="absolute w-10 h-10 lg:w-12 lg:h-12 cursor-pointer transform transition-all duration-300 hover:scale-125"
                 style={{
                   left: `calc(50% + ${x}px)`,
                   top: `calc(50% + ${y}px)`,
@@ -223,7 +223,7 @@ const Hero = () => {
                 onClick={() => handleIconClick(serviceKey)}
               >
                 <div className="w-full h-full bg-gray-900/90 backdrop-blur-sm border-2 border-emerald-400/70 rounded-full flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 shadow-lg">
-                  <Icon size={20} color={service.color} className="drop-shadow-lg" />
+                  <Icon size={window.innerWidth <= 768 ? 16 : 20} color={service.color} className="drop-shadow-lg" />
                 </div>
               </div>
             );
@@ -292,7 +292,7 @@ const Hero = () => {
       </div>
 
       {/* Mobile Right Side Icons (Fallback) */}
-      <div className="lg:hidden absolute right-16 top-1/2 transform -translate-y-1/2 space-y-8">
+      <div className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 space-y-6">
         {currentViewData.rightSide.map((serviceKey, index) => {
           const service = services[serviceKey];
           const Icon = service.icon;
@@ -300,7 +300,7 @@ const Hero = () => {
           return (
             <div
               key={serviceKey}
-              className="w-16 h-16 cursor-pointer transform transition-all duration-500 hover:scale-110"
+              className="w-12 h-12 cursor-pointer transform transition-all duration-500 hover:scale-110"
               style={{
                 animationDelay: `${index * 0.2}s`,
                 animation: 'slideInRight 0.8s ease-out forwards'
@@ -308,7 +308,7 @@ const Hero = () => {
               onClick={() => handleIconClick(serviceKey)}
             >
               <div className="w-full h-full bg-gray-900/80 backdrop-blur-sm border-2 border-emerald-500/60 rounded-xl flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 group shadow-lg">
-                <Icon size={28} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" />
+                <Icon size={20} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" />
               </div>
             </div>
           );
@@ -316,17 +316,17 @@ const Hero = () => {
       </div>
 
       {/* Bottom Left Content */}
-      <div className="absolute bottom-16 left-16 max-w-lg">
+      <div className="absolute bottom-1/4 lg:bottom-16 left-4 lg:left-16 max-w-xs lg:max-w-lg pr-4">
         <h1 
           key={currentView}
-          className="text-5xl font-bold text-white mb-4 leading-tight"
+          className="text-3xl lg:text-5xl font-bold text-white mb-4 leading-tight"
           style={{ animation: 'glitchIn 0.8s ease-out forwards' }}
         >
           {currentViewData.headline}
         </h1>
         <p 
           key={`${currentView}-sub`}
-          className="text-emerald-200 text-lg mb-8 opacity-90"
+          className="text-emerald-200 text-base lg:text-lg mb-8 opacity-90"
           style={{ animation: 'fadeInUp 1s ease-out 0.3s forwards', opacity: 0 }}
         >
           {currentViewData.subtext}
@@ -335,7 +335,7 @@ const Hero = () => {
         <div className="flex justify-start">
          <a
   href="https://moihubapk.vercel.app"
-  className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 inline-block text-center"
+  className="px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 inline-block text-center text-sm lg:text-base"
 >
   Download App
 </a>
@@ -345,13 +345,13 @@ const Hero = () => {
 
       {/* Service Preview */}
       {showPreview && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900/95 backdrop-blur-lg border border-emerald-400/50 rounded-2xl p-8 text-center shadow-2xl z-50 animate-pulse max-w-sm">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
-            {React.createElement(services[showPreview].icon, { size: 32, color: 'white' })}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900/95 backdrop-blur-lg border border-emerald-400/50 rounded-2xl p-6 lg:p-8 text-center shadow-2xl z-50 animate-pulse max-w-xs lg:max-w-sm mx-4">
+          <div className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
+            {React.createElement(services[showPreview].icon, { size: window.innerWidth <= 768 ? 24 : 32, color: 'white' })}
           </div>
-          <h3 className="text-2xl font-bold text-white mb-2">{services[showPreview].name}</h3>
-          <p className="text-emerald-200 mb-4">{services[showPreview].desc}</p>
-          <button className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-400 transition-colors duration-300">
+          <h3 className="text-xl lg:text-2xl font-bold text-white mb-2">{services[showPreview].name}</h3>
+          <p className="text-emerald-200 mb-4 text-sm lg:text-base">{services[showPreview].desc}</p>
+          <button className="px-4 lg:px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-400 transition-colors duration-300 text-sm lg:text-base">
             Learn More
           </button>
         </div>
@@ -396,6 +396,14 @@ const Hero = () => {
         @keyframes slideInRight {
           0% { transform: translateX(50px); opacity: 0; }
           100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 1024px) {
+          .lg\\:h-screen {
+            height: auto;
+            min-height: calc(100vh - 64px);
+            padding-bottom: 2rem;
+          }
         }
       `}</style>
     </div>
