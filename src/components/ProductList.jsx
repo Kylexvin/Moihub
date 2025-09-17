@@ -68,8 +68,7 @@ const ProductList = () => {
     fetchCurrentUser();
   }, [token]);
 
-  // Fetch shop and product data
-// Fetch shop and product data
+// Fetch shop and product data 
 useEffect(() => {
   const fetchShopAndProducts = async () => {
     try {
@@ -84,44 +83,59 @@ useEffect(() => {
       console.log('Products API Response:', productsResponse.data);
 
       if (productsResponse.data.success) {
+        const products = productsResponse.data.data || [];
+
         // Filter only available products
-        const availableProducts = (productsResponse.data.data || []).filter(
-          product => product.isAvailable !== false
+        const availableProducts = products.filter(
+          (product) => product.isAvailable !== false
         );
 
         // Set up initial loading state for all product images
         const initialLoadingState = {};
-        availableProducts.forEach(product => {
+        availableProducts.forEach((product) => {
           initialLoadingState[product._id] = true;
         });
         setLoadingImages(initialLoadingState);
         setProducts(availableProducts);
 
-        // Safely extract shop data
+        // Extract shop data, fallback shopId from first product
         const shopData = productsResponse.data.shop || {};
+        const fallbackShopId = products.length > 0 ? products[0].shop : null;
+
         setShop({
           name: shopData.name || shopData.shopName || 'Shop Details',
-          contactNumber: shopData.contactNumber || shopData.phoneNumber || 'Contact for details',
-          shopId: shopData._id || null, // ensure it's always set (or null)
-          slug: shopData.slug || shopSlug
+          contactNumber:
+            shopData.contactNumber ||
+            shopData.phoneNumber ||
+            'Contact for details',
+          shopId: shopData._id || fallbackShopId,
+          slug: shopData.slug || shopSlug,
         });
 
         console.log('Shop data set:', {
           name: shopData.name || shopData.shopName,
-          shopId: shopData._id,
-          slug: shopData.slug || shopSlug
+          shopId: shopData._id || fallbackShopId,
+          slug: shopData.slug || shopSlug,
         });
-
       } else {
         console.error('API returned success: false', productsResponse.data);
         setFetchError(productsResponse.data.message || 'Failed to fetch products');
-        setShop({ name: 'Shop Details', contactNumber: 'Contact for details', shopId: null, slug: shopSlug });
+        setShop({
+          name: 'Shop Details',
+          contactNumber: 'Contact for details',
+          shopId: null,
+          slug: shopSlug,
+        });
       }
-
     } catch (error) {
       console.error('Error fetching data:', error);
       setFetchError(error.response?.data?.message || 'Error connecting to the server');
-      setShop({ name: 'Shop Details', contactNumber: 'Contact for details', shopId: null, slug: shopSlug });
+      setShop({
+        name: 'Shop Details',
+        contactNumber: 'Contact for details',
+        shopId: null,
+        slug: shopSlug,
+      });
     } finally {
       setIsLoading(false);
       window.scrollTo(0, 0);
@@ -150,23 +164,60 @@ useEffect(() => {
     e.target.src = 'https://via.placeholder.com/150?text=No+Image';
   };
 
-  const addToOrderSummary = (product) => {
-    setOrderItems((prevItems) => {
-      const existingProduct = prevItems.find((item) => item.productId === product._id);
-      if (existingProduct) {
-        return prevItems.map((item) =>
-          item.productId === product._id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prevItems, { 
-        productId: product._id, 
-        name: product.name, 
-        price: product.price, 
-        image: product.image,
-        quantity: 1 
-      }];
+const addToOrderSummary = (product, productsResponse) => {
+  console.log("Raw product received:", product);
+
+  setOrderItems((prevItems) => {
+    const productId = product._id || product.id;
+    const productName = product.name || product.productName;
+    const productImage = product.image || product.imageUrl;
+
+    console.log("Normalized product fields:", {
+      productId,
+      productName,
+      productPrice: product.price,
+      productImage,
     });
-  };
+
+    const existingProduct = prevItems.find(
+      (item) => item.productId === productId
+    );
+
+    // Only set shop if response is provided
+    if (productsResponse?.shop) {
+      const shopData = productsResponse.shop;
+      const products = productsResponse.data || [];
+
+      setShop({
+        name: shopData.name || shopData.shopName,
+        contactNumber: shopData.contactNumber || shopData.phoneNumber,
+        shopId: shopData._id || (products.length > 0 ? products[0].shop : null),
+        slug: shopData.slug,
+      });
+
+      console.log("Shop data set:", {
+        name: shopData.name || shopData.shopName,
+        shopId: shopData._id || (products.length > 0 ? products[0].shop : null),
+        slug: shopData.slug,
+      });
+    }
+
+    const newItem = {
+      productId,
+      name: productName,
+      price: product.price,
+      image: productImage,
+      quantity: 1,
+    };
+
+    console.log("Adding new product to orderItems:", newItem);
+
+    return [...prevItems, newItem];
+  });
+};
+
+
+
 
   const updateItemQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) {
