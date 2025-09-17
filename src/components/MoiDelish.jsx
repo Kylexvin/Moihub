@@ -93,6 +93,7 @@ const MoiDelish = () => {
         
         const filtered = vendors.filter(vendor =>
             (vendor.name && vendor.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
+            (vendor.shopName && vendor.shopName.toLowerCase().includes(searchTerm.toLowerCase())) ||
             (vendor.description && vendor.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
         setFilteredVendors(filtered);
@@ -152,7 +153,7 @@ const MoiDelish = () => {
                     filteredVendors.map((vendor, index) => (
                         <div key={vendor._id || index} className="card-provider">
                             <div className="card-header">
-                                <h2 className="provider-name">{vendor.shopName || "Food Vendor"}</h2>
+                                <h2 className="provider-name">{vendor.shopName || vendor.name || "Food Vendor"}</h2>
                             </div>
                         
                             <div className="card-body">
@@ -176,7 +177,15 @@ const MoiDelish = () => {
                         
                             <div className="card-footer">
                                 <button className="cta-button">
-                                    <Link to={`/vendor/${vendor._id}`}>
+                                    <Link 
+                                        to={`/vendor/${vendor._id}`}
+                                        state={{ 
+                                            shopName: vendor.shopName || vendor.name || "Food Vendor",
+                                            phone: vendor.phone || vendor.contactNumber || "",
+                                            location: vendor.location || "",
+                                            description: vendor.description || "Delicious food available"
+                                        }}
+                                    >
                                         View Menu
                                     </Link>
                                 </button>
@@ -194,7 +203,7 @@ const MoiDelish = () => {
         {isModalOpen && selectedVendor && (
             <FoodModal 
                 vendorId={selectedVendor._id} 
-                vendorName={selectedVendor.name || "Food Vendor"}
+                vendorName={selectedVendor.shopName || selectedVendor.name || "Food Vendor"}
                 onClose={() => setIsModalOpen(false)} 
             />
         )}

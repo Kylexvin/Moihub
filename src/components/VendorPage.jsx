@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './VendorPage.css';
 
 const VendorPage = () => {
     const { vendorId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [vendor, setVendor] = useState(null);
     const [foodListings, setFoodListings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,6 +15,18 @@ const VendorPage = () => {
     const [orderStep, setOrderStep] = useState('menu'); 
     const [orderStatus, setOrderStatus] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [showCart, setShowCart] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(6); // Number of food items per page
+
+    // Get vendor info from navigation state (passed from MoiDelish component)
+    const vendorFromState = location.state || {};
+    const vendorName = vendorFromState.shopName || "Food Vendor";
+    const vendorPhone = vendorFromState.phone || "";
+    const vendorLocation = vendorFromState.location || "";
+    const vendorDescription = vendorFromState.description || "Delicious food available";
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -55,14 +68,11 @@ const VendorPage = () => {
                     listing.isActive === undefined || listing.isActive === true
                 );
                 
-                // Attempt to get vendor info from the first listing
-                if (activeListings.length > 0 && activeListings[0].vendor) {
+                // Set vendor info from API response if not available from state
+                if (activeListings.length > 0 && activeListings[0].vendor && !vendorFromState.shopName) {
                     setVendor(activeListings[0].vendor);
-                } else {
-                    // Fallback: try to get vendor info from another source in the response
-                    if (data && data.vendor) {
-                        setVendor(data.vendor);
-                    }
+                } else if (data && data.vendor && !vendorFromState.shopName) {
+                    setVendor(data.vendor);
                 }
                 
                 setFoodListings(activeListings);
@@ -75,7 +85,19 @@ const VendorPage = () => {
         };
         
         fetchFoodListings();
-    }, [vendorId]);
+    }, [vendorId, vendorFromState.shopName]);
+
+    // Calculate pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = foodListings.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(foodListings.length / itemsPerPage);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        // Scroll to top of page when pagination changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     // Cart management functions
     const addToCart = (listing) => {
@@ -96,10 +118,18 @@ const VendorPage = () => {
                 quantity: 1
             }]);
         }
+        
+        // Show cart when adding an item
+        setShowCart(true);
     };
 
     const removeFromCart = (listingId) => {
         setCart(cart.filter(item => item.listingId !== listingId));
+        
+        // Hide cart if empty
+        if (cart.length <= 1) {
+            setShowCart(false);
+        }
     };
 
     const updateQuantity = (listingId, newQuantity) => {
@@ -122,14 +152,19 @@ const VendorPage = () => {
     const handleCheckout = () => {
         if (isAuthenticated) {
             setOrderStep('checkout');
+            // Scroll to top when entering checkout
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             // Show auth required message
             setOrderStep('auth-required');
+            // Scroll to top for auth message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
     const handleCallVendor = () => {
-        const phoneNumber = vendor?.phone || vendor?.contactNumber;
+        // Use phone from state first, then fallback to vendor object
+        const phoneNumber = vendorPhone || vendor?.phone || vendor?.contactNumber;
         if (phoneNumber) {
             window.location.href = `tel:${phoneNumber}`;
         } else {
@@ -147,6 +182,7 @@ const VendorPage = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 setOrderStep('auth-required');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 return;
             }
 
@@ -173,15 +209,95 @@ const VendorPage = () => {
             if (response.ok) {
                 setOrderStatus('success');
                 setOrderStep('confirmation');
+                setCart([]);
+                setShowCart(false);
+                // Scroll to top for confirmation
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 setOrderStatus('error');
                 setError(data.message || 'Failed to place order');
+                // Scroll to top to show error
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         } catch (err) {
             console.error("Order error:", err);
             setOrderStatus('error');
             setError(err.message);
+            // Scroll to top to show error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    };
+
+    const renderPagination = () => {
+        if (totalPages <= 1) return null;
+
+        const pageNumbers = [];
+        const maxVisiblePages = 5;
+        
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+        }
+
+        return (
+            <div className="pagination">
+                <button 
+                    className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    <i className="fas fa-chevron-left"></i>
+                </button>
+                
+                {startPage > 1 && (
+                    <>
+                        <button 
+                            className="pagination-btn" 
+                            onClick={() => paginate(1)}
+                        >
+                            1
+                        </button>
+                        {startPage > 2 && <span className="pagination-ellipsis">...</span>}
+                    </>
+                )}
+                
+                {pageNumbers.map(number => (
+                    <button
+                        key={number}
+                        className={`pagination-btn ${currentPage === number ? 'active' : ''}`}
+                        onClick={() => paginate(number)}
+                    >
+                        {number}
+                    </button>
+                ))}
+                
+                {endPage < totalPages && (
+                    <>
+                        {endPage < totalPages - 1 && <span className="pagination-ellipsis">...</span>}
+                        <button 
+                            className="pagination-btn" 
+                            onClick={() => paginate(totalPages)}
+                        >
+                            {totalPages}
+                        </button>
+                    </>
+                )}
+                
+                <button 
+                    className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    <i className="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        );
     };
 
     const renderAuthRequiredMessage = () => {
@@ -204,7 +320,7 @@ const VendorPage = () => {
                                 onClick={handleCallVendor}
                             >
                                 <i className="fas fa-phone"></i> 
-                                Call {vendor?.shopName || "Vendor"}
+                                Call {vendorName}
                             </button>
                         </div>
                     </div>
@@ -213,7 +329,13 @@ const VendorPage = () => {
                         <button className="login-button" onClick={() => navigate('/login')}>
                             Login to Order
                         </button>
-                        <button className="back-to-menu" onClick={() => setOrderStep('menu')}>
+                        <button 
+                            className="back-to-menu" 
+                            onClick={() => {
+                                setOrderStep('menu');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                        >
                             Back to Menu
                         </button>
                     </div>
@@ -225,35 +347,34 @@ const VendorPage = () => {
     if (loading) return <div className="loading-container">Loading vendor menu...</div>;
     if (error) return <div className="error-container">Error: {error}</div>;
 
-    const vendorName = vendor?.shopName || vendor?.name || "Food Vendor";
-    const vendorDescription = vendor?.description || "Delicious food available";
-    const vendorLocation = vendor?.location || "";
-    const vendorPhone = vendor?.phone || vendor?.contactNumber || "";
+    // Use vendor info from state if available, otherwise fallback to API response
+    const displayName = vendorName || vendor?.shopName || vendor?.name || "Food Vendor";
+    const displayDescription = vendorDescription || vendor?.description || "Delicious food available";
+    const displayLocation = vendorLocation || vendor?.location || "";
 
     return (
         <div className="vendor-page">
-            {/* Vendor Header */}
-            <div className="vendor-header">
-                <div className="back-button" onClick={() => navigate(-1)}>
-                    <i className="fas fa-arrow-left"></i> Back to Vendors
-                </div>
-                <div className="vendor-info">
-                    <h1>{vendorName}</h1>
-                    <p className="vendor-description">{vendorDescription}</p>
-                    {vendorLocation && (
-                        <div className="vendor-location">
-                            <i className="fas fa-map-marker-alt"></i> {vendorLocation}
-                            <span className="vendor-status open">Open</span>
-                        </div>
-                    )}
-                </div>
-                <div className="vendor-actions">
-                    <button 
-                        className="call-button"
-                        onClick={handleCallVendor}
-                    >
-                        <i className="fas fa-phone"></i> Call Vendor
-                    </button>
+            {/* Fixed Header with Shop Name */}
+            <div className="app-header">
+                <div className="header-content">
+                    <h1 className="shop-name">{displayName}</h1>
+                    <div className="header-actions">
+                        <button 
+                            className="call-button icon-button"
+                            onClick={handleCallVendor}
+                            aria-label="Call vendor"
+                        >
+                            <i className="fas fa-phone"></i>
+                        </button>
+                        <button 
+                            className="cart-button icon-button"
+                            onClick={() => setShowCart(!showCart)}
+                            aria-label="View cart"
+                        >
+                            <i className="fas fa-shopping-cart"></i>
+                            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -263,31 +384,56 @@ const VendorPage = () => {
                 <div className="menu-section">
                     {orderStep === 'menu' && (
                         <>
-                            <h2>Menu</h2>
+                            <div className="vendor-info-card">
+                                <p className="vendor-description">{displayDescription}</p>
+                                {displayLocation && (
+                                    <div className="vendor-location">
+                                        <i className="fas fa-map-marker-alt"></i> {displayLocation}
+                                        <span className="vendor-status open">Open</span>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="menu-header">
+                                <h2>Menu</h2>
+                                {foodListings.length > itemsPerPage && (
+                                    <div className="menu-info">
+                                        Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, foodListings.length)} of {foodListings.length} items
+                                    </div>
+                                )}
+                            </div>
+                            
                             {foodListings.length === 0 ? (
                                 <p className="no-food">No food items available at the moment.</p>
                             ) : (
-                                <div className="food-grid">
-                                    {foodListings.map(food => (
-                                        <div key={food._id} className="food-card">
-                                            <div className="food-image">
-                                                {food.imageURL ? (
-                                                    <img src={food.imageURL} alt={food.name} />
-                                                ) : (
-                                                    <div className="no-image">No Image</div>
-                                                )}
+                                <>
+                                    <div className="food-grid">
+                                        {currentItems.map(food => (
+                                            <div key={food._id} className="food-card">
+                                                <div className="food-image">
+                                                    {food.imageURL ? (
+                                                        <img src={food.imageURL} alt={food.name} />
+                                                    ) : (
+                                                        <div className="no-image">No Image</div>
+                                                    )}
+                                                </div>
+                                                <div className="food-details">
+                                                    <h3>{food.name}</h3>
+                                                    <p className="food-description">{food.description || "No description available"}</p>
+                                                    <div className="food-card-footer">
+                                                        <p className="food-price">KSh {food.price}</p>
+                                                        <button className="add-to-cart" onClick={() => addToCart(food)}>
+                                                            <i className="fas fa-plus"></i> Add
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="food-details">
-                                                <h3>{food.name}</h3>
-                                                <p className="food-description">{food.description || "No description available"}</p>
-                                                <p className="food-price">KSh {food.price}</p>
-                                                <button className="add-to-cart" onClick={() => addToCart(food)}>
-                                                    Add to Order
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Pagination */}
+                                    {renderPagination()}
+                                </>
                             )}
                         </>
                     )}
@@ -325,6 +471,9 @@ const VendorPage = () => {
                                         </button>
                                     </div>
                                 ))}
+                                <div className="order-total">
+                                    <strong>Total: KSh {calculateTotal()}</strong>
+                                </div>
                             </div>
                             
                             <div className="delivery-info">
@@ -338,11 +487,17 @@ const VendorPage = () => {
                             </div>
                             
                             <div className="action-buttons">
-                                <button className="back-button" onClick={() => setOrderStep('menu')}>
+                                <button 
+                                    className="back-button" 
+                                    onClick={() => {
+                                        setOrderStep('menu');
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }}
+                                >
                                     Back to Menu
                                 </button>
                                 <button className="place-order-button" onClick={handlePlaceOrder}>
-                                    Place Order
+                                    Place Order - KSh {calculateTotal()}
                                 </button>
                             </div>
                         </div>
@@ -360,7 +515,7 @@ const VendorPage = () => {
                             ) : (
                                 <>
                                     <h2>Order Placed Successfully!</h2>
-                                    <p>Thank you for your order from {vendorName}.</p>
+                                    <p>Thank you for your order from {displayName}.</p>
                                     <p>Your order will be delivered according to your instructions:</p>
                                     <p className="delivery-note">{deliveryInstructions}</p>
                                     
@@ -373,43 +528,66 @@ const VendorPage = () => {
                     )}
                 </div>
 
-                {/* Cart Sidebar - Only visible during menu browsing */}
-                {orderStep === 'menu' && (
-                    <div className={`cart-sidebar ${cart.length > 0 ? 'has-items' : ''}`}>
-                        <h3>Your Order</h3>
-                        {cart.length === 0 ? (
-                            <p className="empty-cart">Your cart is empty</p>
-                        ) : (
-                            <>
-                                <div className="cart-items">
-                                    {cart.map(item => (
-                                        <div key={item.listingId} className="sidebar-cart-item">
-                                            <div className="item-name-qty">
-                                                <span className="item-name">{item.name}</span>
-                                                <div className="item-qty-control">
-                                                    <button onClick={() => updateQuantity(item.listingId, item.quantity - 1)}>-</button>
-                                                    <span>{item.quantity}</span>
-                                                    <button onClick={() => updateQuantity(item.listingId, item.quantity + 1)}>+</button>
+                {/* Floating Cart Button - Always visible */}
+                {cart.length > 0 && orderStep === 'menu' && (
+                    <div className="floating-cart-button" onClick={() => setShowCart(true)}>
+                        <i className="fas fa-shopping-cart"></i>
+                        <span className="cart-count">{cart.length}</span>
+                        <span className="cart-total">KSh {calculateTotal()}</span>
+                    </div>
+                )}
+
+                {/* Cart Drawer - Slides in from bottom */}
+                {showCart && orderStep === 'menu' && (
+                    <div className="cart-drawer">
+                        <div className="drawer-header">
+                            <h3>Your Order</h3>
+                            <button className="close-drawer" onClick={() => setShowCart(false)}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div className="drawer-content">
+                            {cart.length === 0 ? (
+                                <p className="empty-cart">Your cart is empty</p>
+                            ) : (
+                                <>
+                                    <div className="cart-items">
+                                        {cart.map(item => (
+                                            <div key={item.listingId} className="sidebar-cart-item">
+                                                <div className="item-name-qty">
+                                                    <span className="item-name">{item.name}</span>
+                                                    <div className="item-qty-control">
+                                                        <button onClick={() => updateQuantity(item.listingId, item.quantity - 1)}>-</button>
+                                                        <span>{item.quantity}</span>
+                                                        <button onClick={() => updateQuantity(item.listingId, item.quantity + 1)}>+</button>
+                                                    </div>
+                                                </div>
+                                                <div className="item-price">
+                                                    KSh {item.price * item.quantity}
+                                                    <button className="remove-btn" onClick={() => removeFromCart(item.listingId)}>✕</button>
                                                 </div>
                                             </div>
-                                            <div className="item-price">
-                                                KSh {item.price * item.quantity}
-                                                <button className="remove-btn" onClick={() => removeFromCart(item.listingId)}>✕</button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="cart-footer">
-                                    <div className="cart-total">
-                                        <span>Total</span>
-                                        <span>KSh {calculateTotal()}</span>
+                                        ))}
                                     </div>
-                                    <button className="checkout-button" onClick={handleCheckout}>
-                                        Proceed to Checkout
-                                    </button>
-                                </div>
-                            </>
-                        )}
+                                    <div className="cart-footer">
+                                        <div className="cart-total">
+                                            <span>Total</span>
+                                            <span>KSh {calculateTotal()}</span>
+                                        </div>
+                                        <button 
+                                            className="checkout-button" 
+                                            onClick={() => {
+                                                handleCheckout();
+                                                setShowCart(false);
+                                            }}
+                                        >
+                                            Proceed to Checkout
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

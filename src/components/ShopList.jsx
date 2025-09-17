@@ -97,7 +97,7 @@ const ShopList = () => {
   const filteredShops = shops.filter((shop) =>
     shop.shopName.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+   
   const handleShopClick = (shopSlug) => {
     navigate(`/products/${shopSlug}`); // Changed to use shop slug
   };

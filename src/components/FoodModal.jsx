@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import './FoodModal.css';
 
 const FoodModal = ({ vendorId, vendorName, onClose }) => {
@@ -7,8 +8,9 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
     const [error, setError] = useState(null);
     const [cart, setCart] = useState([]);
     const [deliveryInstructions, setDeliveryInstructions] = useState('');
-    const [orderStep, setOrderStep] = useState('menu'); // menu, checkout, confirmation
+    const [orderStep, setOrderStep] = useState('menu'); // menu, checkout, confirmation, orders
     const [orderStatus, setOrderStatus] = useState(null);
+    const [userOrders, setUserOrders] = useState([]);
 
     useEffect(() => {
         const fetchFoodListings = async () => {
@@ -19,18 +21,16 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 }
                 
                 const data = await response.json();
-                console.log("Food listings response:", data); // For debugging
+                console.log("Food listings response:", data);
                 
-                // Handle different response structures
                 let listingsData = [];
                 if (Array.isArray(data)) {
-                    listingsData = data; // Direct array of listings
+                    listingsData = data;
                 } else if (data && Array.isArray(data.listings)) {
-                    listingsData = data.listings; // { listings: [...] }
+                    listingsData = data.listings;
                 } else if (data && data.success && Array.isArray(data.data)) {
-                    listingsData = data.data; // { success: true, data: [...] }
+                    listingsData = data.data;
                 } else {
-                    // Try to find any array in the response
                     for (const key in data) {
                         if (Array.isArray(data[key])) {
                             listingsData = data[key];
@@ -39,7 +39,6 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                     }
                 }
                 
-                // Filter active listings if the isActive field exists
                 const activeListings = listingsData.filter(listing => 
                     listing.isActive === undefined || listing.isActive === true
                 );
@@ -50,11 +49,47 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 console.error("Food listings error:", err);
                 setError(err.message);
                 setLoading(false);
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Load Menu',
+                    text: err.message,
+                    confirmButtonColor: '#FF5722'
+                });
             }
         };
         
         fetchFoodListings();
     }, [vendorId]);
+
+    const fetchUserOrders = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('http://localhost:5000/api/food/orders/user', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch orders');
+            }
+            
+            const data = await response.json();
+            setUserOrders(Array.isArray(data) ? data : data.orders || []);
+            setLoading(false);
+        } catch (err) {
+            console.error("Failed to fetch orders:", err);
+            setLoading(false);
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Could not load orders',
+                text: 'Please check your connection and try again',
+                confirmButtonColor: '#FF5722'
+            });
+        }
+    };
 
     const addToCart = (listing) => {
         const existingItem = cart.find(item => item.listingId === listing._id);
@@ -74,15 +109,50 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 quantity: 1
             }]);
         }
+
+        // Sweet success notification
+        Swal.fire({
+            icon: 'success',
+            title: 'Added to Cart!',
+            text: `${listing.name} has been added to your order`,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end',
+            timerProgressBar: true
+        });
     };
 
-    const removeFromCart = (listingId) => {
-        setCart(cart.filter(item => item.listingId !== listingId));
+    const removeFromCart = (listingId, itemName) => {
+        Swal.fire({
+            title: 'Remove Item?',
+            text: `Are you sure you want to remove ${itemName} from your cart?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FF5722',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, remove it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setCart(cart.filter(item => item.listingId !== listingId));
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Removed!',
+                    text: `${itemName} has been removed from your cart`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }
+        });
     };
 
     const updateQuantity = (listingId, newQuantity) => {
         if (newQuantity < 1) {
-            removeFromCart(listingId);
+            const item = cart.find(item => item.listingId === listingId);
+            removeFromCart(listingId, item?.name);
             return;
         }
         
@@ -98,14 +168,39 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
     };
 
     const handleCheckout = () => {
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Empty Cart',
+                text: 'Please add some items to your cart before proceeding',
+                confirmButtonColor: '#FF5722'
+            });
+            return;
+        }
         setOrderStep('checkout');
     };
 
     const handlePlaceOrder = async () => {
         if (!deliveryInstructions.trim()) {
-            alert('Please provide delivery instructions');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Delivery Instructions Required',
+                text: 'Please provide delivery instructions to complete your order',
+                confirmButtonColor: '#FF5722'
+            });
             return;
         }
+
+        // Show loading while processing
+        Swal.fire({
+            title: 'Processing Order...',
+            text: 'Please wait while we process your order',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         try {
             const orderData = {
@@ -123,8 +218,7 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Include authorization header if needed
-                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(orderData)
             });
@@ -132,18 +226,85 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
             const data = await response.json();
             console.log("Order response:", data);
             
+            Swal.close(); // Close loading alert
+            
             if (response.ok) {
                 setOrderStatus('success');
                 setOrderStep('confirmation');
+                setCart([]); // Clear cart
+                setDeliveryInstructions(''); // Clear instructions
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order Placed Successfully!',
+                    text: `Your order from ${vendorName} has been placed and will be delivered soon.`,
+                    confirmButtonColor: '#4CAF50',
+                    confirmButtonText: 'Great!'
+                });
             } else {
                 setOrderStatus('error');
                 setError(data.message || 'Failed to place order');
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Order Failed',
+                    text: data.message || 'There was a problem processing your order. Please try again.',
+                    confirmButtonColor: '#FF5722'
+                });
             }
         } catch (err) {
             console.error("Order error:", err);
             setOrderStatus('error');
             setError(err.message);
+            
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Connection Error',
+                text: 'Unable to place order. Please check your internet connection and try again.',
+                confirmButtonColor: '#FF5722'
+            });
         }
+    };
+
+    const handleCloseModal = () => {
+        if (cart.length > 0) {
+            Swal.fire({
+                title: 'Leave without ordering?',
+                text: "You have items in your cart. Are you sure you want to leave?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FF5722',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, leave',
+                cancelButtonText: 'Stay'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    onClose();
+                }
+            });
+        } else {
+            onClose();
+        }
+    };
+
+    const renderOrderSteps = () => {
+        const steps = [
+            { key: 'menu', label: 'Menu', icon: '🍽️' },
+            { key: 'checkout', label: 'Checkout', icon: '🛒' },
+            { key: 'confirmation', label: 'Complete', icon: '✅' }
+        ];
+        
+        return (
+            <div className="order-progress">
+                {steps.map((step, index) => (
+                    <div key={step.key} className={`step ${orderStep === step.key ? 'active' : ''} ${steps.findIndex(s => s.key === orderStep) > index ? 'completed' : ''}`}>
+                        <span className="step-icon">{step.icon}</span>
+                        <span className="step-label">{step.label}</span>
+                    </div>
+                ))}
+            </div>
+        );
     };
 
     const renderMenuStep = () => {
@@ -151,52 +312,107 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
         if (error) return <div className="error-message">Error: {error}</div>;
 
         return (
-            <div className="food-listings">
-                <h2>{vendorName}'s Menu</h2>
-                
-                {foodListings.length === 0 ? (
-                    <p className="no-food">No food items available at the moment.</p>
-                ) : (
-                    <div className="food-grid">
-                        {foodListings.map(food => (
-                            <div key={food._id} className="food-card">
-                                <div className="food-image">
-                                    {food.imageURL ? (
-                                        <img src={food.imageURL} alt={food.name} />
-                                    ) : (
-                                        <div className="no-image">No Image</div>
-                                    )}
-                                </div>
-                                <div className="food-details">
-                                    <h3>{food.name}</h3>
-                                    <p className="food-description">{food.description || "No description available"}</p>
-                                    <p className="food-price">KSh {food.price}</p>
-                                    <button className="add-to-cart" onClick={() => addToCart(food)}>
-                                        Add to Order
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+            <>
+                {renderOrderSteps()}
+                <div className="food-listings">
+                    <div className="menu-header">
+                        <h2>{vendorName}'s Menu</h2>
+                        <p className="menu-subtitle">Choose your favorite dishes</p>
                     </div>
-                )}
+                    
+                    {foodListings.length === 0 ? (
+                        <div className="no-food">
+                            <p>No food items available at the moment.</p>
+                            <p>Please check back later!</p>
+                        </div>
+                    ) : (
+                        <div className="food-grid">
+                            {foodListings.map(food => {
+                                const cartItem = cart.find(item => item.listingId === food._id);
+                                
+                                return (
+                                    <div key={food._id} className="food-card">
+                                        <div className="food-image">
+                                            {food.imageURL ? (
+                                                <img src={food.imageURL} alt={food.name} />
+                                            ) : (
+                                                <div className="no-image">
+                                                    <span>🍽️</span>
+                                                </div>
+                                            )}
+                                            {cartItem && (
+                                                <div className="cart-badge">
+                                                    {cartItem.quantity}
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <div className="food-details">
+                                            <h3>{food.name}</h3>
+                                            <p className="food-description">
+                                                {food.description || "Delicious food item"}
+                                            </p>
+                                            <p className="food-price">KSh {food.price}</p>
+                                            
+                                            {cartItem ? (
+                                                <div className="quantity-controls-inline">
+                                                    <button 
+                                                        className="qty-btn"
+                                                        onClick={() => updateQuantity(food._id, cartItem.quantity - 1)}
+                                                    >
+                                                        −
+                                                    </button>
+                                                    <span className="qty-display">{cartItem.quantity}</span>
+                                                    <button 
+                                                        className="qty-btn"
+                                                        onClick={() => updateQuantity(food._id, cartItem.quantity + 1)}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button 
+                                                    className="add-to-cart" 
+                                                    onClick={() => addToCart(food)}
+                                                >
+                                                    Add to Order
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
                 
+                {/* Floating Cart Indicator */}
                 {cart.length > 0 && (
-                    <div className="cart-summary">
-                        <h3>Your Order ({cart.reduce((total, item) => total + item.quantity, 0)} items)</h3>
-                        <p className="cart-total">Total: KSh {calculateTotal()}</p>
-                        <button className="checkout-button" onClick={handleCheckout}>
-                            Proceed to Checkout
+                    <div className="floating-cart-indicator">
+                        <div className="cart-badge-float">
+                            <span className="item-count">
+                                {cart.reduce((total, item) => total + item.quantity, 0)}
+                            </span>
+                            <span className="cart-text">Cart • KSh {calculateTotal()}</span>
+                        </div>
+                        <button className="view-cart-btn" onClick={handleCheckout}>
+                            View Cart & Checkout →
                         </button>
                     </div>
                 )}
-            </div>
+            </>
         );
     };
 
     const renderCheckoutStep = () => {
         return (
             <div className="checkout-container">
-                <h2>Checkout</h2>
+                {renderOrderSteps()}
+                
+                <div className="checkout-header">
+                    <h2>Review Your Order</h2>
+                    <p>Almost there! Review your items and provide delivery details.</p>
+                </div>
                 
                 <div className="order-summary">
                     <h3>Order Summary</h3>
@@ -206,20 +422,24 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                                 {item.imageURL ? (
                                     <img src={item.imageURL} alt={item.name} />
                                 ) : (
-                                    <div className="no-image">No Image</div>
+                                    <div className="no-image-small">🍽️</div>
                                 )}
                             </div>
                             <div className="item-details">
                                 <h4>{item.name}</h4>
-                                <p>KSh {item.price} x {item.quantity} = KSh {item.price * item.quantity}</p>
+                                <p>KSh {item.price} × {item.quantity} = KSh {item.price * item.quantity}</p>
                             </div>
                             <div className="quantity-controls">
-                                <button onClick={() => updateQuantity(item.listingId, item.quantity - 1)}>-</button>
+                                <button onClick={() => updateQuantity(item.listingId, item.quantity - 1)}>−</button>
                                 <span>{item.quantity}</span>
                                 <button onClick={() => updateQuantity(item.listingId, item.quantity + 1)}>+</button>
                             </div>
-                            <button className="remove-item" onClick={() => removeFromCart(item.listingId)}>
-                                Remove
+                            <button 
+                                className="remove-item" 
+                                onClick={() => removeFromCart(item.listingId, item.name)}
+                                title="Remove item"
+                            >
+                                🗑️
                             </button>
                         </div>
                     ))}
@@ -232,45 +452,88 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 <div className="delivery-info">
                     <h3>Delivery Information</h3>
                     <textarea
+                        className="delivery-textarea"
                         placeholder="Enter delivery instructions (e.g., Hostel Block C, Room 122, Call 0700000000)"
                         value={deliveryInstructions}
                         onChange={(e) => setDeliveryInstructions(e.target.value)}
+                        rows="4"
                         required
                     />
                 </div>
                 
                 <div className="action-buttons">
                     <button className="back-button" onClick={() => setOrderStep('menu')}>
-                        Back to Menu
+                        ← Back to Menu
                     </button>
                     <button className="place-order-button" onClick={handlePlaceOrder}>
-                        Place Order
+                        Place Order • KSh {calculateTotal()}
                     </button>
                 </div>
             </div>
         );
     };
 
-    const renderConfirmationStep = () => {
-        if (orderStatus === 'error') {
-            return (
-                <div className="order-error">
-                    <h2>Order Failed</h2>
-                    <p>{error || 'There was a problem processing your order. Please try again.'}</p>
-                    <button onClick={() => setOrderStep('checkout')}>Try Again</button>
+    const renderOrdersStep = () => {
+        if (loading) return <div className="loading-spinner">Loading your orders...</div>;
+        
+        return (
+            <div className="orders-container">
+                <div className="orders-header">
+                    <h2>My Orders</h2>
+                    <p>Track your recent orders from {vendorName}</p>
                 </div>
-            );
-        }
+                
+                {userOrders.length === 0 ? (
+                    <div className="no-orders">
+                        <p>You haven't placed any orders yet.</p>
+                        <button onClick={() => setOrderStep('menu')}>Browse Menu</button>
+                    </div>
+                ) : (
+                    <div className="orders-list">
+                        {userOrders.map(order => (
+                            <div key={order._id} className="order-card">
+                                <div className="order-header">
+                                    <h4>Order #{order._id?.slice(-6)}</h4>
+                                    <span className={`status-badge ${order.status}`}>{order.status}</span>
+                                </div>
+                                <p className="order-date">
+                                    {new Date(order.createdAt).toLocaleDateString()}
+                                </p>
+                                <p className="order-total">KSh {order.totalAmount}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
+                <button className="back-button" onClick={() => setOrderStep('menu')}>
+                    ← Back to Menu
+                </button>
+            </div>
+        );
+    };
 
+    const renderConfirmationStep = () => {
         return (
             <div className="order-confirmation">
+                <div className="success-animation">
+                    <div className="checkmark">✓</div>
+                </div>
+                
                 <h2>Order Placed Successfully!</h2>
-                <p>Thank you for your order from {vendorName}.</p>
-                <p>Your order will be delivered according to your instructions:</p>
-                <p className="delivery-note">{deliveryInstructions}</p>
+                <p>Thank you for your order from <strong>{vendorName}</strong>.</p>
+                <p>Your delicious meal will be delivered according to your instructions:</p>
+                <div className="delivery-note">
+                    <strong>Delivery Instructions:</strong>
+                    <p>{deliveryInstructions}</p>
+                </div>
                 
                 <div className="confirmation-actions">
-                    <button onClick={onClose}>Close</button>
+                    <button className="primary-button" onClick={onClose}>
+                        Done
+                    </button>
+                    <button className="secondary-button" onClick={() => setOrderStep('orders')}>
+                        View My Orders
+                    </button>
                 </div>
             </div>
         );
@@ -284,6 +547,8 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
                 return renderCheckoutStep();
             case 'confirmation':
                 return renderConfirmationStep();
+            case 'orders':
+                return renderOrdersStep();
             default:
                 return renderMenuStep();
         }
@@ -292,7 +557,29 @@ const FoodModal = ({ vendorId, vendorName, onClose }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <button className="close-modal" onClick={onClose}>&times;</button>
+                {/* Enhanced Header */}
+                <div className="modal-header">
+                    <button className="back-arrow" onClick={handleCloseModal}>
+                        <i className="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 className="vendor-name-prominent">{vendorName}</h1>
+                    <div className="header-actions">
+                        <button 
+                            className="my-orders-btn"
+                            onClick={() => {
+                                setOrderStep('orders');
+                                fetchUserOrders();
+                            }}
+                            title="My Orders"
+                        >
+                            📋
+                        </button>
+                        <button className="close-modal" onClick={handleCloseModal}>
+                            ×
+                        </button>
+                    </div>
+                </div>
+                
                 {renderContent()}
             </div>
         </div>

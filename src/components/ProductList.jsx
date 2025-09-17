@@ -6,6 +6,12 @@ import './ProductList.css';
 const ProductList = () => {
   const { shopSlug } = useParams();
   const navigate = useNavigate();
+  
+  // Get token and user from localStorage
+  const token = localStorage.getItem('token');
+  const [currentUser, setCurrentUser] = useState(null);
+  
+  // State variables
   const [shop, setShop] = useState(null);
   const [products, setProducts] = useState([]);
   const [showInfo, setShowInfo] = useState({});
@@ -23,9 +29,6 @@ const ProductList = () => {
   const [loadingImages, setLoadingImages] = useState({});
   const [fetchError, setFetchError] = useState(null);
 
-  // Get token from localStorage with correct key
-  const token = localStorage.getItem('token');
-
   // Configure axios with headers for authenticated requests
   const config = {
     headers: {
@@ -34,86 +37,100 @@ const ProductList = () => {
     },
   };
 
-  // Check authentication status on load using the correct token key
+  // Get user data from localStorage
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const fetchCurrentUser = () => {
       if (token) {
-        setIsAuthenticated(true);
+        try {
+          // Try different possible keys for user data
+          const userData = localStorage.getItem('user') || 
+                          localStorage.getItem('userData') || 
+                          localStorage.getItem('currentUser');
+          
+          if (userData) {
+            const parsedUser = JSON.parse(userData);
+            setCurrentUser(parsedUser);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          setCurrentUser(null);
+          setIsAuthenticated(false);
+        }
       } else {
+        setCurrentUser(null);
         setIsAuthenticated(false);
       }
     };
     
-    checkAuthStatus();
+    fetchCurrentUser();
   }, [token]);
 
   // Fetch shop and product data
-  useEffect(() => {
-    console.log("Shop Slug from params:", shopSlug);
+// Fetch shop and product data
+useEffect(() => {
+  const fetchShopAndProducts = async () => {
+    try {
+      setIsLoading(true);
+      setFetchError(null);
 
-    const fetchShopAndProducts = async () => {
-      try {
-        setIsLoading(true);
-        setFetchError(null);
+      // Fetch products (API already returns shop info)
+      const productsResponse = await axios.get(
+        `https://moihub.onrender.com/api/eshop/vendor/shops/${shopSlug}/products`
+      );
 
-        // Fetch products which also contains shop data
-        const productsResponse = await axios.get(
-          `https://moihub.onrender.com/api/eshop/vendor/shops/${shopSlug}/products`
+      console.log('Products API Response:', productsResponse.data);
+
+      if (productsResponse.data.success) {
+        // Filter only available products
+        const availableProducts = (productsResponse.data.data || []).filter(
+          product => product.isAvailable !== false
         );
-        
-        console.log('Full Response:', productsResponse.data);
-        
-        if (productsResponse.data.success) {
-          // Log details about the response
-          console.log('Shop Details:', productsResponse.data.shop);
-          console.log('Products:', productsResponse.data.data);
-          console.log('Products Count:', productsResponse.data.count);
 
-          // Filter out products where isAvailable is false or undefined
-          const availableProducts = (productsResponse.data.data || []).filter(
-            product => product.isAvailable !== false
-          );
-          
-          // Set up initial loading state for all product images
-          const initialLoadingState = {};
-          availableProducts.forEach(product => {
-            initialLoadingState[product._id] = true;
-          });
-          setLoadingImages(initialLoadingState);
-          
-          // Set only available products
-          setProducts(availableProducts);
-          
-          // Extract shop data from the same response
-          if (productsResponse.data.shop) {
-            setShop({
-              name: productsResponse.data.shop.name || productsResponse.data.shop.shopName,
-              contactNumber: productsResponse.data.shop.contactNumber || productsResponse.data.shop.phoneNumber,
-              shopId: productsResponse.data.shop._id // Keep shop ID for order placement
-            });
-          } else {
-            // Fallback if shop data is missing
-            setShop({
-              name: "Shop Details",
-              contactNumber: "Contact for details"
-            });
-          }
-        } else {
-          // Log error if success is false
-          console.error('API returned success: false', productsResponse.data);
-          setFetchError(productsResponse.data.message || 'Failed to fetch products');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setFetchError(error.response?.data?.message || 'Error connecting to the server');
-      } finally {
-        setIsLoading(false);
+        // Set up initial loading state for all product images
+        const initialLoadingState = {};
+        availableProducts.forEach(product => {
+          initialLoadingState[product._id] = true;
+        });
+        setLoadingImages(initialLoadingState);
+        setProducts(availableProducts);
+
+        // Safely extract shop data
+        const shopData = productsResponse.data.shop || {};
+        setShop({
+          name: shopData.name || shopData.shopName || 'Shop Details',
+          contactNumber: shopData.contactNumber || shopData.phoneNumber || 'Contact for details',
+          shopId: shopData._id || null, // ensure it's always set (or null)
+          slug: shopData.slug || shopSlug
+        });
+
+        console.log('Shop data set:', {
+          name: shopData.name || shopData.shopName,
+          shopId: shopData._id,
+          slug: shopData.slug || shopSlug
+        });
+
+      } else {
+        console.error('API returned success: false', productsResponse.data);
+        setFetchError(productsResponse.data.message || 'Failed to fetch products');
+        setShop({ name: 'Shop Details', contactNumber: 'Contact for details', shopId: null, slug: shopSlug });
       }
-    };
 
-    fetchShopAndProducts();
-    window.scrollTo(0, 0);
-  }, [shopSlug]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setFetchError(error.response?.data?.message || 'Error connecting to the server');
+      setShop({ name: 'Shop Details', contactNumber: 'Contact for details', shopId: null, slug: shopSlug });
+    } finally {
+      setIsLoading(false);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  fetchShopAndProducts();
+}, [shopSlug]);
+
 
   const toggleInfo = (productId) => {
     setShowInfo((prevState) => ({
@@ -173,7 +190,6 @@ const ProductList = () => {
   const toggleOrderSummary = () => {
     setShowOrderSummary((prevState) => !prevState);
     
-    // Reset form state when opening order summary
     if (!showOrderSummary) {
       setOrderError(null);
       setShowOrderForm(false);
@@ -195,16 +211,15 @@ const ProductList = () => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (orderError) {
       setOrderError(null);
     }
   };
 
- const handlePlaceOrder = async () => {
-    // Check if user is authenticated with the correct token key
-    if (!token) {
-      setOrderError('Session expired. Please refresh the page.');
+  const handlePlaceOrder = async () => {
+    // Check authentication
+    if (!token || !currentUser) {
+      setOrderError('Please log in to place an order.');
       return;
     }
     
@@ -224,29 +239,38 @@ const ProductList = () => {
       setOrderError('Please enter a contact number');
       return;
     }
+
+    // Check if we have shop ID
+    if (!shop?.shopId) {
+      setOrderError('Shop information is missing. Please refresh the page.');
+      return;
+    }
   
     try {
       setIsLoading(true);
-      setOrderError(null); // Clear any previous errors
+      setOrderError(null);
       
       const orderData = {
-        shopId: shop.shopId, // Use shopId from shop object instead of route params
+        shopId: shop.shopId,
         items: orderItems.map(item => ({
           productId: item.productId,
           quantity: item.quantity
         })),
-        shippingAddress: orderFormData.shippingAddress,
-        contactNumber: orderFormData.contactNumber
+        shippingAddress: orderFormData.shippingAddress.trim(),
+        contactNumber: orderFormData.contactNumber.trim(),
+        userId: currentUser?.id || currentUser?._id || currentUser?.userId
       };
   
-      console.log('Sending order with data:', orderData);
+      console.log('Placing order with data:', orderData);
+      console.log('Current user:', currentUser);
       
-      // Use the config object for the request with the correct token
       const response = await axios.post(
         'https://moihub.onrender.com/api/eshop/orders/place',
         orderData,
         config
       );
+  
+      console.log('Order response:', response.data);
   
       if (response.data.success) {
         setOrderSuccess(true);
@@ -257,32 +281,34 @@ const ProductList = () => {
           contactNumber: ''
         });
         
-        // Show success message and hide after delay
         setTimeout(() => {
           setOrderSuccess(false);
           setShowOrderSummary(false);
-        }, 2000);
+        }, 3000);
       } else {
         setOrderError(response.data.message || 'Order failed. Please try again.');
       }
     } catch (error) {
       console.error('Error placing order:', error);
       
-      // Handle different error scenarios
       if (error.response) {
-        // Server returned an error response
-        if (error.response.status === 401) {
-          setOrderError('Your session has expired. Please refresh the page and try again.');
-        } else if (error.response.status === 404) {
-          setOrderError('Shop or products not found. Please refresh the page.');
+        const statusCode = error.response.status;
+        const errorMessage = error.response.data?.message || 'Unknown error';
+        
+        console.log('Error response:', error.response.data);
+        
+        if (statusCode === 401) {
+          setOrderError('Your session has expired. Please refresh the page and log in again.');
+        } else if (statusCode === 404) {
+          setOrderError('Shop or products not found. The shop may be unavailable.');
+        } else if (statusCode === 400) {
+          setOrderError(errorMessage || 'Invalid order data. Please check your information.');
         } else {
-          setOrderError(error.response.data.message || 'Failed to place order. Please try again.');
+          setOrderError(errorMessage || 'Failed to place order. Please try again.');
         }
       } else if (error.request) {
-        // Request made but no response received
         setOrderError('Network error. Please check your connection and try again.');
       } else {
-        // Something else caused the error
         setOrderError('An unexpected error occurred. Please try again.');
       }
     } finally {
@@ -291,7 +317,7 @@ const ProductList = () => {
   };
 
   // Loading state
- if (isLoading) {
+  if (isLoading && products.length === 0) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -334,7 +360,6 @@ const ProductList = () => {
     <>
       <div className="product-list-container"> 
         <div className="relative">
-          {/* Shop info card */}
           <div className="shop-info p-4 bg-white shadow-md flex justify-between items-center rounded-none">
             <h2 className="text-lg font-semibold text-gray-800">
               {shop?.name || "Shop Details"}
