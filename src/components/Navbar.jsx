@@ -56,7 +56,7 @@ const Navbar = () => {
   };
 
   const services = [
-    { name: 'Rental Booking', href: '/book', icon: Calendar },
+    { name: 'Rental Booking', href: '/rentals', icon: Calendar },
     { name: 'E-Chem', href: '/pharmacy', icon: Pill },
     { name: 'Local Services', href: '/discover', icon: MapPin },
     { name: 'Food Delivery', href: '/food-delivery', icon: Utensils },

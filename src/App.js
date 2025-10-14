@@ -32,6 +32,8 @@ import RoomateFinder from './components/RoomateFinder';
 // Real Estate
 import Booking from './components/Booking';
 import ApartmentDetails from './components/ApartmentDetails';
+import RentalHome from './components/rentals/RentalHome';
+import RentalDetail from './components/rentals/RentalDetail';
 
 // Food Delivery
 import MoiDelish from './components/MoiDelish';
@@ -167,8 +169,11 @@ const App = () => {
           {/* Real Estate Routes */}
           <Route path="/book" element={<Booking plots={plotsData} />} />
           <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
+          {/* Rental Routes */}
+          <Route path="/rentals" element={<RentalHome />} />
+          <Route path="/rentals/:id" element={<RentalDetail />} />
 
-          {/* Blog Routes */}
+          {/* Blog Routerentalss */}
           <Route path="/blog" element={<BlogHomepage />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route

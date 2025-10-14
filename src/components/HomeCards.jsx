@@ -43,7 +43,7 @@ const ServiceCards = () => {
       name: 'Rental Booking', 
       icon: Home, 
       color: '#ffffff', 
-      path: '/book',
+      path: '/rentals',
       description: 'Find perfect student housing'
     },
     { 
@@ -88,7 +88,7 @@ const ServiceCards = () => {
     },
     { 
       id: 'secondhand', 
-      name: 'Second-hand', 
+      name: 'Second-hand Market', 
       icon: Package, 
       color: '#a78bfa', 
       path: '/markethub',
@@ -247,7 +247,7 @@ const ServiceCards = () => {
       </div>
 
       {/* Bottom gradient fade */}
-      <div className="mt-12 h-8 bg-gradient-to-t from-gray-900 to-transparent" />
+      {/* <div className="mt-12 h-8 bg-gradient-to-t from-gray-900 to-transparent" /> */}
     </div>
   );
 };

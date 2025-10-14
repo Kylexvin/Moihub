@@ -1,64 +1,570 @@
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+/* RoommateFinder.css - Unique MoiHub Classes */
 
-.roommate-finder {
-    text-align: center;
-  }
-  
-  .filter-buttons {
-    margin-bottom: 20px;
-  }
-  
-  .roommate-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .roommate-card {
-    width: 300px; /* Set a fixed width for each card */
-    margin: 10px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .roommate-card h3 {
-    margin-top: 0;
-  }
-  @media (max-width: 768px) {
-    .roommate-card {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin: 20px;
-    }
+/* Main Container */
+.moihub-roommate-finder {
+  min-height: 100vh;
+  background: #f8fafc;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
-  .roommate-card button {
-    background-color: green;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+
+/* Header */
+.moihub-roommate-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #91c9d8 0%, #bbe1ec 100%);
+  border-radius: 16px;
+  color: #1a1a1a;
+}
+
+.moihub-roommate-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.moihub-roommate-subtitle {
+  font-size: 16px;
+  color: #374151;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Tabs */
+.moihub-roommate-tabs {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.moihub-roommate-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-tab-active {
+  background: #059669;
+  color: white;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.moihub-roommate-tab:hover:not(.moihub-roommate-tab-active) {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Loading States */
+.moihub-roommate-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.moihub-roommate-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #059669;
+  border-radius: 50%;
+  animation: moihub-roommate-spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes moihub-roommate-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Filters */
+.moihub-roommate-filters {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.moihub-roommate-filters-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+}
+
+.moihub-roommate-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.moihub-roommate-filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-filter-active {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+.moihub-roommate-filter-btn:hover {
+  border-color: #9ca3af;
+}
+
+/* Roommate List */
+.moihub-roommate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Roommate Card */
+.moihub-roommate-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.moihub-roommate-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.moihub-roommate-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  flex: 1;
+}
+
+.moihub-roommate-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.moihub-roommate-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moihub-roommate-type-has_room {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.moihub-roommate-type-looking_for_room {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.moihub-roommate-gender {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.moihub-roommate-owner {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.moihub-roommate-card-content {
+  margin-bottom: 20px;
+}
+
+.moihub-roommate-location {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.moihub-roommate-budget {
+  font-size: 18px;
+  font-weight: 700;
+  color: #059669;
+  margin: 0 0 8px 0;
+}
+
+.moihub-roommate-preference {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+}
+
+.moihub-roommate-description {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Card Actions */
+.moihub-roommate-card-actions {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+.moihub-roommate-contact-btns,
+.moihub-roommate-owner-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.moihub-roommate-action-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-call-btn {
+  background: #2196f3;
+  color: white;
+}
+
+.moihub-roommate-call-btn:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+}
+
+.moihub-roommate-whatsapp-btn {
+  background: #25d366;
+  color: white;
+}
+
+.moihub-roommate-whatsapp-btn:hover {
+  background: #128c7e;
+  transform: translateY(-1px);
+}
+
+.moihub-roommate-delete-btn {
+  background: #f44336;
+  color: white;
+}
+
+.moihub-roommate-delete-btn:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+}
+
+/* Empty State */
+.moihub-roommate-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.moihub-roommate-empty-text {
+  font-size: 18px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.moihub-roommate-empty-subtext {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Create Form */
+.moihub-roommate-create {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.moihub-roommate-form-section {
+  margin-bottom: 24px;
+}
+
+.moihub-roommate-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moihub-roommate-input {
+  width: 100%;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  background: white;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-input:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.moihub-roommate-textarea {
+  width: 100%;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  background: white;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.moihub-roommate-textarea:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.moihub-roommate-helper-text {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 8px 0 0 0;
+}
+
+/* Button Rows */
+.moihub-roommate-btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.moihub-roommate-select-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.moihub-roommate-select-active {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+.moihub-roommate-select-btn:hover {
+  border-color: #9ca3af;
+}
+
+/* Submit Button */
+.moihub-roommate-submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #147741 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.moihub-roommate-submit-btn:hover:not(.moihub-roommate-submit-loading) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+}
+
+.moihub-roommate-submit-loading {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.moihub-roommate-btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: moihub-roommate-spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .moihub-roommate-finder {
+    padding: 16px;
   }
   
-  .roommate-card button:hover {
-    background-color:green;
-    box-sizing: border-box;
+  .moihub-roommate-header {
+    padding: 16px;
   }
   
-  .nemo{
-        box-shadow: inset 6px 6px 12px #c1c1c1, inset -6px -6px 12px #ffffff;
-        background-color: white;
-        text-decoration-color: black;
-        border: 1px solid green; /* Add border for separation */
-        border-radius: 10px; /* Add border-radius for rounded corners */
-        padding: 10px; /* Add padding for internal spacing */
-        box-sizing: border-box; /* Include padding and border in the box size */
-        text-align: center; /* Align text in the center */
-        overflow: hidden; /* Hide content if it overflows */
-    }
-    
+  .moihub-roommate-title {
+    font-size: 24px;
+  }
   
+  .moihub-roommate-tabs {
+    flex-direction: column;
+  }
+  
+  .moihub-roommate-filters-row,
+  .moihub-roommate-btn-row {
+    flex-direction: column;
+  }
+  
+  .moihub-roommate-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .moihub-roommate-badges {
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  .moihub-roommate-contact-btns,
+  .moihub-roommate-owner-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .moihub-roommate-create {
+    padding: 16px;
+  }
+  
+  .moihub-roommate-filters {
+    padding: 16px;
+  }
+  
+  .moihub-roommate-card {
+    padding: 16px;
+  }
+}  
+/* Delete Confirmation Modal */
+.moihub-roommate-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.moihub-roommate-modal {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.moihub-roommate-modal h3 {
+  margin: 0 0 12px 0;
+  color: #1f2937;
+  font-size: 20px;
+}
+
+.moihub-roommate-modal p {
+  margin: 0 0 20px 0;
+  color: #6b7280;
+}
+
+.moihub-roommate-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.moihub-roommate-modal-cancel {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 8px;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-modal-cancel:hover {
+  background: #f9fafb;
+}
+
+.moihub-roommate-modal-confirm {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: #f44336;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moihub-roommate-modal-confirm:hover {
+  background: #d32f2f;
+}

@@ -7,20 +7,21 @@ const Footer = () => {
       <div className="footer-content"> 
         <div className="footer-section"> 
           <h4>About Us</h4> 
-          Learn more about our terms,conditions, policy and values by clicking <a href="/learnmore">here.</a>
+          <p>MoiHub is an independent student platform offering rentals, food delivery, e-shops, marketplace, blogs, and a roommate finder for Moi University students. Built to make campus life easier, faster, and more connected.</p>
         </div> 
         <div className="footer-section"> 
           <h4>Quick Links</h4> 
           <ul> 
             <li><a href="/">Home</a></li> 
-            <li><a href="/eshop">Products</a></li> 
-           
+            
+            <li><a href="/learn">Privacy Policy</a></li>
+            <li><a href="/learn">Terms & Conditions</a></li>
           </ul> 
         </div> 
         <div className="footer-section"> 
           <h4>Contact Us</h4> 
           <p>info.moihub@gmail.com</p> 
-          <p>Phone:+254768610613</p> 
+          <p>Phone: +254768610613</p> 
         </div> 
         <div className="footer-section"> 
           <h4>Follow Us</h4> 
@@ -32,10 +33,10 @@ const Footer = () => {
         </div> 
       </div> 
       <div className="footer-bottom"> 
-        <p>© 2025 <br />✟KYLEX✟ | Sejjo Co. <br />All rights reserved.</p> 
+        <p>© {new Date().getFullYear()} <br />✟KYLEX✟ | Sejjo Co. <br />All rights reserved.</p>
       </div> 
     </footer>  
   ); 
 }; 
  
-export default Footer; 
+export default Footer;
