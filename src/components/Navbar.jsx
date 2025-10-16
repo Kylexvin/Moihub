@@ -155,7 +155,7 @@ const Navbar = () => {
     background: 'linear-gradient(135deg, #22c55e, #dcfce7)',
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
-    color: 'transparent'
+    color: 'transparent' 
   }}>
     MoiHub
   </div>
@@ -242,7 +242,7 @@ const Navbar = () => {
                     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
                     border: '1px solid rgba(34, 197, 94, 0.2)',
                     overflow: 'hidden',
-                    zIndex: '50'
+                    zIndex: '50000000000000'
                   }}
                 >
                   {services.map((service, index) => {
@@ -328,7 +328,7 @@ const Navbar = () => {
                     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
                     border: '1px solid rgba(34, 197, 94, 0.2)',
                     overflow: 'hidden',
-                    zIndex: '50'
+                    zIndex: '5000000000'
                   }}
                 >
                   {shopping.map((item, index) => {
@@ -501,7 +501,7 @@ const Navbar = () => {
           backgroundColor: 'rgba(8, 48, 40, 0.98)',
           backdropFilter: 'blur(12px)',
           borderTop: '1px solid rgba(34, 197, 94, 0.2)',
-          zIndex: '40'
+          zIndex: '4000000000'
         }}>
           <div style={{ 
             padding: '24px 16px',

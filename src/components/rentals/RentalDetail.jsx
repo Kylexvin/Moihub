@@ -200,9 +200,9 @@ const RentalDetail = () => {
     <div className="moihub-rental-detail">
       {/* Header */}
       <div className="moihub-detail-header">
-        <button className="moihub-detail-back-btn" onClick={() => navigate('/rentals')}>
+        {/* <button className="moihub-detail-back-btn" onClick={() => navigate('/rentals')}>
           ← Back
-        </button>
+        </button> */}
         <div className="moihub-detail-title-section">
           <h1 className="moihub-detail-title">{rental.name}</h1>
           <div 
@@ -301,18 +301,7 @@ const RentalDetail = () => {
           Send Inquiry
         </button>
         
-        {rental.caretakerNumber && (
-          <div className="moihub-detail-contact-buttons">
-            <button className="moihub-detail-contact-btn secondary" onClick={callCaretaker}>
-              <span className="moihub-detail-btn-icon">📞</span>
-              Call Caretaker
-            </button>
-            <button className="moihub-detail-contact-btn whatsapp" onClick={whatsappCaretaker}>
-              <span className="moihub-detail-btn-icon">💬</span>
-              WhatsApp
-            </button>
-          </div>
-        )}
+        
       </div>
 
       {/* Inquiry Modal */}

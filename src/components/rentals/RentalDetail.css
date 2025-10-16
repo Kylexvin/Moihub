@@ -377,7 +377,7 @@
   padding: 20px 16px;
   background: white;
   border-top: 1px solid #e5e7eb;
-  position: sticky;
+  /* position: sticky; */
   bottom: 0;
   z-index: 90;
 }

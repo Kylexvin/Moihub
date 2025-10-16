@@ -12,6 +12,7 @@ import NotFoundPage from './components/NotFoundPage';
 import LearnMore from './components/LearnMore';
 import OurTeam from './components/Team';
 import Discover from './components/Discover';
+import AccountDeletion from './components/AccountDeletion';
 
 // Marketplace & Shopping
 import BuyersPage from './components/BuyersPage';
@@ -129,6 +130,7 @@ const App = () => {
           <Route path="/discover" element={<Discover />} />
           <Route path="/learnmore" element={<LearnMore />} />
           <Route path="/ourteam" element={<OurTeam />} />
+          <Route path="/delete-account" element={<AccountDeletion />} />
 
           {/* Authentication Routes */}
           <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />

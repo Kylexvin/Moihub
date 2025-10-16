@@ -28,4 +28,62 @@
     margin-top: 20px; /* Add some space between the disclaimer and the content above */
     border-radius: 5px; /* Rounded corners */
   }
-    
+ .learn-more-container h4 {
+  color: #2c3e50;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.learn-more-container ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.learn-more-container ul li {
+  margin-bottom: 0.5rem;
+}
+
+.learn-more-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.learn-more-container a:hover {
+  text-decoration: underline;
+}
+
+.deletion-link {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.highlight {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.disclaimer {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.disclaimer strong {
+  color: #495057;
+}   
