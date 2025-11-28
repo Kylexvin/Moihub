@@ -37,8 +37,8 @@ import RentalHome from './components/rentals/RentalHome';
 import RentalDetail from './components/rentals/RentalDetail';
 
 // Food Delivery
-import MoiDelish from './components/MoiDelish';
-import VendorPage from './components/VendorPage';
+import MoiDelish from './components/food/MoiDelish';
+import VendorPage from './components/food/VendorPage';
 import VendorDashboard from './components/dashboards/VendorDashboard';
 import VendorManagement from './components/dashboards/VendorManagement';
 import UpgradeToVendor from './components/UpgradeToVendor';

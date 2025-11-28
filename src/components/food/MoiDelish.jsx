@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MoiDelish.css';
-import CustomerCare from './customercare';
+import CustomerCare from '../customercare';
 import FoodModal from './FoodModal';
 
 const MoiDelish = () => {
