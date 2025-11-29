@@ -21,114 +21,114 @@ import {
 const ServiceCards = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  const services = [
-    // { 
-    //   id: 'moilink', 
-    //   name: 'MoiLink Travellers', 
-    //   icon: Users, 
-    //   color: '#60a5fa', 
-    //   path: '/moilinktravellers',
-    //   description: 'Connect with fellow travelers'
-    // },
-    // { 
-    //   id: 'linkme', 
-    //   name: 'LinkMe', 
-    //   icon: Heart, 
-    //   color: '#f87171', 
-    //   path: '/linkme',
-    //   description: 'Campus dating & connections'
-    // },
-    { 
-      id: 'rental', 
-      name: 'Rental Booking', 
-      icon: Home, 
-      color: '#ffffff', 
-      path: '/rentals',
-      description: 'Find perfect student housing'
-    },
-    { 
-      id: 'university', 
-      name: 'My University', 
-      icon: GraduationCap, 
-      color: '#34d399', 
-      path: '/myschool',
-      description: 'Academic resources & info'
-    },
-    { 
-      id: 'food', 
-      name: 'Food Delivery', 
-      icon: UtensilsCrossed, 
-      color: '#fcd34d', 
-      path: '/food-delivery',
-      description: 'Order from campus vendors'
-    },
-    { 
-      id: 'pharmacy', 
-      name: 'Chemist', 
-      icon: Pill, 
-      color: '#a78bfa', 
-      path: '/pharmacy',
-      description: 'Medical supplies & pharmacy'
-    },
-    { 
-      id: 'eshop', 
-      name: 'E-Shop', 
-      icon: ShoppingBag, 
-      color: '#fbbf24', 
-      path: '/eshop',
-      description: 'Campus store marketplace'
-    },
-    { 
-      id: 'groceries', 
-      name: 'Groceries', 
-      icon: Apple, 
-      color: '#34d399', 
-      path: '/greenhub',
-      description: 'Fresh groceries & essentials'
-    },
-    { 
-      id: 'secondhand', 
-      name: 'Second-hand Market', 
-      icon: Package, 
-      color: '#a78bfa', 
-      path: '/markethub',
-      description: 'Buy & sell with peers'
-    },
-    { 
-      id: 'roommate', 
-      name: 'Roommate Finder', 
-      icon: UserSearch, 
-      color: '#60a5fa', 
-      path: '/find-roommate',
-      description: 'Match with compatible roommates'
-    },
-    { 
-      id: 'bundles', 
-      name: 'Bingwa Sokoni', 
-      icon: Smartphone, 
-      color: '#fb7185', 
-      path: 'https://mvobingwa.godaddysites.com',
-      description: 'Mobile bundles & services',
-      external: true
-    },
-    { 
-      id: 'gossip', 
-      name: 'Moi Gossip', 
-      icon: MessageSquare, 
-      color: '#38bdf8', 
-      path: 'https://whatsapp.com/channel/0029VaaSTiF8PgsQn25sXK1I',
-      description: 'Campus news & updates',
-      external: true
-    },
-    { 
-      id: 'blog', 
-      name: 'Blog Post', 
-      icon: FileText, 
-      color: '#34d399', 
-      path: '/blog',
-      description: 'Community stories & articles'
-    }
-  ];
+const services = [
+  { 
+    id: 'food', 
+    name: 'Food Delivery', 
+    icon: UtensilsCrossed, 
+    color: '#fcd34d', 
+    path: '/food-delivery',
+    description: 'Order from campus vendors'
+  },
+  { 
+    id: 'rental', 
+    name: 'Rental Booking', 
+    icon: Home, 
+    color: '#ffffff', 
+    path: '/rentals',
+    description: 'Find perfect student housing'
+  },
+  { 
+    id: 'eshop', 
+    name: 'E-Shop', 
+    icon: ShoppingBag, 
+    color: '#fbbf24', 
+    path: '/eshop',
+    description: 'Campus store marketplace'
+  },
+  { 
+    id: 'groceries', 
+    name: 'Groceries', 
+    icon: Apple, 
+    color: '#34d399', 
+    path: '/greenhub',
+    description: 'Fresh groceries & essentials'
+  },
+  { 
+    id: 'pharmacy', 
+    name: 'Chemist', 
+    icon: Pill, 
+    color: '#a78bfa', 
+    path: '/pharmacy',
+    description: 'Medical supplies & pharmacy'
+  },
+  { 
+    id: 'university', 
+    name: 'My University', 
+    icon: GraduationCap, 
+    color: '#34d399', 
+    path: '/myschool',
+    description: 'Academic resources & info'
+  },
+  { 
+    id: 'roommate', 
+    name: 'Roommate Finder', 
+    icon: UserSearch, 
+    color: '#60a5fa', 
+    path: '/find-roommate',
+    description: 'Match with compatible roommates'
+  },
+  { 
+    id: 'secondhand', 
+    name: 'Second-hand Market', 
+    icon: Package, 
+    color: '#a78bfa', 
+    path: '/markethub',
+    description: 'Buy & sell with peers'
+  },
+  { 
+    id: 'moilink', 
+    name: 'Transport Hub', 
+    icon: Users, 
+    color: '#60a5fa', 
+    path: '/moilinktravellers',
+    description: 'Connect with fellow travelers'
+  },
+  { 
+    id: 'bundles', 
+    name: 'Bingwa Sokoni', 
+    icon: Smartphone, 
+    color: '#fb7185', 
+    path: 'https://mvobingwa.godaddysites.com',
+    description: 'Mobile bundles & services',
+    external: true
+  },
+  { 
+    id: 'linkme', 
+    name: 'LinkMe', 
+    icon: Heart, 
+    color: '#f87171', 
+    path: '/linkme',
+    description: 'Campus dating & connections'
+  },
+  { 
+    id: 'gossip', 
+    name: 'Moi Gossip', 
+    icon: MessageSquare, 
+    color: '#38bdf8', 
+    path: 'https://whatsapp.com/channel/0029VaaSTiF8PgsQn25sXK1I',
+    description: 'Campus news & updates',
+    external: true
+  },
+  { 
+    id: 'blog', 
+    name: 'Blog Post', 
+    icon: FileText, 
+    color: '#34d399', 
+    path: '/blog',
+    description: 'Community stories & articles'
+  }
+];
 
   const DiscoverBanner = () => (
     <div 
@@ -137,7 +137,7 @@ const ServiceCards = () => {
       onMouseLeave={() => setHoveredCard(null)}
       onClick={() => window.location.href = '/discover'}
     >
-      <div className={`relative overflow-hidden bg-gradient-to-r from-emerald-600/20 to-teal-600/20 backdrop-blur-sm border-2 border-emerald-400/40 rounded-2xl p-6 transition-all duration-300 ${
+      <div className={`relative overflow-hidden bg-gradient-to-r from-[#083028] to-[#0a3d2e] backdrop-blur-sm border-2 border-emerald-400/40 rounded-2xl p-6 transition-all duration-300 ${
         hoveredCard === 'discover' ? 'scale-105 border-white shadow-lg shadow-emerald-500/25' : ''
       }`}>
         {/* Background pattern */}
@@ -181,7 +181,7 @@ const ServiceCards = () => {
     
     const CardContent = () => (
       <div 
-        className={`relative group bg-gray-900/60 backdrop-blur-sm border-2 border-emerald-400/30 rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 hover:border-white hover:bg-gray-800/70 hover:shadow-lg hover:shadow-emerald-500/20 ${
+        className={`relative group bg-[#083028]/80 backdrop-blur-sm border-2 border-emerald-400/30 rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 hover:border-white hover:bg-[#0a3d2e]/80 hover:shadow-lg hover:shadow-emerald-500/20 ${
           hoveredCard === service.id ? 'border-white shadow-lg shadow-emerald-500/20' : ''
         }`}
         onMouseEnter={() => setHoveredCard(service.id)}
@@ -194,7 +194,7 @@ const ServiceCards = () => {
 
         <div className="relative flex flex-col items-center text-center space-y-3">
           {/* Icon Container */}
-          <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-gray-900/80 border-2 border-gray-600/50 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:border-emerald-400/60 group-hover:scale-110 shadow-lg`}>
+          <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-[#083028] border-2 border-emerald-400/30 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:border-emerald-400/60 group-hover:scale-110 shadow-lg`}>
             <Icon 
               size={28} 
               color={service.color} 
@@ -235,7 +235,7 @@ const ServiceCards = () => {
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-gray-900 via-emerald-950/30 to-gray-900 px-4 py-8">
+    <div className="w-full bg-gradient-to-b from-[#083028] via-emerald-950/30 to-[#083028] px-4 py-8">
       {/* Discover Banner */}
       <DiscoverBanner />
 
@@ -247,7 +247,7 @@ const ServiceCards = () => {
       </div>
 
       {/* Bottom gradient fade */}
-      {/* <div className="mt-12 h-8 bg-gradient-to-t from-gray-900 to-transparent" /> */}
+      {/* <div className="mt-12 h-8 bg-gradient-to-t from-[#083028] to-transparent" /> */}
     </div>
   );
 };

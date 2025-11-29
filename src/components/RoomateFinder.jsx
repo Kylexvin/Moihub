@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { authService } from '../services/authService'; // Fixed import path
+import { authService } from '../services/authService'; // Keep this import
 import './RoommateFinder.css';
 
 const API_URL = 'https://moihub.onrender.com/api';
@@ -28,7 +28,7 @@ const RoommateFinder = () => {
   });
   const [formLoading, setFormLoading] = useState(false);
 
-  // Get authentication state
+  // Get authentication state from authService
   const isAuthenticated = authService.isAuthenticated();
   const token = authService.getToken();
   const currentUser = authService.getCurrentUser();
@@ -70,6 +70,7 @@ const RoommateFinder = () => {
       fetchRoommates();
       alert('Listing deleted successfully');
     } catch (error) {
+      console.error('Delete error:', error);
       alert('Failed to delete listing');
     } finally {
       setShowDeleteConfirm(false);
@@ -96,9 +97,18 @@ const RoommateFinder = () => {
   const isOwnerOfListing = (listing) => {
     if (!currentUser || !isAuthenticated) return false;
 
+    // Enhanced ownership check to handle different ID formats
     const currentUserId = currentUser.userId || currentUser.id;
     const listingUserId = listing.userId || listing.user_id || listing.user;
 
+    console.log('Ownership check:', {
+      currentUserId,
+      listingUserId,
+      currentUser,
+      listing
+    });
+
+    // Convert both to strings for comparison
     return String(currentUserId) === String(listingUserId);
   };
 

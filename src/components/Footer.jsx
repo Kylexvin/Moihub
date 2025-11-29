@@ -33,7 +33,7 @@ const Footer = () => {
         </div> 
       </div> 
       <div className="footer-bottom"> 
-        <p>© {new Date().getFullYear()} <br />✟KYLEX✟ | Sejjo Co. <br />All rights reserved.</p>
+        <p>© {new Date().getFullYear()} <br />KxByte Digital Solutions <br />All rights reserved.</p>
       </div> 
     </footer>  
   ); 

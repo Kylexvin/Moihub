@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, ShoppingBag, Users, Heart, Package, FileText, UtensilsCrossed, MessageCircle, Wrench } from 'lucide-react';
+import { Home, ShoppingBag, Users, Heart, Package, FileText, UtensilsCrossed, MessageCircle, Wrench, Play } from 'lucide-react';
 
 const Hero = () => {
   const [currentView, setCurrentView] = useState(0);
-  const [showPreview, setShowPreview] = useState(null);
   const [filmStripPosition, setFilmStripPosition] = useState(0);
   const heroRef = useRef(null);
   const orbRef = useRef(null);
@@ -108,11 +107,6 @@ const Hero = () => {
     }, 1500);
   };
 
-  const handleIconClick = (service) => {
-    setShowPreview(service);
-    setTimeout(() => setShowPreview(null), 3000);
-  };
-
   const handleSwipe = (direction) => {
     if (direction === 'left') {
       setCurrentView((prev) => (prev + 1) % views.length);
@@ -155,23 +149,24 @@ const Hero = () => {
 <div
   ref={heroRef}
   className="relative w-full overflow-hidden lg:h-screen"
-  style={{
-    height: window.innerWidth <= 768 ? '400px' : 'auto',
-    minHeight: window.innerWidth <= 768 ? '400px' : `calc(100vh - 64px)`,
-    backgroundImage: `
-      url('/herobg.jpg'),
-      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><pattern id="campus" patternUnits="userSpaceOnUse" width="200" height="200"><rect width="200" height="200" fill="%23134e4a" opacity="0.05"/><circle cx="50" cy="50" r="20" fill="%2310b981" opacity="0.1"/><rect x="120" y="30" width="40" height="60" rx="5" fill="%2306d6a0" opacity="0.08"/><polygon points="30,150 70,120 110,150 110,180 30,180" fill="%23059669" opacity="0.06"/><circle cx="150" cy="150" r="15" fill="%230d9488" opacity="0.08"/></pattern></defs><rect width="100%" height="100%" fill="url(%23campus)"/><rect width="100%" height="100%" fill="url(data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.2&quot;/><circle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.15&quot;/><circle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.18&quot;/></svg>)"/></svg>'),
-      radial-gradient(ellipse at ${mousePos.x * 0.1}% ${mousePos.y * 0.1}%,
-        rgba(16, 185, 129, 0.35) 0%,
-        rgba(6, 78, 59, 0.15) 40%,
-        rgba(17, 24, 39, 0.6) 80%,
-        rgba(0, 0, 0, 0.7) 100%)
-    `,
-    backgroundSize: 'cover, cover, cover',
-    backgroundBlendMode: 'soft-light, normal, normal',
-    backgroundColor: '#111827',
-    filter: 'brightness(1.1) contrast(1.05)'
-  }}
+style={{
+  height: window.innerWidth <= 768 ? '400px' : 'auto',
+  minHeight: window.innerWidth <= 768 ? '400px' : `calc(100vh - 64px)`,
+  backgroundImage: `
+    url('/herobg.jpg'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><pattern id="campus" patternUnits="userSpaceOnUse" width="200" height="200"><rect width="200" height="200" fill="%23134e4a" opacity="0.03"/><circle cx="50" cy="50" r="20" fill="%2310b981" opacity="0.05"/><rect x="120" y="30" width="40" height="60" rx="5" fill="%2306d6a0" opacity="0.04"/><polygon points="30,150 70,120 110,150 110,180 30,180" fill="%23059669" opacity="0.03"/><circle cx="150" cy="150" r="15" fill="%230d9488" opacity="0.04"/></pattern></defs><rect width="100%" height="100%" fill="url(%23campus)"/><rect width="100%" height="100%" fill="url(data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.1&quot;/><circle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.08&quot;/><circle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.09&quot;/></svg>)"/></svg>'),
+    radial-gradient(ellipse at ${mousePos.x * 0.1}% ${mousePos.y * 0.1}%,
+      rgba(16, 185, 129, 0.05) 0%,
+      rgba(6, 78, 59, 0.05) 40%,
+      rgba(17, 24, 39, 0.1) 80%,
+      rgba(0, 0, 0, 0.06) 100%)
+  `,
+  backgroundSize: 'cover, cover, cover',
+  backgroundBlendMode: 'soft-light, normal, normal',
+  backgroundColor: '#111827',
+  filter: 'brightness(1.05) contrast(1.02)'
+}}
+
   onClick={(e) => createPulseWave(e.clientX, e.clientY)}
 >
 
@@ -220,7 +215,6 @@ const Hero = () => {
                   top: `calc(50% + ${y}px)`,
                   transform: 'translate(-50%, -50%)'
                 }}
-                onClick={() => handleIconClick(serviceKey)}
               >
                 <div className="w-full h-full bg-gray-900/90 backdrop-blur-sm border-2 border-emerald-400/70 rounded-full flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 shadow-lg">
                   <Icon size={window.innerWidth <= 768 ? 16 : 20} color={service.color} className="drop-shadow-lg" />
@@ -270,7 +264,6 @@ const Hero = () => {
               <div
                 key={serviceKey}
                 className="relative mx-auto my-8 w-16 h-16 cursor-pointer transform transition-all duration-300 hover:scale-110"
-                onClick={() => handleIconClick(serviceKey)}
               >
                 {/* Film frame */}
                 <div className="absolute -inset-2 bg-gray-700/50 border border-gray-500 rounded"></div>
@@ -305,7 +298,6 @@ const Hero = () => {
                 animationDelay: `${index * 0.2}s`,
                 animation: 'slideInRight 0.8s ease-out forwards'
               }}
-              onClick={() => handleIconClick(serviceKey)}
             >
               <div className="w-full h-full bg-gray-900/80 backdrop-blur-sm border-2 border-emerald-500/60 rounded-xl flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 group shadow-lg">
                 <Icon size={20} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" />
@@ -333,29 +325,15 @@ const Hero = () => {
         </p>
         
         <div className="flex justify-start">
-         <a
-  href="https://moihubapk.vercel.app"
-  className="px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 inline-block text-center text-sm lg:text-base"
->
-  Download App
-</a>
-
+          <a
+            href="https://play.google.com/store/apps/details?id=com.kylexvin.moihub"
+            className="flex items-center px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 text-center text-sm lg:text-base"
+          >
+            <Play size={20} className="mr-2" />
+            Get on Play Store
+          </a>
         </div>
       </div>
-
-      {/* Service Preview */}
-      {showPreview && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900/95 backdrop-blur-lg border border-emerald-400/50 rounded-2xl p-6 lg:p-8 text-center shadow-2xl z-50 animate-pulse max-w-xs lg:max-w-sm mx-4">
-          <div className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
-            {React.createElement(services[showPreview].icon, { size: window.innerWidth <= 768 ? 24 : 32, color: 'white' })}
-          </div>
-          <h3 className="text-xl lg:text-2xl font-bold text-white mb-2">{services[showPreview].name}</h3>
-          <p className="text-emerald-200 mb-4 text-sm lg:text-base">{services[showPreview].desc}</p>
-          <button className="px-4 lg:px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-400 transition-colors duration-300 text-sm lg:text-base">
-            Learn More
-          </button>
-        </div>
-      )}
 
       {/* View Indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">

@@ -30,6 +30,11 @@ const VendorPage = () => {
     const vendorLocation = vendorFromState.location || "";
     const vendorDescription = vendorFromState.description || "Delicious food available";
 
+    // Scroll to top on component mount
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsAuthenticated(!!token);
@@ -327,37 +332,19 @@ const VendorPage = () => {
 
     return (
         <div className="vendor-page">
-            {/* Header */}
+            {/* Header - Single Row */}
             <header className="vendor-header">
-                <div className="header-content">
-
-                    <h1 className="vendor-name">{displayName}</h1>
+                <div className="header-content single-row">
+                    
                     <div className="header-actions">
-                        <button className="call-button" onClick={handleCallVendor} aria-label="Call vendor">
-                            <i className="fas fa-phone"></i>
-                        </button>
-                        <button className="cart-icon-button" onClick={() => setShowCart(!showCart)} aria-label="View cart">
+                      
+                        <button className="cart-icon-button" onClick={() => setShowCart(!showCart)}>
                             <i className="fas fa-shopping-cart"></i>
-                            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
+                            {cart.length > 0 && <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>}
                         </button>
                     </div>
                 </div>
             </header>
-
-            {/* Vendor Info Banner */}
-            {/* <div className="vendor-banner">
-                <div className="vendor-info">
-                    <p className="vendor-description">{displayDescription}</p>
-                    {displayLocation && (
-                        <div className="vendor-meta">
-                            <span className="location">
-                                <i className="fas fa-map-marker-alt"></i> {displayLocation}
-                            </span>
-                            <span className="status-badge open">Open Now</span>
-                        </div>
-                    )}
-                </div>
-            </div> */}
 
             {/* Main Content */}
             <main className="vendor-main">
@@ -548,6 +535,7 @@ const VendorPage = () => {
                                         className="btn-primary"
                                         onClick={() => {
                                             setOrderStep('menu');
+                                            setCart([]);
                                             window.scrollTo({ top: 0, behavior: 'smooth' });
                                         }}
                                     >
@@ -569,7 +557,7 @@ const VendorPage = () => {
                 >
                     <i className="fas fa-shopping-cart"></i>
                     <div className="cart-info">
-                        <span className="cart-count">{cart.length} items</span>
+                        <span className="cart-count">{cart.reduce((total, item) => total + item.quantity, 0)} items</span>
                         <span className="cart-total">KSh {calculateTotal()}</span>
                     </div>
                 </button>
@@ -592,7 +580,7 @@ const VendorPage = () => {
                                 <div className="empty-cart">
                                     <i className="fas fa-shopping-cart"></i>
                                     <p>Your cart is empty</p>
-                                </div>
+                                </div> 
                             ) : (
                                 <>
                                     <div className="drawer-items">

@@ -15,86 +15,64 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     padding-bottom: 100px;
 }
-
-/* ============================================
-   HEADER
-   ============================================ */
+/* Header Styles - Mobile First */
 .vendor-header {
-    
+    position: sticky;
     top: 0;
-    background: linear-gradient(135deg, #e29339 0%, #e29031 100%);
+    background: linear-gradient(135deg, #ef4444 0%, #ef4444 100%);
     box-shadow: 0 4px 20px rgba(224, 173, 33, 0.3);
     z-index: 1000;
-    animation: slideDown 0.3s ease-out;
+    padding: 0.75rem 1rem;
 }
 
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 1.5rem;
+.header-content.single-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
     gap: 1rem;
 }
 
-.vendor-name {
-    flex: 1;
-    text-align: center;
+.vendor-name-left {
     color: white;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.back-button,
-.call-button,
-.cart-icon-button {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.back-button:hover,
-.call-button:hover,
-.cart-icon-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.back-button:active,
-.call-button:active,
-.cart-icon-button:active {
-    transform: scale(0.95);
+    flex: 1;
+    min-width: 0;
 }
 
 .header-actions {
     display: flex;
     gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.call-button,
+.cart-icon-button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.call-button:hover,
+.cart-icon-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
 }
 
 .cart-icon-button {
@@ -109,26 +87,60 @@
     color: white;
     border-radius: 12px;
     padding: 2px 6px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    min-width: 20px;
+    min-width: 18px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-    animation: bounceIn 0.4s ease-out;
+    line-height: 1;
+}
+/* Add this to fix the mobile header */
+@media (max-width: 768px) {
+    .vendor-name-left {
+        font-size: 1.1rem;
+        max-width: 200px; /* Prevents name from pushing icons down */
+    }
+    
+    .header-content.single-row {
+        padding: 0.75rem 1rem;
+        min-height: auto; /* Ensure no minimum height causing extra space */
+    }
+    
+    .vendor-header {
+        padding: 0; /* Remove padding from header, let content handle it */
+    }
 }
 
-@keyframes bounceIn {
-    0% {
-        transform: scale(0);
+/* Add this for very small screens */
+@media (max-width: 360px) {
+    .vendor-name-left {
+        font-size: 1rem;
+        max-width: 150px;
     }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
+    
+    .call-button,
+    .cart-icon-button {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
     }
 }
-
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+    .vendor-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .vendor-name-left {
+        font-size: 1.25rem;
+    }
+    
+    .call-button,
+    .cart-icon-button {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+}
 /* ============================================
    VENDOR BANNER
    ============================================ */
@@ -166,7 +178,7 @@
 }
 
 .location i {
-    color: #667eea;
+    color: #FF5722;
 }
 
 .status-badge {
@@ -213,7 +225,7 @@
     justify-content: space-between;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 3px solid #667eea;
+    border-bottom: 3px solid #FF5722;
 }
 
 .menu-header h2 {
@@ -325,7 +337,7 @@
 }
 
 .add-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF5722 0%, #e76e49 100%);
     color: white;
     border: none;
     padding: 0.65rem 1.25rem;
@@ -337,12 +349,12 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(245, 38, 38, 0.3);
 }
 
 .add-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 16px rgba(245, 38, 38, 0.4);
 }
 
 .add-button:active {
@@ -367,7 +379,7 @@
     width: 50px;
     height: 50px;
     border: 4px solid #f3f4f6;
-    border-top: 4px solid #667eea;
+    border-top: 4px solid #FF5722;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 1rem;
@@ -400,7 +412,7 @@
 .error-container button {
     margin-top: 1rem;
     padding: 0.75rem 1.5rem;
-    background: #667eea;
+    background: #FF5722;
     color: white;
     border: none;
     border-radius: 12px;
@@ -410,7 +422,7 @@
 }
 
 .error-container button:hover {
-    background: #5568d3;
+    background: #e76e49;
     transform: translateY(-2px);
 }
 
@@ -426,8 +438,8 @@
 .load-more-button {
     padding: 0.875rem 2rem;
     background: white;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #FF5722;
+    border: 2px solid #FF5722;
     border-radius: 12px;
     font-weight: 600;
     font-size: 1rem;
@@ -439,7 +451,7 @@
     background: #667eea;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(245, 38, 38, 0.3);
 }
 
 .loading-more {
@@ -453,7 +465,7 @@
     width: 24px;
     height: 24px;
     border: 3px solid #f3f4f6;
-    border-top: 3px solid #667eea;
+    border-top: 3px solid #FF5722;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -472,12 +484,12 @@
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF5722 0%, #e76e49 100%);
     color: white;
     border: none;
     padding: 1rem 1.5rem;
     border-radius: 50px;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 24px rgba(245, 38, 38, 0.4);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -500,7 +512,7 @@
 
 .floating-cart:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 12px 32px rgba(245, 38, 38, 0.5);
 }
 
 .floating-cart i {
@@ -568,7 +580,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF5722 0%, #e76e49 100%);
     color: white;
 }
 
@@ -683,7 +695,7 @@
     height: 32px;
     border: none;
     background: #f3f4f6;
-    color: #667eea;
+    color: #FF5722;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
@@ -694,7 +706,7 @@
 }
 
 .qty-controls button:hover {
-    background: #667eea;
+    background: #e76e49;
     color: white;
 }
 
@@ -707,7 +719,7 @@
 
 .item-price {
     font-weight: 700;
-    color: #667eea;
+    color: #FF5722;
     font-size: 1rem;
 }
 
@@ -751,7 +763,7 @@
 .checkout-btn {
     width: 100%;
     padding: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF5722 0%, #e76e49 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -759,12 +771,12 @@
     font-size: 1.05rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(245, 38, 38, 0.3);
 }
 
 .checkout-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 16px rgba(245, 38, 38, 0.4);
 }
 
 .checkout-btn:active {
@@ -856,7 +868,7 @@
     height: 32px;
     border: none;
     background: #f3f4f6;
-    color: #667eea;
+    color: #FF5722;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
@@ -867,7 +879,7 @@
 }
 
 .quantity-controls button:hover {
-    background: #667eea;
+    background: #e76e49;
     color: white;
 }
 
@@ -879,7 +891,7 @@
 
 .item-total {
     font-weight: 700;
-    color: #667eea;
+    color: #FF5722;
     font-size: 1.05rem;
     min-width: 80px;
     text-align: right;
@@ -916,7 +928,7 @@
 }
 
 .total-amount {
-    color: #667eea;
+    color: #FF5722;
 }
 
 .delivery-form {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './MoiDelish.css';
 import CustomerCare from '../customercare';
 import FoodModal from './FoodModal';
+import { Download, Bell, Package, Smartphone } from 'lucide-react';
 
 const MoiDelish = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -65,21 +66,18 @@ const MoiDelish = () => {
     }, []);
 
     useEffect(() => {
+        const slides = document.querySelectorAll('.slide');
+        if (slides.length === 0) return;
+
         const interval = setInterval(() => {
-            showSlide();
+            slides.forEach(slide => slide.classList.remove('active'));
+            const nextSlide = (currentSlide + 1) % slides.length;
+            slides[nextSlide].classList.add('active');
+            setCurrentSlide(nextSlide);
         }, 2000);
+        
         return () => clearInterval(interval);
     }, [currentSlide]);
-
-    const showSlide = () => {
-        const slides = document.querySelectorAll('.slide');
-        if (slides.length > 0) {
-            slides[currentSlide].classList.remove('active');
-            const nextSlide = (currentSlide + 1) % slides.length;
-            setCurrentSlide(nextSlide);
-            slides[nextSlide].classList.add('active');
-        }
-    };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -104,79 +102,104 @@ const MoiDelish = () => {
         setIsModalOpen(true);
     };
 
+    // Handle Enter key press for search
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const handleDownloadApp = () => {
+        window.open('https://play.google.com/store/apps/details?id=com.kylexvin.moihub', '_blank');
+    };
+
     return (
         <>
-        <div>
-            <section className="orange">
-                <div className="hero">
-                    <div className="intro-card">
-                        <div className="intro-header">
-                            <h1>Welcome to MoiDelish</h1>
-                            <p>Your one-stop destination for delicious food delivery around Moi University!</p>
+            <div>
+                <section className="orange">
+                    <div className="hero">
+                        <div className="intro-card">
+                            <div className="intro-header">
+                                <h1>Welcome to MoiDelish</h1>
+                                <p>Your one-stop destination for delicious food delivery around Moi University!</p>
+                            </div>
+                        </div>
+                        <div className="slide active">
+                            <img src="../delish/image1.png" alt="Food Image 1" />
+                        </div>
+                        <div className="slide">
+                            <img src="../delish/image3.png" alt="Food Image 2" />
+                        </div>
+                        <div className="slide">
+                            <img src="../delish/image4.png" alt="Food Image 3" />
+                        </div>
+                        <div className="slide">
+                            <img src="../delish/image3.png" alt="Food Image 4" />
                         </div>
                     </div>
-                    <div className="slide active">
-                        <img src="../delish/image1.png" alt="Food Image 1" />
-                    </div>
-                    <div className="slide">
-                        <img src="../delish/image3.png" alt="Food Image 2" />
-                    </div>
-                    <div className="slide">
-                        <img src="../delish/image4.png" alt="Food Image 3" />
-                    </div>
-                    <div className="slide">
-                        <img src="../delish/image3.png" alt="Food Image 4" />
-                    </div>
-                </div>
-            </section>
-            <svg id="unique-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(180)">
-                <path fill="#FF5722" fillOpacity="1" d="M0,0L24,32C48,64,96,128,144,149.3C192,171,240,149,288,138.7C336,128,384,128,432,144C480,160,528,192,576,213.3C624,235,672,245,720,229.3C768,213,816,171,864,144C912,117,960,107,1008,112C1056,117,1104,139,1152,144C1200,149,1248,139,1296,112C1344,85,1392,43,1416,21.3L1440,0L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z" />
-            </svg>
+                </section>
+                <svg id="unique-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(180)">
+                    <path fill="#FF5722" fillOpacity="1" d="M0,0L24,32C48,64,96,128,144,149.3C192,171,240,149,288,138.7C336,128,384,128,432,144C480,160,528,192,576,213.3C624,235,672,245,720,229.3C768,213,816,171,864,144C912,117,960,107,1008,112C1056,117,1104,139,1152,144C1200,149,1248,139,1296,112C1344,85,1392,43,1416,21.3L1440,0L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z" />
+                </svg>
 
-            <div className="container-provider">
-                <div className="search-container">
-                    <input 
-                        type="text" 
-                        placeholder="Search for restaurant..." 
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                    />
-                    <button onClick={handleSearch}>Search</button>
-                </div>
-                
-                {loading ? (
-                    <div className="loading">Loading vendors...</div>
-                ) : error ? (
-                    <div className="error">Error: {error}</div>
-                ) : filteredVendors.length > 0 ? (
-                    filteredVendors.map((vendor, index) => (
-                        <div key={vendor._id || index} className="card-provider">
-                            <div className="card-header">
-                                <h2 className="provider-name">{vendor.shopName || vendor.name || "Food Vendor"}</h2>
+                <div className="container-provider">
+                    {/* Download App Section - Added here instead of hero */}
+                    <div className="download-app-section">
+                        <div className="download-app-content">
+                            <div className="download-app-text">
+                                <h2>Get MoiHub App from Playstore</h2>
+                                <p>Download our app for better experience with real-time notifications and order tracking</p>
+                               
                             </div>
-                        
-                            <div className="card-body">
-                                <p className="vendor-description mb-2">
-                                    {vendor.description || "Delicious food available"}
-                                </p>
+                            <button className="download-app-btn" onClick={handleDownloadApp}>
+                                <Download size={20} />
+                                Download App
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="search-container">
+                        <input 
+                            type="text" 
+                            placeholder="Search for restaurant..." 
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            onKeyPress={handleKeyPress}
+                        />
+                        <button onClick={handleSearch}>Search</button>
+                    </div>
+                    
+                    {loading ? (
+                        <div className="loading">Loading vendors...</div>
+                    ) : error ? (
+                        <div className="error">Error: {error}</div>
+                    ) : filteredVendors.length > 0 ? (
+                        filteredVendors.map((vendor, index) => (
+                            <div key={vendor._id || index} className="card-provider">
+                                <div className="card-header">
+                                    <h2 className="provider-name">{vendor.shopName || vendor.name || "Food Vendor"}</h2>
+                                </div>
                             
-                                {vendor.location && (
-                                    <div className="flex justify-between items-center">
-                                        <p className="vendor-location">
-                                            <i className="fas fa-map-marker-alt"></i> {vendor.location}
-                                        </p>
-                                    
-                                        <div className="flex items-center text-green-600">
-                                            <i className="fas fa-check-circle mr-2"></i>
-                                            <span>Open</span>
+                                <div className="card-body">
+                                    <p className="vendor-description mb-2">
+                                        {vendor.description || "Delicious food available"}
+                                    </p>
+                                
+                                    {vendor.location && (
+                                        <div className="flex justify-between items-center">
+                                            <p className="vendor-location">
+                                                <i className="fas fa-map-marker-alt"></i> {vendor.location}
+                                            </p>
+                                        
+                                            <div className="flex items-center text-green-600">
+                                                <i className="fas fa-check-circle mr-2"></i>
+                                                <span>Open</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
-                        
-                            <div className="card-footer">
-                                <button className="cta-button">
+                                    )}
+                                </div>
+                            
+                                <div className="card-footer">
                                     <Link 
                                         to={`/vendor/${vendor._id}`}
                                         state={{ 
@@ -185,30 +208,30 @@ const MoiDelish = () => {
                                             location: vendor.location || "",
                                             description: vendor.description || "Delicious food available"
                                         }}
+                                        className="cta-button"
                                     >
                                         View Menu
                                     </Link>
-                                </button>
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="no-results">
+                            <p>No vendors found matching your search criteria.</p>
                         </div>
-                    ))
-                ) : (
-                    <div className="no-results">
-                        <p>No vendors found matching your search criteria.</p>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
-        
-        {isModalOpen && selectedVendor && (
-            <FoodModal 
-                vendorId={selectedVendor._id} 
-                vendorName={selectedVendor.shopName || selectedVendor.name || "Food Vendor"}
-                onClose={() => setIsModalOpen(false)} 
-            />
-        )}
-        
-        <CustomerCare />
+            
+            {isModalOpen && selectedVendor && (
+                <FoodModal 
+                    vendorId={selectedVendor._id} 
+                    vendorName={selectedVendor.shopName || selectedVendor.name || "Food Vendor"}
+                    onClose={() => setIsModalOpen(false)} 
+                />
+            )}
+            
+            <CustomerCare />
         </>
     );
 };

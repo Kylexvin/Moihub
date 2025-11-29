@@ -302,7 +302,87 @@
     background: #FF6347;
     transform: translateY(-2px);
 }
+/* Download App Section */
+.download-app-section {
+    background: linear-gradient(135deg, #FF5722, #FF8A65);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 10px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 
+.download-app-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.download-app-text h2 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.download-app-text p {
+    margin: 0 0 15px 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.app-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.feature svg {
+    opacity: 0.8;
+}
+
+.download-app-btn {
+    background: white;
+    color: #FF5722;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.download-app-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .download-app-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .download-app-text h2 {
+        font-size: 20px;
+    }
+    
+    .app-features {
+        align-items: center;
+    }
+}
 /* ===============================
    ANIMATIONS
    =============================== */
