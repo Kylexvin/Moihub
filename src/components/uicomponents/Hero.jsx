@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react'; // Add useMemo
 import { Home, ShoppingBag, Users, Heart, Package, FileText, UtensilsCrossed, MessageCircle, Wrench, Play } from 'lucide-react';
 
 const Hero = () => {
@@ -6,12 +6,13 @@ const Hero = () => {
   const [filmStripPosition, setFilmStripPosition] = useState(0);
   const heroRef = useRef(null);
   const orbRef = useRef(null);
-  const filmStripRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [pulseWaves, setPulseWaves] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const services = {
+  // Wrap services in useMemo to prevent recreation on every render
+  const services = useMemo(() => ({
     rentals: { name: 'Rentals', icon: Home, color: '#ffffff', desc: 'Find perfect student housing' },
     eshops: { name: 'E-Shops', icon: ShoppingBag, color: '#fbbf24', desc: 'Campus store marketplace' },
     roommate: { name: 'Roommate Finder', icon: Users, color: '#60a5fa', desc: 'Match with compatible roommates' },
@@ -21,9 +22,10 @@ const Hero = () => {
     food: { name: 'Food Delivery', icon: UtensilsCrossed, color: '#fcd34d', desc: 'Order from campus vendors' },
     messaging: { name: 'Messaging', icon: MessageCircle, color: '#38bdf8', desc: 'Real-time chat with friends' },
     services: { name: 'Local Services', icon: Wrench, color: '#fb7185', desc: 'Laundry, printing & more' }
-  };
+  }), []); // Empty dependency array since these values never change
 
-  const views = [
+  // Also wrap views in useMemo for consistency
+  const views = useMemo(() => [
     {
       orbiting: ['rentals', 'eshops'],
       rightSide: ['food', 'roommate'],
@@ -42,18 +44,31 @@ const Hero = () => {
       headline: 'Campus life simplified.',
       subtext: 'Everything you need, when you need it'
     }
-  ];
+  ], []);
 
+  // Check for mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-rotate views
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentView((prev) => (prev + 1) % views.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [views.length]); // Only depend on views.length
 
+  // Handle film strip scrolling (desktop only)
   useEffect(() => {
     const handleWheel = (e) => {
-      if (e.target.closest('.film-strip')) {
+      if (!isMobile && e.target.closest('.film-strip')) {
         e.preventDefault();
         const maxScroll = (Object.keys(services).length * 120) - window.innerHeight + 200;
         setFilmStripPosition(prev => {
@@ -64,7 +79,7 @@ const Hero = () => {
     };
 
     const handleMouseDown = (e) => {
-      if (e.target.closest('.film-strip')) {
+      if (!isMobile && e.target.closest('.film-strip')) {
         setIsDragging(true);
         e.preventDefault();
       }
@@ -73,7 +88,7 @@ const Hero = () => {
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
       
-      if (isDragging) {
+      if (!isMobile && isDragging) {
         const maxScroll = (Object.keys(services).length * 120) - window.innerHeight + 200;
         setFilmStripPosition(prev => {
           const newPos = prev + e.movementY;
@@ -97,7 +112,72 @@ const Hero = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, isMobile, services]); // Now services is stable and won't cause re-runs
+
+  // ... rest of your component code remains the same
+  // Handle swipe for mobile
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isSwiping = true;
+    };
+    
+    const handleTouchMove = (e) => {
+      if (!isSwiping) return;
+      
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = startX - currentX;
+      const diffY = startY - currentY;
+      
+      // Only trigger swipe if horizontal movement is greater than vertical
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        e.preventDefault();
+      }
+    };
+    
+    const handleTouchEnd = (e) => {
+      if (!isSwiping) return;
+      
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = startX - endX;
+      const diffY = startY - endY;
+      
+      // Only trigger swipe if horizontal movement is significant and greater than vertical
+      if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) {
+          // Swipe left - next view
+          setCurrentView((prev) => (prev + 1) % views.length);
+        } else {
+          // Swipe right - previous view
+          setCurrentView((prev) => (prev - 1 + views.length) % views.length);
+        }
+      }
+      
+      isSwiping = false;
+    };
+
+    const hero = heroRef.current;
+    if (hero) {
+      hero.addEventListener('touchstart', handleTouchStart, { passive: true });
+      hero.addEventListener('touchmove', handleTouchMove, { passive: false });
+      hero.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      if (hero) {
+        hero.removeEventListener('touchstart', handleTouchStart);
+        hero.removeEventListener('touchmove', handleTouchMove);
+        hero.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, [views.length]);
 
   const createPulseWave = (x, y) => {
     const id = Date.now() + Math.random();
@@ -107,69 +187,36 @@ const Hero = () => {
     }, 1500);
   };
 
-  const handleSwipe = (direction) => {
-    if (direction === 'left') {
-      setCurrentView((prev) => (prev + 1) % views.length);
-    } else {
-      setCurrentView((prev) => (prev - 1 + views.length) % views.length);
-    }
-  };
-
-  useEffect(() => {
-    let startX = 0;
-    const handleTouchStart = (e) => {
-      startX = e.touches[0].clientX;
-    };
-    
-    const handleTouchEnd = (e) => {
-      const endX = e.changedTouches[0].clientX;
-      const diff = startX - endX;
-      if (Math.abs(diff) > 100) {
-        handleSwipe(diff > 0 ? 'left' : 'right');
-      }
-    };
-
-    const hero = heroRef.current;
-    if (hero) {
-      hero.addEventListener('touchstart', handleTouchStart);
-      hero.addEventListener('touchend', handleTouchEnd);
-    }
-
-    return () => {
-      if (hero) {
-        hero.removeEventListener('touchstart', handleTouchStart);
-        hero.removeEventListener('touchend', handleTouchEnd);
-      }
-    };
-  }, []);
-
   const currentViewData = views[currentView];
 
+  // Background style with proper escaping
+  const backgroundStyle = {
+    backgroundImage: `
+      url('/herobg.jpg'),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Cdefs%3E%3Cpattern id='campus' patternUnits='userSpaceOnUse' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23134e4a' opacity='0.03'/%3E%3Ccircle cx='50' cy='50' r='20' fill='%2310b981' opacity='0.05'/%3E%3Crect x='120' y='30' width='40' height='60' rx='5' fill='%2306d6a0' opacity='0.04'/%3E%3Cpolygon points='30,150 70,120 110,150 110,180 30,180' fill='%23059669' opacity='0.03'/%3E%3Ccircle cx='150' cy='150' r='15' fill='%230d9488' opacity='0.04'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23campus)'/%3E%3Crect width='100%25' height='100%25' fill='url(data:image/svg+xml,%3Csvg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;%3E%3Ccircle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.1&quot;/%3E%3Ccircle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.08&quot;/%3E%3Ccircle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.09&quot;/%3E%3C/svg%3E')/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at ${mousePos.x * 0.1}% ${mousePos.y * 0.1}%,
+        rgba(16, 185, 129, 0.05) 0%,
+        rgba(6, 78, 59, 0.05) 40%,
+        rgba(17, 24, 39, 0.1) 80%,
+        rgba(0, 0, 0, 0.06) 100%)
+    `,
+    backgroundSize: 'cover, cover, cover',
+    backgroundBlendMode: 'soft-light, normal, normal',
+    backgroundColor: '#111827',
+    filter: 'brightness(1.05) contrast(1.02)'
+  };
+
   return (
-<div
-  ref={heroRef}
-  className="relative w-full overflow-hidden lg:h-screen"
-style={{
-  height: window.innerWidth <= 768 ? '400px' : 'auto',
-  minHeight: window.innerWidth <= 768 ? '400px' : `calc(100vh - 64px)`,
-  backgroundImage: `
-    url('/herobg.jpg'),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><pattern id="campus" patternUnits="userSpaceOnUse" width="200" height="200"><rect width="200" height="200" fill="%23134e4a" opacity="0.03"/><circle cx="50" cy="50" r="20" fill="%2310b981" opacity="0.05"/><rect x="120" y="30" width="40" height="60" rx="5" fill="%2306d6a0" opacity="0.04"/><polygon points="30,150 70,120 110,150 110,180 30,180" fill="%23059669" opacity="0.03"/><circle cx="150" cy="150" r="15" fill="%230d9488" opacity="0.04"/></pattern></defs><rect width="100%" height="100%" fill="url(%23campus)"/><rect width="100%" height="100%" fill="url(data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.1&quot;/><circle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.08&quot;/><circle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.09&quot;/></svg>)"/></svg>'),
-    radial-gradient(ellipse at ${mousePos.x * 0.1}% ${mousePos.y * 0.1}%,
-      rgba(16, 185, 129, 0.05) 0%,
-      rgba(6, 78, 59, 0.05) 40%,
-      rgba(17, 24, 39, 0.1) 80%,
-      rgba(0, 0, 0, 0.06) 100%)
-  `,
-  backgroundSize: 'cover, cover, cover',
-  backgroundBlendMode: 'soft-light, normal, normal',
-  backgroundColor: '#111827',
-  filter: 'brightness(1.05) contrast(1.02)'
-}}
-
-  onClick={(e) => createPulseWave(e.clientX, e.clientY)}
->
-
+    <div
+      ref={heroRef}
+      className="relative w-full overflow-hidden lg:h-screen"
+      style={{
+        height: isMobile ? '500px' : 'auto',
+        minHeight: isMobile ? '500px' : 'calc(100vh - 64px)',
+        ...backgroundStyle
+      }}
+      onClick={(e) => createPulseWave(e.clientX, e.clientY)}
+    >
       {/* Pulse Waves */}
       {pulseWaves.map(wave => (
         <div
@@ -187,10 +234,10 @@ style={{
       ))}
 
       {/* Floating 3D Orb */}
-      <div className="absolute left-4 lg:left-1/4 top-1/2 transform -translate-y-1/2">
+      <div className="absolute left-4 lg:left-1/4 top-1/2 transform -translate-y-1/2 z-10">
         <div 
           ref={orbRef}
-          className="relative w-24 h-24 lg:w-32 lg:h-32 animate-pulse"
+          className="relative w-24 h-24 lg:w-32 lg:h-32"
           style={{ animation: 'float 6s ease-in-out infinite' }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full opacity-80 blur-lg animate-spin" 
@@ -203,8 +250,8 @@ style={{
             const service = services[serviceKey];
             const Icon = service.icon;
             const angle = (index * 180) + (Date.now() * 0.001 % 360);
-            const x = Math.cos(angle * Math.PI / 180) * (window.innerWidth <= 768 ? 60 : 80);
-            const y = Math.sin(angle * Math.PI / 180) * (window.innerWidth <= 768 ? 60 : 80);
+            const x = Math.cos(angle * Math.PI / 180) * (isMobile ? 60 : 80);
+            const y = Math.sin(angle * Math.PI / 180) * (isMobile ? 60 : 80);
             
             return (
               <div
@@ -217,7 +264,7 @@ style={{
                 }}
               >
                 <div className="w-full h-full bg-gray-900/90 backdrop-blur-sm border-2 border-emerald-400/70 rounded-full flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 shadow-lg">
-                  <Icon size={window.innerWidth <= 768 ? 16 : 20} color={service.color} className="drop-shadow-lg" />
+                  <Icon size={isMobile ? 16 : 20} color={service.color} className="drop-shadow-lg" />
                 </div>
               </div>
             );
@@ -226,89 +273,93 @@ style={{
       </div>
 
       {/* Camera Film Strip - Desktop Only */}
-      <div className="hidden lg:block absolute right-8 top-0 h-screen w-24 film-strip">
-        {/* Film Strip Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800 border-l-4 border-r-4 border-gray-600 opacity-90">
-          {/* Film holes */}
-          <div className="absolute left-1 top-0 bottom-0 w-2">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-2 h-4 bg-black rounded-sm mb-4 mt-2 opacity-80"
-                style={{ top: `${i * 8}%` }}
-              />
-            ))}
+      {!isMobile && (
+        <div className="hidden lg:block absolute right-8 top-0 h-screen w-24 film-strip z-20">
+          {/* Film Strip Background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800 border-l-4 border-r-4 border-gray-600 opacity-90">
+            {/* Film holes */}
+            <div className="absolute left-1 top-0 bottom-0 w-2">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-2 h-4 bg-black rounded-sm mb-4 mt-2 opacity-80"
+                  style={{ top: `${i * 8}%` }}
+                />
+              ))}
+            </div>
+            <div className="absolute right-1 top-0 bottom-0 w-2">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-2 h-4 bg-black rounded-sm mb-4 mt-2 opacity-80"
+                  style={{ top: `${i * 8}%` }}
+                />
+              ))}
+            </div>
           </div>
-          <div className="absolute right-1 top-0 bottom-0 w-2">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-2 h-4 bg-black rounded-sm mb-4 mt-2 opacity-80"
-                style={{ top: `${i * 8}%` }}
-              />
-            ))}
+
+          {/* Service Icons on Film */}
+          <div
+            className="absolute inset-x-0 transition-transform duration-300 ease-out"
+            style={{ 
+              transform: `translateY(${filmStripPosition}px)`,
+              cursor: isDragging ? 'grabbing' : 'grab'
+            }}
+          >
+            {Object.entries(services).map(([serviceKey, service], index) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={serviceKey}
+                  className="relative mx-auto my-8 w-16 h-16 cursor-pointer transform transition-all duration-300 hover:scale-110"
+                >
+                  {/* Film frame */}
+                  <div className="absolute -inset-2 bg-gray-700/50 border border-gray-500 rounded"></div>
+                  
+                  {/* Icon container */}
+                  <div className="relative w-full h-full bg-black/60 backdrop-blur-sm border-2 border-gray-400/60 rounded-lg flex flex-col items-center justify-center hover:border-white hover:bg-gray-800/80 transition-all duration-300 group shadow-lg">
+                    <Icon size={24} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg mb-1" />
+                    <span className="text-xs text-gray-300 font-medium leading-none">{service.name.split(' ')[0]}</span>
+                  </div>
+
+                  {/* Film frame number */}
+                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 font-mono">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
+      )}
 
-        {/* Service Icons on Film */}
-        <div
-          className="absolute inset-x-0 transition-transform duration-300 ease-out"
-          style={{ 
-            transform: `translateY(${filmStripPosition}px)`,
-            cursor: isDragging ? 'grabbing' : 'grab'
-          }}
-        >
-          {Object.entries(services).map(([serviceKey, service], index) => {
+      {/* Mobile Right Side Icons */}
+      {isMobile && (
+        <div className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 space-y-6 z-10">
+          {currentViewData.rightSide.map((serviceKey, index) => {
+            const service = services[serviceKey];
             const Icon = service.icon;
+            
             return (
               <div
                 key={serviceKey}
-                className="relative mx-auto my-8 w-16 h-16 cursor-pointer transform transition-all duration-300 hover:scale-110"
+                className="w-12 h-12 cursor-pointer transform transition-all duration-500 hover:scale-110"
+                style={{
+                  animationDelay: `${index * 0.2}s`,
+                  animation: 'slideInRight 0.8s ease-out forwards'
+                }}
               >
-                {/* Film frame */}
-                <div className="absolute -inset-2 bg-gray-700/50 border border-gray-500 rounded"></div>
-                
-                {/* Icon container */}
-                <div className="relative w-full h-full bg-black/60 backdrop-blur-sm border-2 border-gray-400/60 rounded-lg flex flex-col items-center justify-center hover:border-white hover:bg-gray-800/80 transition-all duration-300 group shadow-lg">
-                  <Icon size={24} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg mb-1" />
-                  <span className="text-xs text-gray-300 font-medium leading-none">{service.name.split(' ')[0]}</span>
-                </div>
-
-                {/* Film frame number */}
-                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 font-mono">
-                  {String(index + 1).padStart(2, '0')}
+                <div className="w-full h-full bg-gray-900/80 backdrop-blur-sm border-2 border-emerald-500/60 rounded-xl flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 group shadow-lg">
+                  <Icon size={20} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" />
                 </div>
               </div>
             );
           })}
         </div>
-      </div>
-
-      {/* Mobile Right Side Icons (Fallback) */}
-      <div className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 space-y-6">
-        {currentViewData.rightSide.map((serviceKey, index) => {
-          const service = services[serviceKey];
-          const Icon = service.icon;
-          
-          return (
-            <div
-              key={serviceKey}
-              className="w-12 h-12 cursor-pointer transform transition-all duration-500 hover:scale-110"
-              style={{
-                animationDelay: `${index * 0.2}s`,
-                animation: 'slideInRight 0.8s ease-out forwards'
-              }}
-            >
-              <div className="w-full h-full bg-gray-900/80 backdrop-blur-sm border-2 border-emerald-500/60 rounded-xl flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 group shadow-lg">
-                <Icon size={20} color={service.color} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      )}
 
       {/* Bottom Left Content */}
-      <div className="absolute bottom-1/4 lg:bottom-16 left-4 lg:left-16 max-w-xs lg:max-w-lg pr-4">
+      <div className="absolute bottom-1/4 lg:bottom-16 left-4 lg:left-16 max-w-xs lg:max-w-lg pr-4 z-10">
         <h1 
           key={currentView}
           className="text-3xl lg:text-5xl font-bold text-white mb-4 leading-tight"
@@ -327,6 +378,8 @@ style={{
         <div className="flex justify-start">
           <a
             href="https://play.google.com/store/apps/details?id=com.kylexvin.moihub"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 text-center text-sm lg:text-base"
           >
             <Play size={20} className="mr-2" />
@@ -336,14 +389,15 @@ style={{
       </div>
 
       {/* View Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
         {views.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentView(index)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentView ? 'bg-emerald-400' : 'bg-gray-600'
+              index === currentView ? 'bg-emerald-400 w-6' : 'bg-gray-600 hover:bg-gray-400'
             }`}
+            aria-label={`View ${index + 1}`}
           />
         ))}
       </div>
