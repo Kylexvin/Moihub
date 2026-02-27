@@ -196,14 +196,14 @@ const Hero = () => {
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Cdefs%3E%3Cpattern id='campus' patternUnits='userSpaceOnUse' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23134e4a' opacity='0.03'/%3E%3Ccircle cx='50' cy='50' r='20' fill='%2310b981' opacity='0.05'/%3E%3Crect x='120' y='30' width='40' height='60' rx='5' fill='%2306d6a0' opacity='0.04'/%3E%3Cpolygon points='30,150 70,120 110,150 110,180 30,180' fill='%23059669' opacity='0.03'/%3E%3Ccircle cx='150' cy='150' r='15' fill='%230d9488' opacity='0.04'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23campus)'/%3E%3Crect width='100%25' height='100%25' fill='url(data:image/svg+xml,%3Csvg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;%3E%3Ccircle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;2&quot; fill=&quot;%2310b981&quot; opacity=&quot;0.1&quot;/%3E%3Ccircle cx=&quot;80&quot; cy=&quot;40&quot; r=&quot;1.5&quot; fill=&quot;%2306d6a0&quot; opacity=&quot;0.08&quot;/%3E%3Ccircle cx=&quot;40&quot; cy=&quot;70&quot; r=&quot;1&quot; fill=&quot;%23059669&quot; opacity=&quot;0.09&quot;/%3E%3C/svg%3E')/%3E%3C/svg%3E"),
       radial-gradient(ellipse at ${mousePos.x * 0.1}% ${mousePos.y * 0.1}%,
         rgba(16, 185, 129, 0.05) 0%,
-        rgba(6, 78, 59, 0.05) 40%,
+        rgba(6, 78, 59, 0) 40%,
         rgba(17, 24, 39, 0.1) 80%,
         rgba(0, 0, 0, 0.06) 100%)
     `,
     backgroundSize: 'cover, cover, cover',
     backgroundBlendMode: 'soft-light, normal, normal',
     backgroundColor: '#111827',
-    filter: 'brightness(1.05) contrast(1.02)'
+    filter: 'brightness(2.05) contrast(1.02)'
   };
 
   return (
