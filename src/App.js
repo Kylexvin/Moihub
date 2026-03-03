@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css';
 
 // Layout Components
@@ -55,8 +56,8 @@ import WritersPage from './components/WritersPage';
 import EditPostPage from './components/EditPostPage';
 
 // Authentication
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 import EmailVerification from './components/EmailVerification';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChangePassword  from './components/Auth/ChangePassword';
@@ -82,8 +83,14 @@ import plotsData from './data/plots.json';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [cartItems, setCartItems] = useState([]);
+  // Add authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Check if user is already logged in on app load
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+    
     // Loading simulation
     const fetchData = async () => {
       setTimeout(() => {
@@ -106,8 +113,9 @@ const App = () => {
     setCartItems(newCartItems);
   };
 
-  const handleLogin = () => {
-    // Login handler for components that need it
+  // Update handleLogin to actually set the state
+  const handleLogin = (authState) => {
+    setIsAuthenticated(authState);
   };
 
   if (isLoading) {
@@ -119,114 +127,112 @@ const App = () => {
   }
 
   return (
-    <React.Fragment>
-      <div>
-        <Navbar />
-      </div>
-      <Router scrollRestoration="auto">
-        <Routes>
-          {/* Core Pages */}
-          <Route path="/" element={<Home />} />
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/learnmore" element={<LearnMore />} />
-          <Route path="/ourteam" element={<OurTeam />} />
-          <Route path="/delete-account" element={<AccountDeletion />} />
+    <GoogleOAuthProvider clientId="440940724570-q2oimhoge0bre1curvl7h8glbnp6rbma.apps.googleusercontent.com">
+      <React.Fragment>
+        <div>
+          <Navbar />
+        </div>
+        <Router scrollRestoration="auto">
+          <Routes>
+            {/* Core Pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/learnmore" element={<LearnMore />} />
+            <Route path="/ourteam" element={<OurTeam />} />
+            <Route path="/delete-account" element={<AccountDeletion />} />
 
-          {/* Authentication Routes */}
-          <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />
-          <Route path="/register" element={<Register setIsAuthenticated={handleLogin} />} />
-          <Route path="/verify-email/:token" element={<EmailVerification />} />          
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/change-password" element={<ChangePassword />} />
+            {/* Authentication Routes - Pass the correct function */}
+            <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />
+            <Route path="/register" element={<Register setIsAuthenticated={handleLogin} />} />
+            <Route path="/verify-email/:token" element={<EmailVerification />} />          
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/change-password" element={<ChangePassword />} />
 
-          {/* Marketplace & Shopping */}
-          <Route path="/marketplace" element={<BuyersPage />} />
-          <Route path="/sellers" element={<SellersPage />} />
-          <Route path="/provider/:providerId" element={<ProviderDetails />} />
-          <Route path="/cart" element={<CartPage cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} handleUpdateQuantity={handleUpdateQuantity} />} />
-          <Route path="/markethub" element={<MarketHub />} />
+            {/* Rest of your routes... */}
+            <Route path="/marketplace" element={<BuyersPage />} />
+            <Route path="/sellers" element={<SellersPage />} />
+            <Route path="/provider/:providerId" element={<ProviderDetails />} />
+            <Route path="/cart" element={<CartPage cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} handleUpdateQuantity={handleUpdateQuantity} />} />
+            <Route path="/markethub" element={<MarketHub />} />
 
-          {/* E-shop Routes */}
-          <Route path="/eshop" element={<CategoryList />} />
-          <Route path="/shops/:categorySlug" element={<ShopList />} />
-          <Route path="/products/:shopSlug" element={<ProductList />} />
-          <Route path="/eshop/dashboard" element={<EshopDashboard />} />
-          <Route path="/eshop/upgrade" element={<UpgradeEshop />} />
-          <Route path="/admin/eshop" element={<AdminDashboard />} />
+            {/* E-shop Routes */}
+            <Route path="/eshop" element={<CategoryList />} />
+            <Route path="/shops/:categorySlug" element={<ShopList />} />
+            <Route path="/products/:shopSlug" element={<ProductList />} />
+            <Route path="/eshop/dashboard" element={<EshopDashboard />} />
+            <Route path="/eshop/upgrade" element={<UpgradeEshop />} />
+            <Route path="/admin/eshop" element={<AdminDashboard />} />
 
-          {/* Food Delivery Routes */}
-          <Route path="/food-delivery" element={<MoiDelish />} />
-          <Route path="/vendor/:vendorId" element={<VendorPage />} />
-          <Route path="/vendor/dashboard" element={<VendorDashboard />} />
-          <Route path="/vendor/upgrade" element={<UpgradeToVendor />} />
-          <Route path="/admin/foodvendors" element={<VendorManagement />} />
+            {/* Food Delivery Routes */}
+            <Route path="/food-delivery" element={<MoiDelish />} />
+            <Route path="/vendor/:vendorId" element={<VendorPage />} />
+            <Route path="/vendor/dashboard" element={<VendorDashboard />} />
+            <Route path="/vendor/upgrade" element={<UpgradeToVendor />} />
+            <Route path="/admin/foodvendors" element={<VendorManagement />} />
 
-          {/* Specialized Services */}
-          <Route path="/pharmacy" element={<Echem cartItems={cartItems} setCartItems={setCartItems} />} />
-          <Route path="/greenhub" element={<GreenHub />} />
-          <Route path="/myschool" element={<MySchool />} />
-          <Route path="/find-roommate" element={<RoomateFinder />} />
+            {/* Specialized Services */}
+            <Route path="/pharmacy" element={<Echem cartItems={cartItems} setCartItems={setCartItems} />} />
+            <Route path="/greenhub" element={<GreenHub />} />
+            <Route path="/myschool" element={<MySchool />} />
+            <Route path="/find-roommate" element={<RoomateFinder />} />
 
-          {/* Real Estate Routes */}
-          <Route path="/book" element={<Booking plots={plotsData} />} />
-          <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
-          {/* Rental Routes */}
-          <Route path="/rentals" element={<RentalHome />} />
-          <Route path="/rentals/:id" element={<RentalDetail />} />
+            {/* Real Estate Routes */}
+            <Route path="/booking" element={<Booking plots={plotsData} />} />
+            <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
+            <Route path="/rentals" element={<RentalHome />} />
+            <Route path="/rentals/:id" element={<RentalDetail />} />
 
-          {/* Blog Routerentalss */}
-          <Route path="/blog" element={<BlogHomepage />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route
-            path="/post-list"
-            element={
-              <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                <WritersPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/edit/:id"
-            element={
-              <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                <EditPostPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Blog Routes */}
+            <Route path="/blog" element={<BlogHomepage />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route
+              path="/post-list"
+              element={
+                <ProtectedRoute allowedRoles={['writer', 'admin']}>
+                  <WritersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={
+                <ProtectedRoute allowedRoles={['writer', 'admin']}>
+                  <EditPostPage />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Transport (MoiLink) Routes */}
-          <Route path="/moilinktravellers" element={<RouteSelectionPage />} />
-          <Route path="/VehicleSelectionPage/:routeId" element={<VehicleSelectionPage />} />
-          <Route path="/seat-selection/:matatuId" element={<SeatSelectionPage />} />
-          <Route path="/booking-confirmation/:matatuId/:seatId" element={<BookingConfirmationPage />} />
-          <Route path="/payment/initiate" element={<PaymentInitiationPage />} />
-          <Route path="/mybookings" element={<MyBookings />} />
-          <Route path="/verifybooking" element={<QrScanner />} />
-          <Route
-            path="/moilinkadmin"
-            element={
-              <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                <MatatuAdmin />
-              </ProtectedRoute>
-            }
-          />
+            {/* Transport (MoiLink) Routes */}
+            <Route path="/moilinktravellers" element={<RouteSelectionPage />} />
+            <Route path="/VehicleSelectionPage/:routeId" element={<VehicleSelectionPage />} />
+            <Route path="/seat-selection/:matatuId" element={<SeatSelectionPage />} />
+            <Route path="/booking-confirmation/:matatuId/:seatId" element={<BookingConfirmationPage />} />
+            <Route path="/payment/initiate" element={<PaymentInitiationPage />} />
+            <Route path="/mybookings" element={<MyBookings />} />
+            <Route path="/verifybooking" element={<QrScanner />} />
+            <Route
+              path="/moilinkadmin"
+              element={
+                <ProtectedRoute allowedRoles={['writer', 'admin']}>
+                  <MatatuAdmin />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* AI Chatbot */}
-          <Route path="/moihub_ai" element={<ChatbotDashboard />} />
+            {/* AI Chatbot */}
+            <Route path="/moihub_ai" element={<ChatbotDashboard />} />
 
-          {/* Catch-all Route */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
+            {/* Catch-all Route */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
 
-      <div>
-        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" transform="rotate(0)">
-          <path fill="#1a1a1a" fillOpacity="1" d="M0,32L80,74.7C160,117,320,203,480,229.3C640,256,800,224,960,229.3C1120,235,1280,277,1360,298.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-        </svg> */}
-        <Footer />
-      </div>
-    </React.Fragment>
+        <div>
+          <Footer />
+        </div>
+      </React.Fragment>
+    </GoogleOAuthProvider>
   );
 };
 

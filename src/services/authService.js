@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://moihub.onrender.com/api/auth';
+const BASE_URL = 'http://localhost:5000/api/auth';
 
 // Create axios instance with interceptors
 const api = axios.create({
@@ -24,26 +24,24 @@ api.interceptors.request.use(
   }
 );
 
-// Enhanced error handling function
+// In authService.js - update the handleApiError function:
+
 const handleApiError = (error) => {
-  console.error("API Error:", error.response ? error.response.data : error.message);
-  
-  const customError = {
-    message: error.response?.data?.message || error.message || 'An error occurred',
-    status: error.response?.status,
-    data: error.response?.data
-  };
-  
-  // Handle token expiration
+  // Handle 401 Unauthorized
   if (error.response?.status === 401) {
-    authService.logout();
-    // Only redirect if not already on auth pages
-    if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+    // Only clear if it's not a login/register attempt
+    if (!window.location.pathname.includes('/login') && 
+        !window.location.pathname.includes('/register')) {
+      localStorage.clear();
       window.location.href = '/login';
     }
   }
   
-  return customError;
+  return {
+    message: error.response?.data?.message || error.message || 'An error occurred',
+    status: error.response?.status,
+    data: error.response?.data
+  };
 };
 
 export const authService = {
@@ -56,27 +54,58 @@ export const authService = {
     }
   },
 
-  login: async (credentials) => {
-    try {
-      const response = await api.post('/login', credentials);
-      console.log("Raw API Response:", response.data);
+login: async (credentials) => {
+  try {
+    const response = await api.post('/login', credentials);
+    console.log("Raw API Response:", response.data);
 
-      if (response.data.token && response.data.user) {
-        // Store all user data - accessing from the nested user object
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userId', response.data.user.userId);
-        localStorage.setItem('role', response.data.user.role);
-        localStorage.setItem('username', response.data.user.username);
-        localStorage.setItem('userEmail', response.data.user.email);
-      } else {
-        throw new Error("Token or user data is missing in response!");
-      }
-
-      return response.data;
-    } catch (error) {
-      throw handleApiError(error);
+    if (response.data.token && response.data.user) {
+      // Store all user data - use _id consistently
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('_id', response.data.user._id);  // Store as _id
+      localStorage.setItem('userId', response.data.user._id); // Also store as userId for backward compatibility
+      localStorage.setItem('role', response.data.user.role);
+      localStorage.setItem('username', response.data.user.username);
+      localStorage.setItem('userEmail', response.data.user.email);
+    } else {
+      throw new Error("Token or user data is missing in response!");
     }
-  },
+
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+},
+
+// NEW: Get current user data
+getCurrentUser: () => {
+  return {
+    token: localStorage.getItem('token'),
+    userId: localStorage.getItem('userId') || localStorage.getItem('_id'),
+    _id: localStorage.getItem('_id') || localStorage.getItem('userId'),
+    role: localStorage.getItem('role'),
+    username: localStorage.getItem('username'),
+    email: localStorage.getItem('userEmail'),
+  };
+},
+
+googleLogin: async (accessToken) => {
+  try {
+    const response = await api.post('/social-login', {
+      provider: 'google',
+      token: accessToken,
+    });
+
+    // Check if response has required data
+    if (!response.data?.token || !response.data?.user) {
+      throw new Error('Invalid response from server');
+    }
+
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+},
 
   // NEW: Resend verification email
   resendVerification: async (email) => {

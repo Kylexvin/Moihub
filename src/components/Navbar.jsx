@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Calendar, MapPin, Utensils, Users, Smartphone, ShoppingCart, Store, LogIn, LogOut, Home, User, Pill } from 'lucide-react';
+import { authService } from '../services/authService'; // Adjust path as needed
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -7,31 +8,24 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [username, setUsername] = useState('');
 
-  // Authentication check - integrate with your authService
+  // Authentication check - integrated with authService
   useEffect(() => {
-    // Replace with your actual auth service integration:
-    // const token = authService.getToken();
-    // const user = authService.getCurrentUser()?.username;
-    // setIsLoggedIn(authService.isAuthenticated());
-    // setUsername(user || '');
-    
-    // For demo purposes (remove in production):
-    const token = localStorage?.getItem('token');
-    const user = localStorage?.getItem('username');
-    setIsLoggedIn(!!token);
-    setUsername(user || '');
+    const checkAuth = () => {
+      const token = authService.getToken();
+      const user = authService.getCurrentUser()?.username;
+      setIsLoggedIn(authService.isAuthenticated());
+      setUsername(user || '');
+    };
+
+    checkAuth();
+
+    // Optional: Listen for storage changes (login/logout in other tabs)
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
   }, []);
 
   const handleLogout = () => {
-    // Replace with your actual auth service:
-    // authService.logout();
-    
-    // For demo purposes (remove in production):
-    if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-    }
-    
+    authService.logout();
     setIsLoggedIn(false);
     setUsername('');
     window.location.href = '/';
@@ -120,47 +114,45 @@ const Navbar = () => {
           height: '64px' 
         }}>
           {/* Logo Section */}
-     
-<div style={{ 
-  display: 'flex', 
-  alignItems: 'center', 
-  gap: '12px' 
-}}>
-  <div style={{ position: 'relative' }}>
-    <img 
-      src="/logo2.png" 
-      alt="MoiHub Logo"
-      style={{
-        width: '40px',
-        height: '40px',
-        borderRadius: '8px',
-        objectFit: 'cover',
-        boxShadow: '0 4px 12px rgba(34, 197, 94, 0.3)'
-      }}
-    />
-    <div style={{
-      position: 'absolute',
-      top: '-4px',
-      right: '-4px',
-      width: '12px',
-      height: '12px',
-      backgroundColor: '#22c55e',
-      borderRadius: '50%',
-      animation: 'ping 1s infinite'
-    }}></div>
-  </div>
-  <div style={{
-    fontSize: '24px',
-    fontWeight: 'bold',
-    background: 'linear-gradient(135deg, #22c55e, #dcfce7)',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    color: 'transparent' 
-  }}>
-    MoiHub
-  </div>
-</div>
-
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px' 
+          }}>
+            <div style={{ position: 'relative' }}>
+              <img 
+                src="/logo2.png" 
+                alt="MoiHub Logo"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  objectFit: 'cover',
+                  boxShadow: '0 4px 12px rgba(34, 197, 94, 0.3)'
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                top: '-4px',
+                right: '-4px',
+                width: '12px',
+                height: '12px',
+                backgroundColor: '#22c55e',
+                borderRadius: '50%',
+                animation: 'ping 1s infinite'
+              }}></div>
+            </div>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #22c55e, #dcfce7)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent' 
+            }}>
+              MoiHub
+            </div>
+          </div>
 
           {/* Desktop Navigation */}
           <div style={{ 
