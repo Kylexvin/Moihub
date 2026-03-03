@@ -83,14 +83,10 @@ import plotsData from './data/plots.json';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [cartItems, setCartItems] = useState([]);
-  // Add authentication state
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Remove isAuthenticated state since it's not being used directly
+  // We'll just check token directly when needed
 
   useEffect(() => {
-    // Check if user is already logged in on app load
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
-    
     // Loading simulation
     const fetchData = async () => {
       setTimeout(() => {
@@ -113,9 +109,11 @@ const App = () => {
     setCartItems(newCartItems);
   };
 
-  // Update handleLogin to actually set the state
-  const handleLogin = (authState) => {
-    setIsAuthenticated(authState);
+  // Handle login - this will be used by Login/Register components
+  // but we don't need to store the state in App since it's not used
+  const handleLogin = () => {
+    // This function can be empty or can trigger other side effects if needed
+    // The actual auth state is managed in localStorage and read by components directly
   };
 
   if (isLoading) {
@@ -178,6 +176,7 @@ const App = () => {
             <Route path="/find-roommate" element={<RoomateFinder />} />
 
             {/* Real Estate Routes */}
+            <Route path="/book"  element={<Home />} />
             <Route path="/booking" element={<Booking plots={plotsData} />} />
             <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
             <Route path="/rentals" element={<RentalHome />} />

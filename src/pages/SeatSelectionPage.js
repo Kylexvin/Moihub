@@ -167,60 +167,8 @@ const SeatSelectionPage = () => {
     return () => clearInterval(refreshInterval);
   }, [matatuId, selectedSeat, userId]);
 
-  // Watch for seat lock expiry and notify user with SweetAlert
-  useEffect(() => {
-    if (!selectedSeat || !selectedSeat.lock_expiry) return;
-    
-    let alertShown = false;
-    
-    const checkExpiryApproaching = () => {
-      const now = new Date();
-      const expiry = new Date(selectedSeat.lock_expiry);
-      const timeRemaining = expiry - now;
-      
-      // Notify when 30 seconds left, but only once
-      if (timeRemaining > 0 && timeRemaining <= 30000 && !alertShown) {
-        alertShown = true;
-        
-        Swal.fire({
-          title: 'Warning!',
-          text: 'Your seat reservation will expire soon!',
-          icon: 'warning',
-          confirmButtonText: 'Proceed to Book',
-          showCancelButton: true,
-          cancelButtonText: 'Cancel Reservation',
-          timer: 25000,
-          timerProgressBar: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            proceedToBooking();
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            setSelectedSeat(null);
-          }
-        });
-      }
-    };
-    
-    const timer = setInterval(checkExpiryApproaching, 5000);
-    return () => clearInterval(timer);
-  }, [selectedSeat]); 
-
-  const showModal = (message) => {
-    setModalMessage(message);
-    setIsModalOpen(true);
-  };
-
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleLoginRedirect = () => {
-    sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-    navigate('/login');
-    hideModal();
-  };
-  
-  const proceedToBooking = async () => {
+  // Wrap proceedToBooking with useCallback to prevent unnecessary re-renders
+  const proceedToBooking = useCallback(async () => {
     if (!isAuthenticated) {
       showModal('You need to be logged in to proceed with booking. Would you like to log in now?');
       return;
@@ -269,6 +217,59 @@ const SeatSelectionPage = () => {
         toast.error('Failed to verify seat status. Please try again.');
       }
     }
+  }, [isAuthenticated, selectedSeat, matatu, navigate, matatuId]);
+
+  // Watch for seat lock expiry and notify user with SweetAlert - FIXED with proper dependencies
+  useEffect(() => {
+    if (!selectedSeat || !selectedSeat.lock_expiry) return;
+    
+    let alertShown = false;
+    
+    const checkExpiryApproaching = () => {
+      const now = new Date();
+      const expiry = new Date(selectedSeat.lock_expiry);
+      const timeRemaining = expiry - now;
+      
+      // Notify when 30 seconds left, but only once
+      if (timeRemaining > 0 && timeRemaining <= 30000 && !alertShown) {
+        alertShown = true;
+        
+        Swal.fire({
+          title: 'Warning!',
+          text: 'Your seat reservation will expire soon!',
+          icon: 'warning',
+          confirmButtonText: 'Proceed to Book',
+          showCancelButton: true,
+          cancelButtonText: 'Cancel Reservation',
+          timer: 25000,
+          timerProgressBar: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            proceedToBooking();
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            setSelectedSeat(null);
+          }
+        });
+      }
+    };
+    
+    const timer = setInterval(checkExpiryApproaching, 5000);
+    return () => clearInterval(timer);
+  }, [selectedSeat, proceedToBooking]); // Added proceedToBooking to dependencies
+
+  const showModal = (message) => {
+    setModalMessage(message);
+    setIsModalOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleLoginRedirect = () => {
+    sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+    navigate('/login');
+    hideModal();
   };
   
   const handleSeatClick = async (seat) => {
@@ -656,31 +657,31 @@ const SeatSelectionPage = () => {
           </motion.div>
 
          {/* Compact Legend */}
-<motion.div 
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ delay: 0.5 }}
-  className="mt-4 flex flex-wrap gap-3 text-xs bg-white p-3 rounded-lg shadow-sm"
->
-  <div className="flex items-center gap-1">
-    <div className="w-4 h-4 bg-white border border-blue-300 rounded"></div>
-    <span>Available</span>
-  </div>
-  <div className="flex items-center gap-1">
-    <div className="w-4 h-4 bg-green-500 border border-green-600 rounded"></div>
-    <span>Selected</span>
-  </div>
-  <div className="flex items-center gap-1">
-    <div className="w-4 h-4 bg-red-100 border border-red-500 rounded"></div>
-    <span>Booked</span>
-  </div>
-  <div className="flex items-center gap-1">
-    <div className="w-4 h-4 bg-yellow-100 border border-yellow-500 rounded"></div>
-    <span>Reserved by others</span>
-  </div>
-</motion.div>
-
- </div> </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-4 flex flex-wrap gap-3 text-xs bg-white p-3 rounded-lg shadow-sm"
+          >
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-white border border-blue-300 rounded"></div>
+              <span>Available</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-green-500 border border-green-600 rounded"></div>
+              <span>Selected</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-red-100 border border-red-500 rounded"></div>
+              <span>Booked</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-yellow-100 border border-yellow-500 rounded"></div>
+              <span>Reserved by others</span>
+            </div>
+          </motion.div>
+        </div> 
+      </motion.div>
     </div>
   );
 };

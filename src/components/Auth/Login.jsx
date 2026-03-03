@@ -35,37 +35,72 @@ function Login({ setIsAuthenticated }) {
     setIsLoading(true);
     try {
       const response = await authService.login(credentials);
-      if (!response.user?.role) throw new Error('User role is missing from response!');
-      setIsAuthenticated(true);
-      const redirectUrl = location.state?.from || getDashboardRoute(response.user.role) || '/';
-      navigate(redirectUrl, { replace: true });
-    } catch (err) {
-      setError(err.message || 'Invalid email/username or password');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-const handleGoogleLogin = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    setError(null);
-    setIsLoading(true);
-    try {
-      // CHANGE THIS LINE - send access_token directly
-      const response = await authService.googleLogin(tokenResponse.access_token);
+      console.log("Login response:", response); // Debug log
       
       if (!response.user?.role) throw new Error('User role is missing from response!');
       setIsAuthenticated(true);
       const redirectUrl = location.state?.from || getDashboardRoute(response.user.role) || '/';
       navigate(redirectUrl, { replace: true });
     } catch (err) {
-      setError(err.message || 'Google sign-in failed. Please try again.');
+      console.error("Login error:", err); // Debug log
+      setError(err.message || 'Invalid email/username or password');
     } finally {
       setIsLoading(false);
     }
-  },
-  onError: () => setError('Google sign-in was cancelled or failed.'),
-});
+  };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setError(null);
+      setIsLoading(true);
+      try {
+        console.log("Google token response:", tokenResponse); // Debug log
+        
+        // Send access_token directly
+        const response = await authService.googleLogin(tokenResponse.access_token);
+        console.log("Google login response:", response); // Debug log
+        
+        // Check the response structure
+        if (!response) {
+          throw new Error('No response from server');
+        }
+        
+        // Handle different possible response structures
+        let userData = response.user || response.data?.user || response;
+        let token = response.token || response.data?.token;
+        
+        if (!token || !userData) {
+          console.error("Unexpected response structure:", response);
+          throw new Error('Invalid response structure from server');
+        }
+        
+        // Manually store in localStorage if authService didn't already
+        if (!localStorage.getItem('token')) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('_id', userData._id);
+          localStorage.setItem('userId', userData._id);
+          localStorage.setItem('role', userData.role);
+          localStorage.setItem('username', userData.username);
+          localStorage.setItem('userEmail', userData.email);
+        }
+        
+        if (!userData.role) throw new Error('User role is missing from response!');
+        
+        setIsAuthenticated(true);
+        const redirectUrl = location.state?.from || getDashboardRoute(userData.role) || '/';
+        navigate(redirectUrl, { replace: true });
+      } catch (err) {
+        console.error("Google login error:", err);
+        setError(err.message || 'Google sign-in failed. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: (error) => {
+      console.error("Google OAuth error:", error);
+      setError('Google sign-in was cancelled or failed.');
+    },
+  });
 
   return (
     <div className="moi-root">

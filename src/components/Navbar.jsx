@@ -11,7 +11,7 @@ const Navbar = () => {
   // Authentication check - integrated with authService
   useEffect(() => {
     const checkAuth = () => {
-      const token = authService.getToken();
+      // Removed unused 'token' variable
       const user = authService.getCurrentUser()?.username;
       setIsLoggedIn(authService.isAuthenticated());
       setUsername(user || '');

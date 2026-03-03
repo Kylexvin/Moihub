@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Phone, MessageCircle, X, ChevronLeft, MapPin, Star, CheckCircle, Loader2, AlertCircle } from "lucide-react";
+import { Phone, MessageCircle, ChevronLeft, MapPin, Star, CheckCircle, Loader2, AlertCircle } from "lucide-react"; // Removed X
 
 // ─────────────────────────────────────────────────────────────────────────────
 const CATEGORY_ID = "6972884cf20310f7b238930b";

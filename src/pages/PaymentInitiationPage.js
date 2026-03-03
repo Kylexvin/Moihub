@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';  // Removed useNavigate
 
 const PaymentInitiationPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();  // Removed navigate
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);  // Changed from setError to just error
   const [paymentId, setPaymentId] = useState(null);
-  const { paymentId: initialPaymentId } = location.state;
+  const { paymentId: initialPaymentId } = location.state || {}; // Added fallback to prevent errors
 
   useEffect(() => {
-    setPaymentId(initialPaymentId);
+    if (initialPaymentId) {  // Added check
+      setPaymentId(initialPaymentId);
+    }
     setLoading(false);
   }, [initialPaymentId]);
 
@@ -44,12 +45,14 @@ const PaymentInitiationPage = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Payment Initiation</h1>
         <p className="text-lg text-gray-700">Payment has been initiated successfully. Please proceed to the payment gateway to complete the transaction.</p>
-        <a 
-          href={`https://payment-gateway.com/checkout/${paymentId}`}
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors mt-4"
-        >
-          Proceed to Payment
-        </a>
+        {paymentId && (  // Only show link if paymentId exists
+          <a 
+            href={`https://payment-gateway.com/checkout/${paymentId}`}
+            className="inline-block w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors mt-4 text-center"
+          >
+            Proceed to Payment
+          </a>
+        )}
       </div>
     </div>
   );

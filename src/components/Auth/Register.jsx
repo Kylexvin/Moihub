@@ -174,6 +174,30 @@ const handleGoogleLogin = useGoogleLogin({
   const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
   const strengthColors = ['', '#e5534b', '#f97316', '#eab308', '#0d9e80', '#065c4a'];
 
+  // Handle terms and privacy click
+  const handleTermsClick = () => {
+    // You can either navigate to a terms page or show a modal
+    // For now, we'll show a SweetAlert with placeholder text
+    Swal.fire({
+      title: 'Terms of Service',
+      text: 'This is a placeholder for the Terms of Service. You can replace this with your actual terms content or navigate to a dedicated page.',
+      icon: 'info',
+      confirmButtonText: 'Got it',
+      confirmButtonColor: '#0d9e80'
+    });
+  };
+
+  const handlePrivacyClick = () => {
+    // You can either navigate to a privacy page or show a modal
+    Swal.fire({
+      title: 'Privacy Policy',
+      text: 'This is a placeholder for the Privacy Policy. You can replace this with your actual privacy policy content or navigate to a dedicated page.',
+      icon: 'info',
+      confirmButtonText: 'Got it',
+      confirmButtonColor: '#0d9e80'
+    });
+  };
+
   /* ── Verification screen ── */
   if (showVerificationMessage) {
     return (
@@ -382,8 +406,36 @@ const handleGoogleLogin = useGoogleLogin({
 
           <p className="moi-terms">
             By joining you agree to our{' '}
-            <a href="#" className="moi-link">Terms of Service</a> and{' '}
-            <a href="#" className="moi-link">Privacy Policy</a>.
+            <button 
+              onClick={handleTermsClick} 
+              className="moi-link-button"
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: 0, 
+                font: 'inherit', 
+                cursor: 'pointer',
+                color: '#0d9e80',
+                textDecoration: 'underline'
+              }}
+            >
+              Terms of Service
+            </button>{' '}and{' '}
+            <button 
+              onClick={handlePrivacyClick} 
+              className="moi-link-button"
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: 0, 
+                font: 'inherit', 
+                cursor: 'pointer',
+                color: '#0d9e80',
+                textDecoration: 'underline'
+              }}
+            >
+              Privacy Policy
+            </button>.
           </p>
         </div>
       </div>

@@ -5,7 +5,6 @@ const Hero = () => {
   const [currentView, setCurrentView] = useState(0);
   const [filmStripPosition, setFilmStripPosition] = useState(0);
   const heroRef = useRef(null);
-  const orbRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [pulseWaves, setPulseWaves] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -234,43 +233,7 @@ const Hero = () => {
       ))}
 
       {/* Floating 3D Orb */}
-      <div className="absolute left-4 lg:left-1/4 top-1/2 transform -translate-y-1/2 z-10">
-        <div 
-          ref={orbRef}
-          className="relative w-24 h-24 lg:w-32 lg:h-32"
-          style={{ animation: 'float 6s ease-in-out infinite' }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full opacity-80 blur-lg animate-spin" 
-               style={{ animationDuration: '20s' }} />
-          <div className="absolute inset-2 bg-gradient-to-br from-emerald-300 to-emerald-600 rounded-full shadow-2xl border border-emerald-200/30" />
-          <div className="absolute inset-4 bg-gradient-to-tl from-transparent to-white/20 rounded-full" />
-          
-          {/* Orbiting Icons */}
-          {currentViewData.orbiting.map((serviceKey, index) => {
-            const service = services[serviceKey];
-            const Icon = service.icon;
-            const angle = (index * 180) + (Date.now() * 0.001 % 360);
-            const x = Math.cos(angle * Math.PI / 180) * (isMobile ? 60 : 80);
-            const y = Math.sin(angle * Math.PI / 180) * (isMobile ? 60 : 80);
-            
-            return (
-              <div
-                key={serviceKey}
-                className="absolute w-10 h-10 lg:w-12 lg:h-12 cursor-pointer transform transition-all duration-300 hover:scale-125"
-                style={{
-                  left: `calc(50% + ${x}px)`,
-                  top: `calc(50% + ${y}px)`,
-                  transform: 'translate(-50%, -50%)'
-                }}
-              >
-                <div className="w-full h-full bg-gray-900/90 backdrop-blur-sm border-2 border-emerald-400/70 rounded-full flex items-center justify-center hover:border-white hover:bg-gray-800/90 transition-all duration-300 shadow-lg">
-                  <Icon size={isMobile ? 16 : 20} color={service.color} className="drop-shadow-lg" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+
 
       {/* Camera Film Strip - Desktop Only */}
       {!isMobile && (
@@ -380,7 +343,7 @@ const Hero = () => {
             href="https://play.google.com/store/apps/details?id=com.kylexvin.moihub"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 border border-emerald-400/30 text-center text-sm lg:text-base"
+            className="flex items-center px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-emerald-800 to-emerald-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-900/25 border border-emerald-400/30 text-center text-sm lg:text-base"
           >
             <Play size={20} className="mr-2" />
             Get on Play Store

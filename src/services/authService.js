@@ -54,60 +54,80 @@ export const authService = {
     }
   },
 
-login: async (credentials) => {
-  try {
-    const response = await api.post('/login', credentials);
-    console.log("Raw API Response:", response.data);
+  login: async (credentials) => {
+    try {
+      const response = await api.post('/login', credentials);
+      console.log("Raw API Response:", response.data);
 
-    if (response.data.token && response.data.user) {
-      // Store all user data - use _id consistently
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('_id', response.data.user._id);  // Store as _id
-      localStorage.setItem('userId', response.data.user._id); // Also store as userId for backward compatibility
-      localStorage.setItem('role', response.data.user.role);
-      localStorage.setItem('username', response.data.user.username);
-      localStorage.setItem('userEmail', response.data.user.email);
-    } else {
-      throw new Error("Token or user data is missing in response!");
+      if (response.data.token && response.data.user) {
+        // Store all user data - use _id consistently
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('_id', response.data.user._id);  // Store as _id
+        localStorage.setItem('userId', response.data.user._id); // Also store as userId for backward compatibility
+        localStorage.setItem('role', response.data.user.role);
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('userEmail', response.data.user.email);
+      } else {
+        throw new Error("Token or user data is missing in response!");
+      }
+
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
     }
+  },
 
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
-},
+  // Get current user data (SINGLE DEFINITION - REMOVED THE DUPLICATE)
+  getCurrentUser: () => {
+    return {
+      token: localStorage.getItem('token'),
+      userId: localStorage.getItem('userId') || localStorage.getItem('_id'),
+      _id: localStorage.getItem('_id') || localStorage.getItem('userId'),
+      role: localStorage.getItem('role'),
+      username: localStorage.getItem('username'),
+      email: localStorage.getItem('userEmail'),
+    };
+  },
 
-// NEW: Get current user data
-getCurrentUser: () => {
-  return {
-    token: localStorage.getItem('token'),
-    userId: localStorage.getItem('userId') || localStorage.getItem('_id'),
-    _id: localStorage.getItem('_id') || localStorage.getItem('userId'),
-    role: localStorage.getItem('role'),
-    username: localStorage.getItem('username'),
-    email: localStorage.getItem('userEmail'),
-  };
-},
+  googleLogin: async (accessToken) => {
+    try {
+      const response = await api.post('/social-login', {
+        provider: 'google',
+        token: accessToken,
+      });
 
-googleLogin: async (accessToken) => {
-  try {
-    const response = await api.post('/social-login', {
-      provider: 'google',
-      token: accessToken,
-    });
+      console.log("Google login raw response:", response.data);
 
-    // Check if response has required data
-    if (!response.data?.token || !response.data?.user) {
-      throw new Error('Invalid response from server');
+      // Check if response has required data
+      if (!response.data?.token || !response.data?.user) {
+        console.error("Invalid response structure:", response.data);
+        throw new Error('Invalid response from server');
+      }
+
+      // STORE THE DATA IN LOCALSTORAGE - THIS WAS MISSING!
+      const { token, user } = response.data;
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('_id', user._id);
+      localStorage.setItem('userId', user._id);
+      localStorage.setItem('role', user.role);
+      localStorage.setItem('username', user.username);
+      localStorage.setItem('userEmail', user.email);
+
+      console.log("Stored user data:", {
+        token: localStorage.getItem('token'),
+        userId: localStorage.getItem('userId'),
+        role: localStorage.getItem('role')
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Google login error in service:", error);
+      throw handleApiError(error);
     }
+  },
 
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
-},
-
-  // NEW: Resend verification email
+  // Resend verification email
   resendVerification: async (email) => {
     try {
       const response = await api.post('/resend-verification', { email });
@@ -117,7 +137,7 @@ googleLogin: async (accessToken) => {
     }
   },
 
-  // NEW: Verify email token
+  // Verify email token
   verifyEmail: async (token) => {
     try {
       const response = await api.get(`/verify-email/${token}`);
@@ -127,7 +147,7 @@ googleLogin: async (accessToken) => {
     }
   },
 
-  // NEW: Request password reset
+  // Request password reset
   requestPasswordReset: async (email) => {
     try {
       const response = await api.post('/forgot-password', { email });
@@ -137,7 +157,7 @@ googleLogin: async (accessToken) => {
     }
   },
 
-  // NEW: Verify reset token
+  // Verify reset token
   verifyResetToken: async (token) => {
     try {
       const response = await api.get(`/verify-reset-token/${token}`);
@@ -147,7 +167,7 @@ googleLogin: async (accessToken) => {
     }
   },
 
-  // NEW: Reset password with token
+  // Reset password with token
   resetPassword: async (token, password) => {
     try {
       const response = await api.post(`/reset-password/${token}`, { password });
@@ -157,7 +177,7 @@ googleLogin: async (accessToken) => {
     }
   },
 
-  // NEW: Change password (for authenticated users)
+  // Change password (for authenticated users)
   changePassword: async (currentPassword, newPassword) => {
     try {
       const response = await api.post('/change-password', {
@@ -173,6 +193,7 @@ googleLogin: async (accessToken) => {
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('_id');
     localStorage.removeItem('role');
     localStorage.removeItem('username');
     localStorage.removeItem('userEmail');
@@ -186,18 +207,7 @@ googleLogin: async (accessToken) => {
     return localStorage.getItem('role');
   },
 
-  // NEW: Get current user data
-  getCurrentUser: () => {
-    return {
-      token: localStorage.getItem('token'),
-      userId: localStorage.getItem('userId'),
-      role: localStorage.getItem('role'),
-      username: localStorage.getItem('username'),
-      email: localStorage.getItem('userEmail'),
-    };
-  },
-
-  // NEW: Get auth token
+  // Get auth token
   getToken: () => {
     return localStorage.getItem('token');
   },
@@ -219,12 +229,12 @@ googleLogin: async (accessToken) => {
     return localStorage.getItem('role') === 'shopowner';
   },
 
-  // NEW: Check if user has specific role
+  // Check if user has specific role
   hasRole: (role) => {
     return localStorage.getItem('role') === role;
   },
 
-  // NEW: Check if user has any of the specified roles
+  // Check if user has any of the specified roles
   hasAnyRole: (roles) => {
     const userRole = localStorage.getItem('role');
     return roles.includes(userRole);
