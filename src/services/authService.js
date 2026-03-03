@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/api/auth';
+const BASE_URL = 'https://moihu.onrender.com/api/auth';
 
 // Create axios instance with interceptors
 const api = axios.create({
