@@ -92,19 +92,7 @@ const BlogHomepage = () => {
 
   return (
     <div className="blog-homepage">
-      {/* Header with Login/Register Links */}
-      <div className="blog-headerr">
-        <div className="auth-links">
-          <Link to="/login" className="login-link">
-            <LogIn size={20} />
-            <span>Login</span>
-          </Link>
-          <Link to="/register" className="register-link">
-            <UserPlus size={20} />
-            <span>Register</span>
-          </Link>
-        </div>
-      </div>
+      
 
       {/* Loading Spinner for Initial Load */}
       {loading && posts.length === 0 && (
