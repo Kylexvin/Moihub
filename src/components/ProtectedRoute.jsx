@@ -1,31 +1,25 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { authService } from '../services/authService';
+// src/components/ProtectedRoute.jsx
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./Protectedroute.css";
 
-function ProtectedRoute({ children, allowedRoles }) {
+export function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
-  if (!authService.isAuthenticated()) {
-    console.warn('Access Denied: User not authenticated');
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  if (loading) {
+    return (
+      <div className="route-loading">
+        <div className="route-loading-spinner" aria-hidden="true" />
+      </div>
+    );
   }
 
-  const userRole = localStorage.getItem('role')?.trim().toLowerCase();
-
-  console.log('User Role:', userRole);
-  console.log('Allowed Roles:', allowedRoles);
-
-  if (!userRole) {
-    console.error('Error: No role found for authenticated user');
-    return <Navigate to="/" replace />;
-  }
-
-  if (!allowedRoles.includes(userRole)) {
-    console.warn(`Access Denied: User role "${userRole}" is not authorized for this page`);
-    return <Navigate to="/" replace />;
+  if (!isAuthenticated) {
+    // Login.jsx reads location.state.from.pathname to redirect back here after signing in.
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
 }
-
-export default ProtectedRoute;

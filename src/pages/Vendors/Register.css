@@ -1,0 +1,562 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+/* ================= TOKENS (scoped) ================= */
+.vendor-register {
+  --ink: #093028;
+  --paper: #FBF6EC;
+  --paper-line: #E4DACB;
+  --marigold: #F5B324;
+  --chili: #D8482E;
+  --leaf: #2F7D4F;
+  --white: #FFFDF8;
+
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'Work Sans', -apple-system, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  min-height: calc(100vh - 74px);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 56px 24px 80px;
+  display: flex;
+  justify-content: center;
+}
+.vendor-register * { box-sizing: border-box; }
+
+.vendor-register .register-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ================= SHARED TEXT ================= */
+.vendor-register .register-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--white);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: 6px 12px 6px 20px;
+  transform: rotate(-2deg);
+  margin-bottom: 16px;
+}
+.vendor-register .register-tag::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+}
+.vendor-register .register-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.vendor-register .register-sub {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #4a5568;
+  margin: 0 0 24px;
+}
+.vendor-register .register-note {
+  font-size: 12.5px;
+  color: #6b7280;
+  text-align: center;
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+
+/* ================= CARDS ================= */
+.vendor-register .register-card,
+.vendor-register .status-card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 32px 28px;
+  box-shadow: 8px 8px 0 rgba(9, 48, 40, 0.12);
+}
+.vendor-register .status-card { text-align: center; }
+.vendor-register .status-card .register-sub { text-align: left; }
+.vendor-register .status-card .status-actions { justify-content: center; margin-bottom: 4px; }
+.vendor-register .status-card .btn-secondary { margin-top: 16px; }
+
+.vendor-register .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+.vendor-register .back-link:hover { color: var(--chili); }
+
+/* ================= AUTH TABS ================= */
+.vendor-register .auth-tabs {
+  display: flex;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+.vendor-register .auth-tabs button {
+  flex: 1;
+  background: var(--paper);
+  border: none;
+  padding: 11px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+  cursor: pointer;
+}
+.vendor-register .auth-tabs button + button { border-left: 2px solid var(--ink); }
+.vendor-register .auth-tabs button.active { background: var(--ink); color: var(--white); }
+
+/* ================= AUTH ERROR + SWITCH LINK ================= */
+.vendor-register .auth-error {
+  background: #FBE7E2;
+  color: var(--chili);
+  border: 1.5px dashed var(--chili);
+  border-radius: 4px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.vendor-register .auth-switch-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--chili);
+  font-weight: 700;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  border-bottom: 2px solid var(--chili);
+}
+.vendor-register .auth-switch-link:hover { color: var(--ink); border-color: var(--ink); }
+.vendor-register .register-note button.auth-switch-link { margin-left: 2px; }
+
+/* ================= FORM FIELDS ================= */
+.vendor-register .register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.vendor-register .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vendor-register .field > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+.vendor-register .field > span svg { color: var(--chili); flex-shrink: 0; }
+.vendor-register .field .required { color: var(--chili); font-family: var(--font-body); }
+.vendor-register .field-hint {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: #6b7280;
+  margin: -2px 0 4px;
+}
+
+.vendor-register .field input,
+.vendor-register .field select,
+.vendor-register .field textarea {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  padding: 11px 13px;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+}
+.vendor-register .field textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+.vendor-register .field input:focus,
+.vendor-register .field select:focus,
+.vendor-register .field textarea:focus {
+  outline: 3px solid var(--marigold);
+  outline-offset: 1px;
+}
+.vendor-register .field input:disabled,
+.vendor-register .field select:disabled,
+.vendor-register .field textarea:disabled {
+  background: var(--paper);
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+.vendor-register .field input::placeholder,
+.vendor-register .field textarea::placeholder { color: #9ca3af; }
+
+/* ================= CATEGORY CHIPS (eshop form) ================= */
+.vendor-register .categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.vendor-register .category-chip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--white);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: 8px 13px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+.vendor-register .category-chip:hover { transform: translateY(-1px); }
+.vendor-register .category-chip.selected {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+.vendor-register .loading-categories {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  padding: 8px 0;
+}
+.vendor-register .selected-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--leaf);
+}
+
+/* ================= INFO BOX ================= */
+.vendor-register .info-box {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #FFF4D8;
+  border: 1.5px dashed var(--marigold);
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b5310;
+}
+.vendor-register .info-box svg { color: #8a5f0c; flex-shrink: 0; margin-top: 1px; }
+
+/* ================= BUTTONS ================= */
+.vendor-register .btn-primary,
+.vendor-register .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14.5px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  border: 2px solid var(--chili);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.vendor-register .btn-primary {
+  background: var(--chili);
+  color: var(--white);
+  box-shadow: 3px 3px 0 var(--marigold);
+}
+.vendor-register .btn-primary:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--marigold); }
+.vendor-register .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: 3px 3px 0 rgba(9, 48, 40, 0.2);
+}
+.vendor-register .btn-secondary {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 rgba(9, 48, 40, 0.2);
+}
+.vendor-register .btn-secondary:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 rgba(9, 48, 40, 0.2); }
+.vendor-register .full-width { width: 100%; margin-top: 4px; }
+.vendor-register .btn-primary:focus-visible,
+.vendor-register .btn-secondary:focus-visible,
+.vendor-register .category-chip:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 2px;
+}
+
+/* ================= CATEGORY PICKER ================= */
+.vendor-register .picker-wrap { text-align: center; }
+.vendor-register .picker-wrap .register-sub { text-align: center; }
+.vendor-register .picker-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.vendor-register .picker-card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 rgba(9, 48, 40, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-family: var(--font-body);
+}
+.vendor-register .picker-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 rgba(9, 48, 40, 0.16); }
+.vendor-register .picker-icon {
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--ink);
+  border-radius: 4px 16px 4px 4px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+.vendor-register .picker-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.vendor-register .picker-card p {
+  font-size: 13.5px;
+  color: #4a5568;
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+.vendor-register .picker-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.vendor-register .feature-pill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: 3px;
+  padding: 4px 9px;
+  color: #6b7280;
+}
+.vendor-register .picker-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--chili);
+}
+
+/* ================= STATUS ICON ================= */
+.vendor-register .status-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.vendor-register .status-icon.pending { background: #FFF4D8; color: #8a5f0c; border-color: var(--marigold); }
+.vendor-register .status-icon.approved { background: #E6F2EB; color: var(--leaf); border-color: var(--leaf); }
+.vendor-register .status-icon.expired { background: #FBE7E2; color: var(--chili); border-color: var(--chili); }
+
+.vendor-register .status-details {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1.5px dashed var(--paper-line);
+  border-bottom: 1.5px dashed var(--paper-line);
+  margin-bottom: 4px;
+}
+.vendor-register .status-details div { display: flex; flex-direction: column; gap: 4px; }
+.vendor-register .status-details span {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+.vendor-register .status-details strong { font-size: 14px; color: var(--ink); }
+
+/* ================= RECEIPT CARD (approved state) ================= */
+.vendor-register .receipt-card {
+  position: relative;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 22px 20px 24px;
+  margin: 8px 0 4px;
+  text-align: left;
+}
+.vendor-register .receipt-head {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1.5px dashed var(--paper-line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--ink);
+}
+.vendor-register .badge-active {
+  background: var(--leaf);
+  color: var(--white);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.vendor-register .receipt-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 6px 0;
+  color: var(--ink);
+}
+.vendor-register .receipt-line strong { font-weight: 700; text-align: right; word-break: break-all; }
+.vendor-register .receipt-divider { border: none; border-top: 1.5px dashed var(--paper-line); margin: 10px 0; }
+.vendor-register .status-actions { display: flex; gap: 10px; }
+.vendor-register .status-actions button { flex: 1; }
+
+/* ================= APP DOWNLOAD PROMO BOX ================= */
+.vendor-register .app-message {
+  text-align: left;
+  background: var(--paper);
+  border: 1.5px dashed var(--paper-line);
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin: 18px 0 4px;
+}
+.vendor-register .app-message p {
+  margin: 0 0 10px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.vendor-register .app-message ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.vendor-register .app-message li {
+  font-size: 13px;
+  color: #4a5568;
+}
+
+/* ================= LOADING STATE ================= */
+.vendor-register .loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: #6b7280;
+  font-size: 13.5px;
+}
+.vendor-register .loading-spinner svg { color: var(--chili); }
+.vendor-register .spinning { animation: register-spin 0.8s linear infinite; }
+@keyframes register-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .vendor-register .spinning { animation: none; }
+}
+
+/* ================= DEV PREVIEW STRIP ================= */
+.vendor-register .dev-preview {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #9ca3af;
+}
+.vendor-register .dev-preview select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  border: 1px dashed #9ca3af;
+  border-radius: 3px;
+  padding: 4px 6px;
+  background: transparent;
+  color: #6b7280;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 480px) {
+  .vendor-register { padding: 32px 16px 64px; }
+  .vendor-register .register-card,
+  .vendor-register .status-card { padding: 24px 20px; }
+  .vendor-register .register-title { font-size: 24px; }
+  .vendor-register .status-actions { flex-direction: column; }
+  .vendor-register .status-card .status-actions a + a { margin-left: 0 !important; margin-top: 10px; }
+}

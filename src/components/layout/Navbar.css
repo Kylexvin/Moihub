@@ -1,0 +1,381 @@
+/* NAVBAR */
+.navbar {
+  background: #093028;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.nav-logo-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.5px;
+}
+
+/* NAV LINKS - DESKTOP */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.nav-links li a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-links li a:hover {
+  color: #10B981;
+}
+
+.nav-links li a.active {
+  color: #10B981;
+}
+
+.nav-links li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #10B981;
+  border-radius: 2px;
+}
+
+/* PLAYSTORE ICON */
+.playstore-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* DOWNLOAD BUTTON - DESKTOP */
+.nav-download-btn {
+  background: #10B981;
+  color: #FFFFFF;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-download-btn:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+/* NAV RIGHT - DESKTOP AUTH */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-username {
+  color: #10B981;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-login-btn,
+.nav-register-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-login-btn {
+  color: #10B981;
+  border: 1px solid #10B981;
+  background: transparent;
+}
+
+.nav-login-btn:hover {
+  background: #10B981;
+  color: #093028;
+}
+
+.nav-register-btn {
+  background: #10B981;
+  color: #093028;
+  border: 1px solid #10B981;
+}
+
+.nav-register-btn:hover {
+  background: #059669;
+  border-color: #059669;
+  color: #093028;
+}
+
+.nav-logout-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-logout-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* HAMBURGER */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.nav-hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 6px);
+}
+
+.nav-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* MOBILE STYLES - HIDDEN BY DEFAULT */
+.nav-download-mobile {
+  display: none;
+}
+
+.nav-auth-mobile {
+  display: none;
+}
+
+.nav-username-mobile {
+  display: none;
+}
+
+.nav-logout-mobile {
+  display: none;
+}
+
+.nav-divider {
+  color: #4b5563;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-right {
+    display: none !important;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #093028;
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+  }
+
+  .nav-links.open {
+    max-height: 100vh;
+    padding: 1.5rem 2rem;
+    opacity: 1;
+    pointer-events: all;
+    overflow-y: auto;
+  }
+
+  .nav-links li {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    padding: 4px 0;
+  }
+
+  .nav-links.open li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-links.open li:nth-child(1) { transition-delay: 0.05s; }
+  .nav-links.open li:nth-child(2) { transition-delay: 0.10s; }
+  .nav-links.open li:nth-child(3) { transition-delay: 0.15s; }
+  .nav-links.open li:nth-child(4) { transition-delay: 0.20s; }
+  .nav-links.open li:nth-child(5) { transition-delay: 0.25s; }
+  .nav-links.open li:nth-child(6) { transition-delay: 0.30s; }
+  .nav-links.open li:nth-child(7) { transition-delay: 0.35s; }
+  .nav-links.open li:nth-child(8) { transition-delay: 0.40s; }
+
+  .nav-links li a {
+    font-size: 1.2rem;
+    color: #FFFFFF;
+    display: block;
+    padding: 0.5rem 0;
+  }
+
+  .nav-links li a:hover {
+    color: #10B981;
+  }
+
+  /* Mobile Auth - Login | Register */
+  .nav-auth-mobile {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .nav-auth-mobile a {
+    color: #10B981;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .nav-auth-mobile a:hover {
+    color: #059669;
+  }
+
+  /* Mobile Username */
+  .nav-username-mobile {
+    display: block !important;
+    color: #10B981;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 8px 0;
+  }
+
+  /* Mobile Logout */
+  .nav-logout-mobile {
+    display: block !important;
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 0;
+    text-align: left;
+    width: 100%;
+  }
+
+  .nav-logout-mobile:hover {
+    color: #dc2626;
+  }
+
+  .nav-divider {
+    color: #4b5563;
+  }
+
+  /* Mobile Download Button */
+  .nav-download-btn {
+    display: none;
+  }
+
+  .nav-download-mobile {
+    display: block !important;
+    padding: 8px 0;
+    margin-top: 4px;
+  }
+
+  .nav-download-mobile a {
+    background: #10B981;
+    color: #FFFFFF;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-download-mobile a .playstore-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .nav-download-mobile a:hover {
+    background: #059669;
+  }
+}
+

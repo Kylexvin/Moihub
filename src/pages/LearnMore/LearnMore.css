@@ -1,0 +1,167 @@
+.learnmore-page {
+  background: #093028;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.learnmore-container {
+  max-width: 820px;
+  margin: 0 auto;
+  background: #0f4035;
+  border-radius: 16px;
+  padding: 40px 48px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.learnmore-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.learnmore-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.learnmore-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.learnmore-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 32px;
+}
+
+.learnmore-tabs button {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #9CA3AF;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.learnmore-tabs button:hover {
+  color: #D1D5DB;
+}
+
+.learnmore-tabs button.active {
+  background: #10B981;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.learnmore-content {
+  color: #D1D5DB;
+  line-height: 1.7;
+}
+
+.learnmore-content h2 {
+  color: #FFFFFF;
+  font-size: 24px;
+  margin: 0 0 8px 0;
+}
+
+.learnmore-content h3 {
+  color: #10B981;
+  font-size: 18px;
+  margin: 28px 0 12px 0;
+}
+
+.learnmore-content p {
+  margin: 0 0 12px 0;
+}
+
+.learnmore-content ul,
+.learnmore-content ol {
+  margin: 8px 0 16px 0;
+  padding-left: 24px;
+}
+
+.learnmore-content li {
+  margin-bottom: 6px;
+}
+
+.learnmore-content a {
+  color: #10B981;
+  text-decoration: none;
+}
+
+.learnmore-content a:hover {
+  text-decoration: underline;
+}
+
+.learnmore-content strong {
+  color: #FFFFFF;
+}
+
+.learnmore-warning {
+  background: rgba(239, 68, 68, 0.12);
+  border-left: 4px solid #EF4444;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.learnmore-warning strong {
+  color: #FCA5A5;
+}
+
+.learnmore-warning ul {
+  margin: 8px 0 0 0;
+}
+
+.learnmore-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.learnmore-link {
+  color: #10B981;
+  text-decoration: none;
+}
+
+.learnmore-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .learnmore-container {
+    padding: 24px 16px;
+  }
+
+  .learnmore-tabs {
+    flex-direction: column;
+  }
+
+  .learnmore-title {
+    font-size: 22px;
+  }
+
+  .learnmore-content h2 {
+    font-size: 20px;
+  }
+}

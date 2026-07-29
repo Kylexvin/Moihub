@@ -1,0 +1,21 @@
+.route-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FBF6EC;
+}
+.route-loading-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid #E4DACB;
+  border-top-color: #D8482E;
+  border-radius: 50%;
+  animation: route-loading-spin 0.7s linear infinite;
+}
+@keyframes route-loading-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-loading-spinner { animation: none; border-top-color: #E4DACB; }
+}

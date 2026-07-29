@@ -1,59 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MoiHub - All in one.</title>
-  <meta name="description" content="MoiHub is a platform for Moi University comrades offering rental-booking,roomate finder and business space. Explore services, make purchases, and interact with MoiHub - the platform for all." /> 
-  
-  <!-- Add a concise description of your website -->
-  <link rel="icon" href="logo2.png" />
-  
-  
-   <!-- Open Graph Meta Tags -->
-   <meta property="og:title" content="MoiHub" />
-   <meta property="og:description" content="Book rentals,explore services, make purchases, and interact with MoiHub - the platform for Moi University students and locals." />
-   <meta property="og:type" content="website" />
-   <meta property="og:url" content="https://moihub-silk.vercel.app/" /> <!-- Replace with your actual website URL -->
-   <meta property="og:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg" /> <!-- Replace with URL to your Open Graph image -->
- 
-<!-- Open Graph meta tags for MoiHub (WhatsApp optimized) -->
-<meta property="og:title" content="MoiHub - Everything You Need at Moi University">
-<meta property="og:description" content="Find rentals, order food, shop, and more — all in one place. Explore MoiHub today!">
-<meta property="og:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://moihub-silk.vercel.app/"> <!-- Change to your real domain if different -->
-
-
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://moihub-silk.vercel.app/" /> <!-- Your canonical URL -->
-  
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
-  
-  <!-- Font Awesome CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-  <!-- AddToAny social media sharing library -->
-  <script async src="https://static.addtoany.com/menu/page.js"></script>
- 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4438215525193485"
-      crossorigin="anonymous"></script>
-   <!-- Google AdSense Account Meta Tag -->
-   <meta name="google-adsense-account" content="ca-pub-4438215525193485">
-  
-</head>
-<body>
-  <div id="root"></div>
-  
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <!-- Popper.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-  <!-- Bootstrap JS -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Moihub - Everything You Need at Moi University</title>
+    <meta name="description" content="Find rentals, order food, shop, and more — all in one place. Explore Moihub today!" />
+    <meta name="theme-color" content="#093028" />
+    
+    <!-- Favicon Tags -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="/favicon.ico" />
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Moihub - Everything You Need at Moi University" />
+    <meta property="og:description" content="Find rentals, order food, shop, and more — all in one place. Explore Moihub today!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://moihub-silk.vercel.app/" />
+    <meta property="og:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Moihub - Everything You Need at Moi University" />
+    <meta name="twitter:description" content="Find rentals, order food, shop, and more — all in one place." />
+    <meta name="twitter:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  </head>
+  <body>
+    <!-- ResizeObserver Error Handler -->
+    <script>
+      window.addEventListener('error', (e) => {
+        if (e.message && e.message.includes('ResizeObserver loop')) {
+          e.stopImmediatePropagation();
+        }
+      }, true);
+    </script>
+    
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>

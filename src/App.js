@@ -1,238 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import './App.css';
+import { AuthProvider } from "./context/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop"; // ADD THIS
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import Home from "./pages/Home/Home";
+import Features from "./pages/Features/Features";
+import Vendors from "./pages/Vendors";
+import VendorRegister from "./pages/Vendors/Register";
+import Storefront from "./pages/Storefront";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/Blog/Post";
+import About from "./pages/About/About";
+import Contact from "./pages/Contact/Contact";
+import LearnMore from "./pages/LearnMore";
+import NotFound from "./pages/NotFound/NotFound";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import Forgotpassword from "./pages/Auth/Forgotpassword";
+import Resetpassword from "./pages/Auth/Resetpassword";
+import ChangePassword from "./pages/Auth/ChangePassword";
 
-// Layout Components
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import "./styles/globals.css";
+import "./styles/variables.css";
+import "./styles/animations.css";
 
-// Core Pages
-import Home from './components/Home';
-import NotFoundPage from './components/NotFoundPage';
-import LearnMore from './components/LearnMore';
-import OurTeam from './components/Team';
-import Discover from './components/Discover';
-import AccountDeletion from './components/AccountDeletion';
-
-// Marketplace & Shopping
-import BuyersPage from './components/BuyersPage';
-import SellersPage from './components/SellersPage';
-import ProductList from './components/ProductList';
-import CartPage from './components/CartPage';
-import CategoryList from './components/CategoryList';
-import ShopList from './components/ShopList';
-import MarketHub from './components/MarketHub';
-import ProviderDetails from './components/ProviderDetails';
-
-// Specialized Services
-import Echem from './components/Echem';
-import GreenHub from './components/GreenHub';
-import MySchool from './components/MySchool';
-import RoomateFinder from './components/RoomateFinder';
-
-// Real Estate
-import Booking from './components/Booking';
-import ApartmentDetails from './components/ApartmentDetails';
-import RentalHome from './components/rentals/RentalHome';
-import RentalDetail from './components/rentals/RentalDetail';
-
-// Food Delivery
-import MoiDelish from './components/food/MoiDelish';
-import VendorPage from './components/food/VendorPage';
-import VendorDashboard from './components/dashboards/VendorDashboard';
-import VendorManagement from './components/dashboards/VendorManagement';
-import UpgradeToVendor from './components/UpgradeToVendor';
-
-// E-shop
-import EshopDashboard from './components/eshop/EshopDashboard';
-import AdminDashboard from './components/eshop/AdminDashboard';
-import UpgradeEshop from './components/UpgradeEshop';
-
-// Blog System
-import BlogHomepage from './components/BlogHomepage';
-import BlogPost from './components/BlogPost';
-import WritersPage from './components/WritersPage';
-import EditPostPage from './components/EditPostPage';
-
-// Authentication
-import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
-import EmailVerification from './components/EmailVerification';
-import ProtectedRoute from './components/ProtectedRoute';
-import ChangePassword  from './components/Auth/ChangePassword';
-import ForgotPassword from './components/Auth/ForgotPassword';
-import ResetPassword from './components/Auth/ResetPassword';
-
-// Transport (MoiLink)
-import RouteSelectionPage from './pages/RouteSelectionPage';
-import VehicleSelectionPage from './pages/VehicleSelectionPage';
-import SeatSelectionPage from './pages/SeatSelectionPage';
-import BookingConfirmationPage from './pages/BookingConfirmationPage';
-import PaymentInitiationPage from './pages/PaymentInitiationPage';
-import MyBookings from './components/MyBookings';
-import QrScanner from './components/admin/QrScanner';
-import MatatuAdmin from './components/admin/MatatuAdmin';
-
-// AI Chatbot
-import ChatbotDashboard from './components/ChatbotDashboard';
-
-// Data
-import plotsData from './data/plots.json';
-
-const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [cartItems, setCartItems] = useState([]);
-  // Remove isAuthenticated state since it's not being used directly
-  // We'll just check token directly when needed
-
-  useEffect(() => {
-    // Loading simulation
-    const fetchData = async () => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    };
-    fetchData();
-  }, []);
-
-  // Cart Management Functions
-  const handleRemoveFromCart = (index) => {
-    const newCartItems = [...cartItems];
-    newCartItems.splice(index, 1);
-    setCartItems(newCartItems);
-  };
-
-  const handleUpdateQuantity = (index, quantity) => {
-    const newCartItems = [...cartItems];
-    newCartItems[index].quantity = quantity;
-    setCartItems(newCartItems);
-  };
-
-  // Handle login - this will be used by Login/Register components
-  // but we don't need to store the state in App since it's not used
-  const handleLogin = () => {
-    // This function can be empty or can trigger other side effects if needed
-    // The actual auth state is managed in localStorage and read by components directly
-  };
-
-  if (isLoading) {
-    return (
-      <div className='load-c'>
-        <span className="loader"></span>
-      </div>
-    );
-  }
-
+function App() {
   return (
     <GoogleOAuthProvider clientId="440940724570-q2oimhoge0bre1curvl7h8glbnp6rbma.apps.googleusercontent.com">
-      <React.Fragment>
-        <div>
+      <AuthProvider>
+        <BrowserRouter>
+          <ScrollToTop /> {/* ADD THIS INSIDE BROWSER ROUTER */}
           <Navbar />
-        </div>
-        <Router scrollRestoration="auto">
           <Routes>
-            {/* Core Pages */}
             <Route path="/" element={<Home />} />
-            <Route path="/discover" element={<Discover />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/vendors" element={<Vendors />} /> 
+            <Route 
+              path="/vendors/register" 
+              element={
+                <ProtectedRoute>
+                  <VendorRegister />
+                </ProtectedRoute>
+              } 
+            />
+           <Route path="/change-password" element={
+                <ProtectedRoute>
+                  <ChangePassword />
+                </ProtectedRoute>
+            } 
+           />
+            <Route path="/food/:slug" element={<Storefront type="food" />} />
+            <Route path="/eshop/:slug" element={<Storefront type="eshop" />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/learnmore" element={<LearnMore />} />
-            <Route path="/ourteam" element={<OurTeam />} />
-            <Route path="/delete-account" element={<AccountDeletion />} />
-
-            {/* Authentication Routes - Pass the correct function */}
-            <Route path="/login" element={<Login setIsAuthenticated={handleLogin} />} />
-            <Route path="/register" element={<Register setIsAuthenticated={handleLogin} />} />
-            <Route path="/verify-email/:token" element={<EmailVerification />} />          
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/change-password" element={<ChangePassword />} />
-
-            {/* Rest of your routes... */}
-            <Route path="/marketplace" element={<BuyersPage />} />
-            <Route path="/sellers" element={<SellersPage />} />
-            <Route path="/provider/:providerId" element={<ProviderDetails />} />
-            <Route path="/cart" element={<CartPage cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} handleUpdateQuantity={handleUpdateQuantity} />} />
-            <Route path="/markethub" element={<MarketHub />} />
-
-            {/* E-shop Routes */}
-            <Route path="/eshop" element={<CategoryList />} />
-            <Route path="/shops/:categorySlug" element={<ShopList />} />
-            <Route path="/products/:shopSlug" element={<ProductList />} />
-            <Route path="/eshop/dashboard" element={<EshopDashboard />} />
-            <Route path="/eshop/upgrade" element={<UpgradeEshop />} />
-            <Route path="/admin/eshop" element={<AdminDashboard />} />
-
-            {/* Food Delivery Routes */}
-            <Route path="/food-delivery" element={<MoiDelish />} />
-            <Route path="/vendor/:vendorId" element={<VendorPage />} />
-            <Route path="/vendor/dashboard" element={<VendorDashboard />} />
-            <Route path="/vendor/upgrade" element={<UpgradeToVendor />} />
-            <Route path="/admin/foodvendors" element={<VendorManagement />} />
-
-            {/* Specialized Services */}
-            <Route path="/pharmacy" element={<Echem cartItems={cartItems} setCartItems={setCartItems} />} />
-            <Route path="/greenhub" element={<GreenHub />} />
-            <Route path="/myschool" element={<MySchool />} />
-            <Route path="/find-roommate" element={<RoomateFinder />} />
-
-            {/* Real Estate Routes */}
-            <Route path="/book"  element={<Home />} />
-            <Route path="/booking" element={<Booking plots={plotsData} />} />
-            <Route path="/apartment-details/:id" element={<ApartmentDetails plots={plotsData} />} />
-            <Route path="/rentals" element={<RentalHome />} />
-            <Route path="/rentals/:id" element={<RentalDetail />} />
-
-            {/* Blog Routes */}
-            <Route path="/blog" element={<BlogHomepage />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route
-              path="/post-list"
-              element={
-                <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                  <WritersPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/edit/:id"
-              element={
-                <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                  <EditPostPage />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Transport (MoiLink) Routes */}
-            <Route path="/moilinktravellers" element={<RouteSelectionPage />} />
-            <Route path="/VehicleSelectionPage/:routeId" element={<VehicleSelectionPage />} />
-            <Route path="/seat-selection/:matatuId" element={<SeatSelectionPage />} />
-            <Route path="/booking-confirmation/:matatuId/:seatId" element={<BookingConfirmationPage />} />
-            <Route path="/payment/initiate" element={<PaymentInitiationPage />} />
-            <Route path="/mybookings" element={<MyBookings />} />
-            <Route path="/verifybooking" element={<QrScanner />} />
-            <Route
-              path="/moilinkadmin"
-              element={
-                <ProtectedRoute allowedRoles={['writer', 'admin']}>
-                  <MatatuAdmin />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* AI Chatbot */}
-            <Route path="/moihub_ai" element={<ChatbotDashboard />} />
-
-            {/* Catch-all Route */}
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="/forgot-password" element={<Forgotpassword />} />
+            <Route path="/reset-password/:token" element={<Resetpassword />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </Router>
-
-        <div>
           <Footer />
-        </div>
-      </React.Fragment>
+        </BrowserRouter>
+      </AuthProvider>
     </GoogleOAuthProvider>
   );
-};
+}
 
 export default App;

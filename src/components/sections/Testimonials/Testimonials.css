@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+/* ================= TOKENS (scoped) ================= */
+.testimonials {
+  --ink: #093028;
+  --paper: #FBF6EC;
+  --paper-line: #E4DACB;
+  --marigold: #24f535;
+  --chili: #D8482E;
+  --white: #FFFDF8;
+
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'Work Sans', -apple-system, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 96px 0;
+  border-top: 1px dashed var(--paper-line);
+}
+.testimonials * { box-sizing: border-box; }
+
+.testimonials .testimonials-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ================= HEADER ================= */
+.testimonials .testimonials-header {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 48px;
+}
+.testimonials .testimonials-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--white);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: 7px 14px 7px 22px;
+  transform: rotate(-2deg);
+  margin-bottom: 20px;
+}
+.testimonials .testimonials-badge::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+}
+.testimonials .testimonials-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.testimonials .testimonials-highlight { color: var(--chili); }
+.testimonials .testimonials-description {
+  font-size: 16px;
+  color: #4a5568;
+  line-height: 1.5;
+  margin: 0;
+  text-transform: none;
+}
+
+/* ================= FRAME AROUND THIRD-PARTY WIDGET ================= */
+
+.testimonials .testimonials-frame::before,
+.testimonials .testimonials-frame::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--paper) 4.5px, transparent 4.6px);
+  background-size: 18px 18px;
+  background-position: -3px center;
+}
+.testimonials .testimonials-frame::before { top: -7px; }
+.testimonials .testimonials-frame::after { bottom: -7px; }
+
+.testimonials .testimonials-widget {
+  min-height: 220px;
+}
+
+/* ================= SKELETON LOADER (shown while Elfsight loads) ================= */
+.testimonials .testimonials-skeleton {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  padding-bottom: 34px;
+}
+.testimonials .skeleton-card {
+  border: 1.5px dashed var(--paper-line);
+  border-radius: 6px;
+  padding: 18px;
+  background: var(--paper);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.15s);
+}
+.testimonials .skeleton-stars {
+  width: 72px;
+  height: 12px;
+  background: var(--paper-line);
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+.testimonials .skeleton-line {
+  height: 9px;
+  background: var(--paper-line);
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+.testimonials .skeleton-line-lg { width: 100%; }
+.testimonials .skeleton-line-sm { width: 60%; margin-bottom: 16px; }
+.testimonials .skeleton-author {
+  width: 40%;
+  height: 10px;
+  background: var(--paper-line);
+  border-radius: 2px;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.testimonials .testimonials-loading-tag {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--marigold);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  padding: 5px 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials .skeleton-card { animation: none; opacity: 0.8; }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .testimonials { padding: 64px 0; }
+  .testimonials .testimonials-frame { padding: 22px 16px 28px; }
+}
+@media (max-width: 640px) {
+  .testimonials .testimonials-skeleton { grid-template-columns: 1fr; }
+}
