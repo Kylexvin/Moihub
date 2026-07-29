@@ -243,7 +243,7 @@ Smart search powered by AI to help students find services, products, and informa
 
 ### Clone the repository
 ```bash
-git clone https://github.com/yourusername/moihub.git
+git clone https://github.com/kylexvin/moihub.git
 cd moihub
 ```
 
