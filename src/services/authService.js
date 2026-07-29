@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://moihub.onrender.com/api/auth';
 
-// Create axios instance with interceptors
+
 const api = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -12,7 +12,6 @@ const api = axios.create({
 
 
 
-// Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -26,7 +25,7 @@ api.interceptors.request.use(
   }
 );
 
-// In authService.js - update the handleApiError function:
+
 
 const handleApiError = (error) => {
   // Handle 401 Unauthorized
@@ -79,7 +78,7 @@ export const authService = {
     }
   },
 
-  // Get current user data (SINGLE DEFINITION - REMOVED THE DUPLICATE)
+
   getCurrentUser: () => {
     return {
       token: localStorage.getItem('token'),
@@ -106,7 +105,7 @@ export const authService = {
         throw new Error('Invalid response from server');
       }
 
-      // STORE THE DATA IN LOCALSTORAGE - THIS WAS MISSING!
+  
       const { token, user } = response.data;
       
       localStorage.setItem('token', token);
