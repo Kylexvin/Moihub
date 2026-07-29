@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    <!-- Primary Meta Tags -->
-    <title>Moihub - Everything You Need at Moi University</title>
-    <meta name="description" content="Find rentals, order food, shop, and more — all in one place. Explore Moihub today!" />
+    <!-- Remove title and description from here -->
+    <!-- They will be set by Helmet on each page -->
+    
     <meta name="theme-color" content="#093028" />
     <meta name="robots" content="index, follow" />
     
@@ -23,7 +23,7 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
-    <!-- Structured Data - Organization -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -34,20 +34,8 @@
       "logo": "https://moihub-silk.vercel.app/apple-touch-icon.png"
     }
     </script>
-    
-    <!-- Structured Data - Website -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Moihub",
-      "description": "Platform for Moi University students offering rentals, food delivery, shopping, and services.",
-      "url": "https://moihub-silk.vercel.app/"
-    }
-    </script>
   </head>
   <body>
-    <!-- ResizeObserver Error Handler -->
     <script>
       window.addEventListener('error', (e) => {
         if (e.message && e.message.includes('ResizeObserver loop')) {
