@@ -1,7 +1,7 @@
 // src/services/eshopService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/eshop/vendor';
+const API_URL = 'https://moihub.onrender.com/api/eshop/vendor';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');

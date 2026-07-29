@@ -1,7 +1,7 @@
 // src/services/foodService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/food/vendors';
+const API_URL = 'https://moihub.onrender.com/api/food/vendors';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');

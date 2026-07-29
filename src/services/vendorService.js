@@ -3,7 +3,7 @@ import axios from 'axios';
 import { eshopService } from './eshopService';
 import { foodService } from './foodService';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://moihub.onrender.com/api';
 
 export const getCategories = async () => {
   try {

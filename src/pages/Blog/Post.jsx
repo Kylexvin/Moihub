@@ -15,7 +15,7 @@ function BlogPost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/posts/${slug}`);
+        const response = await axios.get(`https://moihub.onrender.com/api/posts/${slug}`);
         if (response.data.success) {
           setPost(response.data.post);
           setRelatedPosts(response.data.relatedPosts || []);

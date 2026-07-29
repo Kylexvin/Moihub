@@ -8,7 +8,7 @@ import FoodStorefront from "./FoodStorefront";
 import EshopStorefront from "./EshopStorefront";
 import "./Storefront.css";
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://moihub.onrender.com/api';
 
 function fetchStorefront(type, slug) {
   return axios.get(`${API_BASE}/storefront/${type}/${slug}`)
