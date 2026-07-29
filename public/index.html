@@ -8,6 +8,7 @@
     <title>Moihub - Everything You Need at Moi University</title>
     <meta name="description" content="Find rentals, order food, shop, and more — all in one place. Explore Moihub today!" />
     <meta name="theme-color" content="#093028" />
+    <meta name="robots" content="index, follow" />
     
     <!-- Favicon Tags -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -16,24 +17,34 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/favicon.ico" />
     
-    <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="Moihub - Everything You Need at Moi University" />
-    <meta property="og:description" content="Find rentals, order food, shop, and more — all in one place. Explore Moihub today!" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://moihub-silk.vercel.app/" />
-    <meta property="og:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Moihub - Everything You Need at Moi University" />
-    <meta name="twitter:description" content="Find rentals, order food, shop, and more — all in one place." />
-    <meta name="twitter:image" content="https://res.cloudinary.com/dlyfxympd/image/upload/v1745769284/djqvpsaazftvdzbaii1d.jpg" />
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://moihub-silk.vercel.app/" />
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Structured Data - Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Moihub",
+      "description": "Everything You Need at Moi University",
+      "url": "https://moihub-silk.vercel.app/",
+      "logo": "https://moihub-silk.vercel.app/apple-touch-icon.png"
+    }
+    </script>
+    
+    <!-- Structured Data - Website -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Moihub",
+      "description": "Platform for Moi University students offering rentals, food delivery, shopping, and services.",
+      "url": "https://moihub-silk.vercel.app/"
+    }
+    </script>
   </head>
   <body>
     <!-- ResizeObserver Error Handler -->
