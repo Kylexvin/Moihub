@@ -43,64 +43,24 @@ function Navbar() {
     <nav className="navbar">
       <div className="nav-container">
 
-        {/* LOGO */}
+        {/* LOGO - far left */}
         <Link to="/" className="nav-logo" onClick={closeMenu}>
           <img src={Logo} alt="Moihub" />
           <span className="nav-logo-text">Moihub</span>
         </Link>
 
-        {/* HAMBURGER */}
-        <button
-          type="button"
-          className={`nav-hamburger ${menuOpen ? "active" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        {/* NAV LINKS */}
-        <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
+        {/* NAV LINKS - center (hidden on mobile) */}
+        <ul className="nav-links">
           {NAV_LINKS.map((link, i) => (
-            <li key={link.to} style={{ "--i": i }}>
+            <li key={link.to}>
               <Link to={link.to} className={isActive(link.to) ? "active" : ""} onClick={closeMenu}>
                 {link.label}
               </Link>
             </li>
           ))}
-
-          {/* Mobile auth */}
-          {isAuthenticated ? (
-            <>
-              <li className="nav-username-mobile" style={{ "--i": NAV_LINKS.length }}>
-                <span className="nav-username-tag">{user?.username || "User"}</span>
-              </li>
-              <li style={{ "--i": NAV_LINKS.length + 1 }}>
-                <button className="nav-logout-mobile" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
-            </>
-          ) : (
-            <li className="nav-auth-mobile" style={{ "--i": NAV_LINKS.length }}>
-              <Link to="/login" onClick={closeMenu}>Login</Link>
-              <span className="nav-divider">/</span>
-              <Link to="/register" onClick={closeMenu}>Register</Link>
-            </li>
-          )}
-
-          <li className="nav-download-mobile" style={{ "--i": NAV_LINKS.length + 2 }}>
-            <a href={PLAYSTORE_URL} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
-              <PlaystoreIcon />
-              Download app
-            </a>
-          </li>
         </ul>
 
-        {/* RIGHT — DESKTOP AUTH + DOWNLOAD */}
+        {/* RIGHT SIDE - desktop auth + download (hidden on mobile) */}
         <div className="nav-right">
           {isAuthenticated ? (
             <div className="nav-auth">
@@ -115,6 +75,52 @@ function Navbar() {
           )}
 
           <a href={PLAYSTORE_URL} className="nav-download-btn" target="_blank" rel="noopener noreferrer">
+            <PlaystoreIcon />
+            Download app
+          </a>
+        </div>
+
+        {/* HAMBURGER - far right (visible on mobile) */}
+        <button
+          type="button"
+          className={`nav-hamburger ${menuOpen ? "active" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      {/* MOBILE MENU - separate from nav-links */}
+      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+        <div className="mobile-menu-inner">
+          {NAV_LINKS.map((link) => (
+            <Link key={link.to} to={link.to} className={isActive(link.to) ? "active" : ""} onClick={closeMenu}>
+              {link.label}
+            </Link>
+          ))}
+          
+          {isAuthenticated ? (
+            <>
+              <div className="mobile-username">
+                <span className="nav-username-tag">{user?.username || "User"}</span>
+              </div>
+              <button className="mobile-logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <div className="mobile-auth">
+              <Link to="/login" onClick={closeMenu}>Login</Link>
+              <span className="nav-divider">/</span>
+              <Link to="/register" onClick={closeMenu}>Register</Link>
+            </div>
+          )}
+
+          <a href={PLAYSTORE_URL} className="mobile-download-btn" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
             <PlaystoreIcon />
             Download app
           </a>
