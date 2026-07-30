@@ -79,7 +79,7 @@ function Storefront({ type }) {
           <div className="storefront-error">
             <div className="storefront-error-icon"><AlertCircle size={26} /></div>
             <h2>Shop not found</h2>
-            <p>This storefront doesn't exist, or it's no longer active.</p>
+            <p>This storefront doesn't exist, or it's closed.</p>
             <Link to="/vendors" className="storefront-error-link">
               <ArrowLeft size={15} /> Back to Vendors
             </Link>
