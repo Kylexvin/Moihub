@@ -95,7 +95,10 @@ function EshopStorefront({ shop, items, shareUrl }) {
             </div>
           ))}
         </div>
-
+{/* Static note — full shopping experience is in the app */}
+<div className="storefront-more-notice">
+  <span>Add to cart and enjoy the full shopping experience in the MoiHub app.</span>
+</div>
         {/* SHARE & APP CTA - inline */}
         <div className="storefront-footer-actions">
           <button type="button" className="storefront-btn-secondary" onClick={handleShare}>

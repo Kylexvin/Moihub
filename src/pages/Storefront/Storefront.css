@@ -419,3 +419,20 @@
   .storefront-page .storefront-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .storefront-page .storefront-body { padding: 0 14px; }
 }
+
+.storefront-page .storefront-more-notice {
+  background: #FFF4D8;
+  border: 1.5px dashed var(--marigold);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 4px 0 24px;
+  font-size: 13px;
+  color: #6b5310;
+  text-align: center;
+}
+
+.storefront-page .storefront-footer-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 8px;
+}

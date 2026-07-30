@@ -96,6 +96,11 @@ function FoodStorefront({ shop, items, shareUrl }) {
           ))}
         </div>
 
+        {/* Static note — check the app for the rest of the menu */}
+        <div className="storefront-more-notice">
+          <span>For more items, check the MoiHub app.</span>
+        </div>
+
         {/* SHARE & APP CTA - inline */}
         <div className="storefront-footer-actions">
           <button type="button" className="storefront-btn-secondary" onClick={handleShare}>

@@ -5,6 +5,14 @@ import './index.css';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// In your main file
+const originalError = console.error;
+console.error = function(...args) {
+  if (args[0]?.includes?.('ResizeObserver loop')) return;
+  originalError.apply(console, args);
+};
+
 root.render(
   <React.StrictMode>
     <HelmetProvider>
