@@ -208,14 +208,14 @@ const checkVendorStatusWrapper = useCallback(async () => {
   };
 
   const handleCopy = () => {
-    const url = `https://moihub.kxbyte.co.ke/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
+    const url = `https://moihub-silk.vercel.app/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
     navigator.clipboard?.writeText(url).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = () => {
-    const url = `https://moihub.kxbyte.co.ke/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
+    const url = `https://moihub-silk.vercel.app/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
     if (navigator.share) {
       navigator.share({ title: approved?.shopName, url }).catch(() => {});
     } else {
@@ -223,7 +223,7 @@ const checkVendorStatusWrapper = useCallback(async () => {
     }
   };
 
-  const storefrontUrl = `moihub.kxbyte.co.ke/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
+  const storefrontUrl = `https://moihub-silk.vercel.app/${vendorType || "food"}/${approved?.slug || "your-shop"}`;
 
   if (loading) {
     return (

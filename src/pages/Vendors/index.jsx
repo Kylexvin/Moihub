@@ -182,7 +182,7 @@ function Vendors() {
               <span className="hero-float-tag f2">Live now</span>
               <div className="receipt-card">
                 <div className="receipt-head">
-                  <span>Tasty Taters</span>
+                  <span>Foody Deliveries</span>
                   <span>Listing</span>
                 </div>
                 <div className="receipt-line"><span>Category</span><strong>Food</strong></div>
@@ -193,7 +193,7 @@ function Vendors() {
                 <div className="receipt-line"><span>Pizza</span><span>KES 350</span></div>
                 <div className="receipt-line"><span>Smoothie</span><span>KES 250</span></div>
                 <hr className="receipt-divider" />
-                <div className="receipt-total"><span>Manage in-app →</span><span>food/tasty-taters</span></div>
+                <div className="receipt-total"><span>Manage in-app →</span><span>foody-deliveries</span></div>
               </div>
             </div>
           </div>
@@ -277,11 +277,11 @@ function Vendors() {
               <Reveal className="storefront-mocks">
                 <div className="mock-shop food-shop">
                   <div className="mock-shop-header">
-                    <span>food/tasty-taters</span>
+                    <span>food/foody-deliveries</span>
                     <span className="verified"><BadgeCheck size={14} /> Verified</span>
                   </div>
                   <div className="mock-shop-body">
-                    <div>Tasty Taters</div>
+                    <div>Foody Palace</div>
                     <div>French fries • Burgers • Snacks</div>
                     <div>★ 4.8 (120 reviews)</div>
                   </div>
